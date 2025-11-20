@@ -12,38 +12,18 @@
 - **Activity**: View source code of a favorite website
 - **Practice**: Write first `<h1>Hello World!</h1>` in browser
 
-### Lesson 1.2: Basic Document Structure
-- **Concept**: Every HTML page has the same basic structure
-- **Topics**:
-  - `<!DOCTYPE html>` - tells browser it's HTML5
-  - `<html>` - root element, wraps everything
-  - `<head>` - invisible info (title, links to CSS)
-  - `<body>` - visible content
-- **Activity**: Create a complete HTML page skeleton
-- **Practice**: Build "My First Page" with title and body
-
-### Lesson 1.3: Headings and Paragraphs
+### Lesson 1.2: Headings and Paragraphs
 - **Concept**: Organizing text content
 - **Topics**:
   - `<h1>` through `<h6>` - heading hierarchy
   - `<p>` - paragraphs
   - `<br>` - line breaks
   - `<hr>` - horizontal rule
+  - Text formatting basics (`<strong>`, `<em>`)
 - **Activity**: Create a story with proper heading structure
 - **Practice**: "About Me" page with headings and paragraphs
 
-### Lesson 1.4: Text Formatting
-- **Concept**: Making text look different
-- **Topics**:
-  - `<strong>` and `<b>` - bold text
-  - `<em>` and `<i>` - italic text
-  - `<u>` - underline
-  - `<mark>` - highlight
-  - `<small>` - smaller text
-- **Activity**: Format a favorite poem or song lyrics
-- **Practice**: Style a recipe with different text formats
-
-### Lesson 1.5: Lists
+### Lesson 1.3: Lists
 - **Concept**: Organizing items in lists
 - **Topics**:
   - `<ul>` - unordered list (bullets)
@@ -53,7 +33,7 @@
 - **Activity**: Create a shopping list and to-do list
 - **Practice**: "My Favorites" page (movies, foods, games)
 
-### Lesson 1.6: Links
+### Lesson 1.4: Links
 - **Concept**: Connecting pages together
 - **Topics**:
   - `<a>` tag with `href` attribute
@@ -61,20 +41,34 @@
   - Relative URLs (links within your site)
   - `target="_blank"` for new tabs
   - Email links with `mailto:`
+  - Anchor links within page
 - **Activity**: Create a page with links to favorite websites
 - **Practice**: Build a multi-page site with navigation
 
-### Lesson 1.7: Images
+### Lesson 1.5: Images
 - **Concept**: Adding pictures to web pages
 - **Topics**:
   - `<img>` tag with `src` attribute
   - `alt` text for accessibility
   - `width` and `height` attributes
   - Image file formats (jpg, png, gif)
+  - `<figure>` and `<figcaption>` for captions
 - **Activity**: Add images to previous pages
 - **Practice**: Photo gallery page
 
-### Lesson 1.8: Divisions and Spans
+### Lesson 1.6: Tables
+- **Concept**: Organizing data in rows and columns
+- **Topics**:
+  - `<table>` - table container
+  - `<tr>` - table row
+  - `<th>` - table header cell
+  - `<td>` - table data cell
+  - `<thead>`, `<tbody>`, `<tfoot>` - table sections
+  - Table borders and styling basics
+- **Activity**: Create a class schedule or game stats table
+- **Practice**: Build a comparison table or scoreboard
+
+### Lesson 1.7: Divisions and Spans
 - **Concept**: Grouping and organizing content
 - **Topics**:
   - `<div>` - block-level container
@@ -84,7 +78,7 @@
 - **Activity**: Organize "About Me" page with divs
 - **Practice**: Create sections for different content types
 
-### Lesson 1.9: Forms and Inputs
+### Lesson 1.8: Forms and Inputs
 - **Concept**: Getting information from users
 - **Topics**:
   - `<form>` element
@@ -94,6 +88,17 @@
   - Basic form structure
 - **Activity**: Build a simple contact form
 - **Practice**: Create game control buttons
+
+### Lesson 1.9: Semantic HTML
+- **Concept**: Using meaningful HTML tags
+- **Topics**:
+  - `<header>`, `<nav>`, `<main>`, `<footer>`
+  - `<article>`, `<section>`, `<aside>`
+  - Why semantic HTML matters
+  - Accessibility benefits
+  - Better page structure
+- **Activity**: Convert div-based layout to semantic HTML
+- **Practice**: Structure a blog post with semantic tags
 
 ### Lesson 1.10: HTML Mini-Project
 - **Concept**: Put it all together
