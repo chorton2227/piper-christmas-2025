@@ -1,0 +1,245 @@
+/* Background Gradients Example CSS */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 48px;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+    margin-bottom: 60px;
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    opacity: 0.95;
+}
+
+/* Content Sections */
+.content-section {
+    padding: 40px 20px;
+    margin-bottom: 40px;
+}
+
+.content-section h2 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.gradient-box {
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 12px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-box h3 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-box code {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: white;
+    display: inline-block;
+    max-width: 90%;
+    word-break: break-word;
+}
+
+/* Linear Gradients */
+.gradient-1 {
+    background: linear-gradient(blue, lightblue);
+}
+
+.gradient-2 {
+    background: linear-gradient(to right, purple, pink);
+}
+
+.gradient-3 {
+    background: linear-gradient(45deg, red, yellow);
+}
+
+.gradient-4 {
+    background: linear-gradient(to right, red, yellow, green);
+}
+
+.gradient-5 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-6 {
+    background: linear-gradient(to bottom, #ff6b6b, #ffd93d);
+}
+
+/* Radial Gradients */
+.radial-1 {
+    background: radial-gradient(blue, lightblue);
+}
+
+.radial-2 {
+    background: radial-gradient(circle, yellow, orange);
+}
+
+.radial-3 {
+    background: radial-gradient(at top left, pink, purple);
+}
+
+/* Creative Combinations */
+.combo-1 {
+    background: linear-gradient(135deg, 
+        rgba(26, 188, 156, 0.9) 0%, 
+        rgba(52, 152, 219, 0.9) 100%);
+}
+
+.combo-2 {
+    background: radial-gradient(circle at center, 
+        rgba(255, 107, 107, 0.8), 
+        rgba(255, 89, 94, 1));
+}
+
+.combo-3 {
+    background: linear-gradient(to right, 
+        #ff0000 0%, 
+        #ff7f00 16.67%, 
+        #ffff00 33.33%, 
+        #00ff00 50%, 
+        #0000ff 66.67%, 
+        #4b0082 83.33%, 
+        #9400d3 100%);
+}
+
+.white-text {
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Gradient Cards Section */
+.cards-section {
+    padding: 40px 20px;
+    background-color: #f8f9fa;
+}
+
+.cards-section h2 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.gradient-card {
+    padding: 40px 30px;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gradient-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.gradient-card h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.gradient-card p {
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.95;
+}
+
+.card-purple {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #2c3e50;
+}
+
+.card-orange {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.card-green {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: #2c3e50;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 36px;
+        padding: 40px 20px;
+    }
+    
+    .hero {
+        padding: 50px 20px;
+    }
+    
+    .hero h2 {
+        font-size: 28px;
+    }
+    
+    .hero p {
+        font-size: 16px;
+    }
+    
+    .content-section h2,
+    .cards-section h2 {
+        font-size: 26px;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gradient-box {
+        min-height: 150px;
+    }
+}

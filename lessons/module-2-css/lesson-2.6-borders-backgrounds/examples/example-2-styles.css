@@ -1,0 +1,249 @@
+/* Box Shadow Example CSS */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.intro {
+    text-align: center;
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 50px;
+}
+
+section {
+    margin-bottom: 60px;
+}
+
+section h2 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.card h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.card p {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.card code {
+    background-color: #f4f4f4;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #e74c3c;
+    display: inline-block;
+}
+
+/* Basic Shadows */
+.simple-shadow {
+    box-shadow: 2px 2px 5px gray;
+}
+
+.soft-shadow {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dramatic-shadow {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Shadow Directions */
+.shadow-bottom {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-right {
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-all-sides {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Layered Shadows */
+.double-shadow {
+    box-shadow: 
+        0 2px 5px rgba(0, 0, 0, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.triple-shadow {
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 4px 8px rgba(0, 0, 0, 0.12),
+        0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.colored-shadow {
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    border: 2px solid #3498db;
+}
+
+/* Inset Shadows */
+.inset-shadow {
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #ecf0f1;
+}
+
+.deep-inset {
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+    background-color: #ecf0f1;
+}
+
+.combined-shadows {
+    box-shadow: 
+        inset 0 2px 5px rgba(0, 0, 0, 0.2),
+        0 4px 10px rgba(0, 0, 0, 0.15);
+    background-color: #ecf0f1;
+}
+
+/* Interactive Shadows */
+.hover-lift {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hover-press {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.hover-press:hover {
+    transform: translateY(2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.hover-glow {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 30px rgba(52, 152, 219, 0.6);
+    border-color: #3498db;
+}
+
+/* Demo Buttons */
+.demo-button {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.btn-flat {
+    background-color: #3498db;
+    color: white;
+    box-shadow: none;
+}
+
+.btn-flat:hover {
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.btn-pressed {
+    background-color: #2ecc71;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-pressed:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 32px;
+    }
+    
+    section h2 {
+        font-size: 24px;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .demo-button {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
