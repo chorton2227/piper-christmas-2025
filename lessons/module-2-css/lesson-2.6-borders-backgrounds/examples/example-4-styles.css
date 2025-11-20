@@ -15,7 +15,11 @@ body {
 /* Hero Section with Cover Background */
 .hero-cover {
     height: 500px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Creating a pattern that looks like an abstract hero image */
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     /* In real project: background-image: url('hero.jpg'); */
     background-size: cover;
     background-position: center;
@@ -108,14 +112,24 @@ body {
 
 /* Background Size Demos */
 .cover-demo {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    /* Creating a CSS pattern that looks like an image */
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            #fa709a 0px,
+            #fa709a 20px,
+            #fee140 20px,
+            #fee140 40px
+        );
     /* In real project: background-image: url('image.jpg'); */
     background-size: cover;
     background-position: center;
 }
 
 .contain-demo {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    /* Pattern that shows contain behavior */
+    background: 
+        radial-gradient(circle at 30% 30%, #43e97b 0%, #38f9d7 50%, #43e97b 100%);
     /* In real project: background-image: url('image.jpg'); */
     background-size: contain;
     background-repeat: no-repeat;
@@ -124,9 +138,15 @@ body {
 }
 
 .auto-demo {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Pattern at original size */
+    background: 
+        repeating-conic-gradient(
+            from 0deg at 50% 50%,
+            #667eea 0deg 30deg,
+            #764ba2 30deg 60deg
+        );
     /* In real project: background-image: url('image.jpg'); */
-    background-size: auto;
+    background-size: 200px 200px;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -142,8 +162,13 @@ body {
 .position-box {
     height: 200px;
     border-radius: 10px;
-    background: radial-gradient(circle at center, white 20%, transparent 20%),
-                linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    /* Using a distinctive pattern to show positioning */
+    background: 
+        radial-gradient(circle at var(--pos-x, 50%) var(--pos-y, 50%), 
+            rgba(255,255,255,0.9) 0%, 
+            rgba(255,255,255,0.9) 15%, 
+            transparent 15%),
+        linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     /* The white circle shows where the image is positioned */
     display: flex;
     align-items: center;
@@ -160,34 +185,47 @@ body {
 }
 
 .position-center {
-    background-position: center;
+    --pos-x: 50%;
+    --pos-y: 50%;
 }
 
 .position-top {
-    background-position: top;
+    --pos-x: 50%;
+    --pos-y: 0%;
 }
 
 .position-bottom {
-    background-position: bottom;
+    --pos-x: 50%;
+    --pos-y: 100%;
 }
 
 .position-left {
-    background-position: left;
+    --pos-x: 0%;
+    --pos-y: 50%;
 }
 
 .position-right {
-    background-position: right;
+    --pos-x: 100%;
+    --pos-y: 50%;
 }
 
 .position-top-right {
-    background-position: top right;
+    --pos-x: 100%;
+    --pos-y: 0%;
 }
 
 /* Overlay Demo */
 .overlay-demo {
     height: 400px;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        repeating-linear-gradient(
+            45deg,
+            #667eea 0px,
+            #667eea 50px,
+            #764ba2 50px,
+            #764ba2 100px
+        );
     /* In real project: url('busy-image.jpg'); */
     background-size: cover;
     background-position: center;
@@ -270,21 +308,52 @@ body {
 }
 
 .card-1 {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: 
+        repeating-radial-gradient(
+            circle at top left,
+            #fa709a 0px,
+            #fa709a 30px,
+            #fee140 30px,
+            #fee140 60px
+        );
 }
 
 .card-2 {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    background: 
+        linear-gradient(45deg, #a8edea 25%, transparent 25%),
+        linear-gradient(-45deg, #a8edea 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #fed6e3 75%),
+        linear-gradient(-45deg, transparent 75%, #fed6e3 75%);
+    background-size: 60px 60px;
+    background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+    background-color: #e8d5e5;
 }
 
 .card-3 {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: 
+        radial-gradient(circle at 20% 80%, #43e97b 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, #38f9d7 0%, transparent 50%),
+        linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
 }
 
 /* Parallax Demo */
 .parallax-demo {
     height: 400px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            #667eea 0px,
+            #667eea 40px,
+            #764ba2 40px,
+            #764ba2 80px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 40px,
+            rgba(255,255,255,0.05) 40px,
+            rgba(255,255,255,0.05) 80px
+        );
     /* In real project: background-image: url('parallax.jpg'); */
     background-size: cover;
     background-position: center;
