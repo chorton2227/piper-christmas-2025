@@ -1,0 +1,157 @@
+/* Class Selectors Practice - Answer Key */
+
+/* Base Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    margin: 0;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #555;
+    font-size: 28px;
+    margin: 30px 0 20px 0;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #ddd;
+    margin: 40px 0;
+}
+
+/* MESSAGE BASE CLASS */
+.message {
+    background-color: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.message h3 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.message p {
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* SUCCESS CLASS (Green) */
+.success {
+    border-color: #28a745;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.success h3 {
+    color: #0f4520;
+}
+
+/* WARNING CLASS (Yellow) */
+.warning {
+    border-color: #ffc107;
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.warning h3 {
+    color: #664d03;
+}
+
+/* ERROR CLASS (Red) */
+.error {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.error h3 {
+    color: #5a151c;
+}
+
+/* INFO CLASS (Blue) */
+.info {
+    border-color: #17a2b8;
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.info h3 {
+    color: #094350;
+}
+
+/* BUTTON BASE CLASS */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+    background-color: #6c757d;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* BUTTON VARIANTS */
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+/* BUTTON SIZE MODIFIER */
+.btn-large {
+    font-size: 20px;
+    padding: 16px 32px;
+}
+
+/* UTILITY CLASSES */
+.text-center {
+    text-align: center;
+}
+
+.highlight {
+    background-color: #fff3cd;
+    border-left: 5px solid #ffc107;
+    padding: 15px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.button-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* FEATURED MODIFIER (Bonus) */
+.featured {
+    border-width: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transform: scale(1.02);
+}

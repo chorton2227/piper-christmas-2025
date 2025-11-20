@@ -1,0 +1,80 @@
+/* Element Selectors Practice - Answer Key */
+
+/* Body styling */
+body {
+    background-color: #e8f4f8;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    padding: 20px;
+    margin: 0;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Main heading */
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 42px;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Section headings */
+h2 {
+    color: #e74c3c;
+    font-size: 28px;
+    border-left: 5px solid #e74c3c;
+    padding-left: 15px;
+    margin: 30px 0 15px 0;
+}
+
+/* All paragraphs */
+p {
+    color: #333;
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 5px;
+}
+
+/* Unordered lists */
+ul {
+    background-color: #d5f4e6;
+    padding: 20px;
+    border-radius: 8px;
+    list-style-position: inside;
+    margin: 15px 0;
+}
+
+/* Ordered lists */
+ol {
+    background-color: #fdebd0;
+    padding: 20px;
+    border-radius: 8px;
+    list-style-position: inside;
+    margin: 15px 0;
+}
+
+/* All list items */
+li {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #2c3e50;
+    line-height: 1.5;
+}
+
+/* Strong text (bonus) */
+strong {
+    color: #e74c3c;
+    font-size: 19px;
+}
+
+/* Emphasized text (bonus) */
+em {
+    color: #3498db;
+    font-style: italic;
+}
