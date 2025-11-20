@@ -1,0 +1,120 @@
+/* Example 1: Color Names */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: whitesmoke;
+}
+
+header {
+    background-color: midnightblue;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 42px;
+}
+
+header p {
+    margin: 10px 0 0 0;
+    font-size: 18px;
+}
+
+main {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+section {
+    background-color: white;
+    margin: 30px 0;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: midnightblue;
+    border-bottom: 3px solid lightblue;
+    padding-bottom: 10px;
+}
+
+/* Color boxes */
+.color-box {
+    display: inline-block;
+    padding: 20px 30px;
+    margin: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    min-width: 120px;
+    text-align: center;
+}
+
+/* Basic colors */
+.red { background-color: red; }
+.blue { background-color: blue; }
+.green { background-color: green; }
+.yellow { background-color: yellow; color: #333; text-shadow: none; }
+.purple { background-color: purple; }
+.orange { background-color: orange; }
+
+/* Light colors */
+.lightblue { background-color: lightblue; color: #333; text-shadow: none; }
+.lightgreen { background-color: lightgreen; color: #333; text-shadow: none; }
+.lightyellow { background-color: lightyellow; color: #333; text-shadow: none; }
+.lightpink { background-color: lightpink; color: #333; text-shadow: none; }
+.lightcoral { background-color: lightcoral; color: #333; text-shadow: none; }
+.lightgray { background-color: lightgray; color: #333; text-shadow: none; }
+
+/* Dark colors */
+.darkblue { background-color: darkblue; }
+.darkgreen { background-color: darkgreen; }
+.darkred { background-color: darkred; }
+.darkorange { background-color: darkorange; }
+.darkviolet { background-color: darkviolet; }
+.darkslategray { background-color: darkslategray; }
+
+/* Special colors */
+.coral { background-color: coral; color: #333; text-shadow: none; }
+.teal { background-color: teal; }
+.navy { background-color: navy; }
+.olive { background-color: olive; }
+.maroon { background-color: maroon; }
+.crimson { background-color: crimson; }
+.gold { background-color: gold; color: #333; text-shadow: none; }
+.silver { background-color: silver; color: #333; text-shadow: none; }
+.turquoise { background-color: turquoise; color: #333; text-shadow: none; }
+
+/* Text color examples */
+.text-colors p {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.text-red { color: red; }
+.text-blue { color: blue; }
+.text-green { color: green; }
+.text-purple { color: purple; }
+
+footer {
+    background-color: midnightblue;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 0;
+}
