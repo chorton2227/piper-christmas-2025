@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: External Styles</title>
+    <link rel="stylesheet" href="example-3-styles.css">
+</head>
+<body>
+    <header>
+        <h1>External CSS - The Best Way!</h1>
+        <p class="subtitle">Clean, organized, and professional</p>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h2>Why External CSS?</h2>
+            <p>
+                External CSS files are the professional way to style websites. 
+                All the CSS for this page is in a separate file called 
+                <code>example-3-styles.css</code>.
+            </p>
+        </section>
+        
+        <section class="benefits">
+            <h2>Benefits of External CSS</h2>
+            <ul>
+                <li><strong>Separation of Concerns:</strong> HTML for structure, CSS for style</li>
+                <li><strong>Reusability:</strong> One CSS file can style multiple pages</li>
+                <li><strong>Easier Maintenance:</strong> Change styles in one place</li>
+                <li><strong>Better Performance:</strong> Browsers can cache CSS files</li>
+                <li><strong>Team Collaboration:</strong> Designers can work on CSS separately</li>
+            </ul>
+        </section>
+        
+        <section class="example">
+            <h2>How It Works</h2>
+            <p>
+                In the <code>&lt;head&gt;</code> section of your HTML, you add:
+            </p>
+            <div class="code-box">
+                &lt;link rel="stylesheet" href="example-3-styles.css"&gt;
+            </div>
+            <p>
+                The browser then downloads the CSS file and applies all the styles 
+                to your HTML elements!
+            </p>
+        </section>
+        
+        <section class="cards">
+            <h2>Beautiful Card Layout</h2>
+            <div class="card-container">
+                <div class="card card-blue">
+                    <h3>Card 1</h3>
+                    <p>This card is styled with external CSS!</p>
+                </div>
+                <div class="card card-green">
+                    <h3>Card 2</h3>
+                    <p>All cards share the same base styles.</p>
+                </div>
+                <div class="card card-purple">
+                    <h3>Card 3</h3>
+                    <p>But each can have unique colors!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>This entire page is styled with just one external CSS file! 🎨</p>
+    </footer>
+</body>
+</html>
