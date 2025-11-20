@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Understanding the Box Model</title>
+    <link rel="stylesheet" href="example-1-styles.css">
+</head>
+<body>
+    <header>
+        <h1>The CSS Box Model</h1>
+        <p>Every element is a box with content, padding, border, and margin!</p>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h2>What is the Box Model?</h2>
+            <p>The box model is how CSS calculates the space an element takes up. Understanding it is essential for layout and spacing!</p>
+        </section>
+        
+        <section class="visual-demo">
+            <h2>Visual Box Model</h2>
+            <p class="description">Here's a box with visible layers so you can see each part:</p>
+            
+            <div class="box-demo">
+                <div class="content-layer">
+                    <strong>CONTENT</strong>
+                    <p>This is the actual content - text, images, etc.</p>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="color-box content-color"></span>
+                    <span>Content - The actual stuff</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-box padding-color"></span>
+                    <span>Padding - Space inside (green)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-box border-color"></span>
+                    <span>Border - Edge line (blue)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-box margin-color"></span>
+                    <span>Margin - Space outside (orange)</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="padding-demo">
+            <h2>Padding Examples</h2>
+            <p class="description">Padding adds space INSIDE an element, between content and border.</p>
+            
+            <div class="example-row">
+                <div class="box no-padding">
+                    <strong>No Padding</strong>
+                    <p>Text touches edges!</p>
+                    <code>padding: 0;</code>
+                </div>
+                
+                <div class="box small-padding">
+                    <strong>Small Padding</strong>
+                    <p>A little breathing room</p>
+                    <code>padding: 10px;</code>
+                </div>
+                
+                <div class="box medium-padding">
+                    <strong>Medium Padding</strong>
+                    <p>Comfortable spacing</p>
+                    <code>padding: 20px;</code>
+                </div>
+                
+                <div class="box large-padding">
+                    <strong>Large Padding</strong>
+                    <p>Lots of space!</p>
+                    <code>padding: 40px;</code>
+                </div>
+            </div>
+        </section>
+        
+        <section class="margin-demo">
+            <h2>Margin Examples</h2>
+            <p class="description">Margin adds space OUTSIDE an element, pushing other elements away.</p>
+            
+            <div class="margin-container">
+                <div class="margin-box no-margin">No Margin</div>
+                <div class="margin-box small-margin">Small Margin (10px)</div>
+                <div class="margin-box medium-margin">Medium Margin (20px)</div>
+                <div class="margin-box large-margin">Large Margin (40px)</div>
+            </div>
+        </section>
+        
+        <section class="border-demo">
+            <h2>Border Examples</h2>
+            <p class="description">Borders create visible lines around elements.</p>
+            
+            <div class="example-row">
+                <div class="border-box thin-border">
+                    <strong>Thin Border</strong>
+                    <code>border: 1px solid</code>
+                </div>
+                
+                <div class="border-box medium-border">
+                    <strong>Medium Border</strong>
+                    <code>border: 3px solid</code>
+                </div>
+                
+                <div class="border-box thick-border">
+                    <strong>Thick Border</strong>
+                    <code>border: 5px solid</code>
+                </div>
+                
+                <div class="border-box dashed-border">
+                    <strong>Dashed Border</strong>
+                    <code>border: 2px dashed</code>
+                </div>
+            </div>
+        </section>
+        
+        <section class="combined-demo">
+            <h2>All Together Now!</h2>
+            <p class="description">Combining padding, border, and margin:</p>
+            
+            <div class="combined-box">
+                <strong>Complete Box</strong>
+                <p>This box has padding (inside space), a border (visible edge), and margin (outside space).</p>
+                <ul>
+                    <li>Padding: 30px (green background)</li>
+                    <li>Border: 3px solid blue</li>
+                    <li>Margin: 40px (orange background shows through)</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="sizing-demo">
+            <h2>Width & Height</h2>
+            <p class="description">By default, width and height apply to the CONTENT only!</p>
+            
+            <div class="sizing-example">
+                <div class="sized-box">
+                    <strong>Width: 300px</strong>
+                    <p>But with 20px padding and 2px border on each side...</p>
+                    <p><strong>Total width = 344px!</strong></p>
+                    <p>(300 + 20 + 20 + 2 + 2)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Use browser DevTools (F12) to inspect elements and see the box model! 🔍</p>
+    </footer>
+</body>
+</html>

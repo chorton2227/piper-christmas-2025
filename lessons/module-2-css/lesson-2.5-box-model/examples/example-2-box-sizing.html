@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Box-Sizing Property</title>
+    <link rel="stylesheet" href="example-2-styles.css">
+</head>
+<body>
+    <header>
+        <h1>Box-Sizing: content-box vs border-box</h1>
+        <p>This property changes how width and height are calculated!</p>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h2>What is box-sizing?</h2>
+            <p>The <code>box-sizing</code> property determines whether padding and border are included in the element's width and height. It makes sizing much more predictable!</p>
+        </section>
+        
+        <section class="comparison">
+            <h2>Side-by-Side Comparison</h2>
+            <p class="description">Both boxes have the same CSS, except for box-sizing. Watch what happens!</p>
+            
+            <div class="comparison-container">
+                <div class="box-wrapper">
+                    <h3>content-box (default)</h3>
+                    <div class="demo-box content-box-demo">
+                        <p>Width: 300px</p>
+                        <p>Padding: 30px</p>
+                        <p>Border: 5px</p>
+                        <p><strong>Total: 370px!</strong></p>
+                    </div>
+                    <p class="info">Width applies to content only. Padding and border are added on top.</p>
+                    <code>box-sizing: content-box;</code>
+                </div>
+                
+                <div class="box-wrapper">
+                    <h3>border-box (recommended!)</h3>
+                    <div class="demo-box border-box-demo">
+                        <p>Width: 300px</p>
+                        <p>Padding: 30px</p>
+                        <p>Border: 5px</p>
+                        <p><strong>Total: 300px!</strong></p>
+                    </div>
+                    <p class="info">Width includes content, padding, AND border. Much more intuitive!</p>
+                    <code>box-sizing: border-box;</code>
+                </div>
+            </div>
+        </section>
+        
+        <section class="math-section">
+            <h2>The Math Behind It</h2>
+            
+            <div class="math-grid">
+                <div class="math-card">
+                    <h3>content-box Calculation</h3>
+                    <div class="calculation">
+                        <p>Content width: <strong>300px</strong></p>
+                        <p>+ Left padding: <strong>30px</strong></p>
+                        <p>+ Right padding: <strong>30px</strong></p>
+                        <p>+ Left border: <strong>5px</strong></p>
+                        <p>+ Right border: <strong>5px</strong></p>
+                        <hr>
+                        <p class="total">Total width: <strong>370px</strong></p>
+                    </div>
+                    <p class="note">⚠️ Setting width doesn't give you the actual width!</p>
+                </div>
+                
+                <div class="math-card">
+                    <h3>border-box Calculation</h3>
+                    <div class="calculation">
+                        <p>Total width: <strong>300px</strong></p>
+                        <p>- Left padding: <strong>30px</strong></p>
+                        <p>- Right padding: <strong>30px</strong></p>
+                        <p>- Left border: <strong>5px</strong></p>
+                        <p>- Right border: <strong>5px</strong></p>
+                        <hr>
+                        <p class="total">Content width: <strong>230px</strong></p>
+                    </div>
+                    <p class="note">✅ What you set is what you get!</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="practical">
+            <h2>Real-World Examples</h2>
+            
+            <h3>Three Equal Columns</h3>
+            <p class="description">With border-box, creating equal-width columns is easy!</p>
+            
+            <div class="columns-demo">
+                <div class="column">
+                    <h4>Column 1</h4>
+                    <p>Width: 33.33%</p>
+                    <p>Padding: 20px</p>
+                    <p>Border: 2px</p>
+                    <p><strong>Still 33.33%!</strong></p>
+                </div>
+                <div class="column">
+                    <h4>Column 2</h4>
+                    <p>Width: 33.33%</p>
+                    <p>Padding: 20px</p>
+                    <p>Border: 2px</p>
+                    <p><strong>Still 33.33%!</strong></p>
+                </div>
+                <div class="column">
+                    <h4>Column 3</h4>
+                    <p>Width: 33.33%</p>
+                    <p>Padding: 20px</p>
+                    <p>Border: 2px</p>
+                    <p><strong>Still 33.33%!</strong></p>
+                </div>
+            </div>
+            
+            <p class="explanation">Without <code>border-box</code>, these columns would break and wrap because padding/border would push them over 100%!</p>
+        </section>
+        
+        <section class="best-practice">
+            <h2>⭐ Best Practice: Use border-box Everywhere!</h2>
+            
+            <div class="code-example">
+                <h3>Add this to the top of your CSS:</h3>
+                <pre><code>* {
+    box-sizing: border-box;
+}</code></pre>
+                <p>This applies <code>border-box</code> to ALL elements, making sizing predictable and intuitive.</p>
+            </div>
+            
+            <div class="benefits">
+                <h3>Why border-box is Better:</h3>
+                <ul>
+                    <li>✅ <strong>Intuitive sizing</strong> - 300px means 300px total</li>
+                    <li>✅ <strong>Easier layouts</strong> - Percentages work as expected</li>
+                    <li>✅ <strong>Less math</strong> - No need to subtract padding/border</li>
+                    <li>✅ <strong>Fewer surprises</strong> - Elements don't overflow unexpectedly</li>
+                    <li>✅ <strong>Industry standard</strong> - Most frameworks use it</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="interactive">
+            <h2>Try It Yourself!</h2>
+            <p class="description">Open your browser's DevTools (F12) and inspect these boxes. Look at the box model diagram to see the difference!</p>
+            
+            <div class="try-it-container">
+                <div class="try-it-box content-box-try">
+                    <h4>content-box</h4>
+                    <p>Right-click and inspect me!</p>
+                </div>
+                
+                <div class="try-it-box border-box-try">
+                    <h4>border-box</h4>
+                    <p>Right-click and inspect me!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Remember: border-box makes your life easier! Use it everywhere. 📦</p>
+    </footer>
+</body>
+</html>
