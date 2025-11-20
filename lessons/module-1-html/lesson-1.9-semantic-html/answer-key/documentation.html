@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Documentation - Learn Semantic HTML</title>
+</head>
+<body>
+    <header>
+        <h1>HTML Documentation <small>v5.0</small></h1>
+        <p>Learn to build semantic, accessible websites</p>
+        <nav>
+            <a href="#intro">Getting Started</a>
+            <a href="#elements">Elements</a>
+            <a href="#best-practices">Best Practices</a>
+            <a href="#examples">Examples</a>
+            <a href="#search">Search</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="intro">
+            <h2>Getting Started with HTML</h2>
+            
+            <p>
+                Welcome to <strong>HTML Documentation</strong>! Whether you're brand new 
+                to web development or looking to <em>master semantic HTML</em>, you're 
+                in the right place.
+            </p>
+            
+            <p>
+                <abbr title="HyperText Markup Language">HTML</abbr> is the foundation 
+                of the web. It provides the <mark>structure and meaning</mark> to web 
+                content, making it accessible to everyone—from search engines to screen 
+                readers to developers maintaining your code years from now.
+            </p>
+            
+            <h3>What You'll Learn</h3>
+            <ul>
+                <li>How to use <strong>semantic HTML elements</strong> properly</li>
+                <li>When to use each structural element</li>
+                <li>Best practices for <strong>accessibility</strong> and <abbr title="Search Engine Optimization">SEO</abbr></li>
+                <li>Real-world examples and patterns</li>
+                <li>How to write <em>clean, maintainable</em> HTML code</li>
+            </ul>
+            
+            <p>
+                <small>
+                    Last updated: <time datetime="2025-01-15">January 15, 2025</time>
+                </small>
+            </p>
+        </section>
+        
+        <section id="elements">
+            <h2>HTML Elements Reference</h2>
+            
+            <article id="element-header">
+                <header>
+                    <h3>&lt;header&gt; Element</h3>
+                    <p>
+                        Category: Sectioning Content | 
+                        <abbr title="HyperText Markup Language">HTML</abbr>5
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Description</h4>
+                    <p>
+                        The <code>&lt;header&gt;</code> element represents 
+                        <strong>introductory content</strong> for its nearest ancestor 
+                        sectioning content or sectioning root element. It typically 
+                        contains heading elements, logos, navigation, or search forms.
+                    </p>
+                </section>
+                
+                <section>
+                    <h4>Code Example</h4>
+                    <pre><code>&lt;header&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;a href="#home"&gt;Home&lt;/a&gt;
+        &lt;a href="#about"&gt;About&lt;/a&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>When to Use</h4>
+                    <ul>
+                        <li><strong>Page headers</strong> with site title and main navigation</li>
+                        <li><strong>Article headers</strong> with title, author, and date</li>
+                        <li><strong>Section headers</strong> with introductory content</li>
+                    </ul>
+                    <p>
+                        <mark>Important:</mark> A page can have multiple 
+                        <code>&lt;header&gt;</code> elements—one for the page and 
+                        others within articles or sections.
+                    </p>
+                </section>
+                
+                <footer>
+                    <p>
+                        <small>
+                            Supported in all modern browsers | 
+                            Last updated: <time datetime="2025-01-15">Jan 15, 2025</time>
+                        </small>
+                    </p>
+                </footer>
+            </article>
+            
+            <article id="element-nav">
+                <header>
+                    <h3>&lt;nav&gt; Element</h3>
+                    <p>
+                        Category: Sectioning Content | 
+                        <abbr title="HyperText Markup Language">HTML</abbr>5
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Description</h4>
+                    <p>
+                        The <code>&lt;nav&gt;</code> element represents a section 
+                        containing <strong>navigation links</strong>, either to other 
+                        pages or to parts within the current page. It helps screen 
+                        readers and search engines identify the main navigation areas.
+                    </p>
+                </section>
+                
+                <section>
+                    <h4>Code Example</h4>
+                    <pre><code>&lt;nav&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#home"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>When to Use</h4>
+                    <ul>
+                        <li><strong>Main site navigation</strong> (primary menu)</li>
+                        <li><strong>Table of contents</strong> for long articles</li>
+                        <li><strong>Breadcrumb navigation</strong></li>
+                        <li><strong>Footer navigation</strong> (secondary links)</li>
+                    </ul>
+                    <p>
+                        <mark>Note:</mark> Not all links need to be in 
+                        <code>&lt;nav&gt;</code>—only <em>major navigation blocks</em>.
+                    </p>
+                </section>
+                
+                <footer>
+                    <p>
+                        <small>
+                            Supported in all modern browsers | 
+                            Last updated: <time datetime="2025-01-15">Jan 15, 2025</time>
+                        </small>
+                    </p>
+                </footer>
+            </article>
+            
+            <article id="element-article">
+                <header>
+                    <h3>&lt;article&gt; Element</h3>
+                    <p>
+                        Category: Sectioning Content | 
+                        <abbr title="HyperText Markup Language">HTML</abbr>5
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Description</h4>
+                    <p>
+                        The <code>&lt;article&gt;</code> element represents a 
+                        <strong>self-contained composition</strong> that could be 
+                        independently distributed or reused. Think blog posts, news 
+                        articles, forum posts, or product cards.
+                    </p>
+                </section>
+                
+                <section>
+                    <h4>Code Example</h4>
+                    <pre><code>&lt;article&gt;
+    &lt;header&gt;
+        &lt;h2&gt;Article Title&lt;/h2&gt;
+        &lt;time&gt;Jan 15, 2025&lt;/time&gt;
+    &lt;/header&gt;
+    &lt;p&gt;Article content...&lt;/p&gt;
+    &lt;footer&gt;
+        &lt;p&gt;By Author Name&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/article&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>When to Use</h4>
+                    <ul>
+                        <li><strong>Blog posts</strong> and news articles</li>
+                        <li><strong>Forum posts</strong> and comments</li>
+                        <li><strong>Product cards</strong> in a catalog</li>
+                        <li><strong>User-submitted content</strong></li>
+                    </ul>
+                    <p>
+                        <mark>Test:</mark> Could this content be distributed via 
+                        <abbr title="Really Simple Syndication">RSS</abbr>? If yes, 
+                        use <code>&lt;article&gt;</code>!
+                    </p>
+                </section>
+                
+                <footer>
+                    <p>
+                        <small>
+                            Supported in all modern browsers | 
+                            Last updated: <time datetime="2025-01-15">Jan 15, 2025</time>
+                        </small>
+                    </p>
+                </footer>
+            </article>
+            
+            <article id="element-section">
+                <header>
+                    <h3>&lt;section&gt; Element</h3>
+                    <p>
+                        Category: Sectioning Content | 
+                        <abbr title="HyperText Markup Language">HTML</abbr>5
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Description</h4>
+                    <p>
+                        The <code>&lt;section&gt;</code> element represents a 
+                        <strong>thematic grouping</strong> of content, typically with 
+                        a heading. Use it to divide content into logical parts.
+                    </p>
+                </section>
+                
+                <section>
+                    <h4>Code Example</h4>
+                    <pre><code>&lt;section&gt;
+    &lt;h2&gt;Our Services&lt;/h2&gt;
+    &lt;p&gt;We offer the following...&lt;/p&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Service 1&lt;/li&gt;
+        &lt;li&gt;Service 2&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/section&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>When to Use</h4>
+                    <ul>
+                        <li><strong>Thematic content grouping</strong> (chapters, tabs)</li>
+                        <li><strong>Major page sections</strong> (services, features)</li>
+                        <li><strong>Within articles</strong> to divide content</li>
+                    </ul>
+                    <p>
+                        <mark>Tip:</mark> If it needs a heading, 
+                        <code>&lt;section&gt;</code> is usually the right choice!
+                    </p>
+                </section>
+                
+                <footer>
+                    <p>
+                        <small>
+                            Supported in all modern browsers | 
+                            Last updated: <time datetime="2025-01-15">Jan 15, 2025</time>
+                        </small>
+                    </p>
+                </footer>
+            </article>
+            
+            <article id="element-strong">
+                <header>
+                    <h3>&lt;strong&gt; Element</h3>
+                    <p>
+                        Category: Text-level Semantics | 
+                        <abbr title="HyperText Markup Language">HTML</abbr>
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Description</h4>
+                    <p>
+                        The <code>&lt;strong&gt;</code> element indicates that text 
+                        has <strong>strong importance, seriousness, or urgency</strong>. 
+                        Browsers typically display it in bold, but its meaning is semantic, 
+                        not just visual.
+                    </p>
+                </section>
+                
+                <section>
+                    <h4>Code Example</h4>
+                    <pre><code>&lt;p&gt;
+    &lt;strong&gt;Warning:&lt;/strong&gt; 
+    This action cannot be undone.
+&lt;/p&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>When to Use</h4>
+                    <ul>
+                        <li><strong>Important information</strong> or warnings</li>
+                        <li><strong>Key points</strong> in instructional content</li>
+                        <li><strong>Urgent messages</strong></li>
+                    </ul>
+                    <p>
+                        <mark>Difference:</mark> Use <code>&lt;strong&gt;</code> for 
+                        <em>importance</em>, <code>&lt;b&gt;</code> for visual boldness only.
+                    </p>
+                </section>
+                
+                <footer>
+                    <p>
+                        <small>
+                            Supported in all browsers | 
+                            Last updated: <time datetime="2025-01-15">Jan 15, 2025</time>
+                        </small>
+                    </p>
+                </footer>
+            </article>
+            
+            <article id="element-time">
+                <header>
+                    <h3>&lt;time&gt; Element</h3>
+                    <p>
+                        Category: Text-level Semantics | 
+                        <abbr title="HyperText Markup Language">HTML</abbr>5
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Description</h4>
+                    <p>
+                        The <code>&lt;time&gt;</code> element represents a specific 
+                        <strong>date, time, or duration</strong> in a machine-readable 
+                        format. This helps search engines and screen readers understand 
+                        temporal information.
+                    </p>
+                </section>
+                
+                <section>
+                    <h4>Code Example</h4>
+                    <pre><code>&lt;p&gt;
+    Published: 
+    &lt;time datetime="2025-01-15"&gt;
+        January 15, 2025
+    &lt;/time&gt;
+&lt;/p&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>When to Use</h4>
+                    <ul>
+                        <li><strong>Publication dates</strong> for articles</li>
+                        <li><strong>Event dates and times</strong></li>
+                        <li><strong>Last updated timestamps</strong></li>
+                        <li><strong>Durations</strong> (using duration format)</li>
+                    </ul>
+                    <p>
+                        <mark>Always include the <var>datetime</var> attribute!</mark> 
+                        Format: <code>YYYY-MM-DD</code> or 
+                        <code>YYYY-MM-DDTHH:MM:SS</code>
+                    </p>
+                </section>
+                
+                <footer>
+                    <p>
+                        <small>
+                            Supported in all modern browsers | 
+                            Last updated: <time datetime="2025-01-15">Jan 15, 2025</time>
+                        </small>
+                    </p>
+                </footer>
+            </article>
+        </section>
+        
+        <section id="best-practices">
+            <h2>Best Practices</h2>
+            
+            <section id="accessibility">
+                <h3>Accessibility Tips</h3>
+                
+                <p>
+                    <strong>Accessible HTML is better HTML.</strong> When you use 
+                    semantic elements properly, you're automatically making your site 
+                    more accessible to people using <em>screen readers and other 
+                    assistive technologies</em>.
+                </p>
+                
+                <h4>DO:</h4>
+                <ul>
+                    <li>
+                        <strong>Use semantic elements</strong> — 
+                        <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>, 
+                        <code>&lt;main&gt;</code> help screen readers navigate
+                    </li>
+                    <li>
+                        <strong>Always add labels to form inputs</strong> — 
+                        Use <code>&lt;label&gt;</code> elements with 
+                        <var>for</var> attributes
+                    </li>
+                    <li>
+                        <strong>Provide alt text for images</strong> — 
+                        The <var>alt</var> attribute describes images to non-visual users
+                    </li>
+                    <li>
+                        <strong>Use proper heading hierarchy</strong> — 
+                        <code>&lt;h1&gt;</code> → <code>&lt;h2&gt;</code> → 
+                        <code>&lt;h3&gt;</code> (don't skip levels!)
+                    </li>
+                    <li>
+                        <strong>Test with keyboard navigation</strong> — 
+                        Press <kbd>Tab</kbd> to move through links and forms
+                    </li>
+                </ul>
+                
+                <h4>DON'T:</h4>
+                <ul>
+                    <li>Use divs for everything (they provide no semantic meaning)</li>
+                    <li>Skip heading levels (h1 → h3 is bad!)</li>
+                    <li>Rely on color alone to convey information</li>
+                    <li>Create keyboard traps where users can't tab out</li>
+                </ul>
+                
+                <blockquote>
+                    <p>
+                        "The power of the Web is in its universality. Access by 
+                        everyone regardless of disability is an essential aspect."
+                    </p>
+                    <footer>
+                        — Tim Berners-Lee, 
+                        <cite>inventor of the World Wide Web</cite>
+                    </footer>
+                </blockquote>
+                
+                <p>
+                    <mark>Remember:</mark> About <strong>15% of the world's population</strong> 
+                    lives with some form of disability. Accessible design benefits everyone!
+                </p>
+            </section>
+            
+            <section id="seo">
+                <h3>SEO Guidelines</h3>
+                
+                <p>
+                    <abbr title="Search Engine Optimization">SEO</abbr> isn't just about 
+                    keywords—it's about <strong>helping search engines understand your 
+                    content</strong>. Semantic HTML is your <em>secret weapon</em> for 
+                    better search rankings.
+                </p>
+                
+                <h4>Best Practices:</h4>
+                <ul>
+                    <li>
+                        <strong>Use one <code>&lt;h1&gt;</code> per page</strong> — 
+                        It tells search engines what your page is about
+                    </li>
+                    <li>
+                        <strong>Put important content in <code>&lt;main&gt;</code></strong> — 
+                        Search engines know this is your primary content
+                    </li>
+                    <li>
+                        <strong>Use <code>&lt;article&gt;</code> for indexable content</strong> — 
+                        Helps search engines identify distinct pieces of content
+                    </li>
+                    <li>
+                        <strong>Use <code>&lt;time&gt;</code> with datetime attributes</strong> — 
+                        Search engines understand when content was published
+                    </li>
+                    <li>
+                        <strong>Structure content with proper headings</strong> — 
+                        Creates an outline search engines can understand
+                    </li>
+                    <li>
+                        <strong>Use <code>&lt;nav&gt;</code> for navigation</strong> — 
+                        Helps search engines understand your site structure
+                    </li>
+                </ul>
+                
+                <p>
+                    <mark>Key insight:</mark> Google's algorithm rewards 
+                    <em>well-structured, semantic HTML</em>. It's not magic—it's just 
+                    good code!
+                </p>
+            </section>
+            
+            <section id="organization">
+                <h3>Code Organization</h3>
+                
+                <p>
+                    Clean, well-organized HTML is <strong>easier to maintain</strong>, 
+                    debug, and collaborate on. Future you (and your teammates) will thank 
+                    you for writing clear, semantic markup.
+                </p>
+                
+                <h4>Guidelines:</h4>
+                <ul>
+                    <li>
+                        <strong>Use consistent indentation</strong> — 
+                        Two spaces or four spaces, pick one and stick with it
+                    </li>
+                    <li>
+                        <strong>Close tags properly</strong> — 
+                        Even though HTML5 is forgiving, proper nesting prevents bugs
+                    </li>
+                    <li>
+                        <strong>Add comments for complex sections</strong> — 
+                        Use <code>&lt;!-- comments --&gt;</code> to explain non-obvious code
+                    </li>
+                    <li>
+                        <strong>Group related content</strong> — 
+                        Use semantic elements to create logical sections
+                    </li>
+                    <li>
+                        <strong>Keep it simple</strong> — 
+                        Don't nest too deeply; aim for <em>flat, readable structures</em>
+                    </li>
+                </ul>
+                
+                <p>
+                    <mark>Pro tip:</mark> Use <kbd>Shift</kbd> + <kbd>Alt</kbd> + 
+                    <kbd>F</kbd> in VS Code to auto-format your HTML!
+                </p>
+            </section>
+            
+            <section id="mistakes">
+                <h3>Common Mistakes to Avoid</h3>
+                
+                <h4>1. Using Divs for Everything</h4>
+                <p>
+                    <strong>Bad:</strong>
+                </p>
+                <pre><code>&lt;div class="header"&gt;
+    &lt;div class="nav"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                <p>
+                    <strong>Good:</strong>
+                </p>
+                <pre><code>&lt;header&gt;
+    &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+                
+                <h4>2. Multiple <code>&lt;main&gt;</code> Elements</h4>
+                <p>
+                    <strong>Only one <code>&lt;main&gt;</code> per page!</strong> 
+                    It identifies the <mark>primary content</mark>.
+                </p>
+                
+                <h4>3. Skipping Heading Levels</h4>
+                <p>
+                    <strong>Bad:</strong> <code>&lt;h1&gt;</code> → 
+                    <code>&lt;h3&gt;</code> (skipped h2!)
+                </p>
+                <p>
+                    <strong>Good:</strong> <code>&lt;h1&gt;</code> → 
+                    <code>&lt;h2&gt;</code> → <code>&lt;h3&gt;</code>
+                </p>
+                
+                <h4>4. Using <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> Instead of <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code></h4>
+                <p>
+                    Use <strong>semantic elements</strong> (<code>&lt;strong&gt;</code>, 
+                    <code>&lt;em&gt;</code>) instead of purely visual ones 
+                    (<code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>) when the text 
+                    has meaning, not just styling.
+                </p>
+                
+                <h4>5. Forgetting <var>datetime</var> Attributes on <code>&lt;time&gt;</code></h4>
+                <p>
+                    Always include <var>datetime</var> so machines can understand dates!
+                </p>
+            </section>
+        </section>
+        
+        <section id="examples">
+            <h2>Complete Examples</h2>
+            
+            <article>
+                <header>
+                    <h3>Example 1: Simple Blog Page</h3>
+                    <p>
+                        This example demonstrates <strong>basic semantic structure</strong> 
+                        for a blog with header, main content, and footer.
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Code</h4>
+                    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Blog&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;My Awesome Blog&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;a href="#home"&gt;Home&lt;/a&gt;
+            &lt;a href="#about"&gt;About&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;article&gt;
+            &lt;header&gt;
+                &lt;h2&gt;My First Post&lt;/h2&gt;
+                &lt;time datetime="2025-01-15"&gt;
+                    Jan 15, 2025
+                &lt;/time&gt;
+            &lt;/header&gt;
+            &lt;p&gt;Content goes here...&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;&copy; 2025 My Blog&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>Key Takeaways</h4>
+                    <ul>
+                        <li>
+                            <mark>One <code>&lt;main&gt;</code> element</mark> 
+                            wraps the primary content
+                        </li>
+                        <li>
+                            <code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code> 
+                            at both page and article levels
+                        </li>
+                        <li>
+                            <code>&lt;nav&gt;</code> clearly marks navigation
+                        </li>
+                        <li>
+                            <code>&lt;time&gt;</code> with <var>datetime</var> 
+                            attribute for dates
+                        </li>
+                    </ul>
+                </section>
+            </article>
+            
+            <article>
+                <header>
+                    <h3>Example 2: Documentation Page with Sidebar</h3>
+                    <p>
+                        This example shows how to create a <strong>documentation layout</strong> 
+                        with main content and a sidebar using <code>&lt;aside&gt;</code>.
+                    </p>
+                </header>
+                
+                <section>
+                    <h4>Code</h4>
+                    <pre><code>&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Documentation&lt;/h1&gt;
+        &lt;nav&gt;...&lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;section id="intro"&gt;
+            &lt;h2&gt;Introduction&lt;/h2&gt;
+            &lt;p&gt;...&lt;/p&gt;
+        &lt;/section&gt;
+        
+        &lt;section id="guide"&gt;
+            &lt;h2&gt;User Guide&lt;/h2&gt;
+            &lt;article&gt;
+                &lt;h3&gt;Getting Started&lt;/h3&gt;
+                &lt;p&gt;...&lt;/p&gt;
+            &lt;/article&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+    
+    &lt;aside&gt;
+        &lt;h2&gt;Table of Contents&lt;/h2&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#intro"&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#guide"&gt;User Guide&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/aside&gt;
+    
+    &lt;footer&gt;...&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h4>Key Takeaways</h4>
+                    <ul>
+                        <li>
+                            <mark><code>&lt;aside&gt;</code> for supplementary content</mark> 
+                            (table of contents, related links)
+                        </li>
+                        <li>
+                            Multiple <code>&lt;section&gt;</code> elements for 
+                            different topics
+                        </li>
+                        <li>
+                            Nested <code>&lt;nav&gt;</code> within 
+                            <code>&lt;aside&gt;</code> is perfectly valid
+                        </li>
+                        <li>
+                            Clear content hierarchy with proper headings
+                        </li>
+                    </ul>
+                </section>
+            </article>
+        </section>
+    </main>
+    
+    <aside>
+        <section>
+            <h2>Table of Contents</h2>
+            <nav>
+                <ul>
+                    <li><a href="#intro">Getting Started</a></li>
+                    <li>
+                        <a href="#elements">Elements Reference</a>
+                        <ul>
+                            <li><a href="#element-header">&lt;header&gt;</a></li>
+                            <li><a href="#element-nav">&lt;nav&gt;</a></li>
+                            <li><a href="#element-article">&lt;article&gt;</a></li>
+                            <li><a href="#element-section">&lt;section&gt;</a></li>
+                            <li><a href="#element-strong">&lt;strong&gt;</a></li>
+                            <li><a href="#element-time">&lt;time&gt;</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#best-practices">Best Practices</a>
+                        <ul>
+                            <li><a href="#accessibility">Accessibility</a></li>
+                            <li><a href="#seo">SEO</a></li>
+                            <li><a href="#organization">Organization</a></li>
+                            <li><a href="#mistakes">Common Mistakes</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#examples">Complete Examples</a></li>
+                </ul>
+            </nav>
+        </section>
+        
+        <section>
+            <h2>Quick Tips</h2>
+            <ul>
+                <li>
+                    <mark>Always use semantic elements</mark> when they apply
+                </li>
+                <li>
+                    Only one <code>&lt;main&gt;</code> per page
+                </li>
+                <li>
+                    Test with <kbd>Tab</kbd> key for keyboard navigation
+                </li>
+                <li>
+                    Use <code>&lt;time&gt;</code> with <var>datetime</var> attributes
+                </li>
+                <li>
+                    Proper heading hierarchy matters!
+                </li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Keyboard Shortcuts</h2>
+            <p>Useful editor shortcuts for HTML development:</p>
+            <ul>
+                <li>
+                    <kbd>Ctrl</kbd> + <kbd>S</kbd> — Save file
+                </li>
+                <li>
+                    <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>F</kbd> — Format document
+                </li>
+                <li>
+                    <kbd>Ctrl</kbd> + <kbd>/</kbd> — Toggle comment
+                </li>
+                <li>
+                    <kbd>Alt</kbd> + <kbd>Up/Down</kbd> — Move line up/down
+                </li>
+                <li>
+                    <kbd>Ctrl</kbd> + <kbd>D</kbd> — Select next occurrence
+                </li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Related Resources</h2>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">
+                        <cite>MDN Web Docs: HTML</cite>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">
+                        <cite>WCAG Quick Reference</cite>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://html.spec.whatwg.org/" target="_blank">
+                        <cite>HTML Living Standard</cite>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://validator.w3.org/" target="_blank">
+                        <cite>W3C Markup Validation Service</cite>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Terminology</h2>
+            <dl>
+                <dt><abbr title="HyperText Markup Language">HTML</abbr></dt>
+                <dd>HyperText Markup Language - The standard markup language for web pages</dd>
+                
+                <dt><abbr title="Cascading Style Sheets">CSS</abbr></dt>
+                <dd>Cascading Style Sheets - Used to style HTML elements</dd>
+                
+                <dt><abbr title="Search Engine Optimization">SEO</abbr></dt>
+                <dd>Search Engine Optimization - Techniques to improve search rankings</dd>
+                
+                <dt><abbr title="Document Object Model">DOM</abbr></dt>
+                <dd>Document Object Model - The tree structure of an HTML document</dd>
+                
+                <dt><abbr title="World Wide Web Consortium">W3C</abbr></dt>
+                <dd>World Wide Web Consortium - Organization that develops web standards</dd>
+            </dl>
+        </section>
+    </aside>
+    
+    <footer>
+        <section>
+            <h3>About This Documentation</h3>
+            <p>
+                This documentation is designed to help developers learn 
+                <strong>semantic HTML</strong> and build accessible, 
+                well-structured websites.
+            </p>
+            <p>
+                <strong>Version:</strong> 5.0 | 
+                <strong>Last Updated:</strong> 
+                <time datetime="2025-01-15">January 15, 2025</time>
+            </p>
+        </section>
+        
+        <section>
+            <h3>Contributors</h3>
+            <ul>
+                <li>Alex Johnson - Lead Author</li>
+                <li>Sam Rodriguez - Technical Reviewer</li>
+                <li>Taylor Kim - Accessibility Expert</li>
+                <li>Community Contributors - Thank you!</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>Quick Links</h3>
+            <nav>
+                <ul>
+                    <li><a href="#top">Back to Top</a></li>
+                    <li><a href="https://github.com/example/html-docs">GitHub Repository</a></li>
+                    <li><a href="mailto:feedback@htmldocs.com">Send Feedback</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#license">License</a></li>
+                </ul>
+            </nav>
+        </section>
+        
+        <p>
+            <small>
+                &copy; 2025 HTML Documentation Project. Licensed under 
+                <abbr title="Massachusetts Institute of Technology">MIT</abbr> License.
+            </small>
+        </p>
+        
+        <p>
+            <small>
+                Made with ❤️ by developers, for developers. 
+                Contributions welcome on GitHub!
+            </small>
+        </p>
+    </footer>
+</body>
+</html>
