@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Types Demo</title>
+</head>
+<body>
+    <h1>HTML5 Input Types</h1>
+    <p>Explore different input types available in HTML!</p>
+    
+    <form>
+        <!-- Text -->
+        <div class="input-demo">
+            <h3>Text Input</h3>
+            <label for="text">type="text"</label>
+            <input type="text" id="text" name="text" placeholder="Any text...">
+            <p><em>Basic text input for general use</em></p>
+        </div>
+        
+        <!-- Email -->
+        <div class="input-demo">
+            <h3>Email Input</h3>
+            <label for="email">type="email"</label>
+            <input type="email" id="email" name="email" placeholder="email@example.com">
+            <p><em>Validates email format automatically</em></p>
+        </div>
+        
+        <!-- Password -->
+        <div class="input-demo">
+            <h3>Password Input</h3>
+            <label for="password">type="password"</label>
+            <input type="password" id="password" name="password" placeholder="Secret...">
+            <p><em>Hides characters for security</em></p>
+        </div>
+        
+        <!-- Number -->
+        <div class="input-demo">
+            <h3>Number Input</h3>
+            <label for="number">type="number"</label>
+            <input type="number" id="number" name="number" min="0" max="100" value="50">
+            <p><em>Only accepts numbers, has spinner controls</em></p>
+        </div>
+        
+        <!-- Range -->
+        <div class="input-demo">
+            <h3>Range (Slider)</h3>
+            <label for="range">type="range"</label>
+            <input type="range" id="range" name="range" min="0" max="100" value="50">
+            <p><em>Slider control for selecting a value</em></p>
+        </div>
+        
+        <!-- Date -->
+        <div class="input-demo">
+            <h3>Date Input</h3>
+            <label for="date">type="date"</label>
+            <input type="date" id="date" name="date">
+            <p><em>Calendar picker for dates</em></p>
+        </div>
+        
+        <!-- Time -->
+        <div class="input-demo">
+            <h3>Time Input</h3>
+            <label for="time">type="time"</label>
+            <input type="time" id="time" name="time">
+            <p><em>Time picker with hours and minutes</em></p>
+        </div>
+        
+        <!-- Color -->
+        <div class="input-demo">
+            <h3>Color Input</h3>
+            <label for="color">type="color"</label>
+            <input type="color" id="color" name="color" value="#3B82F6">
+            <p><em>Color picker tool</em></p>
+        </div>
+        
+        <!-- URL -->
+        <div class="input-demo">
+            <h3>URL Input</h3>
+            <label for="url">type="url"</label>
+            <input type="url" id="url" name="url" placeholder="https://example.com">
+            <p><em>Validates URL format</em></p>
+        </div>
+        
+        <!-- Tel -->
+        <div class="input-demo">
+            <h3>Telephone Input</h3>
+            <label for="tel">type="tel"</label>
+            <input type="tel" id="tel" name="tel" placeholder="(555) 123-4567">
+            <p><em>For phone numbers (mobile keyboard on phones)</em></p>
+        </div>
+        
+        <!-- Search -->
+        <div class="input-demo">
+            <h3>Search Input</h3>
+            <label for="search">type="search"</label>
+            <input type="search" id="search" name="search" placeholder="Search...">
+            <p><em>Search box with clear button</em></p>
+        </div>
+        
+        <!-- File -->
+        <div class="input-demo">
+            <h3>File Input</h3>
+            <label for="file">type="file"</label>
+            <input type="file" id="file" name="file">
+            <p><em>File upload button</em></p>
+        </div>
+        
+        <!-- Checkbox -->
+        <div class="input-demo">
+            <h3>Checkbox</h3>
+            <label>
+                <input type="checkbox" name="check1" value="yes">
+                type="checkbox"
+            </label><br>
+            <label>
+                <input type="checkbox" name="check2" value="yes" checked>
+                Pre-checked option
+            </label>
+            <p><em>Select multiple options</em></p>
+        </div>
+        
+        <!-- Radio -->
+        <div class="input-demo">
+            <h3>Radio Buttons</h3>
+            <label>
+                <input type="radio" name="radio-demo" value="option1">
+                Option 1
+            </label><br>
+            <label>
+                <input type="radio" name="radio-demo" value="option2" checked>
+                Option 2 (selected)
+            </label><br>
+            <label>
+                <input type="radio" name="radio-demo" value="option3">
+                Option 3
+            </label>
+            <p><em>Select only one from a group</em></p>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit">Try Submitting the Form!</button>
+    </form>
+    
+    <hr>
+    
+    <h2>📝 Notes</h2>
+    <ul>
+        <li>Different input types provide different keyboards on mobile devices</li>
+        <li>Some browsers may style inputs differently</li>
+        <li>Validation happens automatically for email, url, etc.</li>
+        <li>Try clicking submit with invalid data to see validation!</li>
+    </ul>
+</body>
+</html>
