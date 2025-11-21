@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Positioning</title>
+    <link rel="stylesheet" href="example-1-styles.css">
+</head>
+<body>
+    <div class="page-container">
+        <h1>🎯 Basic Positioning</h1>
+        <p class="intro">Understanding static, relative, absolute, and fixed positioning</p>
+        
+        <!-- Static Positioning -->
+        <section class="demo-section">
+            <h2>1. Static Positioning (Default)</h2>
+            <p class="description">Normal document flow - elements appear in order</p>
+            
+            <div class="demo-box">
+                <div class="box static">Box 1 (static)</div>
+                <div class="box static">Box 2 (static)</div>
+                <div class="box static">Box 3 (static)</div>
+            </div>
+            
+            <code class="code-display">
+.box {
+    position: static;  /* Default - no special positioning */
+}
+            </code>
+            <p class="note">ℹ️ Static elements can't use top, right, bottom, left properties</p>
+        </section>
+        
+        <!-- Relative Positioning -->
+        <section class="demo-section">
+            <h2>2. Relative Positioning</h2>
+            <p class="description">Moved relative to its original position - keeps space in layout</p>
+            
+            <div class="demo-box">
+                <div class="box static">Box 1 (static)</div>
+                <div class="box relative-example">Box 2 (relative: moved right & down)</div>
+                <div class="box static">Box 3 (static)</div>
+            </div>
+            
+            <code class="code-display">
+.box {
+    position: relative;
+    top: 20px;    /* Move down 20px */
+    left: 30px;   /* Move right 30px */
+}
+            </code>
+            <p class="note">✨ Notice Box 2's original space is still reserved (gap remains)</p>
+        </section>
+        
+        <!-- Absolute Positioning -->
+        <section class="demo-section">
+            <h2>3. Absolute Positioning</h2>
+            <p class="description">Positioned relative to nearest positioned ancestor</p>
+            
+            <div class="relative-parent">
+                <p class="parent-label">Parent (position: relative)</p>
+                <div class="box static">Normal Box 1</div>
+                <div class="box absolute-corner">Absolute (top-right corner)</div>
+                <div class="box absolute-center">Absolute (centered)</div>
+                <div class="box static">Normal Box 2</div>
+            </div>
+            
+            <code class="code-display">
+.parent {
+    position: relative;  /* Creates positioning context */
+}
+
+.absolute-corner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* Center trick! */
+}
+            </code>
+            <p class="note">🎯 Absolute elements are removed from normal flow</p>
+        </section>
+        
+        <!-- Fixed Positioning -->
+        <section class="demo-section">
+            <h2>4. Fixed Positioning</h2>
+            <p class="description">Positioned relative to viewport - stays when scrolling</p>
+            
+            <div class="demo-box tall-box">
+                <p>Scroll down to see the fixed element stay in place!</p>
+                <p>Fixed positioning is perfect for:</p>
+                <ul>
+                    <li>Navigation bars</li>
+                    <li>Chat widgets</li>
+                    <li>Back-to-top buttons</li>
+                    <li>Cookie banners</li>
+                </ul>
+                <p style="margin-top: 50px;">Keep scrolling...</p>
+                <p style="margin-top: 50px;">Almost there...</p>
+                <p style="margin-top: 50px;">You did it! 🎉</p>
+            </div>
+            
+            <code class="code-display">
+.fixed-element {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    /* Stays in viewport corner while scrolling */
+}
+            </code>
+        </section>
+        
+        <!-- Comparison Table -->
+        <section class="demo-section highlight">
+            <h2>📊 Quick Comparison</h2>
+            
+            <div class="comparison-table">
+                <div class="table-row header">
+                    <div>Position</div>
+                    <div>In Flow?</div>
+                    <div>Scrolls?</div>
+                    <div>Positioned Relative To</div>
+                </div>
+                <div class="table-row">
+                    <div><strong>static</strong></div>
+                    <div>✅ Yes</div>
+                    <div>✅ Yes</div>
+                    <div>N/A (normal flow)</div>
+                </div>
+                <div class="table-row">
+                    <div><strong>relative</strong></div>
+                    <div>✅ Yes*</div>
+                    <div>✅ Yes</div>
+                    <div>Original position</div>
+                </div>
+                <div class="table-row">
+                    <div><strong>absolute</strong></div>
+                    <div>❌ No</div>
+                    <div>✅ Yes</div>
+                    <div>Nearest positioned ancestor</div>
+                </div>
+                <div class="table-row">
+                    <div><strong>fixed</strong></div>
+                    <div>❌ No</div>
+                    <div>❌ No</div>
+                    <div>Viewport</div>
+                </div>
+            </div>
+            <p class="note-small">*Keeps space in layout, but visually offset</p>
+        </section>
+    </div>
+    
+    <!-- Fixed Demo Element -->
+    <div class="fixed-demo">
+        <span class="demo-label">Fixed Position</span>
+        <p>I stay here! 📌</p>
+    </div>
+</body>
+</html>

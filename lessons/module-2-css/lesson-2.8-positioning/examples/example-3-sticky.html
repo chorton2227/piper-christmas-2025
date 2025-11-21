@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Positioning</title>
+    <link rel="stylesheet" href="example-3-styles.css">
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <h1>📌 Sticky Positioning</h1>
+            <p>Scroll down to see sticky elements in action!</p>
+        </header>
+        
+        <!-- Introduction -->
+        <section class="intro-section">
+            <h2>What is Sticky Positioning?</h2>
+            <p>Sticky positioning is a <strong>hybrid</strong> of relative and fixed positioning:</p>
+            <ul>
+                <li>Acts like <code>relative</code> positioning normally</li>
+                <li>Becomes <code>fixed</code> when scrolling reaches a threshold</li>
+                <li>Stays within its parent container</li>
+                <li>Perfect for section headers and navigation</li>
+            </ul>
+        </section>
+        
+        <!-- Section 1 -->
+        <section class="content-section">
+            <h2 class="sticky-header">Section 1: Introduction</h2>
+            <p>This section header will stick to the top when you scroll past it!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            <div class="code-box">
+                <strong>CSS for sticky header:</strong>
+                <code>
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+                </code>
+            </div>
+        </section>
+        
+        <!-- Section 2 -->
+        <section class="content-section">
+            <h2 class="sticky-header">Section 2: How It Works</h2>
+            <p>Notice how the previous header unstuck when you scrolled past its section? That's because sticky elements only stick within their parent container.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
+            <p>Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p>
+            <div class="highlight-box">
+                <strong>💡 Key Points:</strong>
+                <ul>
+                    <li>Sticky requires a threshold: <code>top</code>, <code>bottom</code>, <code>left</code>, or <code>right</code></li>
+                    <li>Element must have room to stick (parent must be taller)</li>
+                    <li>Parent can't have <code>overflow: hidden</code></li>
+                    <li>Works great for table headers and section titles</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Section 3 -->
+        <section class="content-section">
+            <h2 class="sticky-header">Section 3: Use Cases</h2>
+            <p>Sticky positioning is perfect for:</p>
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <div class="icon">📋</div>
+                    <h3>Section Headers</h3>
+                    <p>Keep section titles visible as users scroll through content</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="icon">📊</div>
+                    <h3>Table Headers</h3>
+                    <p>Sticky column headers for long data tables</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="icon">🗂️</div>
+                    <h3>Category Labels</h3>
+                    <p>Stick category names in alphabetical lists</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="icon">📱</div>
+                    <h3>Sidebar Navigation</h3>
+                    <p>Sticky sidebar that starts scrolling at a certain point</p>
+                </div>
+            </div>
+            <p style="margin-top: 30px;">Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</p>
+        </section>
+        
+        <!-- Section 4 -->
+        <section class="content-section">
+            <h2 class="sticky-header">Section 4: Sticky Sidebar Example</h2>
+            <div class="sidebar-demo">
+                <aside class="sticky-sidebar">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li><a href="#section1">Introduction</a></li>
+                        <li><a href="#section2">How It Works</a></li>
+                        <li><a href="#section3">Use Cases</a></li>
+                        <li><a href="#section4">Sidebar Example</a></li>
+                        <li><a href="#section5">Best Practices</a></li>
+                    </ul>
+                    <div class="sidebar-note">
+                        👆 This sidebar is sticky!
+                    </div>
+                </aside>
+                <div class="main-content">
+                    <p>This layout demonstrates a sticky sidebar alongside main content. The sidebar will stick to the top when you scroll.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.</p>
+                    <p>Nulla porttitor accumsan tincidunt. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Donec rutrum congue leo eget malesuada.</p>
+                    <p>Proin eget tortor risus. Vivamus suscipit tortor eget felis porttitor volutpat. Cras ultricies ligula sed magna dictum porta.</p>
+                    <p>Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Quisque velit nisi, pretium ut lacinia in, elementum id enim.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 5 -->
+        <section class="content-section">
+            <h2 class="sticky-header">Section 5: Best Practices</h2>
+            
+            <div class="best-practices">
+                <div class="practice-item good">
+                    <div class="practice-icon">✅</div>
+                    <div>
+                        <strong>DO: Use for Section Headers</strong>
+                        <p>Sticky headers help users know where they are in long documents</p>
+                    </div>
+                </div>
+                
+                <div class="practice-item good">
+                    <div class="practice-icon">✅</div>
+                    <div>
+                        <strong>DO: Add Background Color</strong>
+                        <p>Sticky elements should have a background so content doesn't show through</p>
+                    </div>
+                </div>
+                
+                <div class="practice-item good">
+                    <div class="practice-icon">✅</div>
+                    <div>
+                        <strong>DO: Set Z-Index</strong>
+                        <p>Make sure sticky elements appear above content</p>
+                    </div>
+                </div>
+                
+                <div class="practice-item bad">
+                    <div class="practice-icon">❌</div>
+                    <div>
+                        <strong>DON'T: Forget the Threshold</strong>
+                        <p>Sticky requires <code>top</code>, <code>bottom</code>, <code>left</code>, or <code>right</code></p>
+                    </div>
+                </div>
+                
+                <div class="practice-item bad">
+                    <div class="practice-icon">❌</div>
+                    <div>
+                        <strong>DON'T: Use on Parent with overflow: hidden</strong>
+                        <p>Sticky won't work if parent has <code>overflow: hidden</code></p>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 30px;">Scroll all the way to the bottom to see the last section header unstick!</p>
+        </section>
+        
+        <!-- Final Section -->
+        <section class="content-section">
+            <h2 class="sticky-header">Section 6: You Made It! 🎉</h2>
+            <p>Congratulations! You've scrolled through all the sections and seen sticky positioning in action.</p>
+            <p>Notice how each section header:</p>
+            <ul>
+                <li>Started in its normal position</li>
+                <li>Became stuck at the top when you scrolled past it</li>
+                <li>Unstuck when you scrolled past its section</li>
+            </ul>
+            <p>This is the power of <code>position: sticky</code>! 🚀</p>
+            
+            <div class="final-box">
+                <h3>Quick Reference</h3>
+                <code>
+.element {
+    position: sticky;
+    top: 0;           /* Stick when reaching top */
+    background: white; /* Cover content below */
+    z-index: 10;      /* Appear above content */
+}
+                </code>
+            </div>
+        </section>
+        
+        <footer class="page-footer">
+            <p>End of demo - scroll back up to see it again! ↑</p>
+        </footer>
+    </div>
+</body>
+</html>
