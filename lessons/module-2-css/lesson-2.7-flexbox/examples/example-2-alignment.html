@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justify Content and Align Items</title>
+    <link rel="stylesheet" href="example-2-styles.css">
+</head>
+<body>
+    <div class="page-container">
+        <h1>🎨 Justify Content & Align Items</h1>
+        <p class="intro">Master alignment on both axes</p>
+        
+        <!-- Justify Content Examples -->
+        <section class="demo-section">
+            <h2>justify-content (Main Axis)</h2>
+            <p class="description">Controls spacing along the main axis (horizontal in row, vertical in column)</p>
+            
+            <div class="example-grid">
+                <div class="example-item">
+                    <h3>flex-start</h3>
+                    <div class="flex-container justify-start">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>center</h3>
+                    <div class="flex-container justify-center">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>flex-end</h3>
+                    <div class="flex-container justify-end">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>space-between</h3>
+                    <div class="flex-container justify-between">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>space-around</h3>
+                    <div class="flex-container justify-around">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>space-evenly</h3>
+                    <div class="flex-container justify-evenly">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Align Items Examples -->
+        <section class="demo-section">
+            <h2>align-items (Cross Axis)</h2>
+            <p class="description">Controls alignment along the cross axis (vertical in row, horizontal in column)</p>
+            
+            <div class="example-grid">
+                <div class="example-item">
+                    <h3>stretch (default)</h3>
+                    <div class="flex-container tall align-stretch">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>flex-start</h3>
+                    <div class="flex-container tall align-start">
+                        <div class="flex-item sized">1</div>
+                        <div class="flex-item sized">2</div>
+                        <div class="flex-item sized">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>center</h3>
+                    <div class="flex-container tall align-center">
+                        <div class="flex-item sized">1</div>
+                        <div class="flex-item sized">2</div>
+                        <div class="flex-item sized">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>flex-end</h3>
+                    <div class="flex-container tall align-end">
+                        <div class="flex-item sized">1</div>
+                        <div class="flex-item sized">2</div>
+                        <div class="flex-item sized">3</div>
+                    </div>
+                </div>
+                
+                <div class="example-item">
+                    <h3>baseline</h3>
+                    <div class="flex-container tall align-baseline">
+                        <div class="flex-item sized" style="font-size: 12px; padding: 10px;">1</div>
+                        <div class="flex-item sized" style="font-size: 20px; padding: 20px;">2</div>
+                        <div class="flex-item sized" style="font-size: 16px; padding: 15px;">3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Combined Examples -->
+        <section class="demo-section highlight">
+            <h2>🌟 Combining Both</h2>
+            <p class="description">Use <code>justify-content</code> and <code>align-items</code> together for powerful layouts</p>
+            
+            <div class="combined-examples">
+                <div class="combined-item">
+                    <h3>Perfect Centering</h3>
+                    <code class="mini-code">justify-content: center;<br>align-items: center;</code>
+                    <div class="flex-container tall combined-center">
+                        <div class="flex-item sized">Centered!</div>
+                    </div>
+                </div>
+                
+                <div class="combined-item">
+                    <h3>Top Right Corner</h3>
+                    <code class="mini-code">justify-content: flex-end;<br>align-items: flex-start;</code>
+                    <div class="flex-container tall combined-top-right">
+                        <div class="flex-item sized">Top Right</div>
+                    </div>
+                </div>
+                
+                <div class="combined-item">
+                    <h3>Bottom Spread</h3>
+                    <code class="mini-code">justify-content: space-between;<br>align-items: flex-end;</code>
+                    <div class="flex-container tall combined-bottom-spread">
+                        <div class="flex-item sized">1</div>
+                        <div class="flex-item sized">2</div>
+                        <div class="flex-item sized">3</div>
+                    </div>
+                </div>
+                
+                <div class="combined-item">
+                    <h3>Center Spread</h3>
+                    <code class="mini-code">justify-content: space-evenly;<br>align-items: center;</code>
+                    <div class="flex-container tall combined-center-spread">
+                        <div class="flex-item sized">1</div>
+                        <div class="flex-item sized">2</div>
+                        <div class="flex-item sized">3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Real World Example -->
+        <section class="demo-section">
+            <h2>🎯 Real World: Header Navigation</h2>
+            <div class="header-demo">
+                <div class="header">
+                    <div class="logo">MyLogo</div>
+                    <nav class="nav">
+                        <a href="#" class="nav-link">Home</a>
+                        <a href="#" class="nav-link">About</a>
+                        <a href="#" class="nav-link">Services</a>
+                        <a href="#" class="nav-link">Contact</a>
+                    </nav>
+                    <button class="cta-button">Sign Up</button>
+                </div>
+            </div>
+            <code class="code-display">
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+            </code>
+        </section>
+    </div>
+</body>
+</html>
