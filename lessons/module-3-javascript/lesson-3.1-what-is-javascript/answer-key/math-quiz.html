@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz - JavaScript Exercise 2</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 2.8em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .quiz-icon {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        
+        .instruction {
+            background: #fff3f3;
+            border: 3px dashed #f5576c;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        
+        .instruction p {
+            margin: 10px 0;
+            color: #666;
+        }
+        
+        .key-instruction {
+            background: #f5576c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Math Quiz 🧮</h1>
+        <div class="quiz-icon">🎓📐✏️</div>
+        <div class="instruction">
+            <p><strong>Welcome to the JavaScript Math Quiz!</strong></p>
+            <p>Open the console to see all the questions and answers</p>
+            <div class="key-instruction">Press F12 or Ctrl+Shift+J</div>
+            <p style="margin-top: 15px; font-size: 0.9em;">
+                This quiz demonstrates how JavaScript can solve<br>
+                all kinds of math problems automatically!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ===== EXERCISE 2: MATH QUIZ =====
+        // This is the answer key for Exercise 2
+        
+        console.log('╔════════════════════════════════════════╗');
+        console.log('║   JAVASCRIPT MATH QUIZ - ANSWER KEY    ║');
+        console.log('╚════════════════════════════════════════╝');
+        console.log('');
+        
+        // ========== SECTION 1: EASY QUESTIONS ==========
+        console.log('─────────────────────────────────────────');
+        console.log('📝 SECTION 1: EASY QUESTIONS');
+        console.log('─────────────────────────────────────────');
+        console.log('');
+        
+        // Addition
+        console.log('Question 1: 5 + 3 =', 5 + 3);
+        console.log('✓ Addition is combining numbers together');
+        console.log('');
+        
+        // Subtraction
+        console.log('Question 2: 10 - 4 =', 10 - 4);
+        console.log('✓ Subtraction is taking away');
+        console.log('');
+        
+        // Multiplication
+        console.log('Question 3: 6 × 7 =', 6 * 7);
+        console.log('✓ Multiplication is repeated addition');
+        console.log('');
+        
+        // Division
+        console.log('Question 4: 20 ÷ 4 =', 20 / 4);
+        console.log('✓ Division splits into equal groups');
+        console.log('');
+        
+        // Another addition
+        console.log('Question 5: 15 + 25 =', 15 + 25);
+        console.log('✓ Great job on the easy section!');
+        console.log('');
+        console.log('');
+        
+        // ========== SECTION 2: MEDIUM QUESTIONS ==========
+        console.log('─────────────────────────────────────────');
+        console.log('🧠 SECTION 2: MEDIUM QUESTIONS');
+        console.log('─────────────────────────────────────────');
+        console.log('');
+        
+        // Two-step calculation
+        console.log('Question 6: 5 + 3 × 2 =', 5 + 3 * 2);
+        console.log('⚠️ Remember: Multiply FIRST, then add!');
+        console.log('Step 1: 3 × 2 =', 3 * 2);
+        console.log('Step 2: 5 + 6 =', 5 + 6);
+        console.log('');
+        
+        // Parentheses problem
+        console.log('Question 7: (10 + 5) × 2 =', (10 + 5) * 2);
+        console.log('⚠️ Parentheses change the order!');
+        console.log('Step 1: (10 + 5) =', 10 + 5);
+        console.log('Step 2: 15 × 2 =', 15 * 2);
+        console.log('');
+        
+        // Modulo problem
+        console.log('Question 8: 17 % 5 =', 17 % 5);
+        console.log('💡 Modulo gives us the REMAINDER');
+        console.log('17 ÷ 5 = 3 with remainder', 17 % 5);
+        console.log('');
+        console.log('');
+        
+        // ========== SECTION 3: WORD PROBLEMS ==========
+        console.log('─────────────────────────────────────────');
+        console.log('📖 SECTION 3: WORD PROBLEMS');
+        console.log('─────────────────────────────────────────');
+        console.log('');
+        
+        // Word Problem 1: Shopping
+        console.log('Problem 1: Shopping Money 💰');
+        console.log('──────────────────────────');
+        console.log('Scenario: I have $50 and buy 3 games at $12 each');
+        console.log('Question: How much money do I have left?');
+        console.log('');
+        console.log('Solution:');
+        console.log('Starting money: $50');
+        console.log('Cost per game: $12');
+        console.log('Number of games: 3');
+        console.log('Total spent:', 3 * 12, 'dollars');
+        console.log('Money left:', 50 - (3 * 12), 'dollars');
+        console.log('✓ Answer: I have $' + (50 - 3 * 12) + ' left!');
+        console.log('');
+        
+        // Word Problem 2: Game Points
+        console.log('Problem 2: Game Points 🎮');
+        console.log('─────────────────────────');
+        console.log('Scenario: Each level gives 25 points. I complete 8 levels.');
+        console.log('Question: How many points do I have?');
+        console.log('');
+        console.log('Solution:');
+        console.log('Points per level: 25');
+        console.log('Levels completed: 8');
+        console.log('Total points:', 25 * 8);
+        console.log('✓ Answer: I earned', 25 * 8, 'points!');
+        console.log('');
+        console.log('Bonus: If I need 300 points to level up:');
+        console.log('Points needed:', 300 - (25 * 8), 'more points');
+        console.log('');
+        console.log('');
+        
+        // ========== BONUS SECTION ==========
+        console.log('─────────────────────────────────────────');
+        console.log('⭐ BONUS: COMPLEX CALCULATIONS');
+        console.log('─────────────────────────────────────────');
+        console.log('');
+        
+        console.log('Challenge 1: Order of Operations');
+        console.log('2 + 3 × 4 - 5 =', 2 + 3 * 4 - 5);
+        console.log('Steps: 3×4=12, then 2+12=14, then 14-5=9');
+        console.log('');
+        
+        console.log('Challenge 2: Nested Parentheses');
+        console.log('((8 + 2) × 3) - 5 =', ((8 + 2) * 3) - 5);
+        console.log('Steps: 8+2=10, 10×3=30, 30-5=25');
+        console.log('');
+        
+        console.log('Challenge 3: Real Pizza Math 🍕');
+        console.log('4 pizzas, 8 slices each, 6 friends');
+        console.log('Total slices:', 4 * 8);
+        console.log('Slices per person:', (4 * 8) / 6);
+        console.log('Everyone gets', Math.floor((4 * 8) / 6), 'whole slices!');
+        console.log('');
+        console.log('');
+        
+        // ========== QUIZ SUMMARY ==========
+        console.log('╔════════════════════════════════════════╗');
+        console.log('║            QUIZ COMPLETE! 🎉           ║');
+        console.log('╚════════════════════════════════════════╝');
+        console.log('');
+        console.log('📊 Quiz Statistics:');
+        console.log('Total Questions: 11');
+        console.log('Easy Questions: 5');
+        console.log('Medium Questions: 3');
+        console.log('Word Problems: 2');
+        console.log('Bonus Challenges: 3');
+        console.log('');
+        console.log('✨ Great job practicing JavaScript math!');
+        console.log('You solved', 5 + 3 + 2 + 3, 'problems total!');
+    </script>
+</body>
+</html>
