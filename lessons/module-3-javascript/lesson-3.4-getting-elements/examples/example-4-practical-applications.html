@@ -351,9 +351,21 @@
         let inventory = document.querySelector('.inventory');
 
         console.log('✓ First Elements Retrieved:');
-        console.log('  First action button:', firstActionButton.textContent);
-        console.log('  First item:', firstItem.querySelector('.item-name').textContent);
-        console.log('  First enemy:', firstEnemy.querySelector('.enemy-name').textContent);
+        if (firstActionButton) {
+            console.log('  First action button:', firstActionButton.textContent);
+        }
+        if (firstItem) {
+            let itemName = firstItem.querySelector('.item-name');
+            if (itemName) {
+                console.log('  First item:', itemName.textContent);
+            }
+        }
+        if (firstEnemy) {
+            let enemyName = firstEnemy.querySelector('.enemy-name');
+            if (enemyName) {
+                console.log('  First enemy:', enemyName.textContent);
+            }
+        }
         console.log('');
 
         console.log('\n=== STEP 3: Get ALL Elements of Each Type (querySelectorAll) ===\n');
