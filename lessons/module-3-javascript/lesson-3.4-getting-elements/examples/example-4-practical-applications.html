@@ -421,8 +421,10 @@
 
         console.log('🎒 Inventory Items:');
         allItems.forEach(function(item, index) {
-            let name = item.querySelector('.item-name').textContent;
-            let count = item.querySelector('.item-count').textContent;
+            let nameElem = item.querySelector('.item-name');
+            let countElem = item.querySelector('.item-count');
+            let name = nameElem ? nameElem.textContent : 'Unknown';
+            let count = countElem ? countElem.textContent : '?';
             let type = item.getAttribute('data-item-type');
             console.log(`  ${index + 1}. ${name} - ${count} (Type: ${type})`);
         });
@@ -430,8 +432,10 @@
 
         console.log('🐉 Enemy Details:');
         allEnemies.forEach(function(enemy, index) {
-            let name = enemy.querySelector('.enemy-name').textContent;
-            let hp = enemy.querySelector('.enemy-hp').textContent;
+            let nameElem = enemy.querySelector('.enemy-name');
+            let hpElem = enemy.querySelector('.enemy-hp');
+            let name = nameElem ? nameElem.textContent : 'Unknown';
+            let hp = hpElem ? hpElem.textContent : 'HP: ?';
             let type = enemy.getAttribute('data-enemy-type');
             let id = enemy.getAttribute('data-enemy-id');
             console.log(`  ${index + 1}. ${name} - ${hp} (Type: ${type}, ID: ${id})`);
