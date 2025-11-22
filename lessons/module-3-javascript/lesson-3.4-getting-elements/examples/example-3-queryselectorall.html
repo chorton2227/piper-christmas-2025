@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: querySelectorAll Basics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: #4facfe;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .info-box {
+            background: #e3f6ff;
+            border-left: 4px solid #4facfe;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .enemy-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: inline-block;
+            width: calc(33.33% - 10px);
+            margin-right: 10px;
+        }
+
+        .item-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .skill-button {
+            background: #ffd93d;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .player-card {
+            border: 3px solid #4facfe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #e3f6ff;
+        }
+
+        code {
+            background: #e3f6ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #4facfe;
+            font-family: 'Courier New', monospace;
+        }
+
+        .console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .console-output .comment {
+            color: #6a9955;
+        }
+
+        .console-output .number {
+            color: #b5cea8;
+        }
+
+        .console-output .element {
+            color: #4ec9b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 querySelectorAll Basics</h1>
+        <p class="subtitle">Getting ALL elements that match a selector</p>
+
+        <!-- Explanation Card -->
+        <div class="card">
+            <h2>What is querySelectorAll?</h2>
+            <p>The <code>querySelectorAll()</code> method finds ALL elements that match a CSS selector and returns them in a NodeList (similar to an array). Unlike <code>querySelector()</code> which only gets the first match, this gets them all!</p>
+            
+            <div class="info-box">
+                <strong>Syntax:</strong><br>
+                <code>let elements = document.querySelectorAll('css-selector');</code>
+                <br><br>
+                <strong>Returns:</strong> A NodeList containing all matching elements (or an empty NodeList if none found).
+                <br><br>
+                <strong>Important:</strong> NodeList is similar to an array - you can access elements with [0], [1], etc., and it has a .length property.
+            </div>
+        </div>
+
+        <!-- Example: Multiple Enemies -->
+        <div class="card">
+            <h2>Example: Battle Enemies</h2>
+            <div class="enemy-card" data-type="slime">
+                <strong>Slime</strong><br>
+                HP: 30
+            </div>
+            <div class="enemy-card" data-type="goblin">
+                <strong>Goblin</strong><br>
+                HP: 50
+            </div>
+            <div class="enemy-card" data-type="orc">
+                <strong>Orc</strong><br>
+                HP: 100
+            </div>
+        </div>
+
+        <!-- Example: Multiple Items -->
+        <div class="card">
+            <h2>Example: Inventory Items</h2>
+            <div class="item-card">
+                <strong>Health Potion</strong> - Restores 50 HP
+            </div>
+            <div class="item-card">
+                <strong>Mana Potion</strong> - Restores 30 MP
+            </div>
+            <div class="item-card">
+                <strong>Sword</strong> - +10 Attack
+            </div>
+            <div class="item-card">
+                <strong>Shield</strong> - +8 Defense
+            </div>
+        </div>
+
+        <!-- Example: Multiple Buttons -->
+        <div class="card">
+            <h2>Example: Skill Buttons</h2>
+            <button class="skill-button">Fire Spell</button>
+            <button class="skill-button">Ice Spell</button>
+            <button class="skill-button">Thunder Spell</button>
+            <button class="skill-button">Heal Spell</button>
+            <button class="skill-button">Shield Spell</button>
+        </div>
+
+        <!-- Example: Multiple Player Cards -->
+        <div class="card">
+            <h2>Example: Party Members</h2>
+            <div class="player-card" data-class="warrior">
+                <strong>Knight</strong> - Level 5 Warrior
+            </div>
+            <div class="player-card" data-class="mage">
+                <strong>Wizard</strong> - Level 4 Mage
+            </div>
+            <div class="player-card" data-class="rogue">
+                <strong>Thief</strong> - Level 6 Rogue
+            </div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="card">
+            <h2>Console Output</h2>
+            <p>Check your browser console (F12) to see all the elements!</p>
+            <div class="console-output">
+                <div class="comment">// Get ALL enemy cards</div>
+                <div>let enemies = document.querySelectorAll('.enemy-card');</div>
+                <div>console.log(enemies.length);</div>
+                <div class="number">→ 3</div>
+                <br>
+                <div class="comment">// Access individual enemies</div>
+                <div>console.log(enemies[0]);</div>
+                <div class="element">→ &lt;div class="enemy-card"&gt;Slime...&lt;/div&gt;</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXAMPLE 1: Getting All Elements with a Class ===\n');
+
+        // Get ALL enemy cards
+        let enemies = document.querySelectorAll('.enemy-card');
+        console.log('Found enemies using querySelectorAll(".enemy-card"):');
+        console.log(enemies);
+        console.log('Number of enemies:', enemies.length);
+        console.log('Type:', typeof enemies);  // Object (NodeList)
+        console.log('');
+
+        // Access individual enemies
+        console.log('Accessing individual enemies:');
+        console.log('First enemy [0]:', enemies[0]);
+        console.log('Second enemy [1]:', enemies[1]);
+        console.log('Third enemy [2]:', enemies[2]);
+        console.log('');
+
+        // Get text from each
+        console.log('Enemy names:');
+        console.log('Enemy 0:', enemies[0].textContent.trim().replace(/\s+/g, ' '));
+        console.log('Enemy 1:', enemies[1].textContent.trim().replace(/\s+/g, ' '));
+        console.log('Enemy 2:', enemies[2].textContent.trim().replace(/\s+/g, ' '));
+        console.log('');
+
+        console.log('\n=== EXAMPLE 2: Getting All Items ===\n');
+
+        let items = document.querySelectorAll('.item-card');
+        console.log('Found items using querySelectorAll(".item-card"):');
+        console.log('Number of items:', items.length);
+        console.log('');
+
+        console.log('All item descriptions:');
+        for (let i = 0; i < items.length; i++) {
+            console.log(`Item ${i + 1}:`, items[i].textContent.trim());
+        }
+        console.log('');
+
+        console.log('\n=== EXAMPLE 3: Getting All Buttons ===\n');
+
+        let skillButtons = document.querySelectorAll('.skill-button');
+        console.log('Found skill buttons:');
+        console.log('Number of buttons:', skillButtons.length);
+        console.log('');
+
+        console.log('Button text content:');
+        for (let i = 0; i < skillButtons.length; i++) {
+            console.log(`Button ${i + 1}: ${skillButtons[i].textContent}`);
+        }
+        console.log('');
+
+        console.log('\n=== EXAMPLE 4: Getting All Player Cards ===\n');
+
+        let players = document.querySelectorAll('.player-card');
+        console.log('Found party members:');
+        console.log('Party size:', players.length);
+        console.log('');
+
+        console.log('Party member details:');
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i];
+            let playerClass = player.getAttribute('data-class');
+            let playerInfo = player.textContent.trim();
+            console.log(`Member ${i + 1}: ${playerInfo} (Class: ${playerClass})`);
+        }
+        console.log('');
+
+        console.log('\n=== EXAMPLE 5: Getting Elements by Attribute ===\n');
+
+        // Get all elements with data-type attribute
+        let typedEnemies = document.querySelectorAll('[data-type]');
+        console.log('Enemies with data-type attribute:');
+        console.log('Count:', typedEnemies.length);
+        console.log('');
+
+        console.log('Enemy types:');
+        for (let i = 0; i < typedEnemies.length; i++) {
+            let type = typedEnemies[i].getAttribute('data-type');
+            console.log(`Enemy ${i + 1}: ${type}`);
+        }
+        console.log('');
+
+        // Get specific enemy type
+        let slimes = document.querySelectorAll('[data-type="slime"]');
+        console.log('Slimes only:', slimes.length);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 6: Getting All of a Tag Type ===\n');
+
+        // Get ALL divs with a certain class
+        let allCards = document.querySelectorAll('div.card');
+        console.log('All divs with class "card":');
+        console.log('Number of card divs:', allCards.length);
+        console.log('');
+
+        // Get ALL buttons (not just skill buttons)
+        let allButtons = document.querySelectorAll('button');
+        console.log('ALL buttons on the page:');
+        console.log('Total buttons:', allButtons.length);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 7: Empty Results ===\n');
+
+        // Try to get elements that don't exist
+        let dragons = document.querySelectorAll('.dragon');
+        console.log('Searching for .dragon elements:');
+        console.log('Result:', dragons);
+        console.log('Length:', dragons.length);
+        console.log('→ Returns empty NodeList (not null!)');
+        console.log('');
+
+        if (dragons.length > 0) {
+            console.log('Found dragons!');
+        } else {
+            console.log('✓ No dragons found (length is 0)');
+        }
+        console.log('');
+
+        console.log('\n=== EXAMPLE 8: Looping Through Results ===\n');
+
+        console.log('Method 1: Traditional for loop');
+        let items1 = document.querySelectorAll('.item-card');
+        for (let i = 0; i < items1.length; i++) {
+            console.log(`  Item ${i}:`, items1[i].textContent.trim().substring(0, 20) + '...');
+        }
+        console.log('');
+
+        console.log('Method 2: forEach (modern way)');
+        let items2 = document.querySelectorAll('.item-card');
+        items2.forEach(function(item, index) {
+            console.log(`  Item ${index}:`, item.textContent.trim().substring(0, 20) + '...');
+        });
+        console.log('');
+
+        console.log('\n=== EXAMPLE 9: Comparing querySelector vs querySelectorAll ===\n');
+
+        console.log('querySelector (gets FIRST match):');
+        let firstEnemy = document.querySelector('.enemy-card');
+        console.log('Result:', firstEnemy);
+        console.log('Type: Single element');
+        console.log('Text:', firstEnemy.textContent.trim().replace(/\s+/g, ' '));
+        console.log('');
+
+        console.log('querySelectorAll (gets ALL matches):');
+        let allEnemies = document.querySelectorAll('.enemy-card');
+        console.log('Result:', allEnemies);
+        console.log('Type: NodeList with', allEnemies.length, 'elements');
+        console.log('First element [0]:', allEnemies[0].textContent.trim().replace(/\s+/g, ' '));
+        console.log('');
+
+        console.log('Key difference:');
+        console.log('→ querySelector: returns single element or null');
+        console.log('→ querySelectorAll: returns NodeList (can be empty)');
+        console.log('');
+
+        console.log('\n=== EXAMPLE 10: Practical Game Scenario ===\n');
+
+        // Count different game elements
+        console.log('Game Statistics:');
+        console.log('');
+
+        let totalEnemies = document.querySelectorAll('.enemy-card').length;
+        let totalItems = document.querySelectorAll('.item-card').length;
+        let totalSkills = document.querySelectorAll('.skill-button').length;
+        let totalPlayers = document.querySelectorAll('.player-card').length;
+
+        console.log('📊 Current Game State:');
+        console.log(`  🐉 Enemies on screen: ${totalEnemies}`);
+        console.log(`  🎒 Items in inventory: ${totalItems}`);
+        console.log(`  ⚔️  Available skills: ${totalSkills}`);
+        console.log(`  👥 Party members: ${totalPlayers}`);
+        console.log('');
+
+        // Check enemy types
+        let slimeCount = document.querySelectorAll('[data-type="slime"]').length;
+        let goblinCount = document.querySelectorAll('[data-type="goblin"]').length;
+        let orcCount = document.querySelectorAll('[data-type="orc"]').length;
+
+        console.log('📊 Enemy Breakdown:');
+        console.log(`  Slimes: ${slimeCount}`);
+        console.log(`  Goblins: ${goblinCount}`);
+        console.log(`  Orcs: ${orcCount}`);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 11: Working with NodeList ===\n');
+
+        let testList = document.querySelectorAll('.skill-button');
+        console.log('NodeList properties and methods:');
+        console.log('');
+
+        console.log('✓ Has .length property:', testList.length);
+        console.log('✓ Can access with [index]:', testList[0] !== undefined);
+        console.log('✓ Can use forEach:', typeof testList.forEach === 'function');
+        console.log('');
+
+        console.log('⚠️ NodeList limitations:');
+        console.log('✗ Not a real array (is array?):', Array.isArray(testList));
+        console.log('✗ Missing array methods like .map(), .filter(), etc.');
+        console.log('');
+
+        console.log('💡 Convert to array if needed:');
+        let arrayVersion = Array.from(testList);
+        console.log('Is array now?', Array.isArray(arrayVersion));
+        console.log('');
+
+        console.log('\n=== EXAMPLE 12: Complex Selectors ===\n');
+
+        // Get buttons inside a specific card
+        let cardButtons = document.querySelectorAll('.card button');
+        console.log('All buttons inside .card elements:');
+        console.log('Count:', cardButtons.length);
+        console.log('');
+
+        // Get all elements with classes starting with certain text
+        let gameElements = document.querySelectorAll('[class*="card"]');
+        console.log('All elements with "card" in class name:');
+        console.log('Count:', gameElements.length);
+        console.log('');
+
+        console.log('\n=== SUMMARY ===\n');
+        console.log('✓ querySelectorAll gets ALL matching elements');
+        console.log('✓ Returns a NodeList (similar to array)');
+        console.log('✓ Access elements with [0], [1], [2], etc.');
+        console.log('✓ Use .length to see how many elements');
+        console.log('✓ Can loop through with for loop or forEach');
+        console.log('✓ Returns empty NodeList if no matches (not null)');
+        console.log('✓ Perfect for working with multiple similar elements');
+        console.log('');
+        console.log('Common uses:');
+        console.log('  • Getting all enemies in a game');
+        console.log('  • Getting all items in inventory');
+        console.log('  • Getting all buttons to add click handlers');
+        console.log('  • Counting elements on the page');
+        console.log('');
+        console.log('Next: See practical applications combining all selection methods!');
+    </script>
+</body>
+</html>

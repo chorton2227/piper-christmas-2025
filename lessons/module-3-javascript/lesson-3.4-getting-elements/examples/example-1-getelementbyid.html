@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: getElementById Basics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .game-interface {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        code {
+            background: #f0f4ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .console-output .comment {
+            color: #6a9955;
+        }
+
+        .console-output .element {
+            color: #4ec9b0;
+        }
+
+        .console-output .null {
+            color: #569cd6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 getElementById Basics</h1>
+        <p class="subtitle">Learning to find HTML elements by their unique ID</p>
+
+        <!-- Explanation Card -->
+        <div class="card">
+            <h2>What You'll Learn</h2>
+            <p>The <code>getElementById()</code> method is the most straightforward way to find a specific element on your page. Every element can have a unique <code>id</code> attribute, and this method finds that exact element.</p>
+            
+            <div class="info-box">
+                <strong>Syntax:</strong><br>
+                <code>let element = document.getElementById('element-id');</code>
+                <br><br>
+                <strong>Important:</strong> Don't include the # symbol - that's only for CSS!
+            </div>
+        </div>
+
+        <!-- Example Elements to Get -->
+        <div class="card">
+            <h2>Example Elements</h2>
+            <p>Below are several elements with unique IDs. Open your console to see JavaScript finding them!</p>
+
+            <div class="game-interface">
+                <h3 id="game-title">Epic Adventure RPG</h3>
+                
+                <div class="stat-box" id="player-health">
+                    Health: 100 / 100
+                </div>
+                
+                <div class="stat-box" id="player-mana">
+                    Mana: 50 / 50
+                </div>
+                
+                <div class="stat-box" id="player-score">
+                    Score: 0
+                </div>
+
+                <button id="start-button">Start Game</button>
+                <button id="attack-button">Attack</button>
+                <button id="heal-button">Heal</button>
+            </div>
+
+            <div class="input-group">
+                <label for="username">Player Name:</label><br>
+                <input type="text" id="username" placeholder="Enter your name">
+            </div>
+
+            <div id="welcome-message" class="info-box">
+                Welcome, adventurer! Your journey begins here.
+            </div>
+
+            <p id="instructions">
+                Press the buttons above to play. Your health and mana will be tracked automatically.
+            </p>
+        </div>
+
+        <!-- Console Output Display -->
+        <div class="card">
+            <h2>Console Output</h2>
+            <p>Check your browser console (F12) to see the actual elements! Here's what the code does:</p>
+            <div class="console-output">
+                <div class="comment">// Example 1: Getting a heading</div>
+                <div>let gameTitle = document.getElementById('game-title');</div>
+                <div>console.log(gameTitle);</div>
+                <div class="element">→ &lt;h3 id="game-title"&gt;Epic Adventure RPG&lt;/h3&gt;</div>
+                <br>
+                <div class="comment">// Example 2: Getting stat elements</div>
+                <div>let playerHealth = document.getElementById('player-health');</div>
+                <div class="element">→ &lt;div class="stat-box" id="player-health"&gt;...&lt;/div&gt;</div>
+                <br>
+                <div class="comment">// Example 3: Element doesn't exist</div>
+                <div>let missing = document.getElementById('does-not-exist');</div>
+                <div class="null">→ null</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXAMPLE 1: Getting Individual Elements ===\n');
+
+        // Get the game title
+        let gameTitle = document.getElementById('game-title');
+        console.log('Game Title Element:');
+        console.log(gameTitle);
+        console.log('Text inside:', gameTitle.textContent);
+        console.log('');
+
+        // Get player health display
+        let playerHealth = document.getElementById('player-health');
+        console.log('Player Health Element:');
+        console.log(playerHealth);
+        console.log('Content:', playerHealth.textContent);
+        console.log('');
+
+        // Get player mana display
+        let playerMana = document.getElementById('player-mana');
+        console.log('Player Mana Element:');
+        console.log(playerMana);
+        console.log('');
+
+        // Get player score display
+        let playerScore = document.getElementById('player-score');
+        console.log('Player Score Element:');
+        console.log(playerScore);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 2: Getting Buttons ===\n');
+
+        // Get all three buttons
+        let startButton = document.getElementById('start-button');
+        let attackButton = document.getElementById('attack-button');
+        let healButton = document.getElementById('heal-button');
+
+        console.log('Start Button:', startButton);
+        console.log('Attack Button:', attackButton);
+        console.log('Heal Button:', healButton);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 3: Getting Input Fields ===\n');
+
+        // Get the username input
+        let usernameInput = document.getElementById('username');
+        console.log('Username Input Element:');
+        console.log(usernameInput);
+        console.log('Placeholder text:', usernameInput.placeholder);
+        console.log('Current value:', usernameInput.value);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 4: Getting Text Elements ===\n');
+
+        // Get welcome message
+        let welcomeMessage = document.getElementById('welcome-message');
+        console.log('Welcome Message Element:');
+        console.log(welcomeMessage);
+        console.log('Message text:', welcomeMessage.textContent);
+        console.log('');
+
+        // Get instructions
+        let instructions = document.getElementById('instructions');
+        console.log('Instructions Element:');
+        console.log(instructions);
+        console.log('Instructions text:', instructions.textContent);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 5: Checking if Element Exists ===\n');
+
+        // Try to get an element that doesn't exist
+        let missingElement = document.getElementById('does-not-exist');
+        console.log('Trying to get element with id "does-not-exist":');
+        console.log('Result:', missingElement);  // Will be null
+        console.log('');
+
+        // Good practice: check if element exists
+        if (missingElement) {
+            console.log('✓ Element found! Safe to use.');
+        } else {
+            console.log('✗ Element not found! This would cause an error if we tried to use it.');
+        }
+        console.log('');
+
+        // Check an element that DOES exist
+        if (gameTitle) {
+            console.log('✓ Game title exists! We can safely use it.');
+        }
+        console.log('');
+
+        console.log('\n=== EXAMPLE 6: Storing Elements for Later Use ===\n');
+
+        // Store all game UI elements in variables
+        console.log('Storing all game UI elements...');
+
+        let title = document.getElementById('game-title');
+        let health = document.getElementById('player-health');
+        let mana = document.getElementById('player-mana');
+        let score = document.getElementById('player-score');
+        let startBtn = document.getElementById('start-button');
+        let attackBtn = document.getElementById('attack-button');
+        let healBtn = document.getElementById('heal-button');
+        let playerName = document.getElementById('username');
+        let welcome = document.getElementById('welcome-message');
+
+        console.log('✓ All elements stored in variables!');
+        console.log('Now we can use them throughout our code without getting them again.');
+        console.log('');
+
+        console.log('Example - accessing stored elements:');
+        console.log('Title text:', title.textContent);
+        console.log('Health text:', health.textContent);
+        console.log('Mana text:', mana.textContent);
+        console.log('');
+
+        console.log('\n=== EXAMPLE 7: Common Mistakes to Avoid ===\n');
+
+        // Mistake 1: Including # symbol (this won't work!)
+        console.log('❌ WRONG: Including # symbol');
+        console.log('let wrong = document.getElementById("#game-title");');
+        let wrongWay = document.getElementById('#game-title');
+        console.log('Result:', wrongWay);  // null - doesn't work!
+        console.log('');
+
+        console.log('✓ CORRECT: No # symbol needed');
+        console.log('let correct = document.getElementById("game-title");');
+        let correctWay = document.getElementById('game-title');
+        console.log('Result:', correctWay);  // works!
+        console.log('');
+
+        // Mistake 2: Forgetting quotes
+        console.log('❌ WRONG: Forgetting quotes (will cause error)');
+        console.log('// let wrong = document.getElementById(game-title);  // Error!');
+        console.log('');
+
+        console.log('✓ CORRECT: ID in quotes');
+        console.log('let correct = document.getElementById("game-title");');
+        console.log('');
+
+        console.log('\n=== EXAMPLE 8: Why Store in Variables? ===\n');
+
+        console.log('Without storing (getting element every time):');
+        console.log('document.getElementById("player-health").textContent');
+        console.log('document.getElementById("player-health").textContent');
+        console.log('document.getElementById("player-health").textContent');
+        console.log('→ JavaScript searches for element 3 times (slow!)');
+        console.log('');
+
+        console.log('With storing (get once, use many times):');
+        console.log('let health = document.getElementById("player-health");');
+        console.log('health.textContent  // Fast!');
+        console.log('health.textContent  // Fast!');
+        console.log('health.textContent  // Fast!');
+        console.log('→ JavaScript searches only once, then uses variable (fast!)');
+        console.log('');
+
+        console.log('\n=== SUMMARY ===\n');
+        console.log('✓ getElementById finds ONE element by its unique ID');
+        console.log('✓ Returns the element if found, null if not found');
+        console.log('✓ Don\'t include # symbol (that\'s only for CSS)');
+        console.log('✓ Always use quotes around the ID');
+        console.log('✓ Store elements in variables to use them multiple times');
+        console.log('✓ Check if element exists before using it');
+        console.log('');
+        console.log('Next: Learn querySelector for more flexible element selection!');
+    </script>
+</body>
+</html>
