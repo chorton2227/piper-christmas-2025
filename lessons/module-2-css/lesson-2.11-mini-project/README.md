@@ -1,4 +1,4 @@
-# Lesson 2.11: CSS Mini-Project - Styling ProGamer Hub 🎨🎮
+# Lesson 2.11: CSS Mini-Project 🎨✨
 
 ## 🎯 Project Overview
 
@@ -35,7 +35,7 @@ Your website should have at least:
 
 **The HTML structure is already complete from Module 1.10!** Your job now is to make it look professional with CSS.
 
-> **Note:** If you want to see an example of styled HTML, check the `examples/` folder where we've styled the ProGamer Hub website to show you what's possible!
+> **Note:** If you want to see an example of styled HTML, check the `examples/` folder where we've styled a complete gaming website example to show you what's possible!
 
 ## 📋 Project Requirements
 
@@ -111,7 +111,7 @@ Take YOUR plain HTML website from Module 1.10 and apply CSS to create a **profes
 
 ### Step 2: Look at the Example (10 minutes)
 
-Check out the `examples/` folder to see how we styled the ProGamer Hub website:
+Check out the `examples/` folder to see a complete styled website example:
 - Open `examples/index.html` in a browser to see the styled version
 - Study `examples/styles.css` to see:
   - How CSS variables are used for colors and spacing
@@ -503,7 +503,7 @@ You've completed Module 2: CSS! You should be proud of what you've accomplished:
 
 The HTML structure from Module 1 combined with the CSS styling from Module 2 creates a professional website. You've seen firsthand how CSS transforms plain HTML into something visually appealing and user-friendly.
 
-Check out the ProGamer Hub example in the `examples/` folder to see what professional CSS styling looks like!
+Check out the example website in the `examples/` folder to see what professional CSS styling looks like!
 
 Keep practicing, keep experimenting, and most importantly, **keep building!** 🚀✨
 
@@ -511,8 +511,8 @@ Keep practicing, keep experimenting, and most importantly, **keep building!** �
 
 ## 📚 Project Files
 
-- `examples/` - ProGamer Hub example project (styled HTML + CSS for reference)
-  - `index.html`, `reviews.html`, `tips.html`, `contact.html` - Styled pages
+- `examples/` - Complete example project (styled HTML + CSS for reference)
+  - `index.html`, `reviews.html`, `tips.html`, `contact.html` - Example styled pages
   - `styles.css` - Complete CSS stylesheet showing all techniques
   - `images/` - Images used in the example
 - `student-workspace/` - **YOUR workspace** - Copy your Module 1.10 HTML here and create your CSS!
