@@ -2,9 +2,9 @@
 
 ## 🎯 Project Overview
 
-**Congratulations!** You've completed all the CSS lessons in Module 2! Now it's time for the ultimate challenge: transform the **ProGamer Hub** website from Module 1 (Lesson 1.10) into a beautiful, professional-looking gaming site!
+**Congratulations!** You've completed all the CSS lessons in Module 2! Now it's time for the ultimate challenge: transform **YOUR website** from Module 1 (Lesson 1.10) into a beautiful, professional-looking site with CSS!
 
-Remember the gaming website you built with HTML only? It had all the right structure and content, but it looked plain and unstyled. Now you'll use **everything you've learned** in Module 2 to make it look **amazing**!
+Remember the website you built with HTML only in Module 1.10? It had all the right structure and content, but it looked plain and unstyled. Now you'll use **everything you've learned** in Module 2 to make it look **amazing**!
 
 ###  What You've Learned in Module 2
 
@@ -19,46 +19,33 @@ Remember the gaming website you built with HTML only? It had all the right struc
 - ✅ Hover effects and smooth transitions
 - ✅ Responsive design with media queries
 
-### 🎮 The ProGamer Hub Website
+### 📄 Your Website from Module 1.10
 
-You'll be styling a **complete 4-page gaming website** that includes:
+You'll be styling **YOUR multi-page website** that you created in Module 1, Lesson 1.10. Whatever topic you chose (gaming, hobbies, recipes, sports, etc.), you'll now make it look professional!
 
-1. **Home Page** (`index.html`)
-   - Welcome message and site description
-   - Featured game of the month (Minecraft)
-   - Gaming platform sections (PC, Console, Mobile)
-   - Site statistics table
-   - External gaming resources
+Your website should have at least:
+- **3+ HTML pages** with navigation between them
+- **Headings, paragraphs, and text content**
+- **Lists** (ordered and/or unordered)
+- **Links** (internal navigation and external)
+- **Images** with alt text
+- **Tables** (if your topic used them)
+- **Forms** (if you included a contact page)
+- **Semantic HTML** (header, nav, main, footer, sections, etc.)
 
-2. **Game Reviews Page** (`reviews.html`)
-   - Three detailed game reviews (Minecraft, Stardew Valley, Among Us)
-   - Star ratings and review sections
-   - Comparison table of all rated games
-   - Coming soon section
+**The HTML structure is already complete from Module 1.10!** Your job now is to make it look professional with CSS.
 
-3. **Tips & Guides Page** (`tips.html`)
-   - Minecraft beginner's guide
-   - Universal gaming tips list
-   - Gaming setup guide
-   - Budget breakdown table
-
-4. **Contact/Join Us Page** (`contact.html`)
-   - Community membership form with many input types
-   - Contact information section
-   - Community guidelines
-   - FAQ section
-
-**All HTML is already complete!** Your job is to make it look professional with CSS.
+> **Note:** If you want to see an example of styled HTML, check the `examples/` folder where we've styled the ProGamer Hub website to show you what's possible!
 
 ## 📋 Project Requirements
 
 ### Your Mission
 
-Take the plain HTML website and apply CSS to create a **professional gaming website** with:
+Take YOUR plain HTML website from Module 1.10 and apply CSS to create a **professional-looking website** with:
 
 #### Visual Design Requirements
-- [ ] **Color Scheme** - Dark gaming theme with vibrant accent colors
-- [ ] **Typography** - Use Google Fonts (provided: Poppins for headings, Inter for body)
+- [ ] **Color Scheme** - Consistent colors that match your website's topic
+- [ ] **Typography** - Use Google Fonts for professional look
 - [ ] **Gradients** - Use at least 3 gradient backgrounds
 - [ ] **Shadows** - Add depth with box-shadows on cards and sections
 - [ ] **Border Radius** - Round corners on images, cards, and buttons
@@ -116,25 +103,31 @@ Take the plain HTML website and apply CSS to create a **professional gaming webs
 
 ## 🚀 Getting Started
 
-### Step 1: Review the HTML (5 minutes)
+### Step 1: Copy Your HTML to Student Workspace (5 minutes)
 
-Look at the four HTML pages in the `examples/` folder:
-- `index.html` - Home page
-- `reviews.html` - Game reviews
-- `tips.html` - Gaming tips and guides
-- `contact.html` - Contact form and community info
+1. Go to `lessons/module-1-html/lesson-1.10-mini-project/student-workspace/`
+2. Copy ALL your HTML files to this lesson's `student-workspace/` folder
+3. Copy your `images/` folder too
 
-Open them in a browser to see what you're working with.
+### Step 2: Look at the Example (10 minutes)
 
-### Step 2: Look at the Example CSS (10 minutes)
+Check out the `examples/` folder to see how we styled the ProGamer Hub website:
+- Open `examples/index.html` in a browser to see the styled version
+- Study `examples/styles.css` to see:
+  - How CSS variables are used for colors and spacing
+  - The organization with comments
+  - Different styling techniques applied
+  - Responsive breakpoints
 
-Study the provided `styles.css` file to see:
-- How CSS variables are used for colors and spacing
-- The organization with comments
-- Different styling techniques applied
-- Responsive breakpoints
+### Step 3: Create Your CSS File (5 minutes)
 
-### Step 3: Understand the Structure (10 minutes)
+1. In the `student-workspace/` folder, create a new file: `styles.css`
+2. Link it in ALL your HTML files by adding this to the `<head>`:
+   ```html
+   <link rel="stylesheet" href="styles.css">
+   ```
+
+### Step 4: Understand CSS Structure (10 minutes)
 
 Notice how the CSS is organized:
 1. **CSS Variables** - Defined at the top in `:root`
@@ -147,23 +140,25 @@ Notice how the CSS is organized:
 8. **Responsive** - Media queries for different screens
 9. **Special Effects** - Animations and transitions
 
-### Step 4: Test in Browser (Ongoing)
+### Step 5: Start Styling! (Ongoing)
 
-Open the HTML files in your browser to see the styled website. Make sure to:
-- Test all four pages
+Begin adding CSS to your `styles.css` file. Start with:
+1. CSS variables for your color scheme
+2. Reset styles
+3. Typography (fonts, sizes)
+4. Layout (header, nav, main, footer)
+5. Components (sections, images, lists, etc.)
+6. Interactive elements (hover effects)
+7. Responsive design (media queries)
+
+### Step 6: Test in Browser (Ongoing)
+
+Open YOUR HTML files in your browser to see the styling. Make sure to:
+- Test all your pages
 - Click all the links
-- Try the form inputs
+- Try any form inputs (if you have them)
 - Resize the browser window to see responsive design
 - Hover over interactive elements
-
-### Step 5: Customize (Optional)
-
-Want to make it your own? Try:
-- Changing the color scheme
-- Adjusting font sizes or families
-- Adding new hover effects
-- Creating additional responsive breakpoints
-- Adding animations
 
 ## 💡 Understanding the CSS
 
@@ -224,48 +219,29 @@ input:focus {
 }
 ```
 
-## 🎨 Styling Breakdown by Page
+## 🎨 What to Style on Your Website
 
-### All Pages Include:
-- **Sticky Header** with gradient background
-- **Navigation** with hover effects
-- **Main Content** area with max-width and padding
-- **Aside Section** with different background
-- **Footer** with site information
+### Elements to Focus On:
 
-### Home Page (`index.html`)
-- Welcome section with styled paragraphs
-- Featured game article with image
-- Multiple sections with different content
-- Statistics table
-- Platform sections with images
-- External links list
+#### Common to All Pages:
+- **Header** - Make it stand out with background color or gradient
+- **Navigation** - Style links with hover effects, consider making it sticky
+- **Main Content** - Add max-width, center it, add padding
+- **Footer** - Complete the page design with consistent styling
 
-### Reviews Page (`reviews.html`)
-- Three article cards with game reviews
-- Good/Not-So-Good lists in each review
-- Ratings comparison table
-- Coming soon ordered list
+#### Content Elements:
+- **Headings** - Create clear hierarchy (h1 > h2 > h3, etc.)
+- **Paragraphs** - Readable font size, line height, and spacing
+- **Images** - Add borders, shadows, or hover effects
+- **Lists** - Style bullets/numbers, add spacing
+- **Links** - Color, hover states, underlines
+- **Strong/Em/Mark** - Make emphasis elements stand out
 
-### Tips Page (`tips.html`)
-- Beginner guide article with sections
-- Crafting recipes table
-- Universal tips ordered list
-- Budget breakdown table
-- Internal navigation links
-
-### Contact Page (`contact.html`)
-- Large membership form with many input types:
-  - Text inputs (name, username, email)
-  - Number input (age)
-  - Select dropdown (platform)
-  - Checkboxes (genres, notifications)
-  - Radio buttons (frequency)
-  - Textareas (comments)
-  - Submit and reset buttons
-- Contact information sections
-- Community guidelines list
-- FAQ section
+#### If Your Site Has:
+- **Tables** - Style headers, rows, add hover effects
+- **Forms** - Style all inputs, buttons, add focus states
+- **Articles/Sections** - Add backgrounds, padding, shadows
+- **Aside/Sidebar** - Different background to distinguish it
 
 ## 📊 Project Checklist
 
@@ -368,11 +344,11 @@ styles.css structure:
 Want to take it further? Try these enhancements:
 
 ### Level 1: Easy
-- [ ] Change the color scheme to your favorite colors
-- [ ] Adjust font sizes to your preference
-- [ ] Add more hover effects
-- [ ] Change border-radius values
-- [ ] Adjust spacing with CSS variables
+- [ ] Use a custom color scheme that matches your topic
+- [ ] Add Google Fonts instead of default fonts
+- [ ] Add hover effects to all clickable elements
+- [ ] Use border-radius for rounded corners
+- [ ] Add box-shadows for depth
 
 ### Level 2: Intermediate
 - [ ] Add a "scroll to top" button
@@ -523,9 +499,11 @@ You've completed Module 2: CSS! You should be proud of what you've accomplished:
 - ✅ Styled complex components (forms, tables, etc.)
 - ✅ Organized professional-quality code
 
-**ProGamer Hub is now a beautifully styled, fully functional website!**
+**Your website is now beautifully styled and fully functional!**
 
 The HTML structure from Module 1 combined with the CSS styling from Module 2 creates a professional website. You've seen firsthand how CSS transforms plain HTML into something visually appealing and user-friendly.
+
+Check out the ProGamer Hub example in the `examples/` folder to see what professional CSS styling looks like!
 
 Keep practicing, keep experimenting, and most importantly, **keep building!** 🚀✨
 
@@ -533,16 +511,14 @@ Keep practicing, keep experimenting, and most importantly, **keep building!** �
 
 ## 📚 Project Files
 
-- `examples/index.html` - Home page HTML
-- `examples/reviews.html` - Game reviews page HTML
-- `examples/tips.html` - Tips and guides page HTML
-- `examples/contact.html` - Contact form page HTML
-- `examples/styles.css` - Complete CSS stylesheet
-- `examples/images/` - All images for the website
+- `examples/` - ProGamer Hub example project (styled HTML + CSS for reference)
+  - `index.html`, `reviews.html`, `tips.html`, `contact.html` - Styled pages
+  - `styles.css` - Complete CSS stylesheet showing all techniques
+  - `images/` - Images used in the example
+- `student-workspace/` - **YOUR workspace** - Copy your Module 1.10 HTML here and create your CSS!
 - `resources/planning-guide.md` - Project planning worksheet
 - `resources/parent-guide.md` - Guide for parent support
 - `resources/grading-rubric.md` - Grading criteria
-- `student-workspace/` - Your workspace for customization
 
 ## 🎉 Final Thoughts
 
