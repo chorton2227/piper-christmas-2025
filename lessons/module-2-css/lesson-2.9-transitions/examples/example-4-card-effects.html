@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Advanced Card Effects</title>
+    <link rel="stylesheet" href="example-4-card-effects.css">
+</head>
+<body>
+    <h1>🎴 Advanced Card Effects</h1>
+    <p>Hover over cards to see smooth, professional animations!</p>
+
+    <!-- Lift cards -->
+    <section class="demo-section">
+        <h2>Card Lift Effects</h2>
+        
+        <div class="card-grid">
+            <div class="card card-lift-1">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200"><rect fill="#667eea" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Image</text></svg>
+                </div>
+                <div class="card-content">
+                    <h3>Simple Lift</h3>
+                    <p>Smooth elevation with shadow</p>
+                </div>
+            </div>
+
+            <div class="card card-lift-2">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200"><rect fill="#f093fb" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Image</text></svg>
+                </div>
+                <div class="card-content">
+                    <h3>Tilt Lift</h3>
+                    <p>Adds subtle rotation</p>
+                </div>
+            </div>
+
+            <div class="card card-lift-3">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200"><rect fill="#4facfe" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Image</text></svg>
+                </div>
+                <div class="card-content">
+                    <h3>Scale Lift</h3>
+                    <p>Grows while lifting</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image zoom -->
+    <section class="demo-section">
+        <h2>Image Zoom Effects</h2>
+        
+        <div class="card-grid">
+            <div class="card card-zoom">
+                <div class="card-image-zoom">
+                    <svg viewBox="0 0 300 200"><rect fill="#f5576c" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Zoom In</text></svg>
+                </div>
+                <div class="card-content">
+                    <h3>Zoom In</h3>
+                    <p>Image scales up on hover</p>
+                </div>
+            </div>
+
+            <div class="card card-zoom-out">
+                <div class="card-image-zoom">
+                    <svg viewBox="0 0 300 200"><rect fill="#764ba2" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Zoom Out</text></svg>
+                </div>
+                <div class="card-content">
+                    <h3>Zoom Out</h3>
+                    <p>Starts zoomed, reveals on hover</p>
+                </div>
+            </div>
+
+            <div class="card card-pan">
+                <div class="card-image-zoom">
+                    <svg viewBox="0 0 400 200"><rect fill="#00f2fe" width="400" height="200"/><text x="200" y="100" text-anchor="middle" fill="white" font-size="24">Pan</text></svg>
+                </div>
+                <div class="card-content">
+                    <h3>Pan Effect</h3>
+                    <p>Image moves sideways</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overlay effects -->
+    <section class="demo-section">
+        <h2>Overlay Effects</h2>
+        
+        <div class="card-grid">
+            <div class="card card-overlay-fade">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200"><rect fill="#667eea" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Fade</text></svg>
+                </div>
+                <div class="card-overlay">
+                    <h3>Fade Overlay</h3>
+                    <p>Content fades in</p>
+                    <button class="overlay-btn">Read More</button>
+                </div>
+            </div>
+
+            <div class="card card-overlay-slide">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200"><rect fill="#f093fb" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Slide</text></svg>
+                </div>
+                <div class="card-overlay card-overlay-slide-up">
+                    <h3>Slide Up Overlay</h3>
+                    <p>Slides from bottom</p>
+                    <button class="overlay-btn">Read More</button>
+                </div>
+            </div>
+
+            <div class="card card-overlay-reveal">
+                <div class="card-image">
+                    <svg viewBox="0 0 300 200"><rect fill="#f5576c" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Reveal</text></svg>
+                </div>
+                <div class="card-overlay card-overlay-reveal-content">
+                    <h3>Reveal Overlay</h3>
+                    <p>Expands to cover</p>
+                    <button class="overlay-btn">Read More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flip cards -->
+    <section class="demo-section">
+        <h2>Flip Card Effects</h2>
+        
+        <div class="card-grid">
+            <div class="card card-flip">
+                <div class="card-flip-inner">
+                    <div class="card-flip-front">
+                        <div class="card-image">
+                            <svg viewBox="0 0 300 200"><rect fill="#4facfe" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Front</text></svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Flip Card</h3>
+                            <p>Hover to flip over</p>
+                        </div>
+                    </div>
+                    <div class="card-flip-back">
+                        <h3>Back Side!</h3>
+                        <p>This is the back of the card with more information and details.</p>
+                        <button class="overlay-btn">Learn More</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-flip-vertical">
+                <div class="card-flip-inner">
+                    <div class="card-flip-front">
+                        <div class="card-image">
+                            <svg viewBox="0 0 300 200"><rect fill="#764ba2" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="white" font-size="24">Front</text></svg>
+                        </div>
+                        <div class="card-content">
+                            <h3>Vertical Flip</h3>
+                            <p>Flips up and down</p>
+                        </div>
+                    </div>
+                    <div class="card-flip-back">
+                        <h3>Flipped!</h3>
+                        <p>Vertical flip animation looks different than horizontal.</p>
+                        <button class="overlay-btn">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-3d">
+                <div class="card-3d-inner">
+                    <h3>3D Hover</h3>
+                    <p>Tilts in 3D space based on mouse position. Try moving your mouse around!</p>
+                    <div class="card-shine"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Border effects -->
+    <section class="demo-section">
+        <h2>Border Effects</h2>
+        
+        <div class="card-grid">
+            <div class="card card-border-grow">
+                <div class="card-content">
+                    <h3>Border Grow</h3>
+                    <p>Border expands on hover</p>
+                </div>
+            </div>
+
+            <div class="card card-border-draw">
+                <div class="card-content">
+                    <h3>Border Draw</h3>
+                    <p>Border animates in</p>
+                </div>
+            </div>
+
+            <div class="card card-border-glow">
+                <div class="card-content">
+                    <h3>Border Glow</h3>
+                    <p>Glowing border effect</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stacked cards -->
+    <section class="demo-section">
+        <h2>Advanced Layouts</h2>
+        
+        <div class="card-grid">
+            <div class="card-stack">
+                <div class="stacked-card stack-1"></div>
+                <div class="stacked-card stack-2"></div>
+                <div class="stacked-card stack-3">
+                    <h3>Stacked Cards</h3>
+                    <p>Cards separate on hover</p>
+                </div>
+            </div>
+
+            <div class="card card-fold">
+                <div class="card-fold-top">
+                    <h3>Fold Card</h3>
+                    <p>Top half folds back</p>
+                </div>
+                <div class="card-fold-bottom">
+                    <p>Hidden content revealed!</p>
+                </div>
+            </div>
+
+            <div class="card card-perspective">
+                <div class="card-content">
+                    <h3>Perspective</h3>
+                    <p>Rotates in 3D with perspective</p>
+                    <div class="perspective-accent"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>💡 <strong>Key Learning:</strong> Card effects combine multiple techniques: transforms, transitions, overflow control, and pseudo-elements. Layer effects for rich interactions!</p>
+    </footer>
+</body>
+</html>

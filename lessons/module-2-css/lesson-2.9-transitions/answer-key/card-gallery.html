@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Card Gallery</title>
+    <link rel="stylesheet" href="card-gallery.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎴 Animated Card Gallery</h1>
+            <p>Hover over each card to see beautiful animations!</p>
+        </header>
+
+        <!-- Lift Cards -->
+        <section class="gallery-section">
+            <h2>Lift & Shadow Effects</h2>
+            <div class="card-grid">
+                <div class="card card-lift">
+                    <div class="card-image">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#667eea" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Mountain</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Mountain Adventure</h3>
+                        <p>Experience breathtaking views and challenging trails in the heart of nature.</p>
+                        <button class="card-button">Explore</button>
+                    </div>
+                </div>
+
+                <div class="card card-tilt">
+                    <div class="card-image">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#764ba2" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Ocean</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Ocean Breeze</h3>
+                        <p>Relax by the crystal-clear waters and feel the gentle ocean breeze.</p>
+                        <button class="card-button">Discover</button>
+                    </div>
+                </div>
+
+                <div class="card card-lift-scale">
+                    <div class="card-image">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#f093fb" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Forest</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Forest Trail</h3>
+                        <p>Walk through lush greenery and discover hidden natural wonders.</p>
+                        <button class="card-button">Adventure</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Zoom Cards -->
+        <section class="gallery-section">
+            <h2>Image Zoom Effects</h2>
+            <div class="card-grid">
+                <div class="card card-zoom">
+                    <div class="card-image-zoom">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#4facfe" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Desert</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Desert Safari</h3>
+                        <p>Journey through endless sand dunes under the golden sunset.</p>
+                        <button class="card-button">View More</button>
+                    </div>
+                </div>
+
+                <div class="card card-zoom-rotate">
+                    <div class="card-image-zoom">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#00f2fe" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">City</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>City Lights</h3>
+                        <p>Explore vibrant urban landscapes and bustling nightlife.</p>
+                        <button class="card-button">Explore</button>
+                    </div>
+                </div>
+
+                <div class="card card-pan">
+                    <div class="card-image-zoom">
+                        <svg viewBox="0 0 500 250">
+                            <rect fill="#f5576c" width="500" height="250"/>
+                            <text x="250" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Countryside</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Countryside Charm</h3>
+                        <p>Discover peaceful villages and rolling hills in the countryside.</p>
+                        <button class="card-button">Visit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Overlay Cards -->
+        <section class="gallery-section">
+            <h2>Overlay Reveal Effects</h2>
+            <div class="card-grid">
+                <div class="card card-overlay-fade">
+                    <div class="card-image">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#667eea" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Waterfall</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Hidden Waterfall</h3>
+                        <p>Discover a secret paradise behind the cascading waters.</p>
+                    </div>
+                    <div class="card-overlay">
+                        <h3>Hidden Waterfall</h3>
+                        <p>Marvel at the powerful cascade and pristine swimming holes. A true hidden gem waiting to be explored!</p>
+                        <button class="overlay-button">Book Now</button>
+                    </div>
+                </div>
+
+                <div class="card card-overlay-slide">
+                    <div class="card-image">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#764ba2" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Aurora</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Northern Lights</h3>
+                        <p>Witness the magical dance of aurora borealis in the Arctic sky.</p>
+                    </div>
+                    <div class="card-overlay card-overlay-slide-content">
+                        <h3>Northern Lights</h3>
+                        <p>Experience one of nature's most spectacular shows. The aurora borealis will leave you breathless!</p>
+                        <button class="overlay-button">Learn More</button>
+                    </div>
+                </div>
+
+                <div class="card card-overlay-expand">
+                    <div class="card-image">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#f093fb" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Volcano</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Volcanic Wonder</h3>
+                        <p>Explore the raw power of Earth's volcanic activity up close.</p>
+                    </div>
+                    <div class="card-overlay card-overlay-expand-content">
+                        <h3>Volcanic Wonder</h3>
+                        <p>Stand in awe of nature's fury and beauty. Safely explore volcanic landscapes with expert guides.</p>
+                        <button class="overlay-button">Discover</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mixed Effects -->
+        <section class="gallery-section">
+            <h2>Creative Combinations</h2>
+            <div class="card-grid">
+                <div class="card card-border-glow">
+                    <div class="card-image-zoom">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#4facfe" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Canyon</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Grand Canyon</h3>
+                        <p>Stand at the edge of one of the world's most magnificent natural wonders.</p>
+                        <button class="card-button">View</button>
+                    </div>
+                </div>
+
+                <div class="card card-3d">
+                    <div class="card-image-zoom">
+                        <svg viewBox="0 0 400 250">
+                            <rect fill="#00f2fe" width="400" height="250"/>
+                            <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Island</text>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <h3>Tropical Island</h3>
+                        <p>Escape to paradise on a pristine tropical island getaway.</p>
+                        <button class="card-button">Escape</button>
+                    </div>
+                    <div class="card-shine"></div>
+                </div>
+
+                <div class="card card-flip">
+                    <div class="card-flip-inner">
+                        <div class="card-flip-front">
+                            <div class="card-image">
+                                <svg viewBox="0 0 400 250">
+                                    <rect fill="#f5576c" width="400" height="250"/>
+                                    <text x="200" y="125" text-anchor="middle" fill="white" font-size="28" font-weight="bold">Mystery</text>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3>Mystery Location</h3>
+                                <p>Hover to reveal the secret destination...</p>
+                            </div>
+                        </div>
+                        <div class="card-flip-back">
+                            <h3>🗻 Mount Fuji</h3>
+                            <p>Visit Japan's iconic sacred mountain. Experience stunning views, traditional culture, and peaceful surroundings.</p>
+                            <button class="overlay-button">Book Trip</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
