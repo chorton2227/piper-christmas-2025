@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Interactive Clicker Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        /* Game Layout */
+        .game-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .game-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Click Area */
+        .click-monster {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8em;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .click-monster:hover {
+            transform: scale(1.05);
+        }
+
+        .click-monster:active {
+            transform: scale(0.95);
+        }
+
+        .click-monster.celebrating {
+            animation: celebrate 0.5s ease-in-out;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        /* Upgrades */
+        .upgrade-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-btn {
+            width: 100%;
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upgrade-btn:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .upgrade-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .upgrade-cost {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* Achievements */
+        .achievements {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .achievement {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .achievement.unlocked {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .achievement-icon {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .achievement-name {
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        /* Click Effect */
+        .click-effect {
+            position: absolute;
+            color: #f5576c;
+            font-size: 2em;
+            font-weight: bold;
+            pointer-events: none;
+            animation: float-up 1s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            to {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #e68900;
+            transform: translateY(-2px);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info-box h3 {
+            color: #2196f3;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Example 4: Interactive Clicker Game</h1>
+        <p class="subtitle">Combining Multiple Events: Click, Keyboard, and Timers</p>
+
+        <div class="game-container">
+            <!-- Main Game Area -->
+            <div class="game-panel">
+                <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">Click the Monster!</h2>
+                <div class="click-monster" id="monster">👾</div>
+                <p style="text-align: center; color: #666;">Click the monster or press SPACE</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Clicks</div>
+                        <div class="stat-value" id="clickCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Per Click</div>
+                        <div class="stat-value" id="clickPower">1</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Per Second</div>
+                        <div class="stat-value" id="autoClicks">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Score</div>
+                        <div class="stat-value" id="totalScore">0</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn" id="resetBtn">🔄 Reset Game</button>
+                    <button class="control-btn" id="pauseBtn">⏸️ Pause Auto</button>
+                </div>
+            </div>
+
+            <!-- Upgrades & Achievements -->
+            <div class="game-panel">
+                <div class="upgrade-section">
+                    <h3>🛒 Upgrades</h3>
+                    <button class="upgrade-btn" id="upgrade1">
+                        <span>🔨 Better Clicker</span>
+                        <span class="upgrade-cost">10 clicks</span>
+                    </button>
+                    <button class="upgrade-btn" id="upgrade2">
+                        <span>⚡ Super Clicker</span>
+                        <span class="upgrade-cost">50 clicks</span>
+                    </button>
+                    <button class="upgrade-btn" id="upgrade3">
+                        <span>🤖 Auto-Clicker</span>
+                        <span class="upgrade-cost">100 clicks</span>
+                    </button>
+                    <button class="upgrade-btn" id="upgrade4">
+                        <span>🚀 Mega Auto</span>
+                        <span class="upgrade-cost">500 clicks</span>
+                    </button>
+                </div>
+
+                <div class="achievements">
+                    <div class="achievement" id="ach1">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-name">First Click</div>
+                    </div>
+                    <div class="achievement" id="ach2">
+                        <div class="achievement-icon">🌟</div>
+                        <div class="achievement-name">100 Clicks</div>
+                    </div>
+                    <div class="achievement" id="ach3">
+                        <div class="achievement-icon">💎</div>
+                        <div class="achievement-name">1000 Clicks</div>
+                    </div>
+                    <div class="achievement" id="ach4">
+                        <div class="achievement-icon">👑</div>
+                        <div class="achievement-name">All Upgrades</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3>🎯 Events Used in This Game:</h3>
+            <ul>
+                <li><strong>Click Event:</strong> Monster responds to clicks</li>
+                <li><strong>Keyboard Event:</strong> Press SPACE to click the monster</li>
+                <li><strong>Button Click Events:</strong> Upgrades and controls</li>
+                <li><strong>Timer (setInterval):</strong> Auto-clicker generates clicks over time</li>
+                <li><strong>Multiple Listeners:</strong> Monster has both click and keyboard listeners</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXAMPLE 4: INTERACTIVE CLICKER GAME ===\n');
+
+        // Game State
+        let clicks = 0;
+        let clickPower = 1;
+        let autoClickRate = 0;
+        let isPaused = false;
+        let upgradesPurchased = 0;
+
+        // Get Elements
+        let monster = document.getElementById('monster');
+        let clickCountDisplay = document.getElementById('clickCount');
+        let clickPowerDisplay = document.getElementById('clickPower');
+        let autoClicksDisplay = document.getElementById('autoClicks');
+        let totalScoreDisplay = document.getElementById('totalScore');
+        
+        // Update Display
+        function updateDisplay() {
+            clickCountDisplay.textContent = clicks;
+            clickPowerDisplay.textContent = clickPower;
+            autoClicksDisplay.textContent = autoClickRate;
+            totalScoreDisplay.textContent = Math.floor(clicks);
+            
+            // Update upgrade buttons
+            updateUpgradeButtons();
+            checkAchievements();
+        }
+
+        // Click Monster Function
+        function clickMonster(event) {
+            clicks = clicks + clickPower;
+            updateDisplay();
+            
+            // Visual effect
+            monster.classList.add('celebrating');
+            setTimeout(function() {
+                monster.classList.remove('celebrating');
+            }, 500);
+            
+            // Floating number effect
+            if (event && event.clientX) {
+                showClickEffect(event.clientX, event.clientY, '+' + clickPower);
+            }
+            
+            console.log('Monster clicked! Total:', clicks);
+        }
+
+        // Show Click Effect
+        function showClickEffect(x, y, text) {
+            let effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.textContent = text;
+            effect.style.left = x + 'px';
+            effect.style.top = y + 'px';
+            document.body.appendChild(effect);
+            
+            setTimeout(function() {
+                document.body.removeChild(effect);
+            }, 1000);
+        }
+
+        // ===== Event Listeners =====
+        
+        // 1. Click Event on Monster
+        if (monster) {
+            monster.addEventListener('click', clickMonster);
+            console.log('✓ Monster click listener added');
+        }
+
+        // 2. Keyboard Event (SPACE to click)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === ' ' || event.key === 'Spacebar') {
+                event.preventDefault(); // Prevent page scroll
+                clickMonster();
+                console.log('Space pressed - monster clicked!');
+            }
+        });
+        console.log('✓ Keyboard listener added');
+
+        // ===== Upgrades =====
+        
+        let upgrade1Btn = document.getElementById('upgrade1');
+        let upgrade2Btn = document.getElementById('upgrade2');
+        let upgrade3Btn = document.getElementById('upgrade3');
+        let upgrade4Btn = document.getElementById('upgrade4');
+
+        // Upgrade 1: Better Clicker (costs 10)
+        if (upgrade1Btn) {
+            upgrade1Btn.addEventListener('click', function() {
+                if (clicks >= 10) {
+                    clicks -= 10;
+                    clickPower += 1;
+                    upgradesPurchased++;
+                    upgrade1Btn.disabled = true;
+                    upgrade1Btn.textContent = '✅ Purchased!';
+                    updateDisplay();
+                    console.log('Upgrade 1 purchased! Click power:', clickPower);
+                }
+            });
+        }
+
+        // Upgrade 2: Super Clicker (costs 50)
+        if (upgrade2Btn) {
+            upgrade2Btn.addEventListener('click', function() {
+                if (clicks >= 50) {
+                    clicks -= 50;
+                    clickPower += 5;
+                    upgradesPurchased++;
+                    upgrade2Btn.disabled = true;
+                    upgrade2Btn.textContent = '✅ Purchased!';
+                    updateDisplay();
+                    console.log('Upgrade 2 purchased! Click power:', clickPower);
+                }
+            });
+        }
+
+        // Upgrade 3: Auto-Clicker (costs 100)
+        if (upgrade3Btn) {
+            upgrade3Btn.addEventListener('click', function() {
+                if (clicks >= 100) {
+                    clicks -= 100;
+                    autoClickRate += 1;
+                    upgradesPurchased++;
+                    upgrade3Btn.disabled = true;
+                    upgrade3Btn.textContent = '✅ Purchased!';
+                    updateDisplay();
+                    console.log('Upgrade 3 purchased! Auto-clicks:', autoClickRate);
+                }
+            });
+        }
+
+        // Upgrade 4: Mega Auto (costs 500)
+        if (upgrade4Btn) {
+            upgrade4Btn.addEventListener('click', function() {
+                if (clicks >= 500) {
+                    clicks -= 500;
+                    autoClickRate += 10;
+                    upgradesPurchased++;
+                    upgrade4Btn.disabled = true;
+                    upgrade4Btn.textContent = '✅ Purchased!';
+                    updateDisplay();
+                    console.log('Upgrade 4 purchased! Auto-clicks:', autoClickRate);
+                }
+            });
+        }
+
+        console.log('✓ Upgrade listeners added');
+
+        // Update Upgrade Buttons
+        function updateUpgradeButtons() {
+            if (upgrade1Btn && !upgrade1Btn.disabled) {
+                upgrade1Btn.disabled = clicks < 10;
+            }
+            if (upgrade2Btn && !upgrade2Btn.disabled) {
+                upgrade2Btn.disabled = clicks < 50;
+            }
+            if (upgrade3Btn && !upgrade3Btn.disabled) {
+                upgrade3Btn.disabled = clicks < 100;
+            }
+            if (upgrade4Btn && !upgrade4Btn.disabled) {
+                upgrade4Btn.disabled = clicks < 500;
+            }
+        }
+
+        // ===== Achievements =====
+        
+        function checkAchievements() {
+            let ach1 = document.getElementById('ach1');
+            let ach2 = document.getElementById('ach2');
+            let ach3 = document.getElementById('ach3');
+            let ach4 = document.getElementById('ach4');
+
+            if (clicks >= 1 && !ach1.classList.contains('unlocked')) {
+                ach1.classList.add('unlocked');
+                console.log('🏆 Achievement unlocked: First Click!');
+            }
+
+            if (clicks >= 100 && !ach2.classList.contains('unlocked')) {
+                ach2.classList.add('unlocked');
+                console.log('🌟 Achievement unlocked: 100 Clicks!');
+            }
+
+            if (clicks >= 1000 && !ach3.classList.contains('unlocked')) {
+                ach3.classList.add('unlocked');
+                console.log('💎 Achievement unlocked: 1000 Clicks!');
+            }
+
+            if (upgradesPurchased >= 4 && !ach4.classList.contains('unlocked')) {
+                ach4.classList.add('unlocked');
+                console.log('👑 Achievement unlocked: All Upgrades!');
+            }
+        }
+
+        // ===== Auto-Clicker Timer =====
+        
+        setInterval(function() {
+            if (!isPaused && autoClickRate > 0) {
+                clicks += autoClickRate;
+                updateDisplay();
+            }
+        }, 1000);
+
+        console.log('✓ Auto-clicker timer started');
+
+        // ===== Controls =====
+        
+        // Reset Button
+        let resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset the game?')) {
+                    clicks = 0;
+                    clickPower = 1;
+                    autoClickRate = 0;
+                    upgradesPurchased = 0;
+                    isPaused = false;
+                    
+                    // Reset upgrade buttons
+                    if (upgrade1Btn) {
+                        upgrade1Btn.disabled = false;
+                        upgrade1Btn.innerHTML = '<span>🔨 Better Clicker</span><span class="upgrade-cost">10 clicks</span>';
+                    }
+                    if (upgrade2Btn) {
+                        upgrade2Btn.disabled = false;
+                        upgrade2Btn.innerHTML = '<span>⚡ Super Clicker</span><span class="upgrade-cost">50 clicks</span>';
+                    }
+                    if (upgrade3Btn) {
+                        upgrade3Btn.disabled = false;
+                        upgrade3Btn.innerHTML = '<span>🤖 Auto-Clicker</span><span class="upgrade-cost">100 clicks</span>';
+                    }
+                    if (upgrade4Btn) {
+                        upgrade4Btn.disabled = false;
+                        upgrade4Btn.innerHTML = '<span>🚀 Mega Auto</span><span class="upgrade-cost">500 clicks</span>';
+                    }
+                    
+                    // Reset achievements
+                    document.querySelectorAll('.achievement').forEach(function(ach) {
+                        ach.classList.remove('unlocked');
+                    });
+                    
+                    updateDisplay();
+                    console.log('Game reset!');
+                }
+            });
+        }
+
+        // Pause Button
+        let pauseBtn = document.getElementById('pauseBtn');
+        if (pauseBtn) {
+            pauseBtn.addEventListener('click', function() {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    pauseBtn.textContent = '▶️ Resume Auto';
+                    console.log('Auto-clicker paused');
+                } else {
+                    pauseBtn.textContent = '⏸️ Pause Auto';
+                    console.log('Auto-clicker resumed');
+                }
+            });
+        }
+
+        console.log('✓ Control buttons added');
+
+        console.log('\n✓ Game loaded! Click the monster or press SPACE!');
+        console.log('Purchase upgrades to increase your clicking power!');
+        
+        // Initial display update
+        updateDisplay();
+    </script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Keyboard Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            color: #4facfe;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .explanation {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4facfe;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        /* Key Display */
+        .key-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Piano Keys */
+        .piano {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .key {
+            width: 60px;
+            height: 200px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.1s;
+            position: relative;
+        }
+
+        .key:hover {
+            background: #f0f0f0;
+        }
+
+        .key.active {
+            background: #4facfe;
+            transform: translateY(3px);
+        }
+
+        .key .note {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .key .letter {
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Movement Box */
+        .game-area {
+            position: relative;
+            background: #f0f0f0;
+            height: 400px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .player {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #4facfe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.1s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .instructions {
+            text-align: center;
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #666;
+        }
+
+        /* Snake Game */
+        .snake-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            background: #333;
+            padding: 2px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: #ecf0f1;
+            border-radius: 2px;
+        }
+
+        .cell.snake {
+            background: #2ecc71;
+        }
+
+        .cell.food {
+            background: #e74c3c;
+        }
+
+        /* Enter Key Demo */
+        .chat-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .message {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message .time {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        /* Keyboard Shortcuts */
+        .shortcut-list {
+            background: #263238;
+            color: #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .shortcut-item {
+            margin-bottom: 5px;
+        }
+
+        .kbd {
+            background: #455a64;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⌨️ Example 3: Keyboard Events</h1>
+        <p class="subtitle">Learn how to respond to keyboard presses and create keyboard controls</p>
+
+        <!-- Example 1: Key Press Display -->
+        <div class="section">
+            <h2>1. Key Press Display</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Listen for keyboard events and display which key was pressed.
+                <br><br>
+                <strong>Events:</strong> <code>keydown</code> (key pressed), <code>keyup</code> (key released)
+            </div>
+            <p class="instructions">Click here and press any key on your keyboard:</p>
+            <input type="text" id="keyInput" placeholder="Focus here and press keys...">
+            <div class="key-display" id="keyDisplay">Press a key!</div>
+            <div id="keyInfo" style="text-align: center; color: #666;"></div>
+        </div>
+
+        <!-- Example 2: Piano with Keyboard -->
+        <div class="section">
+            <h2>2. Visual Piano (Keyboard Controls)</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Create a visual piano that responds to keyboard presses.
+                <br><br>
+                <strong>Keys:</strong> A, S, D, F, G, H, J (Do, Re, Mi, Fa, Sol, La, Ti)
+            </div>
+            <p class="instructions">Press A, S, D, F, G, H, or J to play notes!</p>
+            <div class="piano" id="piano">
+                <div class="key" data-key="a">
+                    <div class="note">🎵</div>
+                    <div class="letter">A</div>
+                </div>
+                <div class="key" data-key="s">
+                    <div class="note">🎵</div>
+                    <div class="letter">S</div>
+                </div>
+                <div class="key" data-key="d">
+                    <div class="note">🎵</div>
+                    <div class="letter">D</div>
+                </div>
+                <div class="key" data-key="f">
+                    <div class="note">🎵</div>
+                    <div class="letter">F</div>
+                </div>
+                <div class="key" data-key="g">
+                    <div class="note">🎵</div>
+                    <div class="letter">G</div>
+                </div>
+                <div class="key" data-key="h">
+                    <div class="note">🎵</div>
+                    <div class="letter">H</div>
+                </div>
+                <div class="key" data-key="j">
+                    <div class="note">🎵</div>
+                    <div class="letter">J</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example 3: Arrow Key Movement -->
+        <div class="section">
+            <h2>3. Arrow Key Movement</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Use arrow keys to move an object around the screen.
+                <br><br>
+                <strong>Keys:</strong> ↑ ↓ ← → (Arrow Keys) or W A S D
+            </div>
+            <p class="instructions">Use arrow keys or WASD to move the character:</p>
+            <div class="game-area" id="gameArea">
+                <div class="player" id="player">🚀</div>
+            </div>
+            <div id="positionInfo" style="text-align: center; color: #666;"></div>
+        </div>
+
+        <!-- Example 4: Simple Snake Game Grid -->
+        <div class="section">
+            <h2>4. Mini Snake Game</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Use arrow keys to control the snake and eat the food (red squares).
+                <br><br>
+                <strong>Keys:</strong> Arrow keys to change direction
+            </div>
+            <p class="instructions">Use arrow keys to move the snake! Eat the red food!</p>
+            <div class="snake-grid" id="snakeGrid"></div>
+            <div style="text-align: center;">
+                <strong>Score: <span id="score">0</span></strong>
+            </div>
+        </div>
+
+        <!-- Example 5: Enter Key to Send -->
+        <div class="section">
+            <h2>5. Enter Key Submit (Chat Demo)</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Press Enter to submit input without clicking a button.
+                <br><br>
+                <strong>Common in:</strong> Chat apps, search bars, forms
+            </div>
+            <div class="chat-box" id="chatBox">
+                <p style="text-align: center; color: #666;">Type a message and press Enter!</p>
+            </div>
+            <input type="text" id="chatInput" placeholder="Type a message and press Enter...">
+        </div>
+
+        <!-- Example 6: Keyboard Shortcuts -->
+        <div class="section">
+            <h2>6. Keyboard Shortcuts</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Create keyboard shortcuts for common actions (like Ctrl+S to save).
+                <br><br>
+                <strong>Pattern:</strong> Check <code>event.ctrlKey</code> or <code>event.key</code>
+            </div>
+            <p class="instructions">Try these shortcuts anywhere on the page:</p>
+            <ul style="margin: 15px 0;">
+                <li><span class="kbd">Ctrl + S</span> - Simulate Save</li>
+                <li><span class="kbd">Ctrl + Z</span> - Simulate Undo</li>
+                <li><span class="kbd">Escape</span> - Clear log</li>
+            </ul>
+            <div class="shortcut-list" id="shortcutLog">
+                <div class="shortcut-item">Press keyboard shortcuts to see them here...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXAMPLE 3: KEYBOARD EVENTS ===\n');
+
+        // ===== Example 1: Key Press Display =====
+        console.log('--- Example 1: Key Press Display ---');
+        
+        let keyInput = document.getElementById('keyInput');
+        let keyDisplay = document.getElementById('keyDisplay');
+        let keyInfo = document.getElementById('keyInfo');
+
+        if (keyInput && keyDisplay) {
+            keyInput.addEventListener('keydown', function(event) {
+                let key = event.key;
+                let code = event.code;
+                
+                keyDisplay.textContent = key;
+                keyInfo.textContent = 'Key: "' + key + '" | Code: "' + code + '"';
+                
+                console.log('Key pressed:', key, '| Code:', code);
+            });
+            console.log('✓ Key display listener added');
+        }
+
+        // ===== Example 2: Piano Keys =====
+        console.log('\n--- Example 2: Piano Keys ---');
+        
+        let pianoKeys = {
+            'a': 'Do',
+            's': 'Re',
+            'd': 'Mi',
+            'f': 'Fa',
+            'g': 'Sol',
+            'h': 'La',
+            'j': 'Ti'
+        };
+
+        document.addEventListener('keydown', function(event) {
+            let key = event.key.toLowerCase();
+            
+            if (pianoKeys[key]) {
+                let keyElement = document.querySelector('.key[data-key="' + key + '"]');
+                if (keyElement && !keyElement.classList.contains('active')) {
+                    keyElement.classList.add('active');
+                    console.log('Piano key pressed:', pianoKeys[key]);
+                }
+            }
+        });
+
+        document.addEventListener('keyup', function(event) {
+            let key = event.key.toLowerCase();
+            
+            if (pianoKeys[key]) {
+                let keyElement = document.querySelector('.key[data-key="' + key + '"]');
+                if (keyElement) {
+                    keyElement.classList.remove('active');
+                }
+            }
+        });
+
+        console.log('✓ Piano listeners added');
+
+        // ===== Example 3: Arrow Key Movement =====
+        console.log('\n--- Example 3: Arrow Key Movement ---');
+        
+        let player = document.getElementById('player');
+        let gameArea = document.getElementById('gameArea');
+        let positionInfo = document.getElementById('positionInfo');
+        
+        let playerX = 50;
+        let playerY = 50;
+        let speed = 10;
+
+        function updatePlayerPosition() {
+            // Keep player inside game area
+            let maxX = gameArea.offsetWidth - 50;
+            let maxY = gameArea.offsetHeight - 50;
+            
+            playerX = Math.max(0, Math.min(playerX, maxX));
+            playerY = Math.max(0, Math.min(playerY, maxY));
+            
+            player.style.left = playerX + 'px';
+            player.style.top = playerY + 'px';
+            
+            positionInfo.textContent = 'Position: X=' + playerX + ', Y=' + playerY;
+        }
+
+        updatePlayerPosition();
+
+        document.addEventListener('keydown', function(event) {
+            let key = event.key.toLowerCase();
+            
+            if (key === 'arrowup' || key === 'w') {
+                playerY -= speed;
+                console.log('Moving up');
+            } else if (key === 'arrowdown' || key === 's') {
+                playerY += speed;
+                console.log('Moving down');
+            } else if (key === 'arrowleft' || key === 'a') {
+                playerX -= speed;
+                console.log('Moving left');
+            } else if (key === 'arrowright' || key === 'd') {
+                playerX += speed;
+                console.log('Moving right');
+            }
+            
+            updatePlayerPosition();
+        });
+
+        console.log('✓ Movement controls added');
+
+        // ===== Example 4: Snake Game =====
+        console.log('\n--- Example 4: Snake Game ---');
+        
+        let snakeGrid = document.getElementById('snakeGrid');
+        let scoreDisplay = document.getElementById('score');
+        
+        // Create grid
+        for (let i = 0; i < 100; i++) {
+            let cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.index = i;
+            snakeGrid.appendChild(cell);
+        }
+
+        let snake = [44, 43, 42]; // Starting positions
+        let direction = 1; // 1 = right, -1 = left, 10 = down, -10 = up
+        let food = 67;
+        let score = 0;
+        let gameInterval;
+
+        function drawSnake() {
+            let cells = document.querySelectorAll('.cell');
+            cells.forEach(function(cell) {
+                cell.classList.remove('snake', 'food');
+            });
+
+            snake.forEach(function(pos) {
+                if (cells[pos]) {
+                    cells[pos].classList.add('snake');
+                }
+            });
+
+            if (cells[food]) {
+                cells[food].classList.add('food');
+            }
+        }
+
+        function moveSnake() {
+            let head = snake[0] + direction;
+            
+            // Check boundaries
+            if (head < 0 || head > 99) return;
+            if (direction === 1 && head % 10 === 0) return; // Right boundary
+            if (direction === -1 && head % 10 === 9) return; // Left boundary
+            
+            // Check if eating food
+            if (head === food) {
+                score++;
+                scoreDisplay.textContent = score;
+                food = Math.floor(Math.random() * 100);
+                console.log('Food eaten! Score:', score);
+            } else {
+                snake.pop(); // Remove tail
+            }
+            
+            snake.unshift(head); // Add new head
+            drawSnake();
+        }
+
+        // Arrow key controls for snake
+        document.addEventListener('keydown', function(event) {
+            let key = event.key;
+            
+            if (key === 'ArrowUp' && direction !== 10) {
+                direction = -10;
+            } else if (key === 'ArrowDown' && direction !== -10) {
+                direction = 10;
+            } else if (key === 'ArrowLeft' && direction !== 1) {
+                direction = -1;
+            } else if (key === 'ArrowRight' && direction !== -1) {
+                direction = 1;
+            }
+        });
+
+        drawSnake();
+        gameInterval = setInterval(moveSnake, 300);
+
+        console.log('✓ Snake game initialized');
+
+        // ===== Example 5: Enter Key Submit =====
+        console.log('\n--- Example 5: Enter Key Submit ---');
+        
+        let chatInput = document.getElementById('chatInput');
+        let chatBox = document.getElementById('chatBox');
+
+        if (chatInput && chatBox) {
+            chatInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    let message = chatInput.value.trim();
+                    
+                    if (message !== '') {
+                        let now = new Date().toLocaleTimeString();
+                        let messageDiv = document.createElement('div');
+                        messageDiv.className = 'message';
+                        messageDiv.innerHTML = '<strong>You:</strong> ' + message + 
+                                              '<div class="time">' + now + '</div>';
+                        
+                        chatBox.appendChild(messageDiv);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                        chatInput.value = '';
+                        
+                        console.log('Message sent:', message);
+                    }
+                }
+            });
+            console.log('✓ Chat input listener added');
+        }
+
+        // ===== Example 6: Keyboard Shortcuts =====
+        console.log('\n--- Example 6: Keyboard Shortcuts ---');
+        
+        let shortcutLog = document.getElementById('shortcutLog');
+
+        function addShortcutLog(message) {
+            let entry = document.createElement('div');
+            entry.className = 'shortcut-item';
+            entry.textContent = '> ' + message;
+            shortcutLog.appendChild(entry);
+            shortcutLog.scrollTop = shortcutLog.scrollHeight;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            // Ctrl + S (Save)
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault(); // Stop browser's default save action
+                addShortcutLog('💾 Ctrl+S pressed - Document saved! (simulated)');
+                console.log('Ctrl+S pressed');
+            }
+            
+            // Ctrl + Z (Undo)
+            else if (event.ctrlKey && event.key === 'z') {
+                event.preventDefault();
+                addShortcutLog('↩️ Ctrl+Z pressed - Undo action! (simulated)');
+                console.log('Ctrl+Z pressed');
+            }
+            
+            // Escape (Clear)
+            else if (event.key === 'Escape') {
+                shortcutLog.innerHTML = '<div class="shortcut-item">Log cleared!</div>';
+                console.log('Escape pressed - Log cleared');
+            }
+        });
+
+        console.log('✓ Keyboard shortcuts added');
+
+        console.log('\n✓ All keyboard event listeners loaded!');
+        console.log('Try pressing keys and watch the interactions!');
+    </script>
+</body>
+</html>
