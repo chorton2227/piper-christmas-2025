@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Variable Basics</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-top: 0;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .info-box {
+            background: #f8f9ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h2 {
+            margin-top: 0;
+            color: #555;
+            font-size: 1.3em;
+        }
+        
+        .info-box p {
+            margin: 10px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .console-tip {
+            background: #764ba2;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        code {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Variable Basics</h1>
+        
+        <div class="info-box">
+            <h2>What This Example Shows:</h2>
+            <p>✓ Creating variables with <code>let</code> and <code>const</code></p>
+            <p>✓ Storing numbers, strings, and booleans</p>
+            <p>✓ Printing variable values to the console</p>
+            <p>✓ Using <code>typeof</code> to check data types</p>
+        </div>
+        
+        <div class="info-box">
+            <h2>Key Concepts:</h2>
+            <p><strong>Variables</strong> are like labeled boxes that store information</p>
+            <p><strong>let</strong> = can change later</p>
+            <p><strong>const</strong> = stays the same (constant)</p>
+        </div>
+        
+        <div class="console-tip">
+            🖥️ Press F12 to see the variables in action!
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // EXAMPLE 1: VARIABLE BASICS
+        // ========================================
+        
+        console.log('========================================');
+        console.log('    LESSON 3.2 - VARIABLE BASICS');
+        console.log('========================================');
+        console.log('');
+        
+        // ===== CREATING VARIABLES WITH let =====
+        console.log('--- Creating Variables with let ---');
+        console.log('');
+        
+        let playerName = 'Alex';
+        let playerAge = 10;
+        let playerScore = 0;
+        let isPlaying = true;
+        
+        console.log('Created 4 variables:');
+        console.log('playerName:', playerName);
+        console.log('playerAge:', playerAge);
+        console.log('playerScore:', playerScore);
+        console.log('isPlaying:', isPlaying);
+        console.log('');
+        
+        // ===== CREATING VARIABLES WITH const =====
+        console.log('--- Creating Variables with const ---');
+        console.log('');
+        
+        const GAME_NAME = 'Super Quiz';
+        const MAX_PLAYERS = 4;
+        const STARTING_LIVES = 3;
+        const PI = 3.14159;
+        
+        console.log('Created 4 constants:');
+        console.log('GAME_NAME:', GAME_NAME);
+        console.log('MAX_PLAYERS:', MAX_PLAYERS);
+        console.log('STARTING_LIVES:', STARTING_LIVES);
+        console.log('PI:', PI);
+        console.log('');
+        
+        // ===== DATA TYPES =====
+        console.log('--- Data Types ---');
+        console.log('');
+        
+        // Numbers
+        let age = 10;
+        let price = 19.99;
+        let temperature = -5;
+        
+        console.log('Numbers:');
+        console.log('age:', age);
+        console.log('price:', price);
+        console.log('temperature:', temperature);
+        console.log('');
+        
+        // Strings
+        let firstName = 'Alex';
+        let lastName = "Smith";
+        let greeting = 'Hello, World!';
+        
+        console.log('Strings:');
+        console.log('firstName:', firstName);
+        console.log('lastName:', lastName);
+        console.log('greeting:', greeting);
+        console.log('');
+        
+        // Booleans
+        let isLoggedIn = true;
+        let gameOver = false;
+        let hasWon = true;
+        
+        console.log('Booleans:');
+        console.log('isLoggedIn:', isLoggedIn);
+        console.log('gameOver:', gameOver);
+        console.log('hasWon:', hasWon);
+        console.log('');
+        
+        // ===== USING typeof =====
+        console.log('--- Using typeof to Check Data Types ---');
+        console.log('');
+        
+        let myNumber = 42;
+        let myString = 'Hello';
+        let myBoolean = true;
+        
+        console.log('myNumber:', myNumber, '→ Type:', typeof myNumber);
+        console.log('myString:', myString, '→ Type:', typeof myString);
+        console.log('myBoolean:', myBoolean, '→ Type:', typeof myBoolean);
+        console.log('');
+        
+        // More typeof examples
+        console.log('typeof 100 →', typeof 100);
+        console.log('typeof "Hi" →', typeof "Hi");
+        console.log('typeof false →', typeof false);
+        console.log('typeof 3.14 →', typeof 3.14);
+        console.log('');
+        
+        // ===== UPDATING VARIABLES (let only!) =====
+        console.log('--- Updating Variables (let only!) ---');
+        console.log('');
+        
+        let score = 0;
+        console.log('Starting score:', score);
+        
+        score = 10;
+        console.log('After first update:', score);
+        
+        score = 25;
+        console.log('After second update:', score);
+        
+        score = 100;
+        console.log('Final score:', score);
+        console.log('');
+        
+        // ===== YOU CANNOT UPDATE const =====
+        console.log('--- You CANNOT Update const ---');
+        console.log('');
+        
+        const MAX_LIVES = 3;
+        console.log('MAX_LIVES:', MAX_LIVES);
+        console.log('');
+        console.log('If we tried: MAX_LIVES = 5');
+        console.log('We would get: ❌ TypeError: Assignment to constant variable!');
+        console.log('');
+        console.log('💡 Tip: Use const for values that should never change!');
+        console.log('💡 Tip: Use let for values that might change!');
+        console.log('');
+        
+        // ===== PRACTICAL EXAMPLE =====
+        console.log('========================================');
+        console.log('    PRACTICAL EXAMPLE: GAME PLAYER');
+        console.log('========================================');
+        console.log('');
+        
+        // Constants (game settings)
+        const PLAYER_NAME = 'Jordan';
+        const STARTING_SCORE = 0;
+        const LIVES_COUNT = 3;
+        
+        // Variables (things that change)
+        let currentScore = STARTING_SCORE;
+        let currentLevel = 1;
+        let isAlive = true;
+        
+        // Display initial state
+        console.log('🎮 GAME START');
+        console.log('Player:', PLAYER_NAME);
+        console.log('Score:', currentScore);
+        console.log('Level:', currentLevel);
+        console.log('Lives:', LIVES_COUNT);
+        console.log('Alive:', isAlive);
+        console.log('');
+        
+        // Simulate gameplay
+        console.log('📈 LEVEL 1 COMPLETE!');
+        currentScore = currentScore + 100;
+        currentLevel = currentLevel + 1;
+        console.log('Score:', currentScore);
+        console.log('Level:', currentLevel);
+        console.log('');
+        
+        console.log('📈 LEVEL 2 COMPLETE!');
+        currentScore = currentScore + 150;
+        currentLevel = currentLevel + 1;
+        console.log('Score:', currentScore);
+        console.log('Level:', currentLevel);
+        console.log('');
+        
+        console.log('🎉 FINAL STATS');
+        console.log('Player:', PLAYER_NAME);
+        console.log('Final Score:', currentScore);
+        console.log('Final Level:', currentLevel);
+        console.log('Total Lives Used:', LIVES_COUNT);
+        console.log('');
+        
+        // ===== KEY TAKEAWAYS =====
+        console.log('========================================');
+        console.log('    KEY TAKEAWAYS');
+        console.log('========================================');
+        console.log('');
+        console.log('✅ Use let for values that change');
+        console.log('✅ Use const for values that stay the same');
+        console.log('✅ Numbers don\'t need quotes: 42');
+        console.log('✅ Strings need quotes: "Hello"');
+        console.log('✅ Booleans are true or false');
+        console.log('✅ Use typeof to check data types');
+        console.log('✅ Variable names should be descriptive');
+        console.log('✅ Use camelCase for variable names');
+        console.log('');
+        console.log('🎓 Great job learning about variables!');
+    </script>
+</body>
+</html>

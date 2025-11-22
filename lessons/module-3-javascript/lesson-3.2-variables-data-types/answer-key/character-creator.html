@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator - Answer Key</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin: 0 0 20px 0;
+            font-size: 2.5em;
+        }
+        
+        .character-icon {
+            font-size: 5em;
+            margin: 20px 0;
+        }
+        
+        .console-tip {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚔️ Character Creator</h1>
+        <div class="character-icon">🛡️🗡️🎮</div>
+        <p style="color: #666; font-size: 1.2em;">
+            Answer Key for Exercise 1
+        </p>
+        <div class="console-tip">
+            Press F12 to see your character come to life!
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // EXERCISE 1: CHARACTER CREATOR - ANSWER KEY
+        // ==========================================
+        
+        console.log('╔═══════════════════════════════════════╗');
+        console.log('║       CHARACTER CREATOR v1.0          ║');
+        console.log('╚═══════════════════════════════════════╝');
+        console.log('');
+        
+        // ==========================================
+        // CHARACTER CONSTANTS (Never change)
+        // ==========================================
+        const CHARACTER_NAME = 'Thunder Knight';
+        const CHARACTER_CLASS = 'Warrior';
+        const STARTING_HEALTH = 100;
+        const STARTING_MANA = 50;
+        
+        // ==========================================
+        // CHARACTER STATS (Can change during game)
+        // ==========================================
+        let currentHealth = STARTING_HEALTH;
+        let currentMana = STARTING_MANA;
+        let level = 1;
+        let experience = 0;
+        
+        // ==========================================
+        // CHARACTER STATUS (Boolean flags)
+        // ==========================================
+        let isAlive = true;
+        let isInBattle = false;
+        let hasWeapon = true;
+        let hasArmor = true;
+        
+        // ==========================================
+        // ADDITIONAL STATS
+        // ==========================================
+        let strength = 85;
+        let defense = 60;
+        let speed = 45;
+        let gold = 100;
+        
+        // ==========================================
+        // DISPLAY CHARACTER INFORMATION
+        // ==========================================
+        
+        console.log('╔═══════════════════════════════════════╗');
+        console.log('║     ' + CHARACTER_NAME.toUpperCase().padEnd(32) + '║');
+        console.log('╚═══════════════════════════════════════╝');
+        console.log('');
+        console.log('CLASS: ' + CHARACTER_CLASS);
+        console.log('LEVEL: ' + level);
+        console.log('EXPERIENCE: ' + experience + ' XP');
+        console.log('');
+        console.log('─────────────────────────────────────────');
+        console.log('ATTRIBUTES:');
+        console.log('─────────────────────────────────────────');
+        console.log('Health: ' + currentHealth + ' / ' + STARTING_HEALTH);
+        console.log('Mana: ' + currentMana + ' / ' + STARTING_MANA);
+        console.log('Strength: ' + strength);
+        console.log('Defense: ' + defense);
+        console.log('Speed: ' + speed);
+        console.log('');
+        console.log('─────────────────────────────────────────');
+        console.log('STATUS:');
+        console.log('─────────────────────────────────────────');
+        console.log('Alive: ' + (isAlive ? '✓' : '✗'));
+        console.log('In Battle: ' + (isInBattle ? '✓' : '✗'));
+        console.log('Has Weapon: ' + (hasWeapon ? '✓' : '✗'));
+        console.log('Has Armor: ' + (hasArmor ? '✓' : '✗'));
+        console.log('');
+        console.log('─────────────────────────────────────────');
+        console.log('INVENTORY:');
+        console.log('─────────────────────────────────────────');
+        console.log('Gold: ' + gold + ' coins');
+        console.log('');
+        
+        // Calculate and show derived stats
+        let totalPower = strength + defense + speed;
+        let healthPercentage = (currentHealth / STARTING_HEALTH) * 100;
+        let manaPercentage = (currentMana / STARTING_MANA) * 100;
+        
+        console.log('─────────────────────────────────────────');
+        console.log('CALCULATED STATS:');
+        console.log('─────────────────────────────────────────');
+        console.log('Total Power Level: ' + totalPower);
+        console.log('Health: ' + healthPercentage + '%');
+        console.log('Mana: ' + manaPercentage + '%');
+        console.log('');
+        console.log('');
+        
+        // ==========================================
+        // SIMULATE GAMEPLAY - BATTLE SEQUENCE
+        // ==========================================
+        
+        console.log('═══════════════════════════════════════');
+        console.log('⚔️  ENTERING BATTLE!');
+        console.log('═══════════════════════════════════════');
+        console.log('');
+        
+        isInBattle = true;
+        console.log('Status Update: In Battle = ' + isInBattle);
+        console.log('');
+        
+        // Action 1: Take damage
+        console.log('🔥 Enemy attacks! Taking 25 damage...');
+        currentHealth = currentHealth - 25;
+        console.log('Health: ' + currentHealth + ' / ' + STARTING_HEALTH);
+        healthPercentage = (currentHealth / STARTING_HEALTH) * 100;
+        console.log('Health Percentage: ' + healthPercentage + '%');
+        console.log('');
+        
+        // Action 2: Use special ability
+        console.log('⚡ Thunder Knight uses Lightning Strike!');
+        console.log('Mana cost: 20');
+        currentMana = currentMana - 20;
+        console.log('Mana: ' + currentMana + ' / ' + STARTING_MANA);
+        manaPercentage = (currentMana / STARTING_MANA) * 100;
+        console.log('Mana Percentage: ' + manaPercentage + '%');
+        console.log('');
+        
+        // Action 3: Take more damage
+        console.log('💥 Enemy counterattacks! Taking 15 damage...');
+        currentHealth = currentHealth - 15;
+        console.log('Health: ' + currentHealth + ' / ' + STARTING_HEALTH);
+        console.log('');
+        
+        // Action 4: Victory!
+        console.log('🎉 VICTORY! Enemy defeated!');
+        console.log('');
+        isInBattle = false;
+        
+        // Gain rewards
+        let xpGained = 150;
+        let goldGained = 50;
+        
+        console.log('Rewards:');
+        console.log('+ ' + xpGained + ' Experience');
+        console.log('+ ' + goldGained + ' Gold');
+        console.log('');
+        
+        experience = experience + xpGained;
+        gold = gold + goldGained;
+        
+        console.log('Updated Stats:');
+        console.log('Experience: ' + experience + ' XP');
+        console.log('Gold: ' + gold + ' coins');
+        console.log('');
+        console.log('');
+        
+        // ==========================================
+        // LEVEL UP!
+        // ==========================================
+        
+        const XP_FOR_LEVEL_2 = 100;
+        
+        if (experience >= XP_FOR_LEVEL_2) {
+            console.log('═══════════════════════════════════════');
+            console.log('🌟 LEVEL UP! 🌟');
+            console.log('═══════════════════════════════════════');
+            console.log('');
+            
+            level = level + 1;
+            
+            // Increase stats
+            let healthIncrease = 20;
+            let manaIncrease = 10;
+            let strengthIncrease = 5;
+            
+            STARTING_HEALTH; // Would need to track max health separately in real game
+            currentHealth = currentHealth + healthIncrease;
+            currentMana = currentMana + manaIncrease;
+            strength = strength + strengthIncrease;
+            
+            console.log('New Level: ' + level);
+            console.log('');
+            console.log('Stat Increases:');
+            console.log('+ ' + healthIncrease + ' Health');
+            console.log('+ ' + manaIncrease + ' Mana');
+            console.log('+ ' + strengthIncrease + ' Strength');
+            console.log('');
+            console.log('Updated Character Stats:');
+            console.log('Health: ' + currentHealth);
+            console.log('Mana: ' + currentMana);
+            console.log('Strength: ' + strength);
+            console.log('');
+        }
+        
+        // ==========================================
+        // FINAL CHARACTER SHEET
+        // ==========================================
+        
+        console.log('');
+        console.log('╔═══════════════════════════════════════╗');
+        console.log('║      FINAL CHARACTER SHEET            ║');
+        console.log('╚═══════════════════════════════════════╝');
+        console.log('');
+        console.log('CHARACTER: ' + CHARACTER_NAME);
+        console.log('CLASS: ' + CHARACTER_CLASS);
+        console.log('LEVEL: ' + level);
+        console.log('EXPERIENCE: ' + experience + ' XP');
+        console.log('');
+        console.log('ATTRIBUTES:');
+        console.log('Health: ' + currentHealth);
+        console.log('Mana: ' + currentMana);
+        console.log('Strength: ' + strength);
+        console.log('Defense: ' + defense);
+        console.log('Speed: ' + speed);
+        console.log('');
+        console.log('WEALTH:');
+        console.log('Gold: ' + gold + ' coins');
+        console.log('');
+        console.log('STATUS:');
+        console.log('Alive: ' + isAlive);
+        console.log('In Battle: ' + isInBattle);
+        console.log('Has Weapon: ' + hasWeapon);
+        console.log('Has Armor: ' + hasArmor);
+        console.log('');
+        
+        // Calculate final power
+        totalPower = strength + defense + speed;
+        console.log('TOTAL POWER LEVEL: ' + totalPower);
+        console.log('');
+        console.log('✨ Character creation complete! ✨');
+    </script>
+</body>
+</html>
