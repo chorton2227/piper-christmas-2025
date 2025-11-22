@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 3 Solution: Form Element Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .slider-group {
+            margin-top: 10px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .form-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .form-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .button-row {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚔️ Character Creation Form</h1>
+        <p class="subtitle">Create your epic RPG character</p>
+
+        <!-- Basic Information -->
+        <div class="form-section">
+            <h2>📝 Basic Information</h2>
+            <div class="form-group">
+                <label for="char-name">Character Name:</label>
+                <input type="text" id="char-name" placeholder="Enter character name">
+            </div>
+            <div class="form-group">
+                <label for="player-email">Player Email:</label>
+                <input type="email" id="player-email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" min="18" max="100" placeholder="18">
+            </div>
+        </div>
+
+        <!-- Character Class -->
+        <div class="form-section">
+            <h2>⚔️ Character Class</h2>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="class-warrior" name="class" value="warrior" class="class-radio">
+                    <label for="class-warrior">Warrior - Strength and combat mastery</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="class-mage" name="class" value="mage" class="class-radio">
+                    <label for="class-mage">Mage - Intelligence and spellcasting</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="class-rogue" name="class" value="rogue" class="class-radio">
+                    <label for="class-rogue">Rogue - Agility and stealth</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="class-paladin" name="class" value="paladin" class="class-radio">
+                    <label for="class-paladin">Paladin - Holy warrior with healing</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Character Race -->
+        <div class="form-section">
+            <h2>🧝 Character Race</h2>
+            <div class="form-group">
+                <label for="race">Select Race:</label>
+                <select id="race" class="form-select">
+                    <option value="">-- Choose Race --</option>
+                    <option value="human">Human - Balanced and adaptable</option>
+                    <option value="elf">Elf - Graceful and magical</option>
+                    <option value="dwarf">Dwarf - Strong and resilient</option>
+                    <option value="orc">Orc - Powerful and fierce</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="form-section">
+            <h2>🎯 Skills (Choose your specialties)</h2>
+            <div class="checkbox-group">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="skill-swordsmanship" name="skill" value="swordsmanship" class="skill-checkbox">
+                    <label for="skill-swordsmanship">Swordsmanship</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="skill-magic" name="skill" value="magic" class="skill-checkbox">
+                    <label for="skill-magic">Magic</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="skill-stealth" name="skill" value="stealth" class="skill-checkbox">
+                    <label for="skill-stealth">Stealth</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="skill-crafting" name="skill" value="crafting" class="skill-checkbox">
+                    <label for="skill-crafting">Crafting</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="skill-archery" name="skill" value="archery" class="skill-checkbox">
+                    <label for="skill-archery">Archery</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="skill-healing" name="skill" value="healing" class="skill-checkbox">
+                    <label for="skill-healing">Healing</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Character Appearance -->
+        <div class="form-section">
+            <h2>🎨 Character Appearance</h2>
+            <div class="form-group">
+                <label for="hair-color">Hair Color:</label>
+                <input type="text" id="hair-color" placeholder="e.g., Black, Blonde, Red">
+            </div>
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" id="height" min="50" max="250" placeholder="170">
+            </div>
+            <div class="form-group">
+                <label for="backstory">Character Backstory:</label>
+                <textarea id="backstory" rows="4" placeholder="Tell us your character's story..."></textarea>
+            </div>
+        </div>
+
+        <!-- Attributes -->
+        <div class="form-section">
+            <h2>💪 Attributes (Distribute points)</h2>
+            <div class="slider-group">
+                <label for="strength">Strength:</label>
+                <input type="range" id="strength" min="1" max="10" value="5">
+                <div class="slider-value" id="strength-value">5</div>
+            </div>
+            <div class="slider-group">
+                <label for="intelligence">Intelligence:</label>
+                <input type="range" id="intelligence" min="1" max="10" value="5">
+                <div class="slider-value" id="intelligence-value">5</div>
+            </div>
+            <div class="slider-group">
+                <label for="agility">Agility:</label>
+                <input type="range" id="agility" min="1" max="10" value="5">
+                <div class="slider-value" id="agility-value">5</div>
+            </div>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="button-row">
+            <button id="create-btn" class="form-btn">✨ Create Character</button>
+            <button id="reset-btn" class="form-btn">🔄 Reset Form</button>
+            <button id="preview-btn" class="form-btn">👁️ Preview</button>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXERCISE 3 SOLUTION: FORM ELEMENT COLLECTION ===\n');
+
+        // Update slider displays in real-time
+        document.getElementById('strength').addEventListener('input', function() {
+            document.getElementById('strength-value').textContent = this.value;
+        });
+        document.getElementById('intelligence').addEventListener('input', function() {
+            document.getElementById('intelligence-value').textContent = this.value;
+        });
+        document.getElementById('agility').addEventListener('input', function() {
+            document.getElementById('agility-value').textContent = this.value;
+        });
+
+        // ============================================
+        // PART 2: Get Basic Input Elements
+        // ============================================
+        console.log('=== PART 2: Get Basic Input Elements ===\n');
+
+        let charName = document.getElementById('char-name');
+        let playerEmail = document.getElementById('player-email');
+        let age = document.getElementById('age');
+
+        console.log('Basic inputs found:');
+        console.log('  Character name input:', charName !== null);
+        console.log('  Email input:', playerEmail !== null);
+        console.log('  Age input:', age !== null);
+        console.log('');
+
+        console.log('Current values:');
+        console.log('  Name:', charName ? (charName.value || '(empty)') : 'not found');
+        console.log('  Email:', playerEmail ? (playerEmail.value || '(empty)') : 'not found');
+        console.log('  Age:', age ? (age.value || '(empty)') : 'not found');
+        console.log('');
+
+        // ============================================
+        // PART 3: Get Radio Buttons
+        // ============================================
+        console.log('\n=== PART 3: Get Radio Buttons ===\n');
+
+        let classRadios = document.querySelectorAll('.class-radio');
+        console.log('Character classes:');
+        console.log('  Total options:', classRadios.length);
+        console.log('');
+
+        console.log('Available classes:');
+        classRadios.forEach(function(radio, index) {
+            console.log('  ' + (index + 1) + '. ' + radio.value + ' - Checked: ' + radio.checked);
+        });
+        console.log('');
+
+        // Find selected class
+        let selectedClass = null;
+        classRadios.forEach(function(radio) {
+            if (radio.checked) {
+                selectedClass = radio.value;
+            }
+        });
+        console.log('Selected class:', selectedClass || 'None selected');
+        console.log('');
+
+        // ============================================
+        // PART 4: Get Dropdown Elements
+        // ============================================
+        console.log('\n=== PART 4: Get Dropdown Elements ===\n');
+
+        let raceSelect = document.getElementById('race');
+        console.log('Race selection:');
+        console.log('  Element found:', raceSelect !== null);
+        if (raceSelect) {
+            console.log('  Current value:', raceSelect.value || '(none selected)');
+            console.log('  Number of options:', raceSelect.options.length);
+            console.log('');
+
+            console.log('Available races:');
+            for (let i = 0; i < raceSelect.options.length; i++) {
+                let option = raceSelect.options[i];
+                console.log('  ' + (i + 1) + '. ' + option.value + ' (' + option.text + ')');
+            }
+        }
+        console.log('');
+
+        // ============================================
+        // PART 5: Get Checkboxes
+        // ============================================
+        console.log('\n=== PART 5: Get Checkboxes ===\n');
+
+        let skillCheckboxes = document.querySelectorAll('.skill-checkbox');
+        console.log('Available skills:');
+        console.log('  Total skills:', skillCheckboxes.length);
+        console.log('');
+
+        console.log('Skill options:');
+        skillCheckboxes.forEach(function(checkbox, index) {
+            let label = document.querySelector('label[for="' + checkbox.id + '"]');
+            let labelText = label ? label.textContent : checkbox.value;
+            console.log('  ' + (index + 1) + '. ' + labelText + ' - Selected: ' + checkbox.checked);
+        });
+        console.log('');
+
+        // Get selected skills
+        let selectedSkills = [];
+        skillCheckboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                selectedSkills.push(checkbox.value);
+            }
+        });
+        console.log('Selected skills:', selectedSkills.length > 0 ? selectedSkills.join(', ') : 'None');
+        console.log('');
+
+        // ============================================
+        // PART 6: Get Range Inputs
+        // ============================================
+        console.log('\n=== PART 6: Get Range Inputs ===\n');
+
+        let strength = document.getElementById('strength');
+        let intelligence = document.getElementById('intelligence');
+        let agility = document.getElementById('agility');
+
+        console.log('Character attributes:');
+        if (strength) console.log('  Strength: ' + strength.value + '/' + strength.max);
+        if (intelligence) console.log('  Intelligence: ' + intelligence.value + '/' + intelligence.max);
+        if (agility) console.log('  Agility: ' + agility.value + '/' + agility.max);
+        console.log('');
+
+        // Calculate total points
+        let totalPoints = 0;
+        if (strength) totalPoints += parseInt(strength.value);
+        if (intelligence) totalPoints += parseInt(intelligence.value);
+        if (agility) totalPoints += parseInt(agility.value);
+        console.log('  Total points:', totalPoints);
+        console.log('');
+
+        // ============================================
+        // PART 7: Get Form Buttons
+        // ============================================
+        console.log('\n=== PART 7: Get Form Buttons ===\n');
+
+        let createBtn = document.getElementById('create-btn');
+        let resetBtn = document.getElementById('reset-btn');
+        let previewBtn = document.getElementById('preview-btn');
+        let allFormBtns = document.querySelectorAll('.form-btn');
+
+        console.log('Form actions:');
+        if (createBtn) console.log('  Create button:', createBtn.textContent);
+        if (resetBtn) console.log('  Reset button:', resetBtn.textContent);
+        if (previewBtn) console.log('  Preview button:', previewBtn.textContent);
+        console.log('  Total buttons:', allFormBtns.length);
+        console.log('');
+
+        // ============================================
+        // PART 8: Create Form Object
+        // ============================================
+        console.log('\n=== PART 8: Create Form Object ===\n');
+
+        let characterForm = {
+            basic: {
+                name: charName,
+                email: playerEmail,
+                age: age
+            },
+            
+            class: {
+                all: classRadios,
+                getSelected: function() {
+                    let selected = null;
+                    this.all.forEach(function(radio) {
+                        if (radio.checked) selected = radio.value;
+                    });
+                    return selected;
+                }
+            },
+            
+            race: raceSelect,
+            
+            skills: {
+                all: skillCheckboxes,
+                getSelected: function() {
+                    let selected = [];
+                    this.all.forEach(function(checkbox) {
+                        if (checkbox.checked) selected.push(checkbox.value);
+                    });
+                    return selected;
+                }
+            },
+            
+            appearance: {
+                hairColor: document.getElementById('hair-color'),
+                height: document.getElementById('height'),
+                backstory: document.getElementById('backstory')
+            },
+            
+            attributes: {
+                strength: strength,
+                intelligence: intelligence,
+                agility: agility,
+                getTotal: function() {
+                    let total = 0;
+                    if (this.strength) total += parseInt(this.strength.value);
+                    if (this.intelligence) total += parseInt(this.intelligence.value);
+                    if (this.agility) total += parseInt(this.agility.value);
+                    return total;
+                }
+            },
+            
+            buttons: {
+                create: createBtn,
+                reset: resetBtn,
+                preview: previewBtn,
+                all: allFormBtns
+            }
+        };
+
+        console.log('✓ Character form object created!');
+        console.log('');
+
+        // ============================================
+        // PART 9: Form Validation
+        // ============================================
+        console.log('\n=== PART 9: Form Validation ===\n');
+
+        console.log('Checking all required elements...');
+        console.log('');
+
+        let hasName = characterForm.basic.name !== null;
+        let hasEmail = characterForm.basic.email !== null;
+        let hasAge = characterForm.basic.age !== null;
+
+        console.log('Basic inputs:');
+        console.log('  ✓ Name input exists:', hasName);
+        console.log('  ✓ Email input exists:', hasEmail);
+        console.log('  ✓ Age input exists:', hasAge);
+        console.log('');
+
+        let hasClassOptions = characterForm.class.all.length >= 4;
+        console.log('Character class:');
+        console.log('  ✓ Has 4+ class options:', hasClassOptions);
+        console.log('    Actual count:', characterForm.class.all.length);
+        console.log('');
+
+        let hasRace = characterForm.race !== null;
+        console.log('Race:');
+        console.log('  ✓ Race select exists:', hasRace);
+        if (hasRace) {
+            console.log('    Options available:', characterForm.race.options.length);
+        }
+        console.log('');
+
+        let hasSkills = characterForm.skills.all.length >= 6;
+        console.log('Skills:');
+        console.log('  ✓ Has 6+ skills:', hasSkills);
+        console.log('    Actual count:', characterForm.skills.all.length);
+        console.log('');
+
+        let hasAllAttributes = characterForm.attributes.strength &&
+                               characterForm.attributes.intelligence &&
+                               characterForm.attributes.agility;
+        console.log('Attributes:');
+        console.log('  ✓ All attribute sliders exist:', hasAllAttributes);
+        console.log('');
+
+        let hasAllButtons = characterForm.buttons.all.length === 3;
+        console.log('Buttons:');
+        console.log('  ✓ Has all 3 buttons:', hasAllButtons);
+        console.log('');
+
+        let formComplete = hasName && hasEmail && hasAge && hasClassOptions &&
+                          hasRace && hasSkills && hasAllAttributes && hasAllButtons;
+        console.log('═══════════════════════════════════');
+        console.log('✓ Form validation complete:', formComplete);
+        console.log('═══════════════════════════════════');
+        console.log('');
+
+        // ============================================
+        // PART 10: Display Form Summary
+        // ============================================
+        console.log('\n=== PART 10: Form Summary ===\n');
+
+        console.log('╔════════════════════════════════════════════════╗');
+        console.log('║       CHARACTER CREATION FORM SUMMARY          ║');
+        console.log('╚════════════════════════════════════════════════╝');
+        console.log('');
+
+        console.log('📝 Basic Information:');
+        console.log('  Name:', characterForm.basic.name ? (characterForm.basic.name.value || 'Empty') : 'Not found');
+        console.log('  Email:', characterForm.basic.email ? (characterForm.basic.email.value || 'Empty') : 'Not found');
+        console.log('  Age:', characterForm.basic.age ? (characterForm.basic.age.value || 'Empty') : 'Not found');
+        console.log('');
+
+        console.log('⚔️ Character Class:');
+        console.log('  Available classes:', characterForm.class.all.length);
+        console.log('  Selected:', characterForm.class.getSelected() || 'None');
+        console.log('');
+
+        console.log('🧝 Race:');
+        console.log('  Selected:', characterForm.race ? (characterForm.race.value || 'None') : 'Not found');
+        console.log('');
+
+        console.log('🎯 Skills:');
+        console.log('  Available skills:', characterForm.skills.all.length);
+        let selectedSkillsList = characterForm.skills.getSelected();
+        console.log('  Selected skills:', selectedSkillsList.length > 0 ? selectedSkillsList.join(', ') : 'None');
+        console.log('');
+
+        console.log('💪 Attributes:');
+        console.log('  Strength:', characterForm.attributes.strength ? characterForm.attributes.strength.value : '?');
+        console.log('  Intelligence:', characterForm.attributes.intelligence ? characterForm.attributes.intelligence.value : '?');
+        console.log('  Agility:', characterForm.attributes.agility ? characterForm.attributes.agility.value : '?');
+        console.log('  Total points:', characterForm.attributes.getTotal());
+        console.log('');
+
+        console.log('🎨 Appearance:');
+        console.log('  Hair color:', characterForm.appearance.hairColor ? (characterForm.appearance.hairColor.value || 'Not set') : 'Not found');
+        console.log('  Height:', characterForm.appearance.height ? (characterForm.appearance.height.value ? characterForm.appearance.height.value + ' cm' : 'Not set') : 'Not found');
+        console.log('  Backstory:', characterForm.appearance.backstory ? (characterForm.appearance.backstory.value ? 'Provided (' + characterForm.appearance.backstory.value.length + ' chars)' : 'Empty') : 'Not found');
+        console.log('');
+
+        console.log('═══════════════════════════════════════════════');
+        console.log('✓ SOLUTION COMPLETE');
+        console.log('═══════════════════════════════════════════════');
+        console.log('All form elements retrieved and organized!');
+        console.log('The characterForm object is available as window.characterForm');
+        console.log('');
+
+        // Make globally available
+        window.characterForm = characterForm;
+
+        console.log('💡 Try filling out the form and run this script again to see values!');
+    </script>
+</body>
+</html>
