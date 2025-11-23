@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Basic Conditionals</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .demo-section h2 {
+            color: #764ba2;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        
+        .demo-section p {
+            color: #555;
+            margin: 10px 0;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        input[type="number"],
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: none;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .result.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+        
+        .result.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        
+        .code-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .code-example .keyword {
+            color: #ff79c6;
+        }
+        
+        .code-example .string {
+            color: #f1fa8c;
+        }
+        
+        .code-example .number {
+            color: #bd93f9;
+        }
+        
+        .code-example .comment {
+            color: #6272a4;
+        }
+        
+        .explanation {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .explanation strong {
+            color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔀 Basic Conditionals</h1>
+        <p class="subtitle">Learning if, else, and else if statements</p>
+        
+        <!-- Demo 1: Simple if Statement -->
+        <div class="demo-section">
+            <h2>Demo 1: Simple if Statement</h2>
+            <p>Enter your age to see if you're old enough to play the game!</p>
+            
+            <div class="input-group">
+                <label for="age1">Your Age:</label>
+                <input type="number" id="age1" placeholder="Enter your age" min="1" max="120">
+                <button onclick="checkAge()">Check Age</button>
+            </div>
+            
+            <div id="result1" class="result"></div>
+            
+            <div class="code-example">
+<span class="keyword">if</span> (age >= <span class="number">10</span>) {
+    <span class="comment">// Code runs if condition is true</span>
+    console.log(<span class="string">"You're old enough!"</span>);
+}
+            </div>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> The code checks if your age is at least 10. If the condition is TRUE, the message appears. If it's FALSE, nothing happens.
+            </div>
+        </div>
+        
+        <!-- Demo 2: if/else Statement -->
+        <div class="demo-section">
+            <h2>Demo 2: if/else Statement</h2>
+            <p>Check if it's warm or cool outside based on temperature!</p>
+            
+            <div class="input-group">
+                <label for="temp">Temperature (°F):</label>
+                <input type="number" id="temp" placeholder="Enter temperature" min="-50" max="150">
+                <button onclick="checkTemperature()">Check Temperature</button>
+            </div>
+            
+            <div id="result2" class="result"></div>
+            
+            <div class="code-example">
+<span class="keyword">if</span> (temperature > <span class="number">70</span>) {
+    console.log(<span class="string">"It's warm outside!"</span>);
+} <span class="keyword">else</span> {
+    console.log(<span class="string">"It's cool outside!"</span>);
+}
+            </div>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> This uses BOTH if and else. If temperature > 70 is TRUE, it shows "warm". If FALSE, it shows "cool". One or the other ALWAYS runs.
+            </div>
+        </div>
+        
+        <!-- Demo 3: else if Chain -->
+        <div class="demo-section">
+            <h2>Demo 3: else if Chain</h2>
+            <p>Convert a test score to a letter grade!</p>
+            
+            <div class="input-group">
+                <label for="score">Test Score (0-100):</label>
+                <input type="number" id="score" placeholder="Enter your score" min="0" max="100">
+                <button onclick="calculateGrade()">Calculate Grade</button>
+            </div>
+            
+            <div id="result3" class="result"></div>
+            
+            <div class="code-example">
+<span class="keyword">if</span> (score >= <span class="number">90</span>) {
+    grade = <span class="string">"A"</span>;
+} <span class="keyword">else if</span> (score >= <span class="number">80</span>) {
+    grade = <span class="string">"B"</span>;
+} <span class="keyword">else if</span> (score >= <span class="number">70</span>) {
+    grade = <span class="string">"C"</span>;
+} <span class="keyword">else if</span> (score >= <span class="number">60</span>) {
+    grade = <span class="string">"D"</span>;
+} <span class="keyword">else</span> {
+    grade = <span class="string">"F"</span>;
+}
+            </div>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> JavaScript checks conditions from TOP TO BOTTOM. As soon as one is TRUE, it runs that block and STOPS checking the rest.
+            </div>
+        </div>
+        
+        <!-- Demo 4: Multiple Independent if Statements -->
+        <div class="demo-section">
+            <h2>Demo 4: Multiple Independent if Statements</h2>
+            <p>Enter a number and see which conditions are true!</p>
+            
+            <div class="input-group">
+                <label for="number">Enter a Number:</label>
+                <input type="number" id="number" placeholder="Enter any number">
+                <button onclick="checkNumber()">Check Number</button>
+            </div>
+            
+            <div id="result4" class="result"></div>
+            
+            <div class="code-example">
+<span class="keyword">if</span> (num > <span class="number">0</span>) {
+    console.log(<span class="string">"Positive"</span>);
+}
+<span class="keyword">if</span> (num % <span class="number">2</span> === <span class="number">0</span>) {
+    console.log(<span class="string">"Even"</span>);
+}
+<span class="keyword">if</span> (num >= <span class="number">10</span>) {
+    console.log(<span class="string">"Two digits or more"</span>);
+}
+            </div>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> These are SEPARATE if statements (not else if), so ALL of them are checked. Multiple conditions can be true at the same time!
+            </div>
+        </div>
+        
+        <!-- Demo 5: Password Validator -->
+        <div class="demo-section">
+            <h2>Demo 5: Password Validator</h2>
+            <p>Create a password and check if it's strong enough!</p>
+            
+            <div class="input-group">
+                <label for="password">Enter Password:</label>
+                <input type="password" id="password" placeholder="Enter a password">
+                <button onclick="validatePassword()">Validate Password</button>
+            </div>
+            
+            <div id="result5" class="result"></div>
+            
+            <div class="code-example">
+<span class="keyword">if</span> (password.length < <span class="number">6</span>) {
+    <span class="keyword">return</span> <span class="string">"Too short!"</span>;
+} <span class="keyword">else if</span> (password.length < <span class="number">8</span>) {
+    <span class="keyword">return</span> <span class="string">"Okay, but could be longer"</span>;
+} <span class="keyword">else if</span> (password.length < <span class="number">12</span>) {
+    <span class="keyword">return</span> <span class="string">"Good length!"</span>;
+} <span class="keyword">else</span> {
+    <span class="keyword">return</span> <span class="string">"Excellent - very secure!"</span>;
+}
+            </div>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> This checks password length in stages. Shorter passwords get warnings, longer passwords get praise!
+            </div>
+        </div>
+        
+        <!-- Demo 6: Number Comparison -->
+        <div class="demo-section">
+            <h2>Demo 6: Number Comparison</h2>
+            <p>Compare two numbers and see which is larger!</p>
+            
+            <div class="input-group">
+                <label for="num1">First Number:</label>
+                <input type="number" id="num1" placeholder="Enter first number">
+                
+                <label for="num2" style="margin-top: 10px;">Second Number:</label>
+                <input type="number" id="num2" placeholder="Enter second number">
+                
+                <button onclick="compareNumbers()">Compare Numbers</button>
+            </div>
+            
+            <div id="result6" class="result"></div>
+            
+            <div class="code-example">
+<span class="keyword">if</span> (num1 > num2) {
+    result = num1 + <span class="string">" is greater"</span>;
+} <span class="keyword">else if</span> (num1 < num2) {
+    result = num2 + <span class="string">" is greater"</span>;
+} <span class="keyword">else</span> {
+    result = <span class="string">"They are equal!"</span>;
+}
+            </div>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> This handles ALL THREE possibilities: first is bigger, second is bigger, or they're equal.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Demo 1: Simple if Statement
+        function checkAge() {
+            console.log("=== DEMO 1: Simple if Statement ===");
+            
+            let age = parseInt(document.getElementById('age1').value);
+            let resultDiv = document.getElementById('result1');
+            
+            console.log("Age entered:", age);
+            
+            if (isNaN(age) || age < 1) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '⚠️ Please enter a valid age!';
+                resultDiv.style.display = 'block';
+                console.log("Invalid age entered");
+                return;
+            }
+            
+            // Simple if statement
+            if (age >= 10) {
+                console.log("Condition is TRUE: age >= 10");
+                console.log("Message: You're old enough to play!");
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ You\'re old enough to play this game!';
+                resultDiv.style.display = 'block';
+            } else {
+                console.log("Condition is FALSE: age < 10");
+                console.log("Message: Too young to play");
+                resultDiv.className = 'result warning';
+                resultDiv.textContent = '👶 You need to be at least 10 years old to play.';
+                resultDiv.style.display = 'block';
+            }
+        }
+        
+        // Demo 2: if/else Statement
+        function checkTemperature() {
+            console.log("=== DEMO 2: if/else Statement ===");
+            
+            let temperature = parseInt(document.getElementById('temp').value);
+            let resultDiv = document.getElementById('result2');
+            
+            console.log("Temperature entered:", temperature);
+            
+            if (isNaN(temperature)) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '⚠️ Please enter a valid temperature!';
+                resultDiv.style.display = 'block';
+                console.log("Invalid temperature entered");
+                return;
+            }
+            
+            // if/else statement
+            if (temperature > 70) {
+                console.log("Condition is TRUE: temperature > 70");
+                console.log("It's warm outside!");
+                resultDiv.className = 'result info';
+                resultDiv.textContent = '☀️ It\'s warm outside! Temperature: ' + temperature + '°F';
+                resultDiv.style.display = 'block';
+            } else {
+                console.log("Condition is FALSE: temperature <= 70");
+                console.log("It's cool outside!");
+                resultDiv.className = 'result info';
+                resultDiv.textContent = '❄️ It\'s cool outside! Temperature: ' + temperature + '°F';
+                resultDiv.style.display = 'block';
+            }
+        }
+        
+        // Demo 3: else if Chain
+        function calculateGrade() {
+            console.log("=== DEMO 3: else if Chain ===");
+            
+            let score = parseInt(document.getElementById('score').value);
+            let resultDiv = document.getElementById('result3');
+            
+            console.log("Score entered:", score);
+            
+            if (isNaN(score) || score < 0 || score > 100) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '⚠️ Please enter a valid score between 0 and 100!';
+                resultDiv.style.display = 'block';
+                console.log("Invalid score entered");
+                return;
+            }
+            
+            let grade;
+            let message;
+            
+            // else if chain - checks from top to bottom, stops at first true
+            if (score >= 90) {
+                console.log("Condition TRUE: score >= 90");
+                grade = "A";
+                message = "Excellent work!";
+                resultDiv.className = 'result success';
+            } else if (score >= 80) {
+                console.log("Condition TRUE: score >= 80");
+                grade = "B";
+                message = "Good job!";
+                resultDiv.className = 'result success';
+            } else if (score >= 70) {
+                console.log("Condition TRUE: score >= 70");
+                grade = "C";
+                message = "Keep practicing!";
+                resultDiv.className = 'result info';
+            } else if (score >= 60) {
+                console.log("Condition TRUE: score >= 60");
+                grade = "D";
+                message = "You need to study more.";
+                resultDiv.className = 'result warning';
+            } else {
+                console.log("All conditions FALSE, running else block");
+                grade = "F";
+                message = "Please see your teacher.";
+                resultDiv.className = 'result error';
+            }
+            
+            console.log("Final grade:", grade);
+            console.log("Message:", message);
+            
+            resultDiv.textContent = '📝 Score: ' + score + ' | Grade: ' + grade + ' - ' + message;
+            resultDiv.style.display = 'block';
+        }
+        
+        // Demo 4: Multiple Independent if Statements
+        function checkNumber() {
+            console.log("=== DEMO 4: Multiple Independent if Statements ===");
+            
+            let num = parseInt(document.getElementById('number').value);
+            let resultDiv = document.getElementById('result4');
+            
+            console.log("Number entered:", num);
+            
+            if (isNaN(num)) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '⚠️ Please enter a valid number!';
+                resultDiv.style.display = 'block';
+                console.log("Invalid number entered");
+                return;
+            }
+            
+            let messages = [];
+            
+            // Multiple INDEPENDENT if statements - all are checked!
+            if (num > 0) {
+                console.log("✓ Condition TRUE: num > 0 (positive)");
+                messages.push("✓ Positive number");
+            } else if (num < 0) {
+                console.log("✓ Condition TRUE: num < 0 (negative)");
+                messages.push("✓ Negative number");
+            } else {
+                console.log("✓ Number is zero");
+                messages.push("✓ Zero");
+            }
+            
+            if (num % 2 === 0) {
+                console.log("✓ Condition TRUE: num % 2 === 0 (even)");
+                messages.push("✓ Even number");
+            } else {
+                console.log("✓ Condition TRUE: num is odd");
+                messages.push("✓ Odd number");
+            }
+            
+            if (num >= 10) {
+                console.log("✓ Condition TRUE: num >= 10");
+                messages.push("✓ Two digits or more");
+            }
+            
+            if (num >= 100) {
+                console.log("✓ Condition TRUE: num >= 100");
+                messages.push("✓ Three digits or more");
+            }
+            
+            if (num >= 1000) {
+                console.log("✓ Condition TRUE: num >= 1000");
+                messages.push("✓ Four digits or more");
+            }
+            
+            console.log("All checks complete. Found", messages.length, "true conditions");
+            
+            resultDiv.className = 'result info';
+            resultDiv.innerHTML = '<strong>Number: ' + num + '</strong><br>' + messages.join('<br>');
+            resultDiv.style.display = 'block';
+        }
+        
+        // Demo 5: Password Validator
+        function validatePassword() {
+            console.log("=== DEMO 5: Password Validator ===");
+            
+            let password = document.getElementById('password').value;
+            let resultDiv = document.getElementById('result5');
+            
+            console.log("Password length:", password.length);
+            
+            if (password === "") {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '⚠️ Please enter a password!';
+                resultDiv.style.display = 'block';
+                console.log("No password entered");
+                return;
+            }
+            
+            let message;
+            let strength;
+            
+            // else if chain checking password length
+            if (password.length < 6) {
+                console.log("Password too short (< 6 characters)");
+                message = "Too short! Use at least 6 characters.";
+                strength = "Very Weak 😟";
+                resultDiv.className = 'result error';
+            } else if (password.length < 8) {
+                console.log("Password okay but short (6-7 characters)");
+                message = "Okay, but could be longer for better security.";
+                strength = "Weak 😐";
+                resultDiv.className = 'result warning';
+            } else if (password.length < 12) {
+                console.log("Password good length (8-11 characters)");
+                message = "Good length! Your password is reasonably secure.";
+                strength = "Good 😊";
+                resultDiv.className = 'result success';
+            } else {
+                console.log("Password excellent length (12+ characters)");
+                message = "Excellent! This is a very secure password length.";
+                strength = "Excellent 🔒";
+                resultDiv.className = 'result success';
+            }
+            
+            console.log("Strength rating:", strength);
+            
+            resultDiv.innerHTML = '<strong>Strength: ' + strength + '</strong><br>' + message + '<br><small>Length: ' + password.length + ' characters</small>';
+            resultDiv.style.display = 'block';
+        }
+        
+        // Demo 6: Number Comparison
+        function compareNumbers() {
+            console.log("=== DEMO 6: Number Comparison ===");
+            
+            let num1 = parseFloat(document.getElementById('num1').value);
+            let num2 = parseFloat(document.getElementById('num2').value);
+            let resultDiv = document.getElementById('result6');
+            
+            console.log("First number:", num1);
+            console.log("Second number:", num2);
+            
+            if (isNaN(num1) || isNaN(num2)) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '⚠️ Please enter valid numbers in both fields!';
+                resultDiv.style.display = 'block';
+                console.log("Invalid numbers entered");
+                return;
+            }
+            
+            let result;
+            
+            // Compare the two numbers
+            if (num1 > num2) {
+                console.log("Condition TRUE: num1 > num2");
+                result = num1 + " is GREATER than " + num2;
+                resultDiv.className = 'result info';
+            } else if (num1 < num2) {
+                console.log("Condition TRUE: num1 < num2");
+                result = num2 + " is GREATER than " + num1;
+                resultDiv.className = 'result info';
+            } else {
+                console.log("Condition TRUE: num1 === num2");
+                result = "They are EQUAL!";
+                resultDiv.className = 'result success';
+            }
+            
+            console.log("Comparison result:", result);
+            
+            let difference = Math.abs(num1 - num2);
+            
+            resultDiv.innerHTML = '<strong>' + result + '</strong><br><small>Difference: ' + difference.toFixed(2) + '</small>';
+            resultDiv.style.display = 'block';
+        }
+        
+        console.log("🔀 Basic Conditionals example loaded!");
+        console.log("Try each demo to see how if, else, and else if work!");
+    </script>
+</body>
+</html>

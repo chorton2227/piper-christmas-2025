@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator - Answer Key</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 18px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 12px;
+            display: none;
+            border: 3px solid;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grade-display {
+            font-size: 72px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .feedback {
+            font-size: 20px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .details {
+            background-color: rgba(255,255,255,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .details p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        /* Grade specific colors */
+        .grade-a {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .grade-b {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
+        }
+
+        .grade-c {
+            background-color: #fff3cd;
+            color: #856404;
+            border-color: #ffeaa7;
+        }
+
+        .grade-d {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .grade-f {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .emoji {
+            font-size: 48px;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .gpa-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.5);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 Grade Calculator</h1>
+
+    <div class="container">
+        <div class="input-group">
+            <label for="score">Enter your score (0-100):</label>
+            <input type="number" id="score" min="0" max="100" placeholder="Enter a number between 0 and 100">
+        </div>
+
+        <button onclick="calculateGrade()">Calculate Grade</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateGrade() {
+            console.log('=== Grade Calculator ===');
+            
+            // Get the score from input
+            const scoreInput = document.getElementById('score').value;
+            const score = parseInt(scoreInput);
+            const resultDiv = document.getElementById('result');
+            
+            console.log('Score entered:', scoreInput);
+            console.log('Parsed score:', score);
+            
+            // Input validation: Check if input is a valid number
+            if (scoreInput === '' || scoreInput === null) {
+                console.log('Error: Empty input');
+                resultDiv.className = 'error';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <span class="emoji">⚠️</span>
+                    <div class="feedback">Please enter a score!</div>
+                `;
+                return; // Stop function here
+            }
+            
+            // Check if input is a valid number (not NaN)
+            if (isNaN(score)) {
+                console.log('Error: Not a number');
+                resultDiv.className = 'error';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <span class="emoji">❌</span>
+                    <div class="feedback">Please enter a valid number!</div>
+                `;
+                return;
+            }
+            
+            // Check if score is in valid range (0-100)
+            if (score < 0 || score > 100) {
+                console.log('Error: Out of range');
+                resultDiv.className = 'error';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <span class="emoji">⚠️</span>
+                    <div class="feedback">Score must be between 0 and 100!</div>
+                    <div class="details">
+                        <p>You entered: <strong>${score}</strong></p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Now we know the score is valid - calculate the grade!
+            let grade;
+            let feedback;
+            let emoji;
+            let gradeClass;
+            let gpa;
+            let pointsToNext;
+            let nextGrade;
+            
+            // Use if/else if/else chain to determine grade
+            // Check from highest to lowest
+            if (score >= 90) {
+                grade = 'A';
+                feedback = 'Excellent work! Outstanding performance!';
+                emoji = '⭐';
+                gradeClass = 'grade-a';
+                gpa = 4.0;
+                pointsToNext = 0; // Already at the top!
+                nextGrade = 'Perfect Score (100)';
+                console.log('Grade A: Excellent');
+            } else if (score >= 80) {
+                grade = 'B';
+                feedback = 'Great job! Keep up the good work!';
+                emoji = '👍';
+                gradeClass = 'grade-b';
+                gpa = 3.0;
+                pointsToNext = 90 - score;
+                nextGrade = 'A';
+                console.log('Grade B: Great');
+            } else if (score >= 70) {
+                grade = 'C';
+                feedback = 'Good effort! You\'re passing!';
+                emoji = '✅';
+                gradeClass = 'grade-c';
+                gpa = 2.0;
+                pointsToNext = 80 - score;
+                nextGrade = 'B';
+                console.log('Grade C: Good');
+            } else if (score >= 60) {
+                grade = 'D';
+                feedback = 'You passed, but there\'s room for improvement.';
+                emoji = '⚠️';
+                gradeClass = 'grade-d';
+                gpa = 1.0;
+                pointsToNext = 70 - score;
+                nextGrade = 'C';
+                console.log('Grade D: Passing with warning');
+            } else {
+                grade = 'F';
+                feedback = 'Don\'t give up! Keep studying and try again!';
+                emoji = '💪';
+                gradeClass = 'grade-f';
+                gpa = 0.0;
+                pointsToNext = 60 - score;
+                nextGrade = 'D';
+                console.log('Grade F: Failed - needs improvement');
+            }
+            
+            // Calculate percentage
+            const percentage = score;
+            
+            // Display the result
+            resultDiv.className = gradeClass;
+            resultDiv.style.display = 'block';
+            
+            // Build the HTML for the result
+            let resultHTML = `
+                <span class="emoji">${emoji}</span>
+                <div class="grade-display">${grade}</div>
+                <div class="feedback">${feedback}</div>
+                <div class="gpa-display">GPA: ${gpa.toFixed(1)}</div>
+                <div class="details">
+                    <p><strong>Your Score:</strong> ${score} out of 100</p>
+                    <p><strong>Percentage:</strong> ${percentage}%</p>
+                    <p><strong>Letter Grade:</strong> ${grade}</p>
+            `;
+            
+            // Add points needed for next grade (if applicable)
+            if (score < 100) {
+                if (score >= 90) {
+                    resultHTML += `<p><strong>Points to Perfect Score:</strong> ${100 - score} points</p>`;
+                } else {
+                    resultHTML += `<p><strong>Points to Next Grade (${nextGrade}):</strong> ${pointsToNext} points</p>`;
+                }
+            } else {
+                resultHTML += `<p><strong>🎉 Perfect Score! Amazing!</strong></p>`;
+            }
+            
+            resultHTML += `</div>`;
+            
+            resultDiv.innerHTML = resultHTML;
+            
+            console.log('Grade calculated:', grade);
+            console.log('GPA:', gpa);
+            console.log('Result displayed successfully');
+        }
+        
+        // Allow pressing Enter to calculate
+        document.getElementById('score').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calculateGrade();
+            }
+        });
+        
+        console.log('Grade Calculator loaded!');
+        console.log('Enter a score and click Calculate Grade to see the result.');
+    </script>
+</body>
+</html>

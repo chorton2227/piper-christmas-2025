@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Comparison Operators</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .demo-container h2 {
+            color: #f5576c;
+            margin-top: 0;
+            border-bottom: 3px solid #f5576c;
+            padding-bottom: 10px;
+        }
+
+        .demo-container p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .operator-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .operator-table th,
+        .operator-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .operator-table th {
+            background-color: #f093fb;
+            color: white;
+            font-weight: bold;
+        }
+
+        .operator-table tr:hover {
+            background-color: #f8f8f8;
+        }
+
+        .operator-table code {
+            background-color: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-group label {
+            color: #333;
+            font-weight: bold;
+            min-width: 80px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #f5576c;
+        }
+
+        .result-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .result-item.true {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-item.false {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .code-display {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-left: 4px solid #f5576c;
+            overflow-x: auto;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning-box strong {
+            color: #856404;
+        }
+
+        .interactive-demo {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚖️ Example 2: Comparison Operators</h1>
+
+    <!-- Operator Reference Table -->
+    <div class="demo-container">
+        <h2>Comparison Operators Reference</h2>
+        <p>Comparison operators compare two values and return <code>true</code> or <code>false</code>.</p>
+        
+        <table class="operator-table">
+            <thead>
+                <tr>
+                    <th>Operator</th>
+                    <th>Name</th>
+                    <th>Example</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>===</code></td>
+                    <td>Strict Equal</td>
+                    <td><code>5 === 5</code> → true</td>
+                    <td>Checks if values are exactly equal (same type and value)</td>
+                </tr>
+                <tr>
+                    <td><code>!==</code></td>
+                    <td>Strict Not Equal</td>
+                    <td><code>5 !== 3</code> → true</td>
+                    <td>Checks if values are not equal</td>
+                </tr>
+                <tr>
+                    <td><code>&gt;</code></td>
+                    <td>Greater Than</td>
+                    <td><code>10 &gt; 5</code> → true</td>
+                    <td>Checks if left value is greater than right value</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;</code></td>
+                    <td>Less Than</td>
+                    <td><code>3 &lt; 8</code> → true</td>
+                    <td>Checks if left value is less than right value</td>
+                </tr>
+                <tr>
+                    <td><code>&gt;=</code></td>
+                    <td>Greater or Equal</td>
+                    <td><code>5 &gt;= 5</code> → true</td>
+                    <td>Checks if left value is greater than or equal to right value</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;=</code></td>
+                    <td>Less or Equal</td>
+                    <td><code>4 &lt;= 7</code> → true</td>
+                    <td>Checks if left value is less than or equal to right value</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> Always use <code>===</code> and <code>!==</code> (strict comparison) instead of <code>==</code> and <code>!=</code> (loose comparison). Strict comparison is more reliable and prevents unexpected bugs!
+        </div>
+    </div>
+
+    <!-- Demo 1: Equal vs Not Equal -->
+    <div class="demo-container">
+        <h2>Demo 1: Equal (===) and Not Equal (!==)</h2>
+        <p>Test if two values are exactly the same or different.</p>
+
+        <div class="input-group">
+            <label>Value 1:</label>
+            <input type="number" id="equal1" value="5">
+        </div>
+        <div class="input-group">
+            <label>Value 2:</label>
+            <input type="number" id="equal2" value="5">
+        </div>
+
+        <button onclick="testEqual()">Test Equality</button>
+
+        <div id="equalResult" class="result-box" style="display: none;"></div>
+    </div>
+
+    <!-- Demo 2: Greater Than and Less Than -->
+    <div class="demo-container">
+        <h2>Demo 2: Greater Than (&gt;) and Less Than (&lt;)</h2>
+        <p>Compare which value is larger or smaller.</p>
+
+        <div class="input-group">
+            <label>Value 1:</label>
+            <input type="number" id="compare1" value="10">
+        </div>
+        <div class="input-group">
+            <label>Value 2:</label>
+            <input type="number" id="compare2" value="5">
+        </div>
+
+        <button onclick="testComparison()">Compare Values</button>
+
+        <div id="compareResult" class="result-box" style="display: none;"></div>
+    </div>
+
+    <!-- Demo 3: Age Verification System -->
+    <div class="demo-container">
+        <h2>Demo 3: Age Verification System</h2>
+        <p>Real-world example using multiple comparison operators.</p>
+
+        <div class="interactive-demo">
+            <div class="input-group">
+                <label>Your Age:</label>
+                <input type="number" id="userAge" min="0" max="120" value="18">
+            </div>
+
+            <button onclick="checkAgeCategory()">Check Age Category</button>
+
+            <div id="ageResult" class="result-box" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Demo 4: Number Range Checker -->
+    <div class="demo-container">
+        <h2>Demo 4: Number Range Checker</h2>
+        <p>Check if a number falls within a specific range.</p>
+
+        <div class="interactive-demo">
+            <div class="input-group">
+                <label>Number:</label>
+                <input type="number" id="rangeNum" value="50">
+            </div>
+            <div class="input-group">
+                <label>Min:</label>
+                <input type="number" id="rangeMin" value="1">
+            </div>
+            <div class="input-group">
+                <label>Max:</label>
+                <input type="number" id="rangeMax" value="100">
+            </div>
+
+            <button onclick="checkRange()">Check Range</button>
+
+            <div id="rangeResult" class="result-box" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Demo 5: String Comparison -->
+    <div class="demo-container">
+        <h2>Demo 5: String Comparison</h2>
+        <p>Comparison operators work with strings too! Strings are compared alphabetically.</p>
+
+        <div class="input-group">
+            <label>String 1:</label>
+            <input type="text" id="string1" value="apple">
+        </div>
+        <div class="input-group">
+            <label>String 2:</label>
+            <input type="text" id="string2" value="banana">
+        </div>
+
+        <button onclick="testStrings()">Compare Strings</button>
+
+        <div id="stringResult" class="result-box" style="display: none;"></div>
+    </div>
+
+    <!-- Demo 6: Password Strength Checker -->
+    <div class="demo-container">
+        <h2>Demo 6: Password Strength Checker</h2>
+        <p>Use comparison operators to check password requirements.</p>
+
+        <div class="interactive-demo">
+            <div class="input-group">
+                <label>Password:</label>
+                <input type="password" id="pwd" placeholder="Enter password">
+            </div>
+
+            <button onclick="checkPasswordStrength()">Check Strength</button>
+
+            <div id="pwdResult" class="result-box" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Demo 1: Test Equal and Not Equal
+        function testEqual() {
+            console.log('=== Demo 1: Equal/Not Equal ===');
+            
+            const val1 = parseFloat(document.getElementById('equal1').value);
+            const val2 = parseFloat(document.getElementById('equal2').value);
+            const resultDiv = document.getElementById('equalResult');
+            
+            console.log('Value 1:', val1);
+            console.log('Value 2:', val2);
+            
+            // Test ===
+            const isEqual = val1 === val2;
+            console.log('val1 === val2:', isEqual);
+            
+            // Test !==
+            const isNotEqual = val1 !== val2;
+            console.log('val1 !== val2:', isNotEqual);
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="result-item ${isEqual ? 'true' : 'false'}">
+                    ${val1} === ${val2} → <strong>${isEqual}</strong>
+                </div>
+                <div class="result-item ${isNotEqual ? 'true' : 'false'}">
+                    ${val1} !== ${val2} → <strong>${isNotEqual}</strong>
+                </div>
+                <p style="margin-top: 15px; color: #666;">
+                    ${isEqual ? '✅ The values are equal!' : '❌ The values are NOT equal!'}
+                </p>
+            `;
+        }
+
+        // Demo 2: Test Greater/Less Than
+        function testComparison() {
+            console.log('=== Demo 2: Greater/Less Than ===');
+            
+            const val1 = parseFloat(document.getElementById('compare1').value);
+            const val2 = parseFloat(document.getElementById('compare2').value);
+            const resultDiv = document.getElementById('compareResult');
+            
+            console.log('Value 1:', val1);
+            console.log('Value 2:', val2);
+            
+            // Test all comparison operators
+            const greater = val1 > val2;
+            const less = val1 < val2;
+            const greaterOrEqual = val1 >= val2;
+            const lessOrEqual = val1 <= val2;
+            
+            console.log('val1 > val2:', greater);
+            console.log('val1 < val2:', less);
+            console.log('val1 >= val2:', greaterOrEqual);
+            console.log('val1 <= val2:', lessOrEqual);
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="result-item ${greater ? 'true' : 'false'}">
+                    ${val1} &gt; ${val2} → <strong>${greater}</strong>
+                </div>
+                <div class="result-item ${less ? 'true' : 'false'}">
+                    ${val1} &lt; ${val2} → <strong>${less}</strong>
+                </div>
+                <div class="result-item ${greaterOrEqual ? 'true' : 'false'}">
+                    ${val1} &gt;= ${val2} → <strong>${greaterOrEqual}</strong>
+                </div>
+                <div class="result-item ${lessOrEqual ? 'true' : 'false'}">
+                    ${val1} &lt;= ${val2} → <strong>${lessOrEqual}</strong>
+                </div>
+            `;
+        }
+
+        // Demo 3: Age Category Checker
+        function checkAgeCategory() {
+            console.log('=== Demo 3: Age Categories ===');
+            
+            const age = parseInt(document.getElementById('userAge').value);
+            const resultDiv = document.getElementById('ageResult');
+            
+            if (isNaN(age) || age < 0) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<p style="color: #721c24;">❌ Please enter a valid age!</p>';
+                return;
+            }
+            
+            console.log('Age:', age);
+            
+            let category = '';
+            let emoji = '';
+            let message = '';
+            
+            // Using comparison operators in if statements
+            if (age < 2) {
+                category = 'Baby';
+                emoji = '👶';
+                message = 'Just starting life!';
+                console.log('Category: Baby (age < 2)');
+            } else if (age < 13) {
+                category = 'Child';
+                emoji = '🧒';
+                message = 'Time for fun and learning!';
+                console.log('Category: Child (age >= 2 and < 13)');
+            } else if (age < 20) {
+                category = 'Teenager';
+                emoji = '🧑';
+                message = 'The exciting teen years!';
+                console.log('Category: Teenager (age >= 13 and < 20)');
+            } else if (age < 65) {
+                category = 'Adult';
+                emoji = '👨';
+                message = 'In the prime of life!';
+                console.log('Category: Adult (age >= 20 and < 65)');
+            } else {
+                category = 'Senior';
+                emoji = '👴';
+                message = 'Wisdom and experience!';
+                console.log('Category: Senior (age >= 65)');
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3 style="color: #f5576c; margin-top: 0;">
+                    <span class="emoji">${emoji}</span>Age Category: ${category}
+                </h3>
+                <p><strong>Age ${age}:</strong> ${message}</p>
+                <div class="code-display">
+                    Comparison used: age ${age < 2 ? '<' : '>='} ${age < 2 ? '2' : age < 13 ? '2 and < 13' : age < 20 ? '13 and < 20' : age < 65 ? '20 and < 65' : '65'}
+                </div>
+            `;
+        }
+
+        // Demo 4: Number Range Checker
+        function checkRange() {
+            console.log('=== Demo 4: Range Checker ===');
+            
+            const num = parseFloat(document.getElementById('rangeNum').value);
+            const min = parseFloat(document.getElementById('rangeMin').value);
+            const max = parseFloat(document.getElementById('rangeMax').value);
+            const resultDiv = document.getElementById('rangeResult');
+            
+            console.log('Number:', num);
+            console.log('Range:', min, 'to', max);
+            
+            // Check if in range using >= and <=
+            const inRange = num >= min && num <= max;
+            console.log('In range?', inRange);
+            
+            // Check specific conditions
+            const tooLow = num < min;
+            const tooHigh = num > max;
+            
+            console.log('Too low?', tooLow);
+            console.log('Too high?', tooHigh);
+            
+            let status = '';
+            let color = '';
+            
+            if (inRange) {
+                status = '✅ IN RANGE';
+                color = '#155724';
+            } else if (tooLow) {
+                status = '⬇️ BELOW RANGE';
+                color = '#721c24';
+            } else {
+                status = '⬆️ ABOVE RANGE';
+                color = '#721c24';
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3 style="color: ${color}; margin-top: 0;">${status}</h3>
+                <div class="result-item ${num >= min ? 'true' : 'false'}">
+                    ${num} &gt;= ${min} (Minimum) → <strong>${num >= min}</strong>
+                </div>
+                <div class="result-item ${num <= max ? 'true' : 'false'}">
+                    ${num} &lt;= ${max} (Maximum) → <strong>${num <= max}</strong>
+                </div>
+                <div class="result-item ${inRange ? 'true' : 'false'}">
+                    In Range? → <strong>${inRange}</strong>
+                </div>
+            `;
+        }
+
+        // Demo 5: String Comparison
+        function testStrings() {
+            console.log('=== Demo 5: String Comparison ===');
+            
+            const str1 = document.getElementById('string1').value;
+            const str2 = document.getElementById('string2').value;
+            const resultDiv = document.getElementById('stringResult');
+            
+            console.log('String 1:', str1);
+            console.log('String 2:', str2);
+            
+            // Strings are compared alphabetically (lexicographically)
+            const equal = str1 === str2;
+            const notEqual = str1 !== str2;
+            const greater = str1 > str2;
+            const less = str1 < str2;
+            
+            console.log('Alphabetically:', str1, 'vs', str2);
+            console.log('str1 === str2:', equal);
+            console.log('str1 !== str2:', notEqual);
+            console.log('str1 > str2:', greater);
+            console.log('str1 < str2:', less);
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="result-item ${equal ? 'true' : 'false'}">
+                    "${str1}" === "${str2}" → <strong>${equal}</strong>
+                </div>
+                <div class="result-item ${notEqual ? 'true' : 'false'}">
+                    "${str1}" !== "${str2}" → <strong>${notEqual}</strong>
+                </div>
+                <div class="result-item ${greater ? 'true' : 'false'}">
+                    "${str1}" &gt; "${str2}" → <strong>${greater}</strong>
+                    ${greater ? ' (comes later alphabetically)' : ''}
+                </div>
+                <div class="result-item ${less ? 'true' : 'false'}">
+                    "${str1}" &lt; "${str2}" → <strong>${less}</strong>
+                    ${less ? ' (comes earlier alphabetically)' : ''}
+                </div>
+                <p style="margin-top: 15px; color: #666;">
+                    <strong>Note:</strong> Strings are compared character by character using alphabetical order.
+                    Capital letters come before lowercase letters in comparison.
+                </p>
+            `;
+        }
+
+        // Demo 6: Password Strength Checker
+        function checkPasswordStrength() {
+            console.log('=== Demo 6: Password Strength ===');
+            
+            const pwd = document.getElementById('pwd').value;
+            const resultDiv = document.getElementById('pwdResult');
+            
+            console.log('Password length:', pwd.length);
+            
+            // Check multiple conditions using comparison operators
+            const hasLength = pwd.length >= 8;
+            const hasGoodLength = pwd.length >= 12;
+            const hasGreatLength = pwd.length >= 16;
+            
+            console.log('Length >= 8:', hasLength);
+            console.log('Length >= 12:', hasGoodLength);
+            console.log('Length >= 16:', hasGreatLength);
+            
+            let strength = '';
+            let color = '';
+            let emoji = '';
+            
+            if (pwd.length === 0) {
+                strength = 'No password entered';
+                color = '#666';
+                emoji = '⚠️';
+            } else if (pwd.length < 8) {
+                strength = 'Too Weak';
+                color = '#721c24';
+                emoji = '❌';
+            } else if (pwd.length < 12) {
+                strength = 'Acceptable';
+                color = '#856404';
+                emoji = '⚠️';
+            } else if (pwd.length < 16) {
+                strength = 'Good';
+                color = '#0c5460';
+                emoji = '✅';
+            } else {
+                strength = 'Excellent';
+                color = '#155724';
+                emoji = '🛡️';
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3 style="color: ${color}; margin-top: 0;">
+                    <span class="emoji">${emoji}</span>Strength: ${strength}
+                </h3>
+                <div class="result-item ${hasLength ? 'true' : 'false'}">
+                    Length &gt;= 8 characters → <strong>${hasLength}</strong>
+                </div>
+                <div class="result-item ${hasGoodLength ? 'true' : 'false'}">
+                    Length &gt;= 12 characters → <strong>${hasGoodLength}</strong>
+                </div>
+                <div class="result-item ${hasGreatLength ? 'true' : 'false'}">
+                    Length &gt;= 16 characters → <strong>${hasGreatLength}</strong>
+                </div>
+                <p style="margin-top: 15px; color: #666;">
+                    Current length: <strong>${pwd.length}</strong> characters
+                </p>
+            `;
+        }
+
+        console.log('Comparison Operators examples loaded!');
+        console.log('Try different values to see how comparisons work!');
+    </script>
+</body>
+</html>

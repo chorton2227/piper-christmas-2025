@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Logical Operators</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .demo-container h2 {
+            color: #00f2fe;
+            margin-top: 0;
+            border-bottom: 3px solid #00f2fe;
+            padding-bottom: 10px;
+        }
+
+        .demo-container p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .operator-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .operator-table th,
+        .operator-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .operator-table th {
+            background-color: #4facfe;
+            color: white;
+            font-weight: bold;
+        }
+
+        .operator-table tr:hover {
+            background-color: #f8f8f8;
+        }
+
+        .operator-table code {
+            background-color: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+            display: block;
+        }
+
+        .result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+            display: block;
+        }
+
+        .result.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+            display: block;
+        }
+
+        .truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .truth-table th,
+        .truth-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .truth-table th {
+            background-color: #4facfe;
+            color: white;
+        }
+
+        .truth-table .true-val {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+
+        .truth-table .false-val {
+            background-color: #f8d7da;
+            font-weight: bold;
+        }
+
+        .code-display {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-left: 4px solid #4facfe;
+            overflow-x: auto;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.5);
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .highlight-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔗 Example 3: Logical Operators</h1>
+
+    <!-- Operator Reference -->
+    <div class="demo-container">
+        <h2>Logical Operators Reference</h2>
+        <p>Logical operators combine multiple conditions and return <code>true</code> or <code>false</code>.</p>
+        
+        <table class="operator-table">
+            <thead>
+                <tr>
+                    <th>Operator</th>
+                    <th>Name</th>
+                    <th>Example</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>&amp;&amp;</code></td>
+                    <td>AND</td>
+                    <td><code>true &amp;&amp; true</code> → true</td>
+                    <td>Returns true only if BOTH conditions are true</td>
+                </tr>
+                <tr>
+                    <td><code>||</code></td>
+                    <td>OR</td>
+                    <td><code>true || false</code> → true</td>
+                    <td>Returns true if AT LEAST ONE condition is true</td>
+                </tr>
+                <tr>
+                    <td><code>!</code></td>
+                    <td>NOT</td>
+                    <td><code>!true</code> → false</td>
+                    <td>Flips the value (true becomes false, false becomes true)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Demo 1: AND Operator -->
+    <div class="demo-container">
+        <h2>Demo 1: AND Operator (&&)</h2>
+        <p>Both conditions must be true for the result to be true.</p>
+
+        <div class="code-display">
+if (condition1 &amp;&amp; condition2) {<br>
+&nbsp;&nbsp;// Runs only if BOTH are true<br>
+}
+        </div>
+
+        <h3>Truth Table for AND</h3>
+        <table class="truth-table">
+            <tr>
+                <th>A</th>
+                <th>B</th>
+                <th>A && B</th>
+            </tr>
+            <tr>
+                <td class="true-val">true</td>
+                <td class="true-val">true</td>
+                <td class="true-val">true</td>
+            </tr>
+            <tr>
+                <td class="true-val">true</td>
+                <td class="false-val">false</td>
+                <td class="false-val">false</td>
+            </tr>
+            <tr>
+                <td class="false-val">false</td>
+                <td class="true-val">true</td>
+                <td class="false-val">false</td>
+            </tr>
+            <tr>
+                <td class="false-val">false</td>
+                <td class="false-val">false</td>
+                <td class="false-val">false</td>
+            </tr>
+        </table>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="and1" onchange="testAnd()">
+            <label for="and1">Condition 1</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="and2" onchange="testAnd()">
+            <label for="and2">Condition 2</label>
+        </div>
+
+        <button onclick="testAnd()">Test AND Operator</button>
+
+        <div id="andResult" class="result"></div>
+    </div>
+
+    <!-- Demo 2: OR Operator -->
+    <div class="demo-container">
+        <h2>Demo 2: OR Operator (||)</h2>
+        <p>At least one condition must be true for the result to be true.</p>
+
+        <div class="code-display">
+if (condition1 || condition2) {<br>
+&nbsp;&nbsp;// Runs if AT LEAST ONE is true<br>
+}
+        </div>
+
+        <h3>Truth Table for OR</h3>
+        <table class="truth-table">
+            <tr>
+                <th>A</th>
+                <th>B</th>
+                <th>A || B</th>
+            </tr>
+            <tr>
+                <td class="true-val">true</td>
+                <td class="true-val">true</td>
+                <td class="true-val">true</td>
+            </tr>
+            <tr>
+                <td class="true-val">true</td>
+                <td class="false-val">false</td>
+                <td class="true-val">true</td>
+            </tr>
+            <tr>
+                <td class="false-val">false</td>
+                <td class="true-val">true</td>
+                <td class="true-val">true</td>
+            </tr>
+            <tr>
+                <td class="false-val">false</td>
+                <td class="false-val">false</td>
+                <td class="false-val">false</td>
+            </tr>
+        </table>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="or1" onchange="testOr()">
+            <label for="or1">Condition 1</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="or2" onchange="testOr()">
+            <label for="or2">Condition 2</label>
+        </div>
+
+        <button onclick="testOr()">Test OR Operator</button>
+
+        <div id="orResult" class="result"></div>
+    </div>
+
+    <!-- Demo 3: NOT Operator -->
+    <div class="demo-container">
+        <h2>Demo 3: NOT Operator (!)</h2>
+        <p>Flips the boolean value - true becomes false, false becomes true.</p>
+
+        <div class="code-display">
+if (!condition) {<br>
+&nbsp;&nbsp;// Runs if condition is FALSE<br>
+}
+        </div>
+
+        <h3>Truth Table for NOT</h3>
+        <table class="truth-table">
+            <tr>
+                <th>A</th>
+                <th>!A</th>
+            </tr>
+            <tr>
+                <td class="true-val">true</td>
+                <td class="false-val">false</td>
+            </tr>
+            <tr>
+                <td class="false-val">false</td>
+                <td class="true-val">true</td>
+            </tr>
+        </table>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="not1" onchange="testNot()">
+            <label for="not1">Condition</label>
+        </div>
+
+        <button onclick="testNot()">Test NOT Operator</button>
+
+        <div id="notResult" class="result"></div>
+    </div>
+
+    <!-- Demo 4: Movie Theater Admission -->
+    <div class="demo-container">
+        <h2>Demo 4: Movie Theater Admission (AND)</h2>
+        <p>You can watch an R-rated movie if you're 17 OR older AND have an ID.</p>
+
+        <div class="input-group">
+            <label for="movieAge">Your Age:</label>
+            <input type="number" id="movieAge" min="0" max="120" value="18">
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="hasId">
+            <label for="hasId">I have a valid ID</label>
+        </div>
+
+        <button onclick="checkMovieAdmission()">Check Admission</button>
+
+        <div id="movieResult" class="result"></div>
+    </div>
+
+    <!-- Demo 5: Discount Eligibility (OR) -->
+    <div class="demo-container">
+        <h2>Demo 5: Store Discount Eligibility (OR)</h2>
+        <p>You get a discount if you're a student OR a senior (65+) OR have a membership.</p>
+
+        <div class="input-group">
+            <label for="customerAge">Your Age:</label>
+            <input type="number" id="customerAge" min="0" max="120" value="25">
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="isStudent">
+            <label for="isStudent">I'm a student</label>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="hasMembership">
+            <label for="hasMembership">I have a membership card</label>
+        </div>
+
+        <button onclick="checkDiscount()">Check Discount Eligibility</button>
+
+        <div id="discountResult" class="result"></div>
+    </div>
+
+    <!-- Demo 6: Complex Login System -->
+    <div class="demo-container">
+        <h2>Demo 6: Login System (Complex Logic)</h2>
+        <p>Login succeeds if username is correct AND (password is correct OR you have 2FA enabled).</p>
+
+        <div class="input-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" value="admin">
+        </div>
+
+        <div class="input-group">
+            <label for="loginPwd">Password:</label>
+            <input type="password" id="loginPwd" value="password123">
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="has2fa">
+            <label for="has2fa">Two-Factor Authentication enabled</label>
+        </div>
+
+        <button onclick="checkLogin()">Attempt Login</button>
+
+        <div id="loginResult" class="result"></div>
+
+        <div class="highlight-box">
+            <strong>💡 Correct Credentials:</strong><br>
+            Username: <code>admin</code><br>
+            Password: <code>password123</code>
+        </div>
+    </div>
+
+    <!-- Demo 7: Game Access Checker -->
+    <div class="demo-container">
+        <h2>Demo 7: Game Access Checker</h2>
+        <p>Complex logic: You can play if you (own the game AND meet age requirement) OR have a trial pass.</p>
+
+        <div class="input-group">
+            <label for="playerAge">Your Age:</label>
+            <input type="number" id="playerAge" min="0" max="120" value="16">
+        </div>
+
+        <div class="input-group">
+            <label for="gameRating">Game Rating:</label>
+            <select id="gameRating">
+                <option value="E">E (Everyone)</option>
+                <option value="T">T (Teen 13+)</option>
+                <option value="M" selected>M (Mature 17+)</option>
+                <option value="A">A (Adults Only 18+)</option>
+            </select>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="ownsGame" checked>
+            <label for="ownsGame">I own this game</label>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="hasTrialPass">
+            <label for="hasTrialPass">I have a trial pass</label>
+        </div>
+
+        <button onclick="checkGameAccess()">Check Game Access</button>
+
+        <div id="gameResult" class="result"></div>
+    </div>
+
+    <script>
+        // Demo 1: AND Operator
+        function testAnd() {
+            console.log('=== Demo 1: AND Operator ===');
+            
+            const cond1 = document.getElementById('and1').checked;
+            const cond2 = document.getElementById('and2').checked;
+            const resultDiv = document.getElementById('andResult');
+            
+            console.log('Condition 1:', cond1);
+            console.log('Condition 2:', cond2);
+            
+            // AND operator: both must be true
+            const result = cond1 && cond2;
+            console.log('cond1 && cond2:', result);
+            
+            if (result) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<span class="emoji">✅</span><strong>TRUE</strong> - Both conditions are checked!<br><code>true && true = true</code>';
+            } else {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">❌</span><strong>FALSE</strong> - At least one condition is unchecked.<br><code>' + cond1 + ' && ' + cond2 + ' = false</code>';
+            }
+        }
+
+        // Demo 2: OR Operator
+        function testOr() {
+            console.log('=== Demo 2: OR Operator ===');
+            
+            const cond1 = document.getElementById('or1').checked;
+            const cond2 = document.getElementById('or2').checked;
+            const resultDiv = document.getElementById('orResult');
+            
+            console.log('Condition 1:', cond1);
+            console.log('Condition 2:', cond2);
+            
+            // OR operator: at least one must be true
+            const result = cond1 || cond2;
+            console.log('cond1 || cond2:', result);
+            
+            if (result) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<span class="emoji">✅</span><strong>TRUE</strong> - At least one condition is checked!<br><code>' + cond1 + ' || ' + cond2 + ' = true</code>';
+            } else {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">❌</span><strong>FALSE</strong> - Both conditions are unchecked.<br><code>false || false = false</code>';
+            }
+        }
+
+        // Demo 3: NOT Operator
+        function testNot() {
+            console.log('=== Demo 3: NOT Operator ===');
+            
+            const cond = document.getElementById('not1').checked;
+            const resultDiv = document.getElementById('notResult');
+            
+            console.log('Condition:', cond);
+            
+            // NOT operator: flips the value
+            const result = !cond;
+            console.log('!condition:', result);
+            
+            resultDiv.className = 'result info';
+            resultDiv.innerHTML = `
+                <strong>Original value:</strong> ${cond}<br>
+                <strong>After NOT (!):</strong> ${result}<br>
+                <code>!${cond} = ${result}</code><br><br>
+                <span class="emoji">🔄</span>The NOT operator flipped the value!
+            `;
+        }
+
+        // Demo 4: Movie Theater Admission
+        function checkMovieAdmission() {
+            console.log('=== Demo 4: Movie Admission (AND) ===');
+            
+            const age = parseInt(document.getElementById('movieAge').value);
+            const hasId = document.getElementById('hasId').checked;
+            const resultDiv = document.getElementById('movieResult');
+            
+            if (isNaN(age)) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">⚠️</span>Please enter a valid age!';
+                return;
+            }
+            
+            console.log('Age:', age);
+            console.log('Has ID:', hasId);
+            
+            const isOldEnough = age >= 17;
+            console.log('Old enough (>= 17):', isOldEnough);
+            
+            // Both conditions must be true
+            const canWatch = isOldEnough && hasId;
+            console.log('Can watch? (oldEnough && hasId):', canWatch);
+            
+            if (canWatch) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<span class="emoji">🎬</span><strong>ADMITTED!</strong><br>You are ' + age + ' years old AND have an ID. Enjoy the movie!';
+            } else {
+                let reason = '';
+                if (!isOldEnough && !hasId) {
+                    reason = 'You are under 17 AND don\'t have an ID.';
+                } else if (!isOldEnough) {
+                    reason = 'You are under 17 years old.';
+                } else {
+                    reason = 'You don\'t have a valid ID.';
+                }
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">⛔</span><strong>NOT ADMITTED</strong><br>' + reason;
+            }
+        }
+
+        // Demo 5: Discount Eligibility
+        function checkDiscount() {
+            console.log('=== Demo 5: Discount Eligibility (OR) ===');
+            
+            const age = parseInt(document.getElementById('customerAge').value);
+            const isStudent = document.getElementById('isStudent').checked;
+            const hasMembership = document.getElementById('hasMembership').checked;
+            const resultDiv = document.getElementById('discountResult');
+            
+            if (isNaN(age)) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">⚠️</span>Please enter a valid age!';
+                return;
+            }
+            
+            console.log('Age:', age);
+            console.log('Is Student:', isStudent);
+            console.log('Has Membership:', hasMembership);
+            
+            const isSenior = age >= 65;
+            console.log('Is Senior (>= 65):', isSenior);
+            
+            // At least one condition must be true
+            const getsDiscount = isStudent || isSenior || hasMembership;
+            console.log('Gets discount? (student || senior || member):', getsDiscount);
+            
+            if (getsDiscount) {
+                let reasons = [];
+                if (isStudent) reasons.push('Student');
+                if (isSenior) reasons.push('Senior (65+)');
+                if (hasMembership) reasons.push('Member');
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<span class="emoji">🎉</span><strong>DISCOUNT APPROVED!</strong><br>Reason(s): ' + reasons.join(', ') + '<br>You save 15%!';
+            } else {
+                resultDiv.className = 'result info';
+                resultDiv.innerHTML = '<span class="emoji">ℹ️</span><strong>No discount available</strong><br>You need to be a student, senior (65+), or member to qualify.';
+            }
+        }
+
+        // Demo 6: Login System
+        function checkLogin() {
+            console.log('=== Demo 6: Complex Login ===');
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('loginPwd').value;
+            const has2fa = document.getElementById('has2fa').checked;
+            const resultDiv = document.getElementById('loginResult');
+            
+            console.log('Username:', username);
+            console.log('Password:', password.length > 0 ? '[entered]' : '[empty]');
+            console.log('Has 2FA:', has2fa);
+            
+            const correctUsername = username === 'admin';
+            const correctPassword = password === 'password123';
+            
+            console.log('Username correct:', correctUsername);
+            console.log('Password correct:', correctPassword);
+            
+            // Complex logic: username correct AND (password correct OR 2FA enabled)
+            const loginSuccess = correctUsername && (correctPassword || has2fa);
+            console.log('Login success? username && (password || 2fa):', loginSuccess);
+            
+            if (loginSuccess) {
+                let method = correctPassword ? 'Password' : '2FA';
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<span class="emoji">🎊</span><strong>LOGIN SUCCESSFUL!</strong><br>Authenticated via: ' + method;
+            } else {
+                let reason = '';
+                if (!correctUsername) {
+                    reason = 'Incorrect username.';
+                } else if (!correctPassword && !has2fa) {
+                    reason = 'Incorrect password and no 2FA.';
+                }
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">🔒</span><strong>LOGIN FAILED</strong><br>' + reason;
+            }
+        }
+
+        // Demo 7: Game Access Checker
+        function checkGameAccess() {
+            console.log('=== Demo 7: Game Access ===');
+            
+            const age = parseInt(document.getElementById('playerAge').value);
+            const rating = document.getElementById('gameRating').value;
+            const owns = document.getElementById('ownsGame').checked;
+            const hasTrial = document.getElementById('hasTrialPass').checked;
+            const resultDiv = document.getElementById('gameResult');
+            
+            if (isNaN(age)) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">⚠️</span>Please enter a valid age!';
+                return;
+            }
+            
+            console.log('Age:', age);
+            console.log('Rating:', rating);
+            console.log('Owns game:', owns);
+            console.log('Has trial:', hasTrial);
+            
+            // Check age requirement based on rating
+            let requiredAge = 0;
+            if (rating === 'E') requiredAge = 0;
+            else if (rating === 'T') requiredAge = 13;
+            else if (rating === 'M') requiredAge = 17;
+            else if (rating === 'A') requiredAge = 18;
+            
+            const meetsAgeRequirement = age >= requiredAge;
+            console.log('Required age:', requiredAge);
+            console.log('Meets age requirement:', meetsAgeRequirement);
+            
+            // Complex logic: (owns AND meetsAge) OR hasTrial
+            const canPlay = (owns && meetsAgeRequirement) || hasTrial;
+            console.log('Can play? (owns && meetsAge) || hasTrial:', canPlay);
+            
+            if (canPlay) {
+                let reason = hasTrial ? 'Trial Pass' : 'Owns game and meets age requirement';
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<span class="emoji">🎮</span><strong>ACCESS GRANTED!</strong><br>Reason: ' + reason;
+            } else {
+                let reason = '';
+                if (!owns && !hasTrial) {
+                    reason = 'You don\'t own the game and have no trial pass.';
+                } else if (!meetsAgeRequirement) {
+                    reason = 'You must be at least ' + requiredAge + ' years old for this ' + rating + '-rated game.';
+                }
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<span class="emoji">🚫</span><strong>ACCESS DENIED</strong><br>' + reason;
+            }
+        }
+
+        console.log('Logical Operators examples loaded!');
+        console.log('Try different combinations to see how && (AND), || (OR), and ! (NOT) work!');
+    </script>
+</body>
+</html>
