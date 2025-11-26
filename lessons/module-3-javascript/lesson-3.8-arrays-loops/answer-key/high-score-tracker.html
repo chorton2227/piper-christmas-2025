@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Score Tracker - Answer Key</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .top5-section {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .top5-title {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .top5-list {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .top-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; }
+        .rank-2 { background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); color: white; }
+        .rank-3 { background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%); color: white; }
+        .rank-other { background: #f8f9fa; }
+
+        .medal {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f093fb;
+        }
+
+        .scores-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: #f093fb;
+            border-bottom: 3px solid #f093fb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #f093fb;
+        }
+
+        .score-rank {
+            font-weight: bold;
+            color: #6c757d;
+            min-width: 50px;
+        }
+
+        .score-name {
+            flex: 1;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .score-points {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f093fb;
+        }
+
+        .search-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .search-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #95a5a6;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏆 High Score Tracker</h1>
+
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <h2 style="margin-top: 0;">Add New Score</h2>
+            <div class="input-group">
+                <input type="text" id="playerName" placeholder="Player name">
+                <input type="number" id="playerScore" placeholder="Score (0-1000)" min="0" max="1000">
+                <button onclick="addScore()">Add Score</button>
+            </div>
+            <div id="message"></div>
+        </div>
+
+        <!-- Top 5 Section -->
+        <div class="top5-section">
+            <div class="top5-title">🌟 TOP 5 HIGH SCORES 🌟</div>
+            <div class="top5-list" id="top5List">
+                <div class="empty-message">No scores yet!</div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <h2 class="section-title">📊 Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Highest Score</div>
+                <div class="stat-value" id="statHighest">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Lowest Score</div>
+                <div class="stat-value" id="statLowest">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Average Score</div>
+                <div class="stat-value" id="statAverage">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Total Players</div>
+                <div class="stat-value" id="statTotal">0</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h3 style="margin-top: 0;">🔍 Find Player Rank</h3>
+            <div class="input-group">
+                <input type="text" id="searchName" placeholder="Enter player name">
+                <button onclick="findRank()">Find Rank</button>
+            </div>
+            <div id="searchResult"></div>
+        </div>
+
+        <!-- All Scores -->
+        <div class="scores-section">
+            <h2 class="section-title">📋 All Scores</h2>
+            <div id="allScores">
+                <div class="empty-message">No scores to display</div>
+            </div>
+        </div>
+
+        <button style="width: 100%; background: #95a5a6;" onclick="clearScores()">Clear All Scores</button>
+    </div>
+
+    <script>
+        console.log('=== High Score Tracker Loaded ===');
+
+        // Array to store all scores
+        let scores = [];
+
+        // Add new score
+        function addScore() {
+            console.log('Adding new score...');
+
+            const nameInput = document.getElementById('playerName');
+            const scoreInput = document.getElementById('playerScore');
+            const name = nameInput.value.trim();
+            const score = parseInt(scoreInput.value);
+
+            console.log('Player:', name, '| Score:', score);
+
+            // Validation
+            if (name === '') {
+                showMessage('Please enter a player name', 'error');
+                console.log('Error: Empty name');
+                return;
+            }
+
+            if (scoreInput.value === '' || isNaN(score)) {
+                showMessage('Please enter a valid score', 'error');
+                console.log('Error: Invalid score');
+                return;
+            }
+
+            if (score < 0 || score > 1000) {
+                showMessage('Score must be between 0 and 1000', 'error');
+                console.log('Error: Score out of range');
+                return;
+            }
+
+            // Create score object
+            const scoreObj = {
+                name: name,
+                score: score
+            };
+
+            // Add to scores array
+            scores.push(scoreObj);
+            console.log('Score added:', scoreObj);
+
+            // Sort scores (highest first)
+            sortScores();
+
+            // Show success
+            showMessage(`Added ${name} with ${score} points!`, 'success');
+
+            // Clear inputs
+            nameInput.value = '';
+            scoreInput.value = '';
+            nameInput.focus();
+
+            // Update all displays
+            updateAllDisplays();
+        }
+
+        // Sort scores array (highest to lowest)
+        function sortScores() {
+            console.log('Sorting scores...');
+            scores.sort((a, b) => b.score - a.score);
+            console.log('Scores sorted:', scores);
+        }
+
+        // Display top 5 scores
+        function displayTop5() {
+            console.log('Displaying top 5...');
+
+            const top5Div = document.getElementById('top5List');
+
+            if (scores.length === 0) {
+                top5Div.innerHTML = '<div class="empty-message">No scores yet!</div>';
+                return;
+            }
+
+            // Get first 5 scores using slice
+            const top5 = scores.slice(0, 5);
+            console.log('Top 5:', top5);
+
+            let html = '';
+            for (let i = 0; i < top5.length; i++) {
+                const player = top5[i];
+                const rank = i + 1;
+                let medal = '';
+                let rankClass = '';
+
+                // Assign medals and classes
+                if (rank === 1) {
+                    medal = '🥇';
+                    rankClass = 'rank-1';
+                } else if (rank === 2) {
+                    medal = '🥈';
+                    rankClass = 'rank-2';
+                } else if (rank === 3) {
+                    medal = '🥉';
+                    rankClass = 'rank-3';
+                } else {
+                    rankClass = 'rank-other';
+                }
+
+                html += `
+                    <div class="top-score ${rankClass}">
+                        <span>
+                            <span class="medal">${medal}</span>
+                            ${rank}. ${player.name}
+                        </span>
+                        <span style="font-weight: bold;">${player.score} pts</span>
+                    </div>
+                `;
+            }
+
+            top5Div.innerHTML = html;
+        }
+
+        // Display all scores
+        function displayAllScores() {
+            console.log('Displaying all scores...');
+
+            const allScoresDiv = document.getElementById('allScores');
+
+            if (scores.length === 0) {
+                allScoresDiv.innerHTML = '<div class="empty-message">No scores to display</div>';
+                return;
+            }
+
+            let html = '';
+            for (let i = 0; i < scores.length; i++) {
+                const player = scores[i];
+                const rank = i + 1;
+
+                html += `
+                    <div class="score-item">
+                        <span class="score-rank">#${rank}</span>
+                        <span class="score-name">${player.name}</span>
+                        <span class="score-points">${player.score}</span>
+                    </div>
+                `;
+            }
+
+            allScoresDiv.innerHTML = html;
+            console.log('Displayed', scores.length, 'scores');
+        }
+
+        // Calculate and display statistics
+        function calculateStats() {
+            console.log('Calculating statistics...');
+
+            const highestDiv = document.getElementById('statHighest');
+            const lowestDiv = document.getElementById('statLowest');
+            const averageDiv = document.getElementById('statAverage');
+            const totalDiv = document.getElementById('statTotal');
+
+            if (scores.length === 0) {
+                highestDiv.textContent = '-';
+                lowestDiv.textContent = '-';
+                averageDiv.textContent = '-';
+                totalDiv.textContent = '0';
+                console.log('No scores for statistics');
+                return;
+            }
+
+            // Find highest score
+            let highest = scores[0].score;
+            for (let i = 1; i < scores.length; i++) {
+                if (scores[i].score > highest) {
+                    highest = scores[i].score;
+                }
+            }
+
+            // Find lowest score
+            let lowest = scores[0].score;
+            for (let i = 1; i < scores.length; i++) {
+                if (scores[i].score < lowest) {
+                    lowest = scores[i].score;
+                }
+            }
+
+            // Calculate average
+            let sum = 0;
+            for (let i = 0; i < scores.length; i++) {
+                sum += scores[i].score;
+            }
+            const average = sum / scores.length;
+
+            console.log('Highest:', highest);
+            console.log('Lowest:', lowest);
+            console.log('Average:', average);
+            console.log('Total:', scores.length);
+
+            // Update display
+            highestDiv.textContent = highest;
+            lowestDiv.textContent = lowest;
+            averageDiv.textContent = average.toFixed(1);
+            totalDiv.textContent = scores.length;
+        }
+
+        // Find player rank
+        function findRank() {
+            const searchInput = document.getElementById('searchName');
+            const searchName = searchInput.value.trim();
+            const resultDiv = document.getElementById('searchResult');
+
+            console.log('Searching for:', searchName);
+
+            if (searchName === '') {
+                resultDiv.innerHTML = '<div class="message error">Please enter a player name</div>';
+                return;
+            }
+
+            // Search through scores array
+            let found = false;
+            for (let i = 0; i < scores.length; i++) {
+                if (scores[i].name.toLowerCase() === searchName.toLowerCase()) {
+                    const rank = i + 1;
+                    const score = scores[i].score;
+                    
+                    console.log('Found:', scores[i].name, 'at rank', rank);
+
+                    resultDiv.innerHTML = `
+                        <div class="search-result">
+                            🎯 ${scores[i].name} is ranked <strong>#${rank}</strong> with <strong>${score} points</strong>
+                        </div>
+                    `;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                console.log('Player not found');
+                resultDiv.innerHTML = '<div class="message error">❌ Player not found in leaderboard</div>';
+            }
+        }
+
+        // Clear all scores
+        function clearScores() {
+            if (scores.length === 0) {
+                showMessage('No scores to clear!', 'error');
+                return;
+            }
+
+            const confirmed = confirm(`Are you sure you want to clear all ${scores.length} scores?`);
+
+            if (confirmed) {
+                console.log('Clearing all scores...');
+                scores = [];
+                showMessage('All scores cleared!', 'success');
+                updateAllDisplays();
+                document.getElementById('searchResult').innerHTML = '';
+            }
+        }
+
+        // Update all displays
+        function updateAllDisplays() {
+            displayTop5();
+            displayAllScores();
+            calculateStats();
+        }
+
+        // Show message
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = 'message ' + type;
+            messageDiv.textContent = text;
+
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 3000);
+        }
+
+        // Enter key support
+        document.getElementById('playerName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addScore();
+        });
+
+        document.getElementById('playerScore').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addScore();
+        });
+
+        document.getElementById('searchName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') findRank();
+        });
+
+        console.log('High Score Tracker ready!');
+        console.log('Try adding: Alice - 950, Bob - 1200, Charlie - 875');
+    </script>
+</body>
+</html>

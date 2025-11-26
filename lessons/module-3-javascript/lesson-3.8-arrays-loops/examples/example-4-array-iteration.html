@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Iteration - Examples</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+        }
+
+        .demo-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .demo-title {
+            color: #fdcb6e;
+            border-bottom: 3px solid #fdcb6e;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            color: #2d3436;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .output {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #fdcb6e;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            min-height: 60px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .result-box {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .result-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #4caf50;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .code-box {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .item-card {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 2px;
+        }
+
+        .badge-pass {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-fail {
+            background: #f44336;
+            color: white;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 Array Iteration - Practical Examples</h1>
+
+    <!-- Demo 1: Sum All Numbers -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 1: Sum All Numbers in Array</h2>
+        
+        <div class="info">
+            <strong>Array:</strong> [10, 20, 30, 40, 50]
+        </div>
+        
+        <div class="code-box">
+let numbers = [10, 20, 30, 40, 50];
+let sum = 0;
+
+for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+}
+
+console.log('Total:', sum);  // 150
+        </div>
+        
+        <button onclick="demo1Run()">Calculate Sum</button>
+        
+        <div id="demo1-output" class="output" style="display:none;"></div>
+        <div id="demo1-result" class="result-box" style="display:none;">
+            <strong>Total Sum:</strong>
+            <div class="result-number" id="demo1-number"></div>
+        </div>
+    </div>
+
+    <!-- Demo 2: Find Maximum Value -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 2: Find Maximum Value</h2>
+        
+        <div class="info">
+            <strong>Scores:</strong> [85, 92, 78, 95, 88, 91, 77]
+        </div>
+        
+        <div class="code-box">
+let scores = [85, 92, 78, 95, 88, 91, 77];
+let highest = scores[0];  // Start with first score
+
+for (let i = 1; i < scores.length; i++) {
+    if (scores[i] > highest) {
+        highest = scores[i];
+    }
+}
+        </div>
+        
+        <button onclick="demo2Run()">Find Highest Score</button>
+        
+        <div id="demo2-output" class="output" style="display:none;"></div>
+        <div id="demo2-result" class="result-box" style="display:none;">
+            <strong>Highest Score:</strong>
+            <div class="result-number" id="demo2-number"></div>
+        </div>
+    </div>
+
+    <!-- Demo 3: Filter Array -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 3: Filter Array (Get Even Numbers)</h2>
+        
+        <div class="info">
+            <strong>Numbers:</strong> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        </div>
+        
+        <div class="code-box">
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let evenNumbers = [];
+
+for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 2 === 0) {
+        evenNumbers.push(numbers[i]);
+    }
+}
+        </div>
+        
+        <button onclick="demo3Run()">Filter Even Numbers</button>
+        
+        <div id="demo3-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 4: Count Occurrences -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 4: Count How Many Times Value Appears</h2>
+        
+        <div class="info">
+            <strong>Array:</strong> ['apple', 'banana', 'apple', 'orange', 'apple', 'banana']
+        </div>
+        
+        <button onclick="demo4Run()">Count "apple"</button>
+        
+        <div id="demo4-output" class="output" style="display:none;"></div>
+        <div id="demo4-result" class="result-box" style="display:none;">
+            <strong>Count of "apple":</strong>
+            <div class="result-number" id="demo4-number"></div>
+        </div>
+    </div>
+
+    <!-- Demo 5: Calculate Average -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 5: Calculate Average</h2>
+        
+        <div class="info">
+            <strong>Test Scores:</strong> [88, 92, 76, 84, 90]
+        </div>
+        
+        <div class="code-box">
+let scores = [88, 92, 76, 84, 90];
+let sum = 0;
+
+for (let i = 0; i < scores.length; i++) {
+    sum += scores[i];
+}
+
+let average = sum / scores.length;
+        </div>
+        
+        <button onclick="demo5Run()">Calculate Average</button>
+        
+        <div id="demo5-output" class="output" style="display:none;"></div>
+        <div id="demo5-result" class="result-box" style="display:none;">
+            <strong>Average Score:</strong>
+            <div class="result-number" id="demo5-number"></div>
+        </div>
+    </div>
+
+    <!-- Demo 6: Transform Array -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 6: Transform Array (Double All Numbers)</h2>
+        
+        <div class="info">
+            <strong>Original:</strong> [1, 2, 3, 4, 5]
+        </div>
+        
+        <button onclick="demo6Run()">Double All Numbers</button>
+        
+        <div id="demo6-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 7: Find Index of Item -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 7: Find All Indexes of Value</h2>
+        
+        <div class="info">
+            <strong>Array:</strong> [5, 10, 5, 20, 5, 30]<br>
+            <strong>Search for:</strong> 5
+        </div>
+        
+        <button onclick="demo7Run()">Find All Indexes of 5</button>
+        
+        <div id="demo7-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 8: Check All Pass/Fail -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 8: Pass/Fail Checker</h2>
+        
+        <div class="info">
+            <strong>Passing Score:</strong> 60 or higher
+        </div>
+        
+        <button onclick="demo8Run()">Check All Scores</button>
+        
+        <div id="demo8-grid" class="items-grid"></div>
+        <div id="demo8-summary" style="display:none; margin-top: 15px;">
+            <strong>Results:</strong><br>
+            <span class="badge badge-pass">Passed: <span id="demo8-pass">0</span></span>
+            <span class="badge badge-fail">Failed: <span id="demo8-fail">0</span></span>
+        </div>
+    </div>
+
+    <!-- Demo 9: Progress Tracker -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 9: Task Progress Tracker</h2>
+        
+        <div class="info">
+            <strong>Tasks:</strong> Complete 10 tasks (some completed, some not)
+        </div>
+        
+        <button onclick="demo9Run()">Calculate Progress</button>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="demo9-progress" style="width: 0%">0%</div>
+        </div>
+        
+        <div id="demo9-output" class="output" style="display:none;"></div>
+    </div>
+
+    <script>
+        console.log('=== Array Iteration Examples Loaded ===');
+
+        // Demo 1: Sum All Numbers
+        function demo1Run() {
+            const numbers = [10, 20, 30, 40, 50];
+            let sum = 0;
+            
+            const output = document.getElementById('demo1-output');
+            output.style.display = 'block';
+            output.innerHTML = '';
+            
+            console.log('Calculating sum...');
+            
+            for (let i = 0; i < numbers.length; i++) {
+                sum += numbers[i];
+                output.innerHTML += `Step ${i + 1}: sum = ${sum - numbers[i]} + ${numbers[i]} = ${sum}<br>`;
+                console.log('Step', i + 1, ':', sum);
+            }
+            
+            document.getElementById('demo1-result').style.display = 'block';
+            document.getElementById('demo1-number').textContent = sum;
+            
+            console.log('Total sum:', sum);
+        }
+
+        // Demo 2: Find Maximum
+        function demo2Run() {
+            const scores = [85, 92, 78, 95, 88, 91, 77];
+            let highest = scores[0];
+            
+            const output = document.getElementById('demo2-output');
+            output.style.display = 'block';
+            output.innerHTML = `Starting with: ${highest}<br><br>`;
+            
+            console.log('Finding highest score...');
+            console.log('Starting with:', highest);
+            
+            for (let i = 1; i < scores.length; i++) {
+                if (scores[i] > highest) {
+                    output.innerHTML += `${scores[i]} > ${highest} ✓ New highest!<br>`;
+                    console.log(scores[i], '>', highest, '- New highest!');
+                    highest = scores[i];
+                } else {
+                    output.innerHTML += `${scores[i]} ≤ ${highest} - Keep current highest<br>`;
+                    console.log(scores[i], '≤', highest, '- Keep current');
+                }
+            }
+            
+            document.getElementById('demo2-result').style.display = 'block';
+            document.getElementById('demo2-number').textContent = highest;
+            
+            console.log('Highest score:', highest);
+        }
+
+        // Demo 3: Filter Even Numbers
+        function demo3Run() {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const evenNumbers = [];
+            
+            const output = document.getElementById('demo3-output');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Filtering even numbers...</strong><br><br>';
+            
+            console.log('Filtering even numbers...');
+            
+            for (let i = 0; i < numbers.length; i++) {
+                if (numbers[i] % 2 === 0) {
+                    evenNumbers.push(numbers[i]);
+                    output.innerHTML += `${numbers[i]} is even ✓ Added to result<br>`;
+                    console.log(numbers[i], 'is even - added');
+                } else {
+                    output.innerHTML += `${numbers[i]} is odd ✗ Skipped<br>`;
+                }
+            }
+            
+            output.innerHTML += `<br><strong>Result: [${evenNumbers.join(', ')}]</strong>`;
+            console.log('Even numbers:', evenNumbers);
+        }
+
+        // Demo 4: Count Occurrences
+        function demo4Run() {
+            const fruits = ['apple', 'banana', 'apple', 'orange', 'apple', 'banana'];
+            const searchTerm = 'apple';
+            let count = 0;
+            
+            const output = document.getElementById('demo4-output');
+            output.style.display = 'block';
+            output.innerHTML = `Searching for "${searchTerm}"...<br><br>`;
+            
+            console.log('Counting occurrences of "apple"...');
+            
+            for (let i = 0; i < fruits.length; i++) {
+                if (fruits[i] === searchTerm) {
+                    count++;
+                    output.innerHTML += `[${i}] "${fruits[i]}" ✓ Match! Count: ${count}<br>`;
+                    console.log('[' + i + ']', fruits[i], '- Match! Count:', count);
+                } else {
+                    output.innerHTML += `[${i}] "${fruits[i]}" - Not a match<br>`;
+                }
+            }
+            
+            document.getElementById('demo4-result').style.display = 'block';
+            document.getElementById('demo4-number').textContent = count;
+            
+            console.log('Total count:', count);
+        }
+
+        // Demo 5: Calculate Average
+        function demo5Run() {
+            const scores = [88, 92, 76, 84, 90];
+            let sum = 0;
+            
+            const output = document.getElementById('demo5-output');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Calculating average...</strong><br><br>';
+            
+            console.log('Calculating average...');
+            
+            for (let i = 0; i < scores.length; i++) {
+                sum += scores[i];
+                output.innerHTML += `Score ${i + 1}: ${scores[i]} | Running sum: ${sum}<br>`;
+                console.log('Score', i + 1, ':', scores[i], '| Sum:', sum);
+            }
+            
+            const average = sum / scores.length;
+            
+            output.innerHTML += `<br><strong>Sum: ${sum} ÷ Count: ${scores.length} = Average: ${average.toFixed(2)}</strong>`;
+            
+            document.getElementById('demo5-result').style.display = 'block';
+            document.getElementById('demo5-number').textContent = average.toFixed(2);
+            
+            console.log('Average:', average);
+        }
+
+        // Demo 6: Transform Array
+        function demo6Run() {
+            const original = [1, 2, 3, 4, 5];
+            const doubled = [];
+            
+            const output = document.getElementById('demo6-output');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Doubling each number...</strong><br><br>';
+            
+            console.log('Doubling array...');
+            
+            for (let i = 0; i < original.length; i++) {
+                const result = original[i] * 2;
+                doubled.push(result);
+                output.innerHTML += `${original[i]} × 2 = ${result}<br>`;
+                console.log(original[i], '× 2 =', result);
+            }
+            
+            output.innerHTML += `<br><strong>Original: [${original.join(', ')}]</strong><br>`;
+            output.innerHTML += `<strong>Doubled: [${doubled.join(', ')}]</strong>`;
+            
+            console.log('Doubled array:', doubled);
+        }
+
+        // Demo 7: Find All Indexes
+        function demo7Run() {
+            const numbers = [5, 10, 5, 20, 5, 30];
+            const searchValue = 5;
+            const indexes = [];
+            
+            const output = document.getElementById('demo7-output');
+            output.style.display = 'block';
+            output.innerHTML = `Searching for value ${searchValue}...<br><br>`;
+            
+            console.log('Finding all indexes of', searchValue);
+            
+            for (let i = 0; i < numbers.length; i++) {
+                if (numbers[i] === searchValue) {
+                    indexes.push(i);
+                    output.innerHTML += `Found at index ${i}<br>`;
+                    console.log('Found at index', i);
+                }
+            }
+            
+            output.innerHTML += `<br><strong>Found at ${indexes.length} positions: [${indexes.join(', ')}]</strong>`;
+            console.log('All indexes:', indexes);
+        }
+
+        // Demo 8: Pass/Fail Checker
+        function demo8Run() {
+            const scores = [75, 45, 82, 58, 90, 67, 42, 88];
+            const passingScore = 60;
+            let passed = 0;
+            let failed = 0;
+            
+            const grid = document.getElementById('demo8-grid');
+            grid.innerHTML = '';
+            
+            console.log('Checking pass/fail for each score...');
+            
+            for (let i = 0; i < scores.length; i++) {
+                const score = scores[i];
+                const isPassing = score >= passingScore;
+                
+                if (isPassing) {
+                    passed++;
+                } else {
+                    failed++;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.style.background = isPassing ? 
+                    'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)' : 
+                    'linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%)';
+                card.innerHTML = `
+                    <div style="font-size: 24px; font-weight: bold;">${score}</div>
+                    <div>${isPassing ? '✅ Pass' : '❌ Fail'}</div>
+                `;
+                
+                grid.appendChild(card);
+                
+                console.log('Score', score, ':', isPassing ? 'Pass' : 'Fail');
+            }
+            
+            document.getElementById('demo8-summary').style.display = 'block';
+            document.getElementById('demo8-pass').textContent = passed;
+            document.getElementById('demo8-fail').textContent = failed;
+            
+            console.log('Results:', passed, 'passed,', failed, 'failed');
+        }
+
+        // Demo 9: Progress Tracker
+        function demo9Run() {
+            const tasks = [true, true, false, true, false, true, true, false, true, true];
+            let completed = 0;
+            
+            const output = document.getElementById('demo9-output');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Task Status:</strong><br><br>';
+            
+            console.log('Calculating progress...');
+            
+            for (let i = 0; i < tasks.length; i++) {
+                if (tasks[i]) {
+                    completed++;
+                    output.innerHTML += `Task ${i + 1}: ✅ Complete<br>`;
+                    console.log('Task', i + 1, '✅ Complete');
+                } else {
+                    output.innerHTML += `Task ${i + 1}: ⬜ Incomplete<br>`;
+                    console.log('Task', i + 1, '⬜ Incomplete');
+                }
+            }
+            
+            const percentage = (completed / tasks.length) * 100;
+            
+            const progressBar = document.getElementById('demo9-progress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage.toFixed(0) + '%';
+            
+            output.innerHTML += `<br><strong>Progress: ${completed}/${tasks.length} tasks completed (${percentage.toFixed(0)}%)</strong>`;
+            
+            console.log('Progress:', completed, '/', tasks.length, '-', percentage + '%');
+        }
+
+        console.log('All demos ready!');
+    </script>
+</body>
+</html>
