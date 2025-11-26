@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock - Answer Key</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .clock-container {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        
+        #clock-display {
+            font-size: 96px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #date-display {
+            font-size: 24px;
+            color: #495057;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        
+        .status.running {
+            background: #51cf66;
+            color: white;
+        }
+        
+        .status.stopped {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .theme-selector {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .theme-selector h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .theme-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .theme-btn {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .morning { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); }
+        .afternoon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .evening { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .night { background: linear-gradient(135deg, #2c3e50 0%, #000000 100%); }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <h1>⏰ Digital Clock</h1>
+        
+        <div id="clock-display">00:00:00</div>
+        <div id="date-display">Loading...</div>
+        
+        <div class="controls">
+            <button id="start-clock">▶️ Start Clock</button>
+            <button id="stop-clock" disabled>⏹️ Stop Clock</button>
+            <button id="toggle-format">🔄 Switch to 12-Hour</button>
+        </div>
+        
+        <div id="status" class="status stopped">🔴 Stopped</div>
+        
+        <div class="theme-selector">
+            <h3>🎨 Color Theme</h3>
+            <div class="theme-buttons">
+                <button class="theme-btn morning" onclick="setTheme('morning')">🌅 Morning</button>
+                <button class="theme-btn afternoon" onclick="setTheme('afternoon')">☀️ Afternoon</button>
+                <button class="theme-btn evening" onclick="setTheme('evening')">🌆 Evening</button>
+                <button class="theme-btn night" onclick="setTheme('night')">🌙 Night</button>
+                <button class="theme-btn" onclick="autoTheme()">🤖 Auto</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State variables
+        let clockInterval = null;
+        let is24Hour = true;
+        let isRunning = false;
+        
+        // Day and month name arrays
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        // Get DOM elements
+        const clockDisplay = document.getElementById('clock-display');
+        const dateDisplay = document.getElementById('date-display');
+        const startBtn = document.getElementById('start-clock');
+        const stopBtn = document.getElementById('stop-clock');
+        const toggleBtn = document.getElementById('toggle-format');
+        const statusDiv = document.getElementById('status');
+        
+        // Update clock display
+        function updateClock() {
+            const now = new Date();
+            
+            // Get time components
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            
+            let displayHours = hours;
+            let period = '';
+            
+            // Convert to 12-hour format if needed
+            if (!is24Hour) {
+                period = hours >= 12 ? ' PM' : ' AM';
+                displayHours = hours % 12;
+                displayHours = displayHours === 0 ? 12 : displayHours;
+            }
+            
+            // Add leading zeros
+            displayHours = String(displayHours).padStart(2, '0');
+            minutes = String(minutes).padStart(2, '0');
+            seconds = String(seconds).padStart(2, '0');
+            
+            // Update clock display
+            clockDisplay.textContent = `${displayHours}:${minutes}:${seconds}${period}`;
+            
+            // Update date display
+            const dayName = days[now.getDay()];
+            const monthName = months[now.getMonth()];
+            const date = now.getDate();
+            const year = now.getFullYear();
+            
+            dateDisplay.textContent = `${dayName}, ${monthName} ${date}, ${year}`;
+            
+            console.log(`Clock updated: ${displayHours}:${minutes}:${seconds}${period}`);
+        }
+        
+        // Start the clock
+        function startClock() {
+            if (clockInterval === null) {
+                console.log("Starting clock...");
+                updateClock(); // Update immediately
+                clockInterval = setInterval(updateClock, 1000);
+                isRunning = true;
+                
+                // Update UI
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                statusDiv.textContent = '🟢 Running';
+                statusDiv.className = 'status running';
+                
+                console.log("Clock started! Interval ID:", clockInterval);
+            }
+        }
+        
+        // Stop the clock
+        function stopClock() {
+            if (clockInterval !== null) {
+                console.log("Stopping clock...");
+                clearInterval(clockInterval);
+                clockInterval = null;
+                isRunning = false;
+                
+                // Update UI
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                statusDiv.textContent = '🔴 Stopped';
+                statusDiv.className = 'status stopped';
+                
+                console.log("Clock stopped");
+            }
+        }
+        
+        // Toggle between 12/24 hour format
+        function toggleFormat() {
+            is24Hour = !is24Hour;
+            
+            if (is24Hour) {
+                toggleBtn.textContent = '🔄 Switch to 12-Hour';
+                console.log("Switched to 24-hour format");
+            } else {
+                toggleBtn.textContent = '🔄 Switch to 24-Hour';
+                console.log("Switched to 12-hour format");
+            }
+            
+            // Update display immediately
+            updateClock();
+        }
+        
+        // Theme functions (bonus feature!)
+        const themes = {
+            morning: 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)',
+            afternoon: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            evening: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            night: 'linear-gradient(135deg, #2c3e50 0%, #000000 100%)',
+            default: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        };
+        
+        function setTheme(themeName) {
+            if (themes[themeName]) {
+                document.body.style.background = themes[themeName];
+                console.log("Theme changed to:", themeName);
+            }
+        }
+        
+        function autoTheme() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            let theme;
+            if (hour >= 6 && hour < 12) {
+                theme = 'morning';
+            } else if (hour >= 12 && hour < 18) {
+                theme = 'afternoon';
+            } else if (hour >= 18 && hour < 21) {
+                theme = 'evening';
+            } else {
+                theme = 'night';
+            }
+            
+            setTheme(theme);
+            console.log("Auto-theme selected:", theme, "for hour", hour);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startClock);
+        stopBtn.addEventListener('click', stopClock);
+        toggleBtn.addEventListener('click', toggleFormat);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === ' ') { // Spacebar
+                event.preventDefault();
+                if (isRunning) {
+                    stopClock();
+                } else {
+                    startClock();
+                }
+            } else if (event.key === 't' || event.key === 'T') {
+                toggleFormat();
+            }
+        });
+        
+        // Initialize
+        console.log("Digital Clock initialized!");
+        console.log("Press Spacebar to start/stop");
+        console.log("Press 'T' to toggle 12/24 hour format");
+        
+        // Show initial time (not updating)
+        updateClock();
+        
+        // Auto-start the clock
+        console.log("Auto-starting clock in 1 second...");
+        setTimeout(function() {
+            startClock();
+        }, 1000);
+    </script>
+</body>
+</html>
