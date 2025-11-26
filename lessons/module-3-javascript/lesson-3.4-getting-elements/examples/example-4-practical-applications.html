@@ -510,9 +510,9 @@
         // Example: Count total items
         let totalItemCount = 0;
         allItems.forEach(function(item) {
-            let countText = item.querySelector('.item-count').textContent;
+            let countText = item.querySelector('.item-count')?.textContent;
             // Extract number if present (e.g., "x5" → 5)
-            if (countText.startsWith('x')) {
+            if (countText && countText.startsWith('x')) {
                 totalItemCount += parseInt(countText.substring(1));
             }
         });

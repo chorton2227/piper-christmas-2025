@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turbo Racer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial Black', sans-serif; background: linear-gradient(to bottom, #434343 0%, #000000 100%); color: white; overflow: hidden; }
+        .container { width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+        .hud { display: flex; justify-content: space-around; padding: 20px; background: rgba(0,0,0,0.8); z-index: 100; }
+        .hud-item { text-align: center; }
+        .hud-label { font-size: 12px; opacity: 0.8; }
+        .hud-value { font-size: 32px; font-weight: bold; color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .race-track { flex: 1; position: relative; background: #333; overflow: hidden; }
+        .road { position: absolute; width: 400px; left: 50%; transform: translateX(-50%); height: 100%; background: repeating-linear-gradient(to bottom, #555 0px, #555 50px, #fff 50px, #fff 60px, #555 60px); animation: roadScroll 0.5s linear infinite; }
+        @keyframes roadScroll { from { background-position: 0 0; } to { background-position: 0 100px; } }
+        .player-car { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); font-size: 48px; transition: left 0.1s; z-index: 50; }
+        .obstacle { position: absolute; font-size: 48px; left: 50%; transform: translateX(-50%); animation: obstacleMove 3s linear; }
+        @keyframes obstacleMove { from { top: -100px; } to { top: 100%; } }
+        .boost-indicator { position: absolute; bottom: 180px; left: 50%; transform: translateX(-50%); width: 300px; height: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+        .boost-fill { height: 100%; background: linear-gradient(90deg, #ff00ff, #00ffff); transition: width 0.1s; }
+        .game-over { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); padding: 40px; border-radius: 20px; text-align: center; z-index: 200; display: none; }
+        .game-over h1 { font-size: 64px; color: #ff0000; margin-bottom: 20px; }
+        .game-over .stats { margin: 20px 0; font-size: 24px; }
+        button { padding: 15px 40px; font-size: 20px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%); color: #000; margin: 10px; transition: all 0.3s; }
+        button:hover { transform: scale(1.1); box-shadow: 0 0 20px #00ff00; }
+        .menu { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); padding: 40px; border-radius: 20px; text-align: center; z-index: 200; }
+        .menu h1 { font-size: 64px; color: #00ff00; margin-bottom: 30px; text-shadow: 0 0 20px #00ff00; }
+        .controls-info { margin: 20px 0; font-size: 18px; opacity: 0.8; }
+        .messages { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 15px; border-radius: 8px; font-weight: bold; animation: slideIn 0.3s; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .message.success { background: #00b894; }
+        .message.error { background: #d63031; }
+        .message.info { background: #0984e3; }
+    </style>
+</head>
+<body>
+    <div id="messages" class="messages"></div>
+    <div id="menu" class="menu">
+        <h1>🏎️ TURBO RACER 🏎️</h1>
+        <div class="controls-info">
+            <p>⬅️ LEFT ARROW - Move Left</p>
+            <p>➡️ RIGHT ARROW - Move Right</p>
+            <p>SPACE - Boost (when available)</p>
+        </div>
+        <button onclick="game.startRace()">START RACE</button>
+        <button onclick="game.loadGame()">LOAD GAME</button>
+        <div style="margin-top: 20px; font-size: 14px;">
+            <p>Best Distance: <span id="best-distance">0</span>m</p>
+            <p>Total Wins: <span id="total-wins">0</span></p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="hud">
+            <div class="hud-item"><div class="hud-label">SPEED</div><div class="hud-value" id="speed">0</div></div>
+            <div class="hud-item"><div class="hud-label">DISTANCE</div><div class="hud-value" id="distance">0</div></div>
+            <div class="hud-item"><div class="hud-label">SCORE</div><div class="hud-value" id="score">0</div></div>
+        </div>
+        
+        <div class="race-track" id="track">
+            <div class="road"></div>
+            <div class="player-car" id="player">🏎️</div>
+            <div class="boost-indicator">
+                <div class="boost-fill" id="boost-bar" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="game-over" class="game-over">
+        <h1>RACE OVER!</h1>
+        <div class="stats">
+            <p>Distance: <span id="final-distance">0</span>m</p>
+            <p>Score: <span id="final-score">0</span></p>
+            <p>Top Speed: <span id="final-speed">0</span></p>
+        </div>
+        <button onclick="game.startRace()">RACE AGAIN</button>
+        <button onclick="game.showMenu()">MAIN MENU</button>
+    </div>
+    
+    <script>
+        const game = {
+            running: false,
+            playerPos: 0, // -1=left, 0=center, 1=right
+            speed: 50,
+            distance: 0,
+            score: 0,
+            boost: 0,
+            maxBoost: 100,
+            boostActive: false,
+            topSpeed: 0,
+            obstacles: [],
+            obstacleInterval: null,
+            gameLoop: null,
+            
+            bestDistance: 0,
+            totalWins: 0,
+            
+            init() {
+                document.addEventListener('keydown', (e) => this.handleInput(e));
+                this.loadStats();
+                this.updateMenu();
+            },
+            
+            startRace() {
+                document.getElementById('menu').style.display = 'none';
+                document.getElementById('game-over').style.display = 'none';
+                
+                this.running = true;
+                this.playerPos = 0;
+                this.speed = 50;
+                this.distance = 0;
+                this.score = 0;
+                this.boost = 0;
+                this.boostActive = false;
+                this.topSpeed = 50;
+                this.obstacles = [];
+                
+                document.querySelectorAll('.obstacle').forEach(o => o.remove());
+                this.updatePlayerPos();
+                this.updateUI();
+                
+                this.gameLoop = setInterval(() => this.update(), 50);
+                this.obstacleInterval = setInterval(() => this.spawnObstacle(), 1500);
+            },
+            
+            update() {
+                if (!this.running) return;
+                
+                // Increase speed over time
+                this.speed += 0.1;
+                this.topSpeed = Math.max(this.topSpeed, Math.round(this.speed));
+                
+                // Update distance
+                this.distance += this.speed / 20;
+                
+                // Update score
+                this.score = Math.floor(this.distance * 10);
+                
+                // Recharge boost
+                if (!this.boostActive && this.boost < this.maxBoost) {
+                    this.boost += 0.5;
+                }
+                
+                // Move obstacles
+                this.obstacles.forEach((obstacle, index) => {
+                    const speed = this.boostActive ? this.speed * 2 : this.speed;
+                    obstacle.top += speed / 10;
+                    obstacle.element.style.top = obstacle.top + 'px';
+                    
+                    // Check collision
+                    if (obstacle.top > window.innerHeight - 200 && obstacle.top < window.innerHeight - 100) {
+                        if (obstacle.lane === this.playerPos) {
+                            this.crash();
+                        }
+                    }
+                    
+                    // Remove if off screen
+                    if (obstacle.top > window.innerHeight) {
+                        obstacle.element.remove();
+                        this.obstacles.splice(index, 1);
+                    }
+                });
+                
+                this.updateUI();
+            },
+            
+            spawnObstacle() {
+                if (!this.running) return;
+                
+                const lane = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+                const types = ['🚗', '🚙', '🚕', '🚌', '🛢️', '⚠️'];
+                const icon = types[Math.floor(Math.random() * types.length)];
+                
+                const obstacle = document.createElement('div');
+                obstacle.className = 'obstacle';
+                obstacle.textContent = icon;
+                obstacle.style.left = `calc(50% + ${lane * 100}px)`;
+                obstacle.style.top = '-100px';
+                
+                document.getElementById('track').appendChild(obstacle);
+                
+                this.obstacles.push({
+                    element: obstacle,
+                    lane: lane,
+                    top: -100
+                });
+            },
+            
+            handleInput(e) {
+                if (!this.running) return;
+                
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    this.playerPos = Math.max(-1, this.playerPos - 1);
+                    this.updatePlayerPos();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    this.playerPos = Math.min(1, this.playerPos + 1);
+                    this.updatePlayerPos();
+                } else if (e.key === ' ') {
+                    e.preventDefault();
+                    this.activateBoost();
+                }
+            },
+            
+            updatePlayerPos() {
+                const player = document.getElementById('player');
+                player.style.left = `calc(50% + ${this.playerPos * 100}px)`;
+            },
+            
+            activateBoost() {
+                if (this.boost >= 100 && !this.boostActive) {
+                    this.boostActive = true;
+                    this.boost = 0;
+                    this.speed *= 2;
+                    this.showMessage('BOOST ACTIVATED!', 'success');
+                    
+                    setTimeout(() => {
+                        this.boostActive = false;
+                        this.speed /= 2;
+                    }, 2000);
+                }
+            },
+            
+            crash() {
+                this.running = false;
+                clearInterval(this.gameLoop);
+                clearInterval(this.obstacleInterval);
+                
+                if (this.distance > this.bestDistance) {
+                    this.bestDistance = Math.floor(this.distance);
+                    this.showMessage('NEW RECORD!', 'success');
+                }
+                
+                if (this.distance >= 1000) {
+                    this.totalWins++;
+                    this.showMessage('YOU WIN!', 'success');
+                }
+                
+                this.saveStats();
+                
+                document.getElementById('final-distance').textContent = Math.floor(this.distance);
+                document.getElementById('final-score').textContent = this.score;
+                document.getElementById('final-speed').textContent = this.topSpeed;
+                document.getElementById('game-over').style.display = 'block';
+            },
+            
+            showMenu() {
+                document.getElementById('game-over').style.display = 'none';
+                document.getElementById('menu').style.display = 'block';
+                this.updateMenu();
+            },
+            
+            updateUI() {
+                document.getElementById('speed').textContent = Math.round(this.speed);
+                document.getElementById('distance').textContent = Math.floor(this.distance) + 'm';
+                document.getElementById('score').textContent = this.score;
+                
+                const boostPct = (this.boost / this.maxBoost) * 100;
+                document.getElementById('boost-bar').style.width = boostPct + '%';
+                
+                const road = document.querySelector('.road');
+                const animSpeed = Math.max(0.1, 1 - (this.speed / 200));
+                road.style.animationDuration = animSpeed + 's';
+            },
+            
+            updateMenu() {
+                document.getElementById('best-distance').textContent = this.bestDistance;
+                document.getElementById('total-wins').textContent = this.totalWins;
+            },
+            
+            saveStats() {
+                localStorage.setItem('racingGame', JSON.stringify({
+                    bestDistance: this.bestDistance,
+                    totalWins: this.totalWins
+                }));
+                this.showMessage('Stats saved!', 'success');
+            },
+            
+            loadStats() {
+                const saved = localStorage.getItem('racingGame');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.bestDistance = data.bestDistance || 0;
+                    this.totalWins = data.totalWins || 0;
+                }
+            },
+            
+            loadGame() {
+                const saved = localStorage.getItem('racingGame');
+                if (!saved) {
+                    this.showMessage('No saved game!', 'error');
+                    return;
+                }
+                this.loadStats();
+                this.updateMenu();
+                this.showMessage('Stats loaded!', 'success');
+            },
+            
+            showMessage(text, type) {
+                const container = document.getElementById('messages');
+                const msg = document.createElement('div');
+                msg.className = `message ${type}`;
+                msg.textContent = text;
+                container.appendChild(msg);
+                setTimeout(() => {
+                    msg.style.opacity = '0';
+                    msg.style.transform = 'translateX(100%)';
+                    setTimeout(() => msg.remove(), 300);
+                }, 2000);
+            }
+        };
+        
+        game.init();
+    </script>
+</body>
+</html>

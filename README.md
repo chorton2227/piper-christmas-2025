@@ -171,12 +171,6 @@ By the end of this course, Piper will be able to:
 - All content is kid-friendly and appropriate
 - Emphasizes creativity and practical application
 
-## 🎁 From Dad with Love
-
-This course is designed to be fun, engaging, and empowering. The goal isn't just to learn HTML, CSS, and JavaScript—it's to discover the joy of building things, the satisfaction of solving problems, and the confidence that comes from creating something real.
-
-**You can build anything you imagine. Let's start building!** 💻✨
-
 ---
 
 **Ready to begin?** Head to `lessons/module-1-html/lesson-1.1-what-is-html/` and let's start your web development journey! 🚀
