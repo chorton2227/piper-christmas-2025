@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Basics</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .demo-section h2 {
+            color: #764ba2;
+            margin-top: 0;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border-left: 4px solid #764ba2;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .object-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .property {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        .property-name {
+            color: #ffd43b;
+            font-weight: bold;
+        }
+        
+        .property-value {
+            color: #51cf66;
+        }
+        
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #764ba2;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 200px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Object Basics</h1>
+    
+    <!-- Demo 1: Creating Objects -->
+    <div class="demo-section">
+        <h2>Demo 1: Creating Objects</h2>
+        <p>Create objects using different methods!</p>
+        <button onclick="demo1()">Create Objects</button>
+        <div id="demo1-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 2: Accessing Properties -->
+    <div class="demo-section">
+        <h2>Demo 2: Accessing Properties</h2>
+        <p>Access object properties using dot notation and bracket notation</p>
+        <button onclick="demo2()">Access Properties</button>
+        <div id="demo2-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 3: Modifying Objects -->
+    <div class="demo-section">
+        <h2>Demo 3: Modifying Objects</h2>
+        <p>Change, add, and delete properties</p>
+        <div class="object-display" id="person-display">
+            <div class="property">
+                <span class="property-name">name:</span>
+                <span class="property-value">"Piper"</span>
+            </div>
+            <div class="property">
+                <span class="property-name">age:</span>
+                <span class="property-value">10</span>
+            </div>
+            <div class="property">
+                <span class="property-name">favoriteColor:</span>
+                <span class="property-value">"purple"</span>
+            </div>
+        </div>
+        <button onclick="changeName()">Change Name</button>
+        <button onclick="addProperty()">Add Grade</button>
+        <button onclick="deleteProperty()">Delete Age</button>
+        <button onclick="resetPerson()">Reset</button>
+        <div id="demo3-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 4: Object Methods -->
+    <div class="demo-section">
+        <h2>Demo 4: Object Methods</h2>
+        <p>Objects can have functions (methods)!</p>
+        <button onclick="demo4()">Run Methods</button>
+        <div id="demo4-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 5: The 'this' Keyword -->
+    <div class="demo-section">
+        <h2>Demo 5: Using 'this'</h2>
+        <p>The 'this' keyword refers to the object itself</p>
+        <button onclick="demo5()">Demonstrate 'this'</button>
+        <div id="demo5-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 6: Interactive Object Builder -->
+    <div class="demo-section">
+        <h2>Demo 6: Build Your Own Object</h2>
+        <p>Create a custom object!</p>
+        <div>
+            <input type="text" id="obj-name" placeholder="Name">
+            <input type="text" id="obj-age" placeholder="Age">
+            <input type="text" id="obj-color" placeholder="Favorite Color">
+            <button onclick="buildObject()">Create Object</button>
+        </div>
+        <div id="demo6-display"></div>
+        <div id="demo6-output" class="output"></div>
+    </div>
+    
+    <script>
+        // Demo 1: Creating Objects
+        function demo1() {
+            let output = document.getElementById('demo1-output');
+            output.innerHTML = '<h3>Different Ways to Create Objects:</h3>';
+            
+            // Method 1: Object literal
+            let person1 = {
+                name: "Piper",
+                age: 10,
+                favoriteColor: "purple"
+            };
+            
+            output.innerHTML += '<div><strong>Method 1: Object Literal</strong></div>';
+            output.innerHTML += '<div>let person = { name: "Piper", age: 10 };</div>';
+            output.innerHTML += '<div>Result: ' + JSON.stringify(person1) + '</div><br>';
+            
+            // Method 2: new Object()
+            let person2 = new Object();
+            person2.name = "Alex";
+            person2.age = 11;
+            person2.favoriteColor = "blue";
+            
+            output.innerHTML += '<div><strong>Method 2: new Object()</strong></div>';
+            output.innerHTML += '<div>let person = new Object();</div>';
+            output.innerHTML += '<div>person.name = "Alex";</div>';
+            output.innerHTML += '<div>Result: ' + JSON.stringify(person2) + '</div><br>';
+            
+            // Method 3: Empty object
+            let person3 = {};
+            person3.name = "Sam";
+            person3.age = 10;
+            
+            output.innerHTML += '<div><strong>Method 3: Empty Object</strong></div>';
+            output.innerHTML += '<div>let person = {};</div>';
+            output.innerHTML += '<div>person.name = "Sam";</div>';
+            output.innerHTML += '<div>Result: ' + JSON.stringify(person3) + '</div>';
+            
+            console.log('Method 1:', person1);
+            console.log('Method 2:', person2);
+            console.log('Method 3:', person3);
+        }
+        
+        // Demo 2: Accessing Properties
+        function demo2() {
+            let car = {
+                brand: "Tesla",
+                model: "Model 3",
+                year: 2024,
+                color: "red"
+            };
+            
+            let output = document.getElementById('demo2-output');
+            output.innerHTML = '<h3>Accessing Object Properties:</h3>';
+            
+            // Dot notation
+            output.innerHTML += '<div><strong>Dot Notation:</strong></div>';
+            output.innerHTML += '<div>car.brand = ' + car.brand + '</div>';
+            output.innerHTML += '<div>car.year = ' + car.year + '</div><br>';
+            
+            // Bracket notation
+            output.innerHTML += '<div><strong>Bracket Notation:</strong></div>';
+            output.innerHTML += '<div>car["model"] = ' + car["model"] + '</div>';
+            output.innerHTML += '<div>car["color"] = ' + car["color"] + '</div><br>';
+            
+            // Dynamic access
+            let propertyName = "brand";
+            output.innerHTML += '<div><strong>Dynamic Access:</strong></div>';
+            output.innerHTML += '<div>let propertyName = "brand";</div>';
+            output.innerHTML += '<div>car[propertyName] = ' + car[propertyName] + '</div><br>';
+            
+            // All properties
+            output.innerHTML += '<div><strong>All Properties:</strong></div>';
+            for (let key in car) {
+                output.innerHTML += '<div>car.' + key + ' = ' + car[key] + '</div>';
+            }
+            
+            console.log('Car object:', car);
+        }
+        
+        // Demo 3: Modifying Objects
+        let person = {
+            name: "Piper",
+            age: 10,
+            favoriteColor: "purple"
+        };
+        
+        function updateDisplay() {
+            let display = document.getElementById('person-display');
+            display.innerHTML = '';
+            
+            for (let key in person) {
+                display.innerHTML += '<div class="property">' +
+                    '<span class="property-name">' + key + ':</span> ' +
+                    '<span class="property-value">' + 
+                    (typeof person[key] === 'string' ? '"' + person[key] + '"' : person[key]) +
+                    '</span></div>';
+            }
+        }
+        
+        function changeName() {
+            person.name = "Piper Johnson";
+            updateDisplay();
+            document.getElementById('demo3-output').innerHTML = 
+                '<div>✅ Changed name to "Piper Johnson"</div>' +
+                '<div>Code: person.name = "Piper Johnson";</div>';
+            console.log('Name changed:', person.name);
+        }
+        
+        function addProperty() {
+            person.grade = 5;
+            updateDisplay();
+            document.getElementById('demo3-output').innerHTML = 
+                '<div>✅ Added grade property: 5</div>' +
+                '<div>Code: person.grade = 5;</div>';
+            console.log('Added grade:', person);
+        }
+        
+        function deleteProperty() {
+            delete person.age;
+            updateDisplay();
+            document.getElementById('demo3-output').innerHTML = 
+                '<div>✅ Deleted age property</div>' +
+                '<div>Code: delete person.age;</div>';
+            console.log('Deleted age:', person);
+        }
+        
+        function resetPerson() {
+            person = {
+                name: "Piper",
+                age: 10,
+                favoriteColor: "purple"
+            };
+            updateDisplay();
+            document.getElementById('demo3-output').innerHTML = '<div>🔄 Reset to original</div>';
+            console.log('Reset person:', person);
+        }
+        
+        // Demo 4: Object Methods
+        function demo4() {
+            let calculator = {
+                brand: "MathPro",
+                add: function(a, b) {
+                    return a + b;
+                },
+                subtract: function(a, b) {
+                    return a - b;
+                },
+                multiply: function(a, b) {
+                    return a * b;
+                },
+                divide: function(a, b) {
+                    if (b === 0) return "Cannot divide by zero!";
+                    return a / b;
+                }
+            };
+            
+            let output = document.getElementById('demo4-output');
+            output.innerHTML = '<h3>Calculator Object with Methods:</h3>';
+            
+            output.innerHTML += '<div>Brand: ' + calculator.brand + '</div><br>';
+            
+            output.innerHTML += '<div><strong>Testing Methods:</strong></div>';
+            output.innerHTML += '<div>calculator.add(5, 3) = ' + calculator.add(5, 3) + '</div>';
+            output.innerHTML += '<div>calculator.subtract(10, 4) = ' + calculator.subtract(10, 4) + '</div>';
+            output.innerHTML += '<div>calculator.multiply(6, 7) = ' + calculator.multiply(6, 7) + '</div>';
+            output.innerHTML += '<div>calculator.divide(20, 5) = ' + calculator.divide(20, 5) + '</div>';
+            output.innerHTML += '<div>calculator.divide(10, 0) = ' + calculator.divide(10, 0) + '</div>';
+            
+            console.log('Calculator:', calculator);
+            console.log('5 + 3 =', calculator.add(5, 3));
+        }
+        
+        // Demo 5: The 'this' Keyword
+        function demo5() {
+            let person = {
+                firstName: "Piper",
+                lastName: "Smith",
+                age: 10,
+                
+                introduce: function() {
+                    return "Hi! I'm " + this.firstName + " " + this.lastName + 
+                           " and I'm " + this.age + " years old.";
+                },
+                
+                haveBirthday: function() {
+                    this.age = this.age + 1;
+                    return "Happy birthday! You're now " + this.age;
+                },
+                
+                changeName: function(newFirst, newLast) {
+                    this.firstName = newFirst;
+                    this.lastName = newLast;
+                    return "Name changed to " + this.firstName + " " + this.lastName;
+                }
+            };
+            
+            let output = document.getElementById('demo5-output');
+            output.innerHTML = '<h3>Using "this" Keyword:</h3>';
+            
+            output.innerHTML += '<div><strong>Initial State:</strong></div>';
+            output.innerHTML += '<div>Name: ' + person.firstName + ' ' + person.lastName + '</div>';
+            output.innerHTML += '<div>Age: ' + person.age + '</div><br>';
+            
+            output.innerHTML += '<div><strong>Calling Methods:</strong></div>';
+            output.innerHTML += '<div>' + person.introduce() + '</div>';
+            output.innerHTML += '<div>' + person.haveBirthday() + '</div>';
+            output.innerHTML += '<div>' + person.changeName("Alex", "Johnson") + '</div>';
+            output.innerHTML += '<div>' + person.introduce() + '</div><br>';
+            
+            output.innerHTML += '<div><strong>Why "this" matters:</strong></div>';
+            output.innerHTML += '<div>"this" refers to the object itself</div>';
+            output.innerHTML += '<div>It lets methods access and modify the object\'s properties</div>';
+            
+            console.log('Person object:', person);
+        }
+        
+        // Demo 6: Build Your Own Object
+        function buildObject() {
+            let name = document.getElementById('obj-name').value;
+            let age = document.getElementById('obj-age').value;
+            let color = document.getElementById('obj-color').value;
+            
+            if (!name || !age || !color) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            let customObject = {
+                name: name,
+                age: parseInt(age),
+                favoriteColor: color,
+                introduce: function() {
+                    return "Hi! I'm " + this.name + ", I'm " + this.age + 
+                           " years old, and my favorite color is " + this.favoriteColor + "!";
+                }
+            };
+            
+            let display = document.getElementById('demo6-display');
+            display.innerHTML = '<div class="object-display">';
+            display.innerHTML += '<div class="property"><span class="property-name">name:</span> <span class="property-value">"' + customObject.name + '"</span></div>';
+            display.innerHTML += '<div class="property"><span class="property-name">age:</span> <span class="property-value">' + customObject.age + '</span></div>';
+            display.innerHTML += '<div class="property"><span class="property-name">favoriteColor:</span> <span class="property-value">"' + customObject.favoriteColor + '"</span></div>';
+            display.innerHTML += '<div class="property"><span class="property-name">introduce:</span> <span class="property-value">function() {...}</span></div>';
+            display.innerHTML += '</div>';
+            
+            let output = document.getElementById('demo6-output');
+            output.innerHTML = '<h3>Your Object:</h3>';
+            output.innerHTML += '<div>' + customObject.introduce() + '</div>';
+            output.innerHTML += '<div style="margin-top: 10px;">Object as JSON: ' + 
+                              JSON.stringify({ name: customObject.name, age: customObject.age, favoriteColor: customObject.favoriteColor }) + '</div>';
+            
+            console.log('Custom object created:', customObject);
+            console.log(customObject.introduce());
+        }
+        
+        console.log('Object Basics Examples loaded!');
+        console.log('Learn how to create, access, and modify objects!');
+    </script>
+</body>
+</html>

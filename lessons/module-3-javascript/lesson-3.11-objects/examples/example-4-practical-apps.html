@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical Objects - Real World Apps</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .app-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .app-container h2 {
+            color: #a6c1ee;
+            margin-top: 0;
+            border-bottom: 3px solid #fbc2eb;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        .todo-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #a6c1ee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-left-color: #51cf66;
+        }
+        
+        .cart-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cart-item-details {
+            flex-grow: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .cart-item-price {
+            color: #51cf66;
+            font-weight: bold;
+        }
+        
+        .total-display {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .pet-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-bar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .stat-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .progress-health { background: #ff6b6b; }
+        .progress-hunger { background: #ffd43b; }
+        .progress-happiness { background: #51cf66; }
+        .progress-energy { background: #4dabf7; }
+        
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #a6c1ee;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 300px;
+            margin: 5px;
+        }
+        
+        .pet-display {
+            text-align: center;
+            font-size: 100px;
+            margin: 20px 0;
+        }
+        
+        .message {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Real-World Object Applications</h1>
+    
+    <!-- App 1: To-Do List Manager -->
+    <div class="app-container">
+        <h2>📝 To-Do List Manager</h2>
+        <p>Manage tasks using objects</p>
+        
+        <div>
+            <input type="text" id="todo-input" placeholder="Enter a new task...">
+            <button onclick="addTodo()">Add Task</button>
+            <button class="secondary" onclick="clearCompleted()">Clear Completed</button>
+        </div>
+        
+        <div id="todo-list"></div>
+        <div id="todo-stats" style="margin-top: 20px; color: #666;"></div>
+    </div>
+    
+    <!-- App 2: Shopping Cart -->
+    <div class="app-container">
+        <h2>🛒 Shopping Cart</h2>
+        <p>Add items and calculate totals</p>
+        
+        <div>
+            <button onclick="addToCart('Laptop', 999)">Add Laptop ($999)</button>
+            <button onclick="addToCart('Mouse', 25)">Add Mouse ($25)</button>
+            <button onclick="addToCart('Keyboard', 75)">Add Keyboard ($75)</button>
+            <button onclick="addToCart('Monitor', 299)">Add Monitor ($299)</button>
+            <button class="secondary" onclick="clearCart()">Clear Cart</button>
+        </div>
+        
+        <div id="cart-items"></div>
+        <div id="cart-total" class="total-display">Cart is empty</div>
+    </div>
+    
+    <!-- App 3: Virtual Pet -->
+    <div class="app-container">
+        <h2>🐾 Virtual Pet Simulator</h2>
+        <p>Take care of your virtual pet!</p>
+        
+        <div class="pet-display" id="pet-emoji">🐱</div>
+        
+        <div class="pet-stats">
+            <div class="stat-bar">
+                <div class="stat-label">❤️ Health</div>
+                <div class="progress-bar">
+                    <div id="health-bar" class="progress-fill progress-health" style="width: 100%"></div>
+                </div>
+                <div id="health-text">100</div>
+            </div>
+            
+            <div class="stat-bar">
+                <div class="stat-label">🍖 Hunger</div>
+                <div class="progress-bar">
+                    <div id="hunger-bar" class="progress-fill progress-hunger" style="width: 50%"></div>
+                </div>
+                <div id="hunger-text">50</div>
+            </div>
+            
+            <div class="stat-bar">
+                <div class="stat-label">😊 Happiness</div>
+                <div class="progress-bar">
+                    <div id="happiness-bar" class="progress-fill progress-happiness" style="width: 80%"></div>
+                </div>
+                <div id="happiness-text">80</div>
+            </div>
+            
+            <div class="stat-bar">
+                <div class="stat-label">⚡ Energy</div>
+                <div class="progress-bar">
+                    <div id="energy-bar" class="progress-fill progress-energy" style="width: 70%"></div>
+                </div>
+                <div id="energy-text">70</div>
+            </div>
+        </div>
+        
+        <div>
+            <button onclick="feedPet()">🍖 Feed</button>
+            <button onclick="playWithPet()">🎾 Play</button>
+            <button onclick="petSleep()">😴 Sleep</button>
+            <button onclick="healPet()">💊 Heal</button>
+        </div>
+        
+        <div id="pet-message"></div>
+    </div>
+    
+    <script>
+        // App 1: To-Do List Manager
+        let todoList = {
+            tasks: [],
+            nextId: 1,
+            
+            addTask: function(description) {
+                let task = {
+                    id: this.nextId++,
+                    description: description,
+                    completed: false,
+                    createdAt: new Date().toLocaleString()
+                };
+                this.tasks.push(task);
+                return task;
+            },
+            
+            toggleTask: function(id) {
+                let task = this.tasks.find(t => t.id === id);
+                if (task) {
+                    task.completed = !task.completed;
+                }
+            },
+            
+            deleteTask: function(id) {
+                this.tasks = this.tasks.filter(t => t.id !== id);
+            },
+            
+            clearCompleted: function() {
+                this.tasks = this.tasks.filter(t => !t.completed);
+            },
+            
+            getStats: function() {
+                let total = this.tasks.length;
+                let completed = this.tasks.filter(t => t.completed).length;
+                let remaining = total - completed;
+                return { total, completed, remaining };
+            }
+        };
+        
+        function addTodo() {
+            let input = document.getElementById('todo-input');
+            let description = input.value.trim();
+            
+            if (!description) {
+                alert('Please enter a task!');
+                return;
+            }
+            
+            todoList.addTask(description);
+            input.value = '';
+            updateTodoDisplay();
+            console.log('Task added:', description);
+        }
+        
+        function toggleTodo(id) {
+            todoList.toggleTask(id);
+            updateTodoDisplay();
+            console.log('Task toggled:', id);
+        }
+        
+        function deleteTodo(id) {
+            todoList.deleteTask(id);
+            updateTodoDisplay();
+            console.log('Task deleted:', id);
+        }
+        
+        function clearCompleted() {
+            todoList.clearCompleted();
+            updateTodoDisplay();
+            console.log('Completed tasks cleared');
+        }
+        
+        function updateTodoDisplay() {
+            let list = document.getElementById('todo-list');
+            list.innerHTML = '';
+            
+            if (todoList.tasks.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">No tasks yet. Add one above!</div>';
+            } else {
+                todoList.tasks.forEach(task => {
+                    let div = document.createElement('div');
+                    div.className = 'todo-item' + (task.completed ? ' completed' : '');
+                    div.innerHTML = `
+                        <div>
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                                   onchange="toggleTodo(${task.id})">
+                            ${task.description}
+                        </div>
+                        <button onclick="deleteTodo(${task.id})" class="secondary">Delete</button>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+            
+            let stats = todoList.getStats();
+            document.getElementById('todo-stats').textContent = 
+                `Total: ${stats.total} | Completed: ${stats.completed} | Remaining: ${stats.remaining}`;
+        }
+        
+        // App 2: Shopping Cart
+        let shoppingCart = {
+            items: [],
+            
+            addItem: function(name, price) {
+                let existingItem = this.items.find(item => item.name === name);
+                
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    this.items.push({
+                        name: name,
+                        price: price,
+                        quantity: 1
+                    });
+                }
+            },
+            
+            removeItem: function(name) {
+                this.items = this.items.filter(item => item.name !== name);
+            },
+            
+            updateQuantity: function(name, delta) {
+                let item = this.items.find(item => item.name === name);
+                if (item) {
+                    item.quantity += delta;
+                    if (item.quantity <= 0) {
+                        this.removeItem(name);
+                    }
+                }
+            },
+            
+            getTotal: function() {
+                return this.items.reduce((total, item) => {
+                    return total + (item.price * item.quantity);
+                }, 0);
+            },
+            
+            getItemCount: function() {
+                return this.items.reduce((count, item) => count + item.quantity, 0);
+            },
+            
+            clear: function() {
+                this.items = [];
+            }
+        };
+        
+        function addToCart(name, price) {
+            shoppingCart.addItem(name, price);
+            updateCartDisplay();
+            console.log('Added to cart:', name, '$' + price);
+        }
+        
+        function removeFromCart(name) {
+            shoppingCart.removeItem(name);
+            updateCartDisplay();
+            console.log('Removed from cart:', name);
+        }
+        
+        function updateCartQuantity(name, delta) {
+            shoppingCart.updateQuantity(name, delta);
+            updateCartDisplay();
+        }
+        
+        function clearCart() {
+            shoppingCart.clear();
+            updateCartDisplay();
+            console.log('Cart cleared');
+        }
+        
+        function updateCartDisplay() {
+            let itemsDiv = document.getElementById('cart-items');
+            itemsDiv.innerHTML = '';
+            
+            if (shoppingCart.items.length === 0) {
+                itemsDiv.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">Cart is empty</div>';
+            } else {
+                shoppingCart.items.forEach(item => {
+                    let div = document.createElement('div');
+                    div.className = 'cart-item';
+                    div.innerHTML = `
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price} × ${item.quantity} = $${item.price * item.quantity}</div>
+                        </div>
+                        <div>
+                            <button onclick="updateCartQuantity('${item.name}', -1)">-</button>
+                            <span style="margin: 0 10px; font-weight: bold;">${item.quantity}</span>
+                            <button onclick="updateCartQuantity('${item.name}', 1)">+</button>
+                            <button class="secondary" onclick="removeFromCart('${item.name}')">Remove</button>
+                        </div>
+                    `;
+                    itemsDiv.appendChild(div);
+                });
+            }
+            
+            let totalDiv = document.getElementById('cart-total');
+            if (shoppingCart.items.length === 0) {
+                totalDiv.textContent = 'Cart is empty';
+            } else {
+                totalDiv.textContent = `Total: $${shoppingCart.getTotal()} (${shoppingCart.getItemCount()} items)`;
+            }
+        }
+        
+        // App 3: Virtual Pet
+        let virtualPet = {
+            name: "Fluffy",
+            type: "cat",
+            emoji: "🐱",
+            health: 100,
+            hunger: 50,
+            happiness: 80,
+            energy: 70,
+            
+            feed: function() {
+                this.hunger = Math.max(0, this.hunger - 30);
+                this.happiness = Math.min(100, this.happiness + 10);
+                this.energy = Math.min(100, this.energy + 5);
+                return this.name + " ate! Yum! 🍖";
+            },
+            
+            play: function() {
+                if (this.energy < 20) {
+                    return this.name + " is too tired to play! 😴";
+                }
+                this.happiness = Math.min(100, this.happiness + 20);
+                this.hunger = Math.min(100, this.hunger + 15);
+                this.energy = Math.max(0, this.energy - 20);
+                return this.name + " had fun playing! 🎾";
+            },
+            
+            sleep: function() {
+                this.energy = Math.min(100, this.energy + 30);
+                this.hunger = Math.min(100, this.hunger + 10);
+                this.happiness = Math.min(100, this.happiness + 5);
+                return this.name + " took a nap! 😴";
+            },
+            
+            heal: function() {
+                this.health = 100;
+                return this.name + " is feeling better! 💊";
+            },
+            
+            tick: function() {
+                // Passive changes over time
+                this.hunger = Math.min(100, this.hunger + 1);
+                this.energy = Math.max(0, this.energy - 0.5);
+                this.happiness = Math.max(0, this.happiness - 0.5);
+                
+                // Health affected by hunger
+                if (this.hunger > 80) {
+                    this.health = Math.max(0, this.health - 1);
+                }
+            }
+        };
+        
+        function feedPet() {
+            let message = virtualPet.feed();
+            updatePetDisplay(message);
+            console.log('Fed pet');
+        }
+        
+        function playWithPet() {
+            let message = virtualPet.play();
+            updatePetDisplay(message);
+            console.log('Played with pet');
+        }
+        
+        function petSleep() {
+            let message = virtualPet.sleep();
+            updatePetDisplay(message);
+            console.log('Pet slept');
+        }
+        
+        function healPet() {
+            let message = virtualPet.heal();
+            updatePetDisplay(message);
+            console.log('Pet healed');
+        }
+        
+        function updatePetDisplay(message) {
+            // Update bars
+            document.getElementById('health-bar').style.width = virtualPet.health + '%';
+            document.getElementById('health-text').textContent = virtualPet.health;
+            
+            document.getElementById('hunger-bar').style.width = virtualPet.hunger + '%';
+            document.getElementById('hunger-text').textContent = virtualPet.hunger;
+            
+            document.getElementById('happiness-bar').style.width = virtualPet.happiness + '%';
+            document.getElementById('happiness-text').textContent = virtualPet.happiness;
+            
+            document.getElementById('energy-bar').style.width = virtualPet.energy + '%';
+            document.getElementById('energy-text').textContent = virtualPet.energy;
+            
+            // Show message
+            if (message) {
+                let messageDiv = document.getElementById('pet-message');
+                messageDiv.innerHTML = '<div class="message">' + message + '</div>';
+                setTimeout(() => messageDiv.innerHTML = '', 3000);
+            }
+        }
+        
+        // Pet simulation tick
+        setInterval(() => {
+            virtualPet.tick();
+            updatePetDisplay();
+        }, 5000);
+        
+        // Initialize displays
+        updateTodoDisplay();
+        updateCartDisplay();
+        updatePetDisplay();
+        
+        console.log('Real-World Object Applications loaded!');
+        console.log('Three practical examples: To-Do List, Shopping Cart, Virtual Pet');
+    </script>
+</body>
+</html>
