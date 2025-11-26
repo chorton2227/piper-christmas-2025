@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Quest - Exercise 1 Complete</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        /* Stats Display */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        /* Location Display */
+        .location {
+            background: linear-gradient(to right, #fff, #f8f9fa);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 20px;
+            min-height: 120px;
+        }
+        
+        .location h2 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .location p {
+            color: #495057;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        /* Combat Display */
+        .combat-section {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: white;
+            display: none;
+        }
+        
+        .combat-section.active {
+            display: block;
+        }
+        
+        .enemy-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .enemy-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .health-bar {
+            background: rgba(255,255,255,0.3);
+            height: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .health-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .combat-log {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .combat-message {
+            padding: 5px;
+            margin: 3px 0;
+            border-radius: 3px;
+        }
+        
+        .combat-message.player {
+            background: rgba(40, 167, 69, 0.3);
+        }
+        
+        .combat-message.enemy {
+            background: rgba(220, 53, 69, 0.3);
+        }
+        
+        .combat-message.info {
+            background: rgba(255, 193, 7, 0.3);
+        }
+        
+        /* Action Buttons */
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        button.danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+        
+        button.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        button.warning {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+        }
+        
+        /* Inventory */
+        .inventory {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .inventory h3 {
+            margin-bottom: 15px;
+            color: #764ba2;
+            font-size: 20px;
+        }
+        
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .inventory-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .inventory-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .item-name {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .item-description {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        /* Shop Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: #764ba2;
+        }
+        
+        .close-btn {
+            background: #dc3545;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            padding: 0;
+        }
+        
+        .shop-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .shop-item-info h4 {
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .shop-item-info p {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .shop-item-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffc107;
+            margin-right: 15px;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .controls button {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        /* Messages */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 600;
+            text-align: center;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .inventory-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>⚔️ Adventure Quest ⚔️</h1>
+        
+        <!-- Player Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">❤️ Health</div>
+                <div class="stat-value" id="health">100/100</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">💰 Gold</div>
+                <div class="stat-value" id="gold">50</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">⚔️ Attack</div>
+                <div class="stat-value" id="attack">10</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">🛡️ Defense</div>
+                <div class="stat-value" id="defense">5</div>
+            </div>
+        </div>
+        
+        <!-- Messages -->
+        <div id="messages"></div>
+        
+        <!-- Location Display -->
+        <div class="location">
+            <h2 id="location-name">Town Square</h2>
+            <p id="location-description">Welcome to the town square...</p>
+        </div>
+        
+        <!-- Combat Section -->
+        <div class="combat-section" id="combat-section">
+            <div class="enemy-info">
+                <div class="enemy-name" id="enemy-name">Enemy</div>
+                <div class="health-bar">
+                    <div class="health-fill" id="enemy-health-bar">100 / 100</div>
+                </div>
+            </div>
+            
+            <div class="actions" id="combat-actions">
+                <button onclick="game.attack()" class="danger">⚔️ Attack</button>
+                <button onclick="game.defend()" class="warning">🛡️ Defend</button>
+                <button onclick="game.usePotion()" class="success">🧪 Potion</button>
+                <button onclick="game.flee()">🏃 Flee</button>
+            </div>
+            
+            <div class="combat-log" id="combat-log"></div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="actions" id="action-buttons"></div>
+        
+        <!-- Inventory -->
+        <div class="inventory">
+            <h3>🎒 Inventory</h3>
+            <div class="inventory-grid" id="inventory"></div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button onclick="game.saveGame()" class="success">💾 Save Game</button>
+            <button onclick="game.loadGame()" class="warning">📂 Load Game</button>
+            <button onclick="game.resetGame()" class="danger">🔄 Reset Game</button>
+        </div>
+    </div>
+    
+    <!-- Shop Modal -->
+    <div class="modal" id="shop-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏪 Item Shop</h2>
+                <button class="close-btn" onclick="game.closeShop()">×</button>
+            </div>
+            <div id="shop-items"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // GAME DATA
+        // ==========================================
+        
+        const ITEMS = {
+            healthPotion: {
+                id: 'healthPotion',
+                name: 'Health Potion',
+                description: 'Restores 30 HP',
+                type: 'consumable',
+                healing: 30,
+                price: 20
+            },
+            sword: {
+                id: 'sword',
+                name: 'Iron Sword',
+                description: '+5 Attack',
+                type: 'weapon',
+                attackBonus: 5,
+                price: 50
+            },
+            shield: {
+                id: 'shield',
+                name: 'Wooden Shield',
+                description: '+3 Defense',
+                type: 'armor',
+                defenseBonus: 3,
+                price: 40
+            },
+            megaPotion: {
+                id: 'megaPotion',
+                name: 'Mega Potion',
+                description: 'Restores 50 HP',
+                type: 'consumable',
+                healing: 50,
+                price: 40
+            }
+        };
+        
+        const MONSTERS = {
+            goblin: {
+                id: 'goblin',
+                name: 'Goblin',
+                health: 30,
+                maxHealth: 30,
+                attack: 5,
+                defense: 2,
+                gold: 15,
+                xp: 10
+            },
+            wolf: {
+                id: 'wolf',
+                name: 'Wolf',
+                health: 40,
+                maxHealth: 40,
+                attack: 7,
+                defense: 3,
+                gold: 20,
+                xp: 15
+            },
+            bandit: {
+                id: 'bandit',
+                name: 'Bandit',
+                health: 50,
+                maxHealth: 50,
+                attack: 8,
+                defense: 4,
+                gold: 30,
+                xp: 20
+            },
+            orc: {
+                id: 'orc',
+                name: 'Orc',
+                health: 70,
+                maxHealth: 70,
+                attack: 10,
+                defense: 5,
+                gold: 50,
+                xp: 30
+            }
+        };
+        
+        const LOCATIONS = {
+            town: {
+                id: 'town',
+                name: 'Town Square',
+                description: 'You are in the town square. Villagers bustle about their daily business. The shop and tavern are nearby.',
+                actions: [
+                    { text: '🏪 Visit Shop', action: 'openShop' },
+                    { text: '🍺 Visit Tavern', action: 'visitTavern' },
+                    { text: '🌲 Go to Forest', action: 'goToForest' },
+                    { text: '🏔️ Go to Cave', action: 'goToCave' }
+                ]
+            },
+            forest: {
+                id: 'forest',
+                name: 'Dark Forest',
+                description: 'Tall trees surround you. Strange noises echo in the distance.',
+                encounters: ['goblin', 'wolf', 'bandit'],
+                actions: [
+                    { text: '⚔️ Hunt for Monsters', action: 'hunt' },
+                    { text: '🔍 Explore', action: 'explore' },
+                    { text: '🏘️ Return to Town', action: 'goToTown' }
+                ]
+            },
+            cave: {
+                id: 'cave',
+                name: 'Mysterious Cave',
+                description: 'A dark cave entrance looms before you. You hear echoing sounds from within.',
+                encounters: ['wolf', 'bandit', 'orc'],
+                actions: [
+                    { text: '⚔️ Hunt for Monsters', action: 'hunt' },
+                    { text: '🔍 Explore', action: 'explore' },
+                    { text: '🏘️ Return to Town', action: 'goToTown' }
+                ]
+            },
+            tavern: {
+                id: 'tavern',
+                name: 'Cozy Tavern',
+                description: 'A warm fireplace crackles in the corner. The innkeeper greets you with a smile.',
+                actions: [
+                    { text: '💤 Rest (20g)', action: 'rest' },
+                    { text: '🏘️ Leave', action: 'goToTown' }
+                ]
+            }
+        };
+        
+        // ==========================================
+        // GAME OBJECT
+        // ==========================================
+        
+        const game = {
+            player: {
+                health: 100,
+                maxHealth: 100,
+                attack: 10,
+                defense: 5,
+                gold: 50,
+                xp: 0,
+                level: 1,
+                inventory: []
+            },
+            
+            currentLocation: 'town',
+            inCombat: false,
+            currentEnemy: null,
+            playerDefending: false,
+            
+            // Initialize game
+            init() {
+                // Add starting items
+                this.player.inventory.push('healthPotion');
+                this.player.inventory.push('healthPotion');
+                
+                // Check for saved game
+                if (localStorage.getItem('adventureGame')) {
+                    this.showMessage('Found saved game! Click "Load Game" to continue.', 'info');
+                }
+                
+                this.updateUI();
+            },
+            
+            // Update all UI elements
+            updateUI() {
+                // Update stats
+                document.getElementById('health').textContent = 
+                    `${this.player.health}/${this.player.maxHealth}`;
+                document.getElementById('gold').textContent = this.player.gold;
+                document.getElementById('attack').textContent = this.player.attack;
+                document.getElementById('defense').textContent = this.player.defense;
+                
+                // Update location
+                const location = LOCATIONS[this.currentLocation];
+                document.getElementById('location-name').textContent = location.name;
+                document.getElementById('location-description').textContent = location.description;
+                
+                // Update action buttons
+                this.updateActionButtons();
+                
+                // Update inventory
+                this.updateInventory();
+            },
+            
+            // Update action buttons based on location
+            updateActionButtons() {
+                const location = LOCATIONS[this.currentLocation];
+                const actionsDiv = document.getElementById('action-buttons');
+                actionsDiv.innerHTML = '';
+                
+                location.actions.forEach(action => {
+                    const button = document.createElement('button');
+                    button.textContent = action.text;
+                    button.onclick = () => this[action.action]();
+                    actionsDiv.appendChild(button);
+                });
+            },
+            
+            // Update inventory display
+            updateInventory() {
+                const inventoryDiv = document.getElementById('inventory');
+                inventoryDiv.innerHTML = '';
+                
+                if (this.player.inventory.length === 0) {
+                    inventoryDiv.innerHTML = '<p style="color: #6c757d; text-align: center;">Empty</p>';
+                    return;
+                }
+                
+                // Count items
+                const itemCounts = {};
+                this.player.inventory.forEach(itemId => {
+                    itemCounts[itemId] = (itemCounts[itemId] || 0) + 1;
+                });
+                
+                // Display items
+                for (let itemId in itemCounts) {
+                    const item = ITEMS[itemId];
+                    const count = itemCounts[itemId];
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'inventory-item';
+                    itemDiv.onclick = () => this.useItem(itemId);
+                    
+                    itemDiv.innerHTML = `
+                        <div class="item-name">${item.name} ${count > 1 ? `(×${count})` : ''}</div>
+                        <div class="item-description">${item.description}</div>
+                    `;
+                    
+                    inventoryDiv.appendChild(itemDiv);
+                }
+            },
+            
+            // Navigate to location
+            goToLocation(locationId) {
+                this.currentLocation = locationId;
+                this.inCombat = false;
+                document.getElementById('combat-section').classList.remove('active');
+                this.updateUI();
+            },
+            
+            // Location navigation methods
+            goToTown() { this.goToLocation('town'); },
+            goToForest() { this.goToLocation('forest'); },
+            goToCave() { this.goToLocation('cave'); },
+            visitTavern() { this.goToLocation('tavern'); },
+            
+            // Explore location for gold
+            explore() {
+                const goldFound = Math.floor(Math.random() * 20) + 10;
+                this.player.gold += goldFound;
+                this.showMessage(`You found ${goldFound} gold!`, 'success');
+                this.updateUI();
+            },
+            
+            // Hunt for monsters
+            hunt() {
+                const location = LOCATIONS[this.currentLocation];
+                if (!location.encounters) {
+                    this.showMessage('No monsters here!', 'error');
+                    return;
+                }
+                
+                const monsterId = location.encounters[
+                    Math.floor(Math.random() * location.encounters.length)
+                ];
+                
+                this.startCombat(monsterId);
+            },
+            
+            // Start combat
+            startCombat(monsterId) {
+                // Create enemy copy
+                this.currentEnemy = JSON.parse(JSON.stringify(MONSTERS[monsterId]));
+                this.inCombat = true;
+                this.playerDefending = false;
+                
+                // Show combat section
+                document.getElementById('combat-section').classList.add('active');
+                document.getElementById('enemy-name').textContent = this.currentEnemy.name;
+                this.updateEnemyHealthBar();
+                
+                // Clear combat log
+                document.getElementById('combat-log').innerHTML = '';
+                
+                this.addCombatMessage(`A ${this.currentEnemy.name} appears!`, 'info');
+            },
+            
+            // Player attack
+            attack() {
+                if (!this.inCombat) return;
+                
+                // Calculate damage
+                const baseDamage = this.player.attack;
+                const damage = Math.max(0, Math.floor(
+                    Math.random() * baseDamage + baseDamage / 2
+                ) - this.currentEnemy.defense);
+                
+                this.currentEnemy.health -= damage;
+                this.addCombatMessage(`You attack for ${damage} damage!`, 'player');
+                this.updateEnemyHealthBar();
+                
+                if (this.currentEnemy.health <= 0) {
+                    this.victory();
+                } else {
+                    setTimeout(() => this.enemyAttack(), 1000);
+                }
+                
+                this.playerDefending = false;
+            },
+            
+            // Player defend
+            defend() {
+                if (!this.inCombat) return;
+                
+                this.playerDefending = true;
+                this.addCombatMessage('You brace for impact!', 'player');
+                
+                setTimeout(() => this.enemyAttack(), 1000);
+            },
+            
+            // Use potion in combat
+            usePotion() {
+                if (!this.inCombat) return;
+                
+                // Find a potion
+                const potionIndex = this.player.inventory.findIndex(itemId => 
+                    ITEMS[itemId].type === 'consumable'
+                );
+                
+                if (potionIndex === -1) {
+                    this.showMessage('No potions in inventory!', 'error');
+                    return;
+                }
+                
+                const potionId = this.player.inventory[potionIndex];
+                const potion = ITEMS[potionId];
+                
+                // Use potion
+                this.player.health = Math.min(
+                    this.player.health + potion.healing,
+                    this.player.maxHealth
+                );
+                
+                this.player.inventory.splice(potionIndex, 1);
+                this.addCombatMessage(`Used ${potion.name}! Healed ${potion.healing} HP`, 'player');
+                this.updateUI();
+                
+                setTimeout(() => this.enemyAttack(), 1000);
+            },
+            
+            // Flee from combat
+            flee() {
+                if (!this.inCombat) return;
+                
+                // 50% chance to flee
+                if (Math.random() < 0.5) {
+                    this.addCombatMessage('You fled successfully!', 'info');
+                    setTimeout(() => {
+                        this.inCombat = false;
+                        document.getElementById('combat-section').classList.remove('active');
+                        this.showMessage('You escaped!', 'success');
+                    }, 1000);
+                } else {
+                    this.addCombatMessage('Failed to escape!', 'info');
+                    setTimeout(() => this.enemyAttack(), 1000);
+                }
+            },
+            
+            // Enemy attack
+            enemyAttack() {
+                if (!this.inCombat) return;
+                
+                // 10% miss chance
+                if (Math.random() < 0.1) {
+                    this.addCombatMessage('The enemy missed!', 'enemy');
+                    return;
+                }
+                
+                // Calculate damage
+                const baseDamage = this.currentEnemy.attack;
+                let damage = Math.floor(Math.random() * baseDamage + baseDamage / 2);
+                
+                // Apply defense
+                const defense = this.playerDefending ? this.player.defense * 2 : this.player.defense;
+                damage = Math.max(0, damage - defense);
+                
+                this.player.health -= damage;
+                this.addCombatMessage(
+                    `${this.currentEnemy.name} attacks for ${damage} damage!`, 
+                    'enemy'
+                );
+                
+                if (this.playerDefending) {
+                    this.addCombatMessage('Your defense absorbed some damage!', 'info');
+                }
+                
+                this.updateUI();
+                
+                if (this.player.health <= 0) {
+                    this.defeat();
+                }
+                
+                this.playerDefending = false;
+            },
+            
+            // Victory
+            victory() {
+                this.inCombat = false;
+                
+                const goldReward = this.currentEnemy.gold;
+                const xpReward = this.currentEnemy.xp;
+                
+                this.player.gold += goldReward;
+                this.player.xp += xpReward;
+                
+                this.addCombatMessage(
+                    `Victory! Earned ${goldReward} gold and ${xpReward} XP!`, 
+                    'info'
+                );
+                
+                setTimeout(() => {
+                    document.getElementById('combat-section').classList.remove('active');
+                    this.showMessage('You won the battle!', 'success');
+                    this.checkLevelUp();
+                    this.updateUI();
+                }, 2000);
+            },
+            
+            // Defeat
+            defeat() {
+                this.inCombat = false;
+                
+                const goldLost = Math.floor(this.player.gold * 0.2);
+                this.player.gold -= goldLost;
+                this.player.health = this.player.maxHealth;
+                
+                this.addCombatMessage('You were defeated!', 'enemy');
+                
+                setTimeout(() => {
+                    document.getElementById('combat-section').classList.remove('active');
+                    this.currentLocation = 'town';
+                    this.showMessage(`Defeated! Lost ${goldLost} gold. Returned to town.`, 'error');
+                    this.updateUI();
+                }, 2000);
+            },
+            
+            // Check for level up
+            checkLevelUp() {
+                const xpNeeded = this.player.level * 100;
+                
+                while (this.player.xp >= xpNeeded) {
+                    this.player.xp -= xpNeeded;
+                    this.player.level++;
+                    
+                    // Increase stats
+                    this.player.maxHealth += 10;
+                    this.player.health = this.player.maxHealth;
+                    this.player.attack += 2;
+                    this.player.defense += 1;
+                    
+                    this.showMessage(`Level Up! Now level ${this.player.level}!`, 'success');
+                }
+            },
+            
+            // Update enemy health bar
+            updateEnemyHealthBar() {
+                const percentage = (this.currentEnemy.health / this.currentEnemy.maxHealth) * 100;
+                const healthBar = document.getElementById('enemy-health-bar');
+                healthBar.style.width = percentage + '%';
+                healthBar.textContent = `${this.currentEnemy.health} / ${this.currentEnemy.maxHealth}`;
+            },
+            
+            // Add combat log message
+            addCombatMessage(text, type) {
+                const logDiv = document.getElementById('combat-log');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `combat-message ${type}`;
+                messageDiv.textContent = text;
+                logDiv.appendChild(messageDiv);
+                logDiv.scrollTop = logDiv.scrollHeight;
+            },
+            
+            // Use item from inventory
+            useItem(itemId) {
+                const item = ITEMS[itemId];
+                
+                if (item.type === 'consumable') {
+                    if (this.player.health === this.player.maxHealth) {
+                        this.showMessage('Already at full health!', 'info');
+                        return;
+                    }
+                    
+                    this.player.health = Math.min(
+                        this.player.health + item.healing,
+                        this.player.maxHealth
+                    );
+                    
+                    const index = this.player.inventory.indexOf(itemId);
+                    this.player.inventory.splice(index, 1);
+                    
+                    this.showMessage(`Used ${item.name}! Healed ${item.healing} HP`, 'success');
+                    this.updateUI();
+                } else if (item.type === 'weapon') {
+                    this.player.attack += item.attackBonus;
+                    const index = this.player.inventory.indexOf(itemId);
+                    this.player.inventory.splice(index, 1);
+                    this.showMessage(`Equipped ${item.name}! Attack increased!`, 'success');
+                    this.updateUI();
+                } else if (item.type === 'armor') {
+                    this.player.defense += item.defenseBonus;
+                    const index = this.player.inventory.indexOf(itemId);
+                    this.player.inventory.splice(index, 1);
+                    this.showMessage(`Equipped ${item.name}! Defense increased!`, 'success');
+                    this.updateUI();
+                }
+            },
+            
+            // Open shop
+            openShop() {
+                const modal = document.getElementById('shop-modal');
+                const shopItemsDiv = document.getElementById('shop-items');
+                shopItemsDiv.innerHTML = '';
+                
+                // Display shop items
+                for (let itemId in ITEMS) {
+                    const item = ITEMS[itemId];
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'shop-item';
+                    
+                    itemDiv.innerHTML = `
+                        <div class="shop-item-info">
+                            <h4>${item.name}</h4>
+                            <p>${item.description}</p>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div class="shop-item-price">${item.price}g</div>
+                            <button onclick="game.buyItem('${itemId}')">Buy</button>
+                        </div>
+                    `;
+                    
+                    shopItemsDiv.appendChild(itemDiv);
+                }
+                
+                modal.classList.add('active');
+            },
+            
+            // Close shop
+            closeShop() {
+                document.getElementById('shop-modal').classList.remove('active');
+            },
+            
+            // Buy item
+            buyItem(itemId) {
+                const item = ITEMS[itemId];
+                
+                if (this.player.gold >= item.price) {
+                    this.player.gold -= item.price;
+                    this.player.inventory.push(itemId);
+                    this.showMessage(`Bought ${item.name}!`, 'success');
+                    this.updateUI();
+                } else {
+                    this.showMessage('Not enough gold!', 'error');
+                }
+            },
+            
+            // Rest at tavern
+            rest() {
+                if (this.player.gold >= 20) {
+                    this.player.gold -= 20;
+                    this.player.health = this.player.maxHealth;
+                    this.showMessage('You rest and restore your health!', 'success');
+                    this.updateUI();
+                } else {
+                    this.showMessage('Not enough gold to rest!', 'error');
+                }
+            },
+            
+            // Show message
+            showMessage(text, type) {
+                const messagesDiv = document.getElementById('messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                messageDiv.textContent = text;
+                
+                messagesDiv.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    messageDiv.style.opacity = '0';
+                    setTimeout(() => messageDiv.remove(), 300);
+                }, 3000);
+            },
+            
+            // Save game
+            saveGame() {
+                const saveData = {
+                    player: this.player,
+                    currentLocation: this.currentLocation
+                };
+                
+                try {
+                    localStorage.setItem('adventureGame', JSON.stringify(saveData));
+                    this.showMessage('Game saved!', 'success');
+                } catch (error) {
+                    this.showMessage('Failed to save game!', 'error');
+                    console.error(error);
+                }
+            },
+            
+            // Load game
+            loadGame() {
+                const saved = localStorage.getItem('adventureGame');
+                
+                if (!saved) {
+                    this.showMessage('No saved game found!', 'error');
+                    return;
+                }
+                
+                try {
+                    const data = JSON.parse(saved);
+                    
+                    // Restore data
+                    this.player = data.player;
+                    this.currentLocation = data.currentLocation;
+                    this.inCombat = false;
+                    
+                    document.getElementById('combat-section').classList.remove('active');
+                    this.updateUI();
+                    this.showMessage('Game loaded!', 'success');
+                } catch (error) {
+                    this.showMessage('Failed to load game!', 'error');
+                    console.error(error);
+                }
+            },
+            
+            // Reset game
+            resetGame() {
+                if (confirm('Are you sure you want to reset? All progress will be lost!')) {
+                    localStorage.removeItem('adventureGame');
+                    location.reload();
+                }
+            }
+        };
+        
+        // Initialize game when page loads
+        game.init();
+    </script>
+</body>
+</html>
