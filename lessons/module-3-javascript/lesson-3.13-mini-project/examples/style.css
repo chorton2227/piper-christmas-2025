@@ -1,0 +1,556 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.game-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "main sidebar"
+        "footer footer";
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height: 90vh;
+}
+
+/* Header */
+header {
+    grid-area: header;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+}
+
+header h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.player-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.stat {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 12px 20px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.stat-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* Main Area */
+main {
+    grid-area: main;
+    padding: 30px;
+    overflow-y: auto;
+    max-height: calc(90vh - 200px);
+}
+
+.story-panel {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border-left: 5px solid #667eea;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.story-panel h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.story-panel p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #495057;
+}
+
+.game-message {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 5px;
+    display: none;
+    animation: slideIn 0.3s ease;
+}
+
+.game-message.show {
+    display: block;
+}
+
+.game-message.success {
+    background: #d4edda;
+    border-left-color: #28a745;
+    color: #155724;
+}
+
+.game-message.error {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+    color: #721c24;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-panel {
+    margin-top: 20px;
+}
+
+.action-panel h3 {
+    color: #495057;
+    margin-bottom: 15px;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+button {
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+button.danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+}
+
+button.success {
+    background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+}
+
+button.warning {
+    background: linear-gradient(135deg, #ffd93d 0%, #ffc300 100%);
+    color: #333;
+}
+
+/* Combat Panel */
+.combat-panel {
+    background: linear-gradient(135deg, #ffe5e5 0%, #ffcccc 100%);
+    border: 3px solid #ff6b6b;
+    border-radius: 10px;
+    padding: 25px;
+    margin-top: 25px;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
+.enemy-info {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.enemy-info h3 {
+    color: #c92a2a;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.health-bar {
+    width: 100%;
+    height: 35px;
+    background: #ddd;
+    border-radius: 17px;
+    overflow: hidden;
+    margin: 15px 0;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.health-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b 0%, #ee5a6f 100%);
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.enemy-info p {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #c92a2a;
+}
+
+.combat-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.combat-log {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-size: 15px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.combat-message {
+    padding: 8px;
+    margin: 5px 0;
+    border-left: 3px solid #667eea;
+    padding-left: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.combat-message.player-attack {
+    border-left-color: #51cf66;
+    color: #2b8a3e;
+    background: #d3f9d8;
+}
+
+.combat-message.enemy-attack {
+    border-left-color: #ff6b6b;
+    color: #c92a2a;
+    background: #ffe3e3;
+}
+
+.combat-message.heal {
+    border-left-color: #51cf66;
+    color: #2b8a3e;
+}
+
+.combat-message.miss {
+    border-left-color: #868e96;
+    color: #495057;
+    font-style: italic;
+}
+
+.combat-message.victory {
+    border-left-color: #ffd43b;
+    color: #f59f00;
+    background: #fff9db;
+    font-weight: bold;
+}
+
+/* Sidebar */
+aside {
+    grid-area: sidebar;
+    background: #f8f9fa;
+    padding: 25px;
+    overflow-y: auto;
+    max-height: calc(90vh - 200px);
+}
+
+aside h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #667eea;
+    font-size: 1.2em;
+}
+
+.inventory-panel,
+.equipment-panel,
+.quest-panel,
+.achievement-panel {
+    margin-bottom: 30px;
+}
+
+.inventory-item,
+.quest-item,
+.achievement-item {
+    background: white;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border-left: 3px solid #667eea;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.inventory-item:hover {
+    background: #e9ecef;
+    cursor: pointer;
+    transform: translateX(5px);
+}
+
+.inventory-item.equipped {
+    border-left-color: #ffd43b;
+    background: #fff9db;
+}
+
+.item-name {
+    font-weight: bold;
+    color: #495057;
+}
+
+.item-stats {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.item-value {
+    font-size: 0.85em;
+    color: #868e96;
+}
+
+.quest-item.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.quest-item.active {
+    border-left-color: #ffd43b;
+}
+
+.quest-progress {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.achievement-item.locked {
+    opacity: 0.3;
+    filter: grayscale(100%);
+}
+
+.achievement-icon {
+    font-size: 1.5em;
+}
+
+.achievement-details {
+    flex: 1;
+}
+
+.achievement-name {
+    font-weight: bold;
+    color: #495057;
+}
+
+.achievement-description {
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+.equipment-panel p {
+    background: white;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border-left: 3px solid #667eea;
+}
+
+/* Footer */
+footer {
+    grid-area: footer;
+    background: #343a40;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+footer button {
+    background: #495057;
+    font-size: 14px;
+    padding: 12px 20px;
+}
+
+footer button:hover {
+    background: #6c757d;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 35px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.shop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+}
+
+.shop-item-info {
+    flex: 1;
+}
+
+.shop-item-name {
+    font-weight: bold;
+    color: #495057;
+}
+
+.shop-item-description {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.shop-item-price {
+    color: #ffc107;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .game-container {
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .player-stats {
+        flex-direction: column;
+    }
+    
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .combat-actions {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        max-width: 95%;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

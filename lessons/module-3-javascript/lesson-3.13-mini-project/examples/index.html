@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Quest - Complete Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header>
+            <h1>🗡️ Adventure Quest</h1>
+            <div class="player-stats">
+                <div class="stat">
+                    <span class="stat-label">❤️ Health:</span>
+                    <span id="playerHealth">100</span>/<span id="playerMaxHealth">100</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">💰 Gold:</span>
+                    <span id="playerGold">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">⭐ Level:</span>
+                    <span id="playerLevel">1</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">✨ XP:</span>
+                    <span id="playerXP">0</span>/<span id="playerXPNeeded">100</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <main>
+            <!-- Story/Description Panel -->
+            <div class="story-panel">
+                <h2 id="locationName">Town Square</h2>
+                <p id="locationDescription">You stand in the center of a bustling town. The marketplace is busy with merchants selling their wares.</p>
+                <div id="gameMessage" class="game-message"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-panel">
+                <h3>What do you want to do?</h3>
+                <div class="button-grid" id="actionButtons">
+                    <!-- Buttons will be added dynamically -->
+                </div>
+            </div>
+
+            <!-- Combat Panel (hidden by default) -->
+            <div class="combat-panel" id="combatPanel" style="display: none;">
+                <div class="enemy-info">
+                    <h3 id="enemyName">Monster</h3>
+                    <div class="health-bar">
+                        <div class="health-fill" id="enemyHealthBar" style="width: 100%;"></div>
+                    </div>
+                    <p><span id="enemyHealth">50</span>/<span id="enemyMaxHealth">50</span> HP</p>
+                </div>
+                <div class="combat-actions">
+                    <button onclick="game.attack()">⚔️ Attack</button>
+                    <button onclick="game.defend()">🛡️ Defend</button>
+                    <button onclick="game.usePotion()">🧪 Use Potion</button>
+                    <button onclick="game.flee()">🏃 Flee</button>
+                </div>
+                <div id="combatLog" class="combat-log"></div>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside>
+            <!-- Inventory -->
+            <div class="inventory-panel">
+                <h3>🎒 Inventory (<span id="inventoryCount">0</span>)</h3>
+                <div id="inventoryList"></div>
+            </div>
+
+            <!-- Equipment -->
+            <div class="equipment-panel">
+                <h3>⚔️ Equipment</h3>
+                <div id="equipmentList">
+                    <p>Weapon: <span id="equippedWeapon">None</span></p>
+                    <p>Armor: <span id="equippedArmor">None</span></p>
+                </div>
+            </div>
+
+            <!-- Quests -->
+            <div class="quest-panel">
+                <h3>📜 Quests</h3>
+                <div id="questList"></div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="achievement-panel">
+                <h3>🏆 Achievements (<span id="achievementCount">0</span>)</h3>
+                <div id="achievementList"></div>
+            </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer>
+            <button onclick="game.saveGame()">💾 Save Game</button>
+            <button onclick="game.loadGame()">📂 Load Game</button>
+            <button onclick="game.resetGame()">🔄 New Game</button>
+            <button onclick="game.showStats()">📊 Statistics</button>
+        </footer>
+    </div>
+
+    <!-- Modal for Shop, Stats, etc. -->
+    <div class="modal" id="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="game.closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript files -->
+    <script src="game-data.js"></script>
+    <script src="adventure-quest.js"></script>
+</body>
+</html>
