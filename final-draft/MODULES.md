@@ -69,6 +69,9 @@ Mini Project
 - Artifacts: Playable web game.
 - Assessment: Playtest + reflection.
 
+Mini Project
+- Build a small browser game (e.g., number guesser or simple clicker) and progressively enhance toward a polished demo. Include audio with fallbacks, reduced-motion support, and a basic testing harness (manual checklist + simple script logs).
+
 ## Module 5: Web Fundamentals Plus
 - Objectives: Ship projects confidently — version control, tooling, deployment, collaboration, and portfolios.
 - Prerequisites: Modules 1–4.
@@ -82,8 +85,12 @@ Mini Project
 - Artifacts: Published project and portfolio page.
 - Assessment: Release checklist + peer review.
 
+Capstone
+- Publish your best module project (or a combined portfolio site). Use Git/GitHub, set up CI formatting/linting, deploy to GitHub Pages/Netlify/Vercel, and document setup and accessibility considerations.
+
 ## Cross-Cutting Practices
-- Accessibility, consistency, message speed controls, reusable components.
+- Accessibility and consistency: reduced-motion defaults, readable timing/message speed controls, semantic HTML.
+- Reusable components: shared base stylesheet (variables/typography) and simple utilities.
 - Parent guides and cheat sheets per lesson.
 
 ## Notes
