@@ -12,6 +12,7 @@ Content
 - List: `<ul>`, `<ol>`, `<li>`
 - Link: `<a href="...">text</a>`
 - Image: `<img src="..." alt="...">`
+	- Placeholder images: use `https://placehold.co/widthxheight` (e.g., `https://placehold.co/600x400`) with descriptive `alt`.
 
 Tips
 - Always set a meaningful `<title>`.
