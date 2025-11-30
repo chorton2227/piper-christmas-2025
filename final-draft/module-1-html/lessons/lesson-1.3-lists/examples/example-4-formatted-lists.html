@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formatted Lists</title>
+  <style>
+    ul.checklist { list-style: none; padding-left: 0; }
+    ul.checklist li::before { content: "✓ "; color: green; }
+    ol.steps { counter-reset: step; }
+    ol.steps li { margin: 0.5rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Formatted Lists</h1>
+  <h2>Checklist</h2>
+  <ul class="checklist">
+    <li>Back up files</li>
+    <li>Update software</li>
+    <li>Restart device</li>
+  </ul>
+  <h2>Steps</h2>
+  <ol class="steps">
+    <li>Plan</li>
+    <li>Build</li>
+    <li>Test</li>
+  </ol>
+</body>
+</html>
