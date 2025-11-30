@@ -30,8 +30,7 @@ Mini Projects (Outline)
 - Module 1: Multi-page semantic site (Home/About/Contact) with nav, images w/ alt, and contact form. Focus: structure and semantics.
 - Module 2: Theming + responsive layout for the Module 1 site using CSS variables, flex/grid, and a dark mode toggle. Focus: styling, responsiveness, accessibility.
 - Module 3: Interactivity add-ons — form validation, FAQ accordion or image gallery, and nav state. Focus: DOM, events, state.
- - Module 4: Progressive game build — start with a simple interactive loop, add audio fallbacks, reduced-motion, and a manual testing checklist.
- - Module 5: Capstone publish — version control, CI formatting/linting, deploy, and document accessibility.
+ 
 Shared Base Assets
 - Create a `shared/` folder for a base stylesheet (`base.css`) with CSS variables (colors, spacing), typography defaults, and motion rules.
 - Provide JS helpers for message-speed controls and reduced-motion detection where relevant.
