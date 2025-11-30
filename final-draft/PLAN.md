@@ -25,3 +25,8 @@ Anticipated Changes Starting at Module 1:
 - Introduce a consistent file/folder template per lesson.
 - Add parent guides and cheat sheets early for continuity.
 - Establish reduced-motion defaults and message-speed controls from the outset.
+
+Mini Projects (Outline)
+- Module 1: Multi-page semantic site (Home/About/Contact) with nav, images w/ alt, and contact form. Focus: structure and semantics.
+- Module 2: Theming + responsive layout for the Module 1 site using CSS variables, flex/grid, and a dark mode toggle. Focus: styling, responsiveness, accessibility.
+- Module 3: Interactivity add-ons — form validation, FAQ accordion or image gallery, and nav state. Focus: DOM, events, state.

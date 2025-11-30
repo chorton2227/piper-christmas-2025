@@ -18,6 +18,9 @@ This index outlines modules, lessons, objectives, prerequisites, artifacts, and 
 - Artifacts: Simple multi-page site.
 - Assessment: Checklist + short reflection.
 
+Mini Project
+- Build a simple multi-page site (Home, About, Contact) with semantic structure, navigation links, images with alt text, and a contact form (no backend). Deliverables: HTML files only.
+
 ## Module 2: CSS Essentials
 - Objectives: Style layout, typography, colors; responsive design; variables; motion.
 - Prerequisites: Module 1.
@@ -32,6 +35,9 @@ This index outlines modules, lessons, objectives, prerequisites, artifacts, and 
 - Artifacts: Styled site with responsive layout.
 - Assessment: Rubric + accessibility audit.
 
+Mini Project
+- Style the Module 1 site: apply a consistent theme with CSS variables, responsive layout with flex/grid, readable typography, and a basic dark mode. Deliverables: CSS file(s) and updated HTML linking CSS.
+
 ## Module 3: JavaScript Fundamentals
 - Objectives: Variables, functions, control flow, arrays/objects, DOM, events, state.
 - Prerequisites: Modules 1–2.
@@ -45,6 +51,9 @@ This index outlines modules, lessons, objectives, prerequisites, artifacts, and 
   - 3.7 State & Data Flow
 - Artifacts: Interactive mini-app.
 - Assessment: Unit checks + project demo.
+
+Mini Project
+- Enhance interactivity: add a navigation highlight, a form validator with helpful messages, and a simple interactive component (e.g., FAQ accordion or image gallery). Deliverables: JS file(s) and updated HTML including scripts.
 
 ## Module 4: Game Building
 - Objectives: Plan, build, and polish a browser game; UX, audio, accessibility.
