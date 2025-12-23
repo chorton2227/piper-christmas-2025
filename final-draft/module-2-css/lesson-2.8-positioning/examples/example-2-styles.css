@@ -1,0 +1,62 @@
+/* Absolute Positioning */
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    background-color: #ecf0f1;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 40px;
+}
+
+.parent {
+    position: relative;
+    background-color: #bdc3c7;
+    height: 400px;
+    border: 3px solid #7f8c8d;
+    padding: 20px;
+}
+
+.parent p {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.absolute {
+    position: absolute;
+    background-color: #3498db;
+    color: white;
+    padding: 15px 20px;
+    font-weight: bold;
+}
+
+.top-left {
+    top: 10px;
+    left: 10px;
+}
+
+.top-right {
+    top: 10px;
+    right: 10px;
+}
+
+.bottom-left {
+    bottom: 10px;
+    left: 10px;
+}
+
+.bottom-right {
+    bottom: 10px;
+    right: 10px;
+}
+
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e74c3c;
+}

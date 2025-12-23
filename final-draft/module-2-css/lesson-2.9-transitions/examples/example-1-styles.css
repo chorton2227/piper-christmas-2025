@@ -1,0 +1,57 @@
+/* Basic Transitions */
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    background-color: #ecf0f1;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 40px;
+}
+
+.box {
+    width: 300px;
+    padding: 30px;
+    margin: 30px auto;
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+.color-change {
+    transition: background-color 0.5s;
+}
+
+.color-change:hover {
+    background-color: #e74c3c;
+}
+
+.size-change {
+    transition: transform 0.3s;
+}
+
+.size-change:hover {
+    transform: scale(1.1);
+}
+
+.move {
+    transition: transform 0.4s;
+}
+
+.move:hover {
+    transform: translateX(50px);
+}
+
+.rotate {
+    transition: transform 0.5s;
+}
+
+.rotate:hover {
+    transform: rotate(10deg);
+}

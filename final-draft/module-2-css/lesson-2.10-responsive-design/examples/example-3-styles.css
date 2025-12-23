@@ -1,0 +1,104 @@
+/* Mobile-First Design */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Mobile Styles (default) */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+nav {
+    background-color: #34495e;
+    display: flex;
+    flex-direction: column;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    border-bottom: 1px solid #2c3e50;
+}
+
+nav a:hover {
+    background-color: #2c3e50;
+}
+
+main {
+    padding: 20px;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    color: #3498db;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.card p {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 32px;
+    }
+    
+    nav {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    nav a {
+        border-bottom: none;
+        border-right: 1px solid #2c3e50;
+    }
+    
+    nav a:last-child {
+        border-right: none;
+    }
+    
+    main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+    main {
+        max-width: 1200px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .card {
+        margin-bottom: 0;
+    }
+}

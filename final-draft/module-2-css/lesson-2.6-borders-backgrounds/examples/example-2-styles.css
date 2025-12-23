@@ -1,0 +1,48 @@
+/* Border Radius Example */
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    background-color: #ecf0f1;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+div {
+    padding: 20px;
+    margin: 20px auto;
+    width: 300px;
+    background-color: white;
+    text-align: center;
+    font-weight: bold;
+    border: 3px solid #3498db;
+}
+
+.small-radius {
+    border-radius: 5px;
+}
+
+.medium-radius {
+    border-radius: 15px;
+}
+
+.large-radius {
+    border-radius: 30px;
+}
+
+.pill {
+    border-radius: 50px;
+}
+
+.circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
