@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Game - Starter Template</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+        <!-- Floating card symbols -->
+        <span class="card-symbol">♠</span>
+        <span class="card-symbol">♥</span>
+        <span class="card-symbol">♦</span>
+        <span class="card-symbol">♣</span>
+        
+        <h1 class="game-title">POKER GAME</h1>
+        
+        <div class="start-buttons">
+            <button class="btn btn-primary">Start New Game</button>
+            <button class="btn btn-secondary">How to Play</button>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="poker-table">
+            <!-- Game Info -->
+            <div class="game-info">
+                <div class="chip-count">
+                    <span class="chip-icon"></span>
+                    <span>Your Chips: <span id="player-chips">1000</span></span>
+                </div>
+                <div class="pot-display">
+                    POT: <span id="pot-amount">0</span>
+                </div>
+            </div>
+
+            <!-- Dealer's Cards -->
+            <div class="cards-section">
+                <h3>Dealer's Hand</h3>
+                <div class="cards-container" id="dealer-cards">
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                </div>
+            </div>
+
+            <!-- Player's Cards -->
+            <div class="cards-section">
+                <h3>Your Hand</h3>
+                <div class="cards-container" id="player-cards">
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                    <div class="card face-down"></div>
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="game-controls">
+                <div class="betting-buttons">
+                    <button class="btn btn-fold" id="fold-btn">Fold</button>
+                    <button class="btn btn-call" id="call-btn">Call (<span id="call-amount">20</span>)</button>
+                    <button class="btn btn-raise" id="raise-btn">Raise</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen" class="screen">
+        <h2 class="result-message" id="result-message">Game Over</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Final Chips</h3>
+                <p id="final-chips">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Hands Won</h3>
+                <p id="hands-won">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Hands Lost</h3>
+                <p id="hands-lost">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Win Rate</h3>
+                <p id="win-rate">0%</p>
+            </div>
+        </div>
+        
+        <div class="end-buttons">
+            <button class="btn btn-primary" id="play-again-btn">Play Again</button>
+            <button class="btn btn-secondary" id="main-menu-btn">Main Menu</button>
+        </div>
+    </div>
+
+    <!-- INSTRUCTIONS OVERLAY (hidden by default) -->
+    <div class="instructions-overlay hidden" id="instructions-overlay">
+        <div class="instructions-content">
+            <h2>How to Play Poker</h2>
+            
+            <h3>Game Rules:</h3>
+            <ul>
+                <li><strong>Objective:</strong> Get a better poker hand than the dealer</li>
+                <li><strong>Starting Chips:</strong> You begin with 1000 chips</li>
+                <li><strong>Ante:</strong> 10 chips to play each hand</li>
+                <li><strong>Betting:</strong> You can Fold, Call, or Raise</li>
+            </ul>
+            
+            <h3>Poker Hands (Best to Worst):</h3>
+            <ul>
+                <li><strong>Royal Flush:</strong> A, K, Q, J, 10 all same suit</li>
+                <li><strong>Straight Flush:</strong> Five cards in sequence, same suit</li>
+                <li><strong>Four of a Kind:</strong> Four cards of same rank</li>
+                <li><strong>Full House:</strong> Three of a kind + pair</li>
+                <li><strong>Flush:</strong> Five cards of same suit</li>
+                <li><strong>Straight:</strong> Five cards in sequence</li>
+                <li><strong>Three of a Kind:</strong> Three cards of same rank</li>
+                <li><strong>Two Pair:</strong> Two different pairs</li>
+                <li><strong>One Pair:</strong> Two cards of same rank</li>
+                <li><strong>High Card:</strong> Highest card wins</li>
+            </ul>
+            
+            <h3>Betting Options:</h3>
+            <ul>
+                <li><strong>Fold:</strong> Give up your hand and lose ante</li>
+                <li><strong>Call:</strong> Match the current bet</li>
+                <li><strong>Raise:</strong> Increase the bet amount</li>
+            </ul>
+            
+            <button class="btn btn-primary" id="close-instructions-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- JavaScript will be added in Lesson 4.5 -->
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>

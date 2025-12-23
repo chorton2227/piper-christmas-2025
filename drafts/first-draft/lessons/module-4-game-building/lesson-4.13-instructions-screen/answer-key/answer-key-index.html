@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Lesson 4.13 Answer Key – Instructions & Guided Mode</title>
+<style>
+ body { font-family: system-ui, sans-serif; margin:0; background:#132; color:#eef; }
+ header { padding:1rem 1.5rem; background:#1b3d55; display:flex; align-items:center; gap:1rem; }
+ button { cursor:pointer; font:inherit; }
+ .game-area { padding:1rem 1.5rem; }
+ #tutorialOverlay[hidden]{ display:none; }
+ #tutorialOverlay { position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; z-index:1000; }
+ .tutorial-dialog { width:640px; max-width:95%; background:#fff; color:#222; border-radius:14px; padding:1.3rem 1.6rem; box-shadow:0 12px 30px -8px rgba(0,0,0,.5); display:flex; flex-direction:column; gap:1rem; position:relative; }
+ .tutorial-dialog h2 { margin:0; font-size:1.5rem; }
+ .close-btn { position:absolute; top:.65rem; right:.65rem; background:#eee; border:none; padding:.4rem .6rem; border-radius:6px; }
+ .steps { display:flex; gap:.5rem; justify-content:center; }
+ .steps button { width:12px; height:12px; border-radius:50%; border:none; background:#ccc; padding:0; }
+ .steps button[aria-current="step"] { background:#1b3d55; }
+ .nav-row { display:flex; justify-content:space-between; align-items:center; }
+ .progress-bar-wrap { background:#eee; height:6px; border-radius:4px; overflow:hidden; }
+ .progress-bar { background:#1b3d55; height:100%; width:0%; transition:width .25s ease; }
+ @media (prefers-reduced-motion: reduce){ .progress-bar { transition:none; } }
+ .fade-in { animation: fade .3s ease; }
+ @keyframes fade { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:translateY(0);} }
+ .tooltip-bubble { position:fixed; background:#fff; color:#222; padding:.45rem .65rem; border-radius:8px; font-size:.85rem; box-shadow:0 4px 16px -4px rgba(0,0,0,.35); max-width:200px; line-height:1.2; z-index:1200; opacity:0; pointer-events:none; transition:opacity .15s; }
+ .highlight { outline:3px solid #ffc107; border-radius:8px; position:relative; }
+ .guided-prompt { background:#1b3d55; padding:.6rem .9rem; border-left:4px solid #ffc107; margin-top:.75rem; border-radius:8px; font-size:.9rem; }
+ .guided-toggle { margin-left:auto; display:flex; align-items:center; gap:.4rem; }
+ .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+</style>
+</head>
+<body>
+<header>
+  <button id="helpBtn" data-tooltip="Open the tutorial." aria-describedby="tipHelp">❓ Help</button>
+  <div class="guided-toggle">
+    <label><input type="checkbox" id="guidedModeToggle" /> Guided Mode</label>
+  </div>
+  <button id="resetTutorial" data-tooltip="See tutorial again next visit." aria-describedby="tipReset">Reset Tutorial</button>
+</header>
+<div class="game-area">
+  <h1>Poker Game (Demo)</h1>
+  <div class="actions">
+    <button data-tooltip="Check: pass without betting." id="btnCheck">Check</button>
+    <button data-tooltip="Call: match current bet." id="btnCall">Call</button>
+    <button data-tooltip="Bet/Raise: put chips in." id="btnBet">Bet</button>
+    <button data-tooltip="Fold: give up this hand." id="btnFold">Fold</button>
+  </div>
+  <div id="guidedPrompt" class="guided-prompt" aria-live="polite"></div>
+</div>
+<div id="tutorialOverlay" hidden>
+  <div class="tutorial-dialog fade-in" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle" aria-describedby="tutorialDesc">
+    <button class="close-btn" id="closeTutorial" aria-label="Close Tutorial">✕</button>
+    <h2 id="tutorialTitle">Tutorial</h2>
+    <div id="tutorialDesc" class="sr-only">Multi-step introduction to game concepts.</div>
+    <div id="tutorialContent"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="tutorialProgress"></div></div>
+    <div class="nav-row">
+      <div class="steps" id="stepDots"></div>
+      <div style="display:flex; gap:.5rem;">
+        <button id="prevStep">Previous</button>
+        <button id="nextStep">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="tooltip" role="tooltip" class="tooltip-bubble" aria-hidden="true"></div>
+<script>
+// Step data
+const tutorialSteps = [
+  { id:'intro', title:'Welcome', html:'<p>Welcome to the Poker Game! This tutorial will explain phases, actions, and strategy basics.</p>' },
+  { id:'phases', title:'Hand Phases', html:'<p><strong>Phases:</strong> Pre-Flop → Flop → Turn → River → Showdown. Community cards appear gradually; plan your bets.</p>' },
+  { id:'actions', title:'Player Actions', html:'<ul><li><strong>Check:</strong> Pass with no bet.</li><li><strong>Call:</strong> Match an existing bet.</li><li><strong>Bet/Raise:</strong> Put chips in to build the pot.</li><li><strong>Fold:</strong> Exit the hand to avoid losing more.</li><li><strong>All-In:</strong> Commit all remaining chips.</li></ul>' },
+  { id:'strategy', title:'Basic Strategy', html:'<p>Start tight: play stronger starting hands. Observe betting patterns. Fold weak holdings early to conserve chips.</p>' },
+  { id:'finish', title:'You\'re Ready!', html:'<p>That\'s the basics. You can re-open this tutorial anytime from the Help button.</p>' }
+];
+let currentStepIndex = 0;
+let lastFocus = null;
+const overlay = document.getElementById('tutorialOverlay');
+const dialog = overlay.querySelector('.tutorial-dialog');
+const content = document.getElementById('tutorialContent');
+const titleEl = document.getElementById('tutorialTitle');
+const progressEl = document.getElementById('tutorialProgress');
+const dotsWrap = document.getElementById('stepDots');
+const prevBtn = document.getElementById('prevStep');
+const nextBtn = document.getElementById('nextStep');
+
+function renderDots(){
+  dotsWrap.innerHTML='';
+  tutorialSteps.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.setAttribute('aria-label', 'Go to step ' + (i+1));
+    if(i===currentStepIndex) b.setAttribute('aria-current','step');
+    b.addEventListener('click',()=>{ currentStepIndex=i; renderStep(); });
+    dotsWrap.appendChild(b);
+  });
+}
+function renderStep(){
+  const step = tutorialSteps[currentStepIndex];
+  titleEl.textContent = step.title;
+  content.innerHTML = step.html;
+  prevBtn.disabled = currentStepIndex===0;
+  nextBtn.textContent = currentStepIndex===tutorialSteps.length-1 ? 'Finish' : 'Next';
+  const pct = (currentStepIndex+1)/tutorialSteps.length*100;
+  progressEl.style.width = pct + '%';
+  renderDots();
+  titleEl.focus();
+}
+function openTutorial(){
+  lastFocus = document.activeElement;
+  overlay.hidden=false;
+  currentStepIndex=0; renderStep();
+  trapFocus(dialog);
+}
+function closeTutorial(){
+  overlay.hidden=true;
+  if(lastFocus) lastFocus.focus();
+}
+prevBtn.addEventListener('click', ()=>{ if(currentStepIndex>0){ currentStepIndex--; renderStep(); } });
+nextBtn.addEventListener('click', ()=>{
+  if(currentStepIndex < tutorialSteps.length-1){ currentStepIndex++; renderStep(); }
+  else {
+    localStorage.setItem('hasSeenTutorial','1');
+    closeTutorial();
+  }
+});
+// Focus trap
+function trapFocus(container){
+  const selector='a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])';
+  let focusEls = Array.from(container.querySelectorAll(selector));
+  let first=focusEls[0]; let last=focusEls[focusEls.length-1];
+  container.addEventListener('keydown', e=>{
+    if(e.key==='Tab'){
+      focusEls = Array.from(container.querySelectorAll(selector));
+      first=focusEls[0]; last=focusEls[focusEls.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+}
+// Escape to close
+window.addEventListener('keydown', e=>{ if(!overlay.hidden && e.key==='Escape') closeTutorial(); });
+// Help button
+const helpBtn = document.getElementById('helpBtn');
+helpBtn.addEventListener('click', openTutorial);
+// Reset tutorial
+document.getElementById('resetTutorial').addEventListener('click', ()=>{ localStorage.removeItem('hasSeenTutorial'); alert('Tutorial will auto-open next visit.'); });
+// Auto-open first visit
+if(localStorage.getItem('hasSeenTutorial')!=='1') openTutorial();
+
+// Tooltip system
+function initTooltips(){
+  const tip = document.getElementById('tooltip');
+  let active=null;
+  const elems = document.querySelectorAll('[data-tooltip]');
+  elems.forEach(el=>{
+    el.addEventListener('mouseenter', ()=>show(el));
+    el.addEventListener('focus', ()=>show(el));
+    ['mouseleave','blur'].forEach(evt=>el.addEventListener(evt, hide));
+  });
+  function show(el){ active=el; tip.textContent=el.getAttribute('data-tooltip'); tip.style.opacity=1; position(el); tip.removeAttribute('aria-hidden'); }
+  function hide(){ if(active){ active=null; tip.style.opacity=0; tip.setAttribute('aria-hidden','true'); } }
+  function position(el){
+    const r = el.getBoundingClientRect();
+    const pad=8; const tipRect = tip.getBoundingClientRect();
+    let x = r.left + (r.width/2) - (tipRect.width/2);
+    let y = r.top - tipRect.height - 10;
+    if(x < pad) x=pad; if(x + tipRect.width > window.innerWidth - pad) x=window.innerWidth - pad - tipRect.width;
+    if(y < pad) y = r.bottom + 10; // flip below
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  window.addEventListener('scroll', ()=>{ if(active) position(active); });
+  window.addEventListener('resize', ()=>{ if(active) position(active); });
+}
+initTooltips();
+
+// Guided mode (mock phases)
+const guidedToggle = document.getElementById('guidedModeToggle');
+const guidedPrompt = document.getElementById('guidedPrompt');
+let guidedMode = false;
+let currentPhase = 'preflop';
+const guidedMessages = {
+  preflop: 'Pre-Flop: These are your private hole cards. Evaluate their strength.',
+  flop: 'Flop: 3 community cards appear. Combine them with your hand.',
+  turn: 'Turn: Fourth card. Pot growth decisions matter.',
+  river: 'River: Final card. Prepare for potential showdown.',
+  showdown: 'Showdown: Hands compared. Highest ranking wins the pot.'
+};
+function updateGuidedState(){
+  if(!guidedMode){ guidedPrompt.textContent=''; clearHighlights(); return; }
+  guidedPrompt.textContent = guidedMessages[currentPhase];
+  clearHighlights();
+  const targetMap = { preflop:'#btnBet', flop:'#btnCheck', turn:'#btnCall', river:'#btnFold', showdown:'#helpBtn' };
+  const sel = targetMap[currentPhase];
+  if(sel){ const el = document.querySelector(sel); el && el.classList.add('highlight'); }
+}
+function clearHighlights(){ document.querySelectorAll('.highlight').forEach(el=>el.classList.remove('highlight')); }
+// Simulate phase progression every 4s for demo
+setInterval(()=>{
+  const order=['preflop','flop','turn','river','showdown'];
+  const idx = order.indexOf(currentPhase);
+  currentPhase = order[(idx+1)%order.length];
+  updateGuidedState();
+}, 4000);
+
+guidedToggle.addEventListener('change', ()=>{ guidedMode = guidedToggle.checked; updateGuidedState(); });
+</script>
+</body>
+</html>

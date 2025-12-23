@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><title>Lesson 4.15 Answer Key – Final Integration</title>
+<style>
+ body{font-family:system-ui,sans-serif;margin:0;background:#111e28;color:#eef;}
+ header{background:#173245;padding:.9rem 1.2rem;display:flex;gap:.8rem;align-items:center;}
+ button{cursor:pointer;font:inherit;background:#255b7a;color:#eef;border:none;padding:.55rem .9rem;border-radius:6px;}
+ button:hover{background:#2e6d92;} .section{padding:1rem 1.4rem;border-bottom:1px solid #1e3a4d;} h1{margin:0 0 1rem;} pre{background:#1d3442;padding:.75rem;border-radius:8px;overflow:auto;} .checklist li{margin:.35rem 0;}
+ .badge{display:inline-block;background:#255b7a;padding:.3rem .55rem;border-radius:4px;font-size:.7rem;margin-left:.4rem;}
+ .ok{color:#4caf50;} .warn{color:#ffc107;} .fail{color:#f44336;}
+ .grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+</style></head>
+<body>
+<header>
+  <h1>Final Integration Dashboard</h1>
+  <button id="runSmoke">Smoke Test</button>
+  <button id="showChecklist">Checklist Status</button>
+  <button id="exportNotes">Generate Release Notes</button>
+</header>
+<div id="output" class="section"></div>
+<div class="section">
+  <h2>Integration Checklist</h2>
+  <ul class="checklist" id="checklist">
+    <li data-key="ai">AI logic stable<span class="badge" id="aiBadge"></span></li>
+    <li data-key="tutorial">Tutorial onboarding working<span class="badge" id="tutorialBadge"></span></li>
+    <li data-key="audio">Audio fallback operational<span class="badge" id="audioBadge"></span></li>
+    <li data-key="stats">Stats & achievements update<span class="badge" id="statsBadge"></span></li>
+    <li data-key="tests">Test suite passing<span class="badge" id="testsBadge"></span></li>
+    <li data-key="access">Accessibility pass<span class="badge" id="accessBadge"></span></li>
+    <li data-key="performance">Performance reasonable<span class="badge" id="perfBadge"></span></li>
+  </ul>
+</div>
+<div class="section">
+  <h2>Reflection Prompts</h2>
+  <ul>
+    <li>Which bug fix most improved reliability?</li>
+    <li>What design decision saved time later?</li>
+    <li>How did testing change your confidence?</li>
+    <li>What would you prioritize for v2.0?</li>
+  </ul>
+</div>
+<div class="section">
+  <h2>Draft Release Notes</h2>
+  <pre id="releaseNotes"></pre>
+</div>
+<script>
+// Simulated statuses (in real integration you'd derive these from actual code/data)
+const status={ ai:true, tutorial:true, audio:true, stats:true, tests:true, access:true, performance:true };
+function badge(el, ok){ el.textContent = ok? 'OK':'Review'; el.style.background = ok? '#2e7d32':'#ff9800'; }
+function initBadges(){ badge(aiBadge,status.ai); badge(tutorialBadge,status.tutorial); badge(audioBadge,status.audio); badge(statsBadge,status.stats); badge(testsBadge,status.tests); badge(accessBadge,status.access); badge(perfBadge,status.performance); }
+initBadges();
+function smokeTest(){ const out=document.getElementById('output'); out.innerHTML='<h2>Smoke Test Result</h2>'; const results=[{name:'AI decision cycle', pass:status.ai},{name:'Tutorial auto-open first run', pass:status.tutorial},{name:'Audio fallback beep', pass:status.audio},{name:'Stats increment on end hand', pass:status.stats},{name:'Unit tests pass', pass:status.tests},{name:'Focus trap active', pass:status.access},{name:'No massive asset (>1MB)', pass:status.performance}]; results.forEach(r=>{ out.innerHTML += `<div class='${r.pass?'ok':'fail'}'>${r.pass?'PASS':'FAIL'}: ${r.name}</div>`; }); }
+function generateReleaseNotes(){ const note = `# v1.0.0 – Initial Public Release\n\n## Features\n- AI dealer & multi-phase logic\n- Tutorial onboarding & guided mode\n- Stats & achievements tracking\n- Audio & animation polish (fallback tones)\n- Test harness (unit + simulation)\n\n## Quality\n- All integration checklist items green\n- 15 unit tests, 25 simulations (0 anomalies)\n\n## Accessibility\n- Focus traps, ARIA roles, reduced motion support\n\n## Known Limitations\n- Simplified hand evaluation (high-card only)\n\n## Future Roadmap\n- Full hand rankings & odds calculator\n- Dark mode & theming system\n- Multiplayer / leaderboard\n- Mobile layout optimization\n`; document.getElementById('releaseNotes').textContent = note; }
+runSmoke.addEventListener('click', smokeTest);
+showChecklist.addEventListener('click', initBadges);
+exportNotes.addEventListener('click', generateReleaseNotes);
+// Auto-generate draft notes
+generateReleaseNotes();
+</script>
+</body>
+</html>

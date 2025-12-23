@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Lesson 4.12 Answer Key – Sound & Animation</title>
+<style>
+body{font-family:Segoe UI, sans-serif; background:#10161f; color:#fff; margin:0; padding:20px;}
+.cards{display:flex; gap:8px;}
+.card{width:60px;height:90px;background:#fff;color:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,.4);opacity:0;}
+.animated-card.deal{animation:popIn .4s ease forwards;}
+@keyframes popIn{0%{transform:translateY(-18px) scale(.6);opacity:0;}70%{transform:translateY(4px) scale(1.05);opacity:1;}100%{transform:translateY(0) scale(1);opacity:1;}}
+.reduce-motion .animated-card.deal{animation:none;opacity:1;}
+#chip-travel{position:absolute;top:60%;left:50%;transform:translate(-50%,-50%);background:#FFD700;color:#000;padding:10px 16px;border-radius:30px;font-weight:600;box-shadow:0 0 12px rgba(255,215,0,.6);transition:transform .7s cubic-bezier(.22,.8,.32,1);display:none;}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;}
+#overlay.active{display:flex;}
+.overlay-panel{background:#1e2733;padding:34px 28px;border-radius:18px;width:360px;text-align:center;animation:fadeScale .4s ease; border:2px solid #FFD700;}
+@keyframes fadeScale{0%{transform:scale(.6);opacity:0;}100%{transform:scale(1);opacity:1;}}
+button{cursor:pointer;border:none;padding:10px 18px;border-radius:8px;font-weight:600;margin:6px;background:#33415c;color:#fff;}
+button.primary{background:linear-gradient(90deg,#FFD700,#FFA500);color:#000;}
+.controls{margin:14px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.volume-range{width:140px;}
+.log{margin-top:16px;font-size:.85rem;max-height:140px;overflow:auto;background:#141c25;padding:10px;border-radius:8px;}
+.log-entry{margin:4px 0;padding:4px 6px;background:#1f2a35;border-left:3px solid #FFD700;}
+</style>
+</head>
+<body>
+<h1>🔊 Sound & Animation Demo</h1>
+<div class="controls">
+  <label><input type="checkbox" id="muteToggle" /> Mute</label>
+  <label>Volume <input type="range" id="vol" min="0" max="1" step="0.01" class="volume-range" /></label>
+  <button onclick="dealDemo()" class="primary">Deal Cards</button>
+  <button onclick="awardPot()">Award Pot</button>
+  <button onclick="showWinOverlay('win')">Win Overlay</button>
+  <button onclick="showWinOverlay('lose')">Lose Overlay</button>
+</div>
+<div class="cards" id="cardContainer"></div>
+<div id="chip-travel"></div>
+<div id="overlay"></div>
+<div class="log" id="log"></div>
+<script src="answer-key-script.js"></script>
+<script>
+function log(msg){const l=document.getElementById('log');const d=document.createElement('div');d.className='log-entry';d.textContent=msg;l.appendChild(d);l.scrollTop=l.scrollHeight;}
+
+// Wire mute & volume
+const muteToggle=document.getElementById('muteToggle');
+const vol=document.getElementById('vol');
+vol.value=localStorage.getItem('pokerVol')||audioManager.volume;
+muteToggle.checked=audioManager.muted;
+vol.addEventListener('input',e=>{audioManager.setVolume(parseFloat(e.target.value));log('Volume: '+e.target.value);});
+muteToggle.addEventListener('change',()=>{audioManager.toggleMute();log('Muted: '+audioManager.muted);});
+
+function createCard(label){const c=document.createElement('div');c.className='card';c.textContent=label;return c;}
+function dealDemo(){document.getElementById('cardContainer').innerHTML='';const cards=['A♠','10♥','K♦','7♣','Q♥'].map(createCard);cards.forEach(c=>document.getElementById('cardContainer').appendChild(c));dealCardsAnimation(cards);log('Dealt 5 cards');}
+function awardPot(){const target=document.getElementById('cardContainer');animateChipAward(target, 320, ()=>{log('Pot awarded animation complete');});log('Animating pot award...');audioManager.play('bet');}
+// Unlock audio on first interaction
+window.addEventListener('click', function first(){initAudio();window.removeEventListener('click', first);log('Audio initialized');});
+</script>
+</body>
+</html>

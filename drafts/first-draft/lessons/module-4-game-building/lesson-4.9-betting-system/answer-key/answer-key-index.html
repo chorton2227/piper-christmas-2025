@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Betting System - Answer Key</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        #game-container {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #ffd700;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+        }
+        
+        #round-info {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        
+        .player-section {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .dealer-section {
+            background: #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .player-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .chips {
+            background: #ffd700;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .bet-display {
+            color: #4CAF50;
+            font-size: 1em;
+            margin-left: 15px;
+        }
+        
+        .dealer-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fff;
+            color: #000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .hand {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 10px;
+            min-width: 60px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card.face-down {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        #community-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        #community-section h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        #community-cards {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        #pot-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #pot {
+            font-size: 2em;
+            color: #4CAF50;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #check-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+        
+        #call-btn {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        }
+        
+        #raise-btn {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+        
+        #fold-btn {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        }
+        
+        #all-in-btn {
+            background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+            font-size: 1.1em;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .all-in-indicator {
+            display: none;
+            background: #e91e63;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        #side-pots-display {
+            display: none;
+            background: #16213e;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        #side-pots-display h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .pot-item {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .pot-item strong {
+            color: #4CAF50;
+            font-size: 1.2em;
+        }
+        
+        .pot-item small {
+            color: #aaa;
+        }
+        
+        /* Modal Styles */
+        #bet-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            min-width: 300px;
+        }
+        
+        .modal-content h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        #bet-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            background: #16213e;
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            #controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <header>
+            <h1>🃏 Texas Hold'em Poker 🃏</h1>
+            <div id="round-info">Loading...</div>
+        </header>
+        
+        <!-- Dealer Section -->
+        <div class="dealer-section">
+            <div class="player-info">
+                <div>
+                    <span class="player-name">🤖 Dealer</span>
+                    <span class="bet-display" id="dealer-bet">Bet: $0</span>
+                </div>
+                <div class="chips" id="dealer-chips">$1000</div>
+                <div class="dealer-button" id="dealer-button" style="display: none;">D</div>
+            </div>
+            <div class="all-in-indicator" id="dealer-all-in">💥 DEALER IS ALL-IN! 💥</div>
+            <div class="hand" id="dealer-hand">
+                <!-- Dealer cards go here -->
+            </div>
+        </div>
+        
+        <!-- Community Cards -->
+        <div id="community-section">
+            <h3>Community Cards</h3>
+            <div id="community-cards">
+                <!-- Community cards go here -->
+            </div>
+        </div>
+        
+        <!-- Pot -->
+        <div id="pot-section">
+            <div id="pot">Pot: $0</div>
+        </div>
+        
+        <!-- Side Pots Display -->
+        <div id="side-pots-display">
+            <h3>Pots</h3>
+            <div id="pots-list">
+                <!-- Side pots go here -->
+            </div>
+        </div>
+        
+        <!-- Player Section -->
+        <div class="player-section">
+            <div class="player-info">
+                <div>
+                    <span class="player-name">👤 You</span>
+                    <span class="bet-display" id="player-bet">Bet: $0</span>
+                </div>
+                <div class="chips" id="player-chips">$1000</div>
+                <div class="dealer-button" id="player-button" style="display: none;">D</div>
+            </div>
+            <div class="all-in-indicator" id="player-all-in">🔥 YOU ARE ALL-IN! 🔥</div>
+            <div class="hand" id="player-hand">
+                <!-- Player cards go here -->
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div id="controls">
+            <button id="check-btn" onclick="check()">Check</button>
+            <button id="bet-btn" onclick="bet()">Bet</button>
+            <button id="call-btn" onclick="call()">Call</button>
+            <button id="raise-btn" onclick="raise()">Raise</button>
+            <button id="fold-btn" onclick="fold()">Fold</button>
+            <button id="all-in-btn" onclick="allIn()">All-In 🔥</button>
+        </div>
+    </div>
+    
+    <!-- Bet Input Modal -->
+    <div id="bet-modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Enter Bet Amount</h2>
+            <input type="number" id="bet-input" min="10" step="5" value="10">
+            <div class="modal-buttons">
+                <button id="confirm-bet">Confirm</button>
+                <button id="cancel-bet">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="answer-key-script.js"></script>
+</body>
+</html>

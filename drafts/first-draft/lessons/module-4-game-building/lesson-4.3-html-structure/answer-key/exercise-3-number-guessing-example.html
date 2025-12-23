@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game - Exercise 3 Example</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen">
+        <h1 class="game-title">
+            🎯 Number Guessing Game 🎯
+        </h1>
+        
+        <p class="tagline">Can you guess the secret number?</p>
+        
+        <div class="difficulty-selection">
+            <h3>Choose Difficulty:</h3>
+            <button id="easy-btn" class="btn btn-difficulty" data-range="10">Easy (1-10)</button>
+            <button id="medium-btn" class="btn btn-difficulty" data-range="50">Medium (1-50)</button>
+            <button id="hard-btn" class="btn btn-difficulty" data-range="100">Hard (1-100)</button>
+        </div>
+        
+        <footer class="credits">
+            <p>Created by: Student Example</p>
+        </footer>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen hidden">
+        
+        <h2>Guess a number between <span id="min-range">1</span> and <span id="max-range">100</span></h2>
+        
+        <div class="guess-area">
+            <input type="number" id="guess-input" min="1" max="100" placeholder="Enter guess">
+            <button id="guess-btn" class="btn btn-primary">Submit Guess</button>
+        </div>
+        
+        <div class="feedback">
+            <p id="hint-message" class="hint">Make your first guess!</p>
+            <p class="guesses-info">
+                Guesses remaining: <span id="guesses-left">10</span>
+            </p>
+        </div>
+        
+        <div class="guess-history">
+            <h3>Previous Guesses:</h3>
+            <ul id="guess-list">
+                <!-- JavaScript will add guesses here -->
+            </ul>
+        </div>
+        
+        <button id="give-up-btn" class="btn btn-secondary">Give Up</button>
+        
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen" class="screen hidden">
+        <h1 id="end-title" class="end-title">Game Over</h1>
+        
+        <p id="end-message" class="end-message">
+            The secret number was: <span id="secret-number">?</span>
+        </p>
+        
+        <div class="end-stats">
+            <div class="stat-item">
+                <span class="stat-label">Total Guesses:</span>
+                <span id="total-guesses">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Games Played:</span>
+                <span id="games-played">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Games Won:</span>
+                <span id="games-won">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Win Rate:</span>
+                <span id="win-rate">0%</span>
+            </div>
+        </div>
+        
+        <div class="end-buttons">
+            <button id="play-again-btn" class="btn btn-primary">Play Again</button>
+            <button id="quit-btn" class="btn btn-secondary">Back to Menu</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Poker Game - Answer Key</title>
+    <link rel="stylesheet" href="answer-key-style.css">
+</head>
+<body>
+    <!-- Message Overlay (for animations) -->
+    <div id="message-overlay" class="message-overlay">
+        <div class="message-content">
+            <p id="message-text">Message</p>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+        <div class="screen-content">
+            <h1>🎴 Animated Poker</h1>
+            <h2>5 Card Draw</h2>
+            <p>Complete with smooth animations!</p>
+            <div class="rules-summary">
+                <h3>Quick Rules:</h3>
+                <ul>
+                    <li>You and dealer each get 5 cards</li>
+                    <li>Choose: Call, Fold, or Raise</li>
+                    <li>Best poker hand wins!</li>
+                </ul>
+            </div>
+            <button id="start-button" class="big-button">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen" style="display: none;">
+        <!-- Header -->
+        <div class="game-header">
+            <div class="chip-display">
+                <div class="player-chips">
+                    <span class="label">Your Chips:</span>
+                    <span class="amount">$<span id="player-chips">1000</span></span>
+                </div>
+                <div class="pot-display">
+                    <span class="label">Pot:</span>
+                    <span class="amount">$<span id="pot-amount">0</span></span>
+                </div>
+                <div class="dealer-chips">
+                    <span class="label">Dealer Chips:</span>
+                    <span class="amount">$<span id="dealer-chips">1000</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Playing Area -->
+        <div class="playing-area">
+            <!-- Dealer Section -->
+            <div class="player-section dealer-section">
+                <h2>Dealer</h2>
+                <div id="dealer-cards" class="card-container"></div>
+                <div id="dealer-hand-name" class="hand-name"></div>
+            </div>
+
+            <!-- Player Section -->
+            <div class="player-section player-section-main">
+                <h2>You</h2>
+                <div id="player-cards" class="card-container"></div>
+                <div id="player-hand-name" class="hand-name"></div>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button id="fold-button" class="game-button fold-button">
+                Fold
+                <span class="button-hint">Give up</span>
+            </button>
+            <button id="call-button" class="game-button call-button">
+                Call
+                <span class="button-hint">Match bet</span>
+            </button>
+            <button id="raise-button" class="game-button raise-button">
+                Raise
+                <span class="button-hint">Bet more</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen" class="screen" style="display: none;">
+        <div class="screen-content">
+            <h1 id="result-emoji">🎉</h1>
+            <h2 id="result-text">You Win!</h2>
+            
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="stat-label">Your Final Chips:</span>
+                    <span class="stat-value">$<span id="final-player-chips">0</span></span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Dealer Final Chips:</span>
+                    <span class="stat-value">$<span id="final-dealer-chips">0</span></span>
+                </div>
+            </div>
+
+            <div class="end-buttons">
+                <button id="play-again-button" class="big-button">Play Again</button>
+                <button id="quit-button" class="big-button secondary-button">Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="answer-key-script.js"></script>
+</body>
+</html>
