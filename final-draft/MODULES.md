@@ -382,26 +382,26 @@ This document provides comprehensive details for each module and lesson, includi
 
 ---
 
-## 🎮 Module 4: Game Building
+## 🎮 Module 4: Texas Hold'em Poker Game
 
-**Goal:** Create interactive browser-based games
+**Goal:** Build a complete Texas Hold'em poker game from scratch
 
 **Duration:** 7 lessons + capstone game  
 **Prerequisites:** Modules 1-3  
-**Outcome:** Playable web game with sound and animations
+**Outcome:** Fully playable Texas Hold'em game with AI opponents, animations, and accessibility features
 
 ### Lesson Outline:
-- 4.1 Game Loop & State - Update/render cycles, game state management
-- 4.2 Rendering & Animations - Drawing to canvas, smooth animations
-- 4.3 Input Handling - Keyboard, mouse, touch controls
-- 4.4 Assets & Audio - Loading images/sounds, audio playback
-- 4.5 Accessibility in Games - Reduced motion, captions, keyboard-only
-- 4.6 Testing & Debugging - Testing strategies, common bugs
-- 4.7 Final Integration & Polish - Putting it all together
+- 4.1 Game Loop & State - Card deck, hands, betting rounds, game flow
+- 4.2 Rendering & Animations - Card animations, chip movements, smooth transitions
+- 4.3 Input Handling - Betting controls, fold/call/raise actions, keyboard shortcuts
+- 4.4 Assets & Audio - Card images, chip sounds, background music, voice announcements
+- 4.5 Accessibility in Games - Keyboard-only play, screen reader support, reduced motion, text alternatives
+- 4.6 Testing & Debugging - Game logic validation, edge cases, AI testing
+- 4.7 Final Integration & Polish - AI opponents, pot calculations, winner detection, visual polish
 
-**Capstone:** Complete playable game with all features
+**Capstone:** Complete Texas Hold'em game with AI players, betting mechanics, and full accessibility
 
-**Assessment:** Playtest + technical review + reflection
+**Assessment:** Playtest + code review + accessibility audit + reflection
 
 ---
 

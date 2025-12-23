@@ -84,20 +84,25 @@ The final draft should be:
 ---
 
 ### Phase 4: Game Development (Future)
-**Focus:** Module 4 - Game Building
+**Focus:** Module 4 - Texas Hold'em Poker Game
 
 **Priorities:**
-1. Game loop and state management
-2. Canvas rendering and animations
-3. Input handling (keyboard, mouse, touch)
-4. Asset loading and audio playback
-5. Accessibility in games (keyboard-only, reduced motion, captions)
+1. Game loop and poker game state (deck, hands, betting rounds, pot)
+2. Card rendering and animations (dealing, flipping, chip movements)
+3. Input handling (betting controls, fold/call/raise, keyboard shortcuts)
+4. Asset loading and audio (card images, chip sounds, announcements)
+5. Accessibility in games (keyboard-only, screen reader support, reduced motion, text alternatives)
+6. AI opponents with varying difficulty levels
+7. Hand evaluation and winner detection
 
 **Deliverable:**
-- Polished, playable browser game
-- Accessible to keyboard-only users
+- Complete Texas Hold'em poker game
+- 2-6 AI opponents with different play styles
+- Full betting mechanics (blinds, raises, all-in)
+- Accessible to keyboard-only and screen reader users
 - Respects reduced-motion preferences
-- Includes audio with captions/alternatives
+- Audio feedback with text alternatives
+- Polished UI with animations
 
 ---
 
@@ -197,13 +202,15 @@ Add JavaScript interactivity:
 - Navigation highlighting
 - Local storage for preferences
 
-### Module 4: Browser Game
-Create a complete game:
-- Game loop and state management
-- Canvas rendering
-- Keyboard/mouse controls
-- Sound effects (with alternatives)
-- Accessibility features
+### Module 4: Texas Hold'em Poker Game
+Build a complete poker game:
+- Full Texas Hold'em rules and mechanics
+- 2-6 AI opponents with different strategies
+- Card dealing and hand evaluation
+- Betting system (blinds, raises, all-in)
+- Chip animations and sound effects
+- Keyboard-only and screen reader support
+- Reduced motion alternatives
 
 ### Module 5: Published Portfolio
 Deploy everything:

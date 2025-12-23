@@ -80,22 +80,24 @@ Add interactivity, logic, and dynamic behavior to your websites. Learn programmi
 
 ---
 
-### Module 4: Game Building 🎮
-**Create interactive browser games**
+### Module 4: Texas Hold'em Poker Game 🎮
+**Build a complete poker game from scratch**
 
-Put all your skills together to build games with graphics, sound, user input, and game logic. Learn testing, debugging, and polish.
+Put all your skills together to build a full-featured Texas Hold'em poker game. Learn game logic, AI opponents, animations, and accessibility in games.
 
 **What You'll Learn:**
-- Game planning and design
+- Poker game rules and mechanics
+- Card deck and hand evaluation
 - Game loop and state management
-- Rendering and animations
-- Input handling (keyboard/mouse)
-- Audio with fallbacks
-- Accessibility (reduced motion, captions)
-- Testing and debugging strategies
+- AI opponent strategies
+- Card animations and transitions
+- Betting system and pot calculations
+- Audio with announcements and fallbacks
+- Accessibility (keyboard-only, screen readers, reduced motion)
+- Testing poker game logic
 - Game feel and polish
 
-**Final Project:** Playable browser game with audio, animations, and accessibility features
+**Final Project:** Complete Texas Hold'em game with AI opponents, betting mechanics, animations, and full accessibility
 
 ---
 
