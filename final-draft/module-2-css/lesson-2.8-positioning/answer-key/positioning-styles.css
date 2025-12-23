@@ -1,0 +1,138 @@
+/* Positioning Examples - Solution */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding-top: 100px;
+}
+
+/* Fixed Header */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.fixed-header h1 {
+    margin-bottom: 5px;
+}
+
+/* Main Content */
+.content {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content h2 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+
+/* Relative Positioning with Badge */
+.relative-box {
+    position: relative;
+    background-color: #ecf0f1;
+    padding: 30px;
+    margin: 30px 0;
+    border-radius: 8px;
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Absolute Positioning Example */
+.absolute-example {
+    position: relative;
+    background-color: #d5dbdb;
+    padding: 50px;
+    margin: 30px 0;
+    border: 2px dashed #95a5a6;
+    min-height: 200px;
+}
+
+.absolute-child {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #3498db;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Scroll Content */
+.scroll-content,
+.more-content {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.scroll-content p,
+.more-content p {
+    margin: 40px 0;
+    font-size: 18px;
+    line-height: 3;
+}
+
+/* Sticky Element */
+.sticky-box {
+    position: sticky;
+    top: 100px;
+    background-color: #f39c12;
+    color: white;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Back to Top Button - Fixed */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 99;
+    transition: all 0.3s;
+}
+
+.back-to-top:hover {
+    background-color: #2980b9;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}

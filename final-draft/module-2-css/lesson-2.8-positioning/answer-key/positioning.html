@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positioning Examples - Solution</title>
+    <link rel="stylesheet" href="positioning-styles.css">
+</head>
+<body>
+    <header class="fixed-header">
+        <h1>Fixed Header</h1>
+        <p>This header stays at the top when you scroll!</p>
+    </header>
+
+    <main>
+        <section class="content">
+            <h2>Positioning Demo</h2>
+            
+            <div class="relative-box">
+                <p>This box uses relative positioning</p>
+                <span class="badge">New!</span>
+            </div>
+
+            <div class="absolute-example">
+                <p>Parent with relative positioning</p>
+                <div class="absolute-child">Absolutely positioned inside!</div>
+            </div>
+        </section>
+
+        <div class="scroll-content">
+            <p>Scroll down to see the sticky element in action...</p>
+            <p>Keep scrolling...</p>
+            <p>Keep scrolling...</p>
+        </div>
+
+        <div class="sticky-box">
+            <p>I'm sticky! I stick to the top when you scroll past me.</p>
+        </div>
+
+        <div class="more-content">
+            <p>More content to enable scrolling...</p>
+            <p>More content...</p>
+            <p>More content...</p>
+        </div>
+    </main>
+
+    <button class="back-to-top">↑</button>
+</body>
+</html>

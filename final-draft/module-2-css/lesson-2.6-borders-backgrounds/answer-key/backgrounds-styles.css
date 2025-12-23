@@ -1,0 +1,100 @@
+/* Backgrounds & Gradients - Solution */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+section {
+    padding: 50px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 18px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Solid Background */
+.solid-bg {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Linear Gradient - Horizontal */
+.linear-bg {
+    background: linear-gradient(to right, #3498db, #9b59b6);
+    color: white;
+}
+
+/* Diagonal Gradient - Three Colors */
+.diagonal-bg {
+    background: linear-gradient(45deg, #f12711, #f5af19, #ffd700);
+    color: white;
+}
+
+/* Radial Gradient */
+.radial-bg {
+    background: radial-gradient(circle, #e74c3c, #c0392b);
+    color: white;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 100px 20px;
+}
+
+.hero h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+.hero button {
+    padding: 15px 40px;
+    border: 2px solid white;
+    background-color: white;
+    color: #667eea;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero button:hover {
+    background-color: transparent;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Sunset Gradient */
+.sunset {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Ocean Gradient */
+.ocean {
+    background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
