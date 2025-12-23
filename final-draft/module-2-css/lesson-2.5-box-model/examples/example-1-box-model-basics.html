@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Box Model Basics</title>
+    <link rel="stylesheet" href="example-1-styles.css">
+</head>
+<body>
+    <h1>The Box Model Visualized</h1>
+
+    <!-- Content Only -->
+    <div class="demo-section">
+        <h2>1. Content Only (No Padding, Margin, or Border)</h2>
+        <div class="box content-only">
+            This is just content with no padding, margin, or border.
+        </div>
+    </div>
+
+    <!-- Padding Demo -->
+    <div class="demo-section">
+        <h2>2. Content + Padding</h2>
+        <div class="box with-padding">
+            This box has 20px padding on all sides. Notice the space between the text and the edges!
+        </div>
+    </div>
+
+    <!-- Border Demo -->
+    <div class="demo-section">
+        <h2>3. Content + Padding + Border</h2>
+        <div class="box with-border">
+            This box has padding AND a 3px solid border. The border wraps around the padding.
+        </div>
+    </div>
+
+    <!-- Margin Demo -->
+    <div class="demo-section">
+        <h2>4. Complete Box Model (Content + Padding + Border + Margin)</h2>
+        <div class="box complete-box">
+            This box has it all: content, padding, border, AND margin pushing it away from other elements!
+        </div>
+        <div class="box complete-box">
+            Second box - notice the margin creating space between us!
+        </div>
+    </div>
+
+    <!-- Individual Sides Demo -->
+    <div class="demo-section">
+        <h2>5. Different Padding on Each Side</h2>
+        <div class="box different-padding">
+            Top: 10px, Right: 20px, Bottom: 30px, Left: 40px
+        </div>
+    </div>
+
+    <!-- Practical Examples -->
+    <div class="demo-section">
+        <h2>6. Practical Examples</h2>
+        
+        <button class="styled-button">Click Me!</button>
+        
+        <div class="card">
+            <h3>Card Title</h3>
+            <p>This card uses padding for internal spacing and margin for external spacing. Perfect for content cards!</p>
+        </div>
+        
+        <div class="highlight-box">
+            <p><strong>Pro Tip:</strong> Padding makes elements larger but keeps background color. Margin creates transparent space outside!</p>
+        </div>
+    </div>
+
+    <!-- Border Styles -->
+    <div class="demo-section">
+        <h2>7. Different Border Styles</h2>
+        <div class="border-demo">
+            <div class="box border-solid">Solid Border</div>
+            <div class="box border-dashed">Dashed Border</div>
+            <div class="box border-dotted">Dotted Border</div>
+            <div class="box border-double">Double Border</div>
+            <div class="box border-rounded">Rounded Corners</div>
+        </div>
+    </div>
+</body>
+</html>

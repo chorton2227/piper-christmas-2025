@@ -1,0 +1,158 @@
+/* Example 1: Box Model Basics */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 40px;
+}
+
+.demo-section {
+    background-color: white;
+    padding: 30px;
+    margin-bottom: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.demo-section h2 {
+    color: #3498db;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Base Box Styling */
+.box {
+    background-color: #e8f4f8;
+    color: #2c3e50;
+    font-size: 16px;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* 1. Content Only */
+.content-only {
+    /* No padding, margin, or border - just content */
+}
+
+/* 2. With Padding */
+.with-padding {
+    padding: 20px;
+    /* Space inside the box */
+}
+
+/* 3. With Border */
+.with-border {
+    padding: 20px;
+    border: 3px solid #3498db;
+    /* Border wraps around the padding */
+}
+
+/* 4. Complete Box Model */
+.complete-box {
+    padding: 20px;
+    border: 3px solid #e74c3c;
+    margin: 20px 0;
+    /* Margin creates space outside */
+}
+
+/* 5. Different Padding on Each Side */
+.different-padding {
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    padding-left: 40px;
+    border: 2px solid #9b59b6;
+}
+
+/* Practical Examples */
+.styled-button {
+    padding: 15px 30px;
+    margin: 10px 0 20px 0;
+    border: 2px solid #3498db;
+    background-color: #3498db;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.styled-button:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.card {
+    padding: 25px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.card p {
+    margin-bottom: 0;
+    line-height: 1.6;
+    color: #555;
+}
+
+.highlight-box {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #fff3cd;
+    border-left: 5px solid #ffc107;
+    border-radius: 5px;
+}
+
+.highlight-box p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Border Styles Demo */
+.border-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.border-demo .box {
+    flex: 1;
+    min-width: 150px;
+    padding: 15px;
+    text-align: center;
+}
+
+.border-solid {
+    border: 3px solid #3498db;
+}
+
+.border-dashed {
+    border: 3px dashed #e74c3c;
+}
+
+.border-dotted {
+    border: 3px dotted #27ae60;
+}
+
+.border-double {
+    border: 5px double #9b59b6;
+}
+
+.border-rounded {
+    border: 3px solid #f39c12;
+    border-radius: 15px;
+}

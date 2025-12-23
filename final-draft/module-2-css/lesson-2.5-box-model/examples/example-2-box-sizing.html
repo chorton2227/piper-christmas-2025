@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Box-Sizing</title>
+    <link rel="stylesheet" href="example-2-styles.css">
+</head>
+<body>
+    <h1>Box-Sizing: content-box vs border-box</h1>
+
+    <div class="comparison">
+        <div class="demo-column">
+            <h2>Default: content-box ❌</h2>
+            <p class="explanation">Width applies to CONTENT ONLY. Padding and border are ADDED to the width.</p>
+            
+            <div class="box content-box-demo">
+                <div class="measurements">
+                    <p><strong>CSS:</strong></p>
+                    <code>
+                        width: 300px;<br>
+                        padding: 20px;<br>
+                        border: 5px solid;
+                    </code>
+                    <p><strong>Actual Total Width:</strong></p>
+                    <p>300px (content) + 40px (padding) + 10px (border) = <strong>350px</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-column">
+            <h2>Better: border-box ✅</h2>
+            <p class="explanation">Width applies to the ENTIRE BOX. Padding and border are INCLUDED in the width.</p>
+            
+            <div class="box border-box-demo">
+                <div class="measurements">
+                    <p><strong>CSS:</strong></p>
+                    <code>
+                        box-sizing: border-box;<br>
+                        width: 300px;<br>
+                        padding: 20px;<br>
+                        border: 5px solid;
+                    </code>
+                    <p><strong>Actual Total Width:</strong></p>
+                    <p><strong>300px</strong> (includes everything!)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="best-practice">
+        <h2>🌟 Best Practice: Apply to Everything!</h2>
+        <div class="code-example">
+            <code>
+                * {<br>
+                &nbsp;&nbsp;box-sizing: border-box;<br>
+                }
+            </code>
+        </div>
+        <p>This makes ALL elements use border-box, making sizing predictable and easier to work with!</p>
+    </div>
+
+    <div class="practical-demo">
+        <h2>Practical Example: Two Boxes Side by Side</h2>
+        
+        <h3>Without border-box (breaks layout!):</h3>
+        <div class="container-demo">
+            <div class="half-box content-box-example">
+                Width: 50%<br>
+                Padding: 20px<br>
+                Border: 3px
+            </div>
+            <div class="half-box content-box-example">
+                Width: 50%<br>
+                Padding: 20px<br>
+                Border: 3px
+            </div>
+        </div>
+        <p class="note">⚠️ Notice they wrap because total width &gt; 100%</p>
+        
+        <h3>With border-box (works perfectly!):</h3>
+        <div class="container-demo">
+            <div class="half-box border-box-example">
+                Width: 50%<br>
+                Padding: 20px<br>
+                Border: 3px
+            </div>
+            <div class="half-box border-box-example">
+                Width: 50%<br>
+                Padding: 20px<br>
+                Border: 3px
+            </div>
+        </div>
+        <p class="note">✅ Perfect! They fit side by side exactly.</p>
+    </div>
+
+    <div class="width-demo">
+        <h2>Understanding Width with Different Box Sizing</h2>
+        
+        <div class="width-example">
+            <h3>Set Width: 400px (content-box)</h3>
+            <div class="width-box content-box-width">
+                Content width: 400px<br>
+                + Padding: 30px × 2 = 60px<br>
+                + Border: 4px × 2 = 8px<br>
+                <strong>= Total: 468px</strong>
+            </div>
+        </div>
+        
+        <div class="width-example">
+            <h3>Set Width: 400px (border-box)</h3>
+            <div class="width-box border-box-width">
+                Total width: 400px<br>
+                (Padding and border included!)<br>
+                Content adjusts automatically<br>
+                <strong>= Total: 400px</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
