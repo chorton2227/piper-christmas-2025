@@ -1,0 +1,139 @@
+/* Example 1: Color Names */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: whitesmoke;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: navy;
+    text-align: center;
+    border-bottom: 3px solid dodgerblue;
+    padding-bottom: 15px;
+}
+
+h2 {
+    color: darkslategray;
+    margin-top: 40px;
+}
+
+.intro {
+    background-color: lightyellow;
+    padding: 20px;
+    border-left: 5px solid gold;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Color boxes */
+.color-box {
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.color-box h3 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.color-box p {
+    margin: 5px 0 0 0;
+    font-family: 'Courier New', monospace;
+    background-color: rgba(0,0,0,0.1);
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* Basic colors */
+.red {
+    background-color: red;
+    color: white;
+}
+
+.blue {
+    background-color: blue;
+    color: white;
+}
+
+.green {
+    background-color: green;
+    color: white;
+}
+
+.yellow {
+    background-color: yellow;
+    color: black;
+}
+
+/* Light variations */
+.lightblue {
+    background-color: lightblue;
+    color: darkblue;
+}
+
+.lightgreen {
+    background-color: lightgreen;
+    color: darkgreen;
+}
+
+.lightpink {
+    background-color: lightpink;
+    color: darkred;
+}
+
+/* Dark variations */
+.darkblue {
+    background-color: lightcyan;
+    color: darkblue;
+}
+
+.darkgreen {
+    background-color: lightgreen;
+    color: darkgreen;
+}
+
+.darkorange {
+    background-color: lightyellow;
+    color: darkorange;
+}
+
+/* Special colors */
+.coral {
+    background-color: coral;
+    color: white;
+}
+
+.teal {
+    background-color: teal;
+    color: white;
+}
+
+.gold {
+    background-color: gold;
+    color: darkgoldenrod;
+}
+
+.crimson {
+    background-color: crimson;
+    color: white;
+}
+
+/* Tip box */
+.tip-box {
+    background-color: mintcream;
+    border: 2px solid mediumseagreen;
+    padding: 20px;
+    margin: 30px 0;
+    border-radius: 8px;
+}
+
+.tip-box h3 {
+    color: darkgreen;
+    margin-top: 0;
+}

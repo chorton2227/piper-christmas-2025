@@ -1,0 +1,209 @@
+/* Example 2: Hex Colors */
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 4px solid #3498db;
+    padding-bottom: 15px;
+}
+
+h2 {
+    color: #34495e;
+    margin-top: 50px;
+    border-left: 5px solid #3498db;
+    padding-left: 15px;
+}
+
+.intro {
+    background-color: #fff9e6;
+    color: #856404;
+    padding: 20px;
+    border-left: 5px solid #ffd54f;
+    font-size: 18px;
+    line-height: 1.6;
+    border-radius: 5px;
+}
+
+/* Hex demonstration boxes */
+.hex-demo {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.hex-box {
+    flex: 1;
+    min-width: 200px;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.hex-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-family: 'Courier New', monospace;
+}
+
+.hex-box p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.hex-box code {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Primary colors */
+.pure-red {
+    background-color: #FF0000;
+    color: white;
+}
+
+.pure-green {
+    background-color: #00FF00;
+    color: #004d00;
+}
+
+.pure-blue {
+    background-color: #0000FF;
+    color: white;
+}
+
+/* Mixed colors */
+.yellow {
+    background-color: #FFFF00;
+    color: #666600;
+}
+
+.cyan {
+    background-color: #00FFFF;
+    color: #006666;
+}
+
+.magenta {
+    background-color: #FF00FF;
+    color: white;
+}
+
+/* Professional palette */
+.palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.palette-box {
+    padding: 30px 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.palette-box:hover {
+    transform: translateY(-5px);
+}
+
+.palette-box h3 {
+    margin: 0 0 5px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+}
+
+.palette-box p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.dark {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+.light {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+/* Shorthand examples */
+.shorthand-examples {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.short-box {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #6c757d;
+    border-radius: 4px;
+}
+
+.short-box code {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e74c3c;
+    font-family: 'Courier New', monospace;
+}
+
+.short-box p {
+    margin: 5px 0 0 0;
+    color: #666;
+}
+
+/* Info box */
+.info-box {
+    background-color: #e3f2fd;
+    border: 2px solid #2196f3;
+    padding: 25px;
+    margin: 30px 0;
+    border-radius: 8px;
+}
+
+.info-box h3 {
+    color: #1565c0;
+    margin-top: 0;
+}
+
+.info-box ul {
+    color: #0d47a1;
+    line-height: 1.8;
+}
+
+.info-box li {
+    margin: 8px 0;
+}

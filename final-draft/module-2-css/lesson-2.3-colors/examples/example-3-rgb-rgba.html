@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: RGB and RGBA</title>
+    <link rel="stylesheet" href="example-3-styles.css">
+</head>
+<body>
+    <h1>Understanding RGB and RGBA Colors</h1>
+    
+    <p class="intro">RGB uses three values (Red, Green, Blue) from 0-255. RGBA adds transparency with a fourth value (Alpha) from 0-1!</p>
+    
+    <h2>RGB Basics</h2>
+    <div class="rgb-demo">
+        <div class="rgb-box rgb-red">
+            <h3>rgb(255, 0, 0)</h3>
+            <p>Pure Red</p>
+            <code>Red: 255 (max), Green: 0, Blue: 0</code>
+        </div>
+        
+        <div class="rgb-box rgb-green">
+            <h3>rgb(0, 255, 0)</h3>
+            <p>Pure Green</p>
+            <code>Red: 0, Green: 255 (max), Blue: 0</code>
+        </div>
+        
+        <div class="rgb-box rgb-blue">
+            <h3>rgb(0, 0, 255)</h3>
+            <p>Pure Blue</p>
+            <code>Red: 0, Green: 0, Blue: 255 (max)</code>
+        </div>
+    </div>
+    
+    <h2>Mixed RGB Colors</h2>
+    <div class="rgb-demo">
+        <div class="rgb-box rgb-purple">
+            <h3>rgb(128, 0, 128)</h3>
+            <p>Purple</p>
+            <code>Red + Blue = Purple</code>
+        </div>
+        
+        <div class="rgb-box rgb-orange">
+            <h3>rgb(255, 165, 0)</h3>
+            <p>Orange</p>
+            <code>Lots of Red + Some Green</code>
+        </div>
+        
+        <div class="rgb-box rgb-gray">
+            <h3>rgb(128, 128, 128)</h3>
+            <p>Gray</p>
+            <code>Equal amounts = Gray</code>
+        </div>
+    </div>
+    
+    <h2>RGBA - Adding Transparency! 🌟</h2>
+    <p class="explanation">The fourth value (alpha) controls transparency. 0 = invisible, 1 = solid, 0.5 = 50% see-through</p>
+    
+    <div class="transparency-demo">
+        <h3>Same Color, Different Transparency</h3>
+        <div class="layer-container">
+            <div class="base-layer">
+                <p>Background Image/Pattern</p>
+            </div>
+            <div class="rgba-layer alpha-100">
+                <p>rgba(52, 152, 219, 1.0)</p>
+                <p>100% opaque (solid)</p>
+            </div>
+            <div class="rgba-layer alpha-75">
+                <p>rgba(52, 152, 219, 0.75)</p>
+                <p>75% opaque</p>
+            </div>
+            <div class="rgba-layer alpha-50">
+                <p>rgba(52, 152, 219, 0.5)</p>
+                <p>50% opaque</p>
+            </div>
+            <div class="rgba-layer alpha-25">
+                <p>rgba(52, 152, 219, 0.25)</p>
+                <p>25% opaque</p>
+            </div>
+        </div>
+    </div>
+    
+    <h2>Real-World RGBA Examples</h2>
+    
+    <div class="overlay-example">
+        <div class="image-box">
+            <div class="dark-overlay">
+                <h3>Dark Overlay Effect</h3>
+                <p>rgba(0, 0, 0, 0.6) creates a dark overlay - perfect for text on images!</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-examples">
+        <div class="glass-card">
+            <h3>Glass Morphism</h3>
+            <p>Modern "frosted glass" effect using RGBA</p>
+            <code>rgba(255, 255, 255, 0.2)</code>
+        </div>
+        
+        <div class="alert-success">
+            <h4>Success Message</h4>
+            <p>Your changes have been saved!</p>
+            <code>rgba(46, 204, 113, 0.2)</code>
+        </div>
+        
+        <div class="alert-error">
+            <h4>Error Message</h4>
+            <p>Something went wrong. Please try again.</p>
+            <code>rgba(231, 76, 60, 0.2)</code>
+        </div>
+    </div>
+    
+    <div class="tip-box">
+        <h3>💡 RGBA vs opacity Property</h3>
+        <div class="comparison">
+            <div class="comparison-box">
+                <h4>RGBA</h4>
+                <div class="rgba-example">
+                    <p>Only background is transparent</p>
+                    <p>Text stays solid!</p>
+                </div>
+            </div>
+            <div class="comparison-box">
+                <h4>opacity: 0.5</h4>
+                <div class="opacity-example">
+                    <p>Everything is transparent</p>
+                    <p>Including text!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
