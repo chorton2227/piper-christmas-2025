@@ -1,0 +1,139 @@
+/* Example 3: ID Selectors */
+/* IDs start with a HASH (#) in CSS */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* ID selector: Only ONE element with id="header" */
+#header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+#header p {
+    margin: 10px 0 0 0;
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* ID selector: Only ONE element with id="navigation" */
+#navigation {
+    background-color: #2c3e50;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+#navigation a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#navigation a:hover {
+    background-color: #34495e;
+}
+
+/* ID selector: Only ONE element with id="main-content" */
+#main-content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#main-content h2 {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+#main-content p {
+    line-height: 1.6;
+    color: #333;
+}
+
+#main-content ul {
+    line-height: 1.8;
+}
+
+/* ID selector: Only ONE element with id="important-notice" */
+#important-notice {
+    background-color: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+#important-notice h3 {
+    margin-top: 0;
+    color: #856404;
+}
+
+#important-notice p {
+    color: #856404;
+    margin: 10px 0;
+}
+
+/* ID selector: Only ONE element with id="sidebar" */
+#sidebar {
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+#sidebar h3 {
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+#sidebar li {
+    margin: 8px 0;
+}
+
+#sidebar a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+#sidebar a:hover {
+    text-decoration: underline;
+}
+
+/* ID selector: Only ONE element with id="footer" */
+#footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#footer p {
+    margin: 5px 0;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Selectors Practice - Answer Key</title>
+    <link rel="stylesheet" href="class-practice.css">
+</head>
+<body>
+    <h1>Learning Class Selectors</h1>
+    
+    <h2>Message Boxes</h2>
+    <p>Class selectors let us create reusable styles. Here are different types of message boxes:</p>
+    
+    <div class="message success">
+        <strong>Success!</strong>
+        <p>Your file was saved successfully. All changes have been preserved.</p>
+    </div>
+    
+    <div class="message warning">
+        <strong>Warning!</strong>
+        <p>Please review your code before submitting. Make sure there are no errors.</p>
+    </div>
+    
+    <div class="message error">
+        <strong>Error!</strong>
+        <p>Something went wrong. Please check your syntax and try again.</p>
+    </div>
+    
+    <div class="message info">
+        <strong>Information</strong>
+        <p>Did you know? You can use multiple classes on the same element to combine styles!</p>
+    </div>
+    
+    <h2>Highlighted Text</h2>
+    <p>This is a normal paragraph without any special styling.</p>
+    <p class="highlight">This paragraph is highlighted! It has the "highlight" class.</p>
+    <p>Another normal paragraph here.</p>
+    <p class="highlight">This one is also highlighted because it has the same class!</p>
+    <p class="important">This paragraph is marked as important with special styling.</p>
+    <p class="highlight important">This paragraph has BOTH classes - it gets styles from both!</p>
+    
+    <h2>Buttons</h2>
+    <p>Classes are perfect for creating button systems with consistent styles but different colors:</p>
+    
+    <button class="btn">Normal Button</button>
+    <button class="btn btn-primary">Primary Button</button>
+    <button class="btn btn-success">Success Button</button>
+    <button class="btn btn-warning">Warning Button</button>
+    <button class="btn btn-danger">Danger Button</button>
+    <button class="btn btn-info">Info Button</button>
+    
+    <h2>Understanding Classes</h2>
+    <p>Classes are the most important selector type you'll use. Here's why:</p>
+    <ul class="highlight-list">
+        <li>They're reusable - use the same class on multiple elements</li>
+        <li>They're flexible - combine multiple classes on one element</li>
+        <li>They're semantic - names describe what they do (.btn, .message, .card)</li>
+        <li>They keep your code DRY (Don't Repeat Yourself)</li>
+    </ul>
+    
+    <div class="tip-box">
+        <h3>💡 Pro Tip</h3>
+        <p>In HTML, you write: <code>class="highlight"</code> (no dot)</p>
+        <p>In CSS, you write: <code>.highlight { }</code> (with dot)</p>
+        <p>This is the #1 thing students mix up - remember the difference!</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Combining Selectors</title>
+    <link rel="stylesheet" href="example-4-combining-selectors.css">
+</head>
+<body>
+    <h1>Advanced Selector Techniques</h1>
+    
+    <h2>1. Element with Class</h2>
+    <p>This is a normal paragraph.</p>
+    <p class="highlight">This paragraph has the highlight class.</p>
+    <div class="highlight">This div also has the highlight class, but it looks different!</div>
+    
+    <h2>2. Grouping Selectors</h2>
+    <h3>About Me</h3>
+    <h4>My Hobbies</h4>
+    <h5>My Favorites</h5>
+    <p>Notice how h3, h4, and h5 all have the same color? That's grouping!</p>
+    
+    <h2>3. Descendant Selectors</h2>
+    <p>This paragraph is NOT inside a div.</p>
+    
+    <div class="container">
+        <p>This paragraph IS inside a div with class "container".</p>
+        <p>This one too! Descendant selectors let us target these specifically.</p>
+        <ul>
+            <li>List item in container</li>
+            <li>Another list item</li>
+        </ul>
+    </div>
+    
+    <h2>4. Multiple Classes</h2>
+    <div class="card">Regular card</div>
+    <div class="card featured">Featured card (has both "card" and "featured" classes)</div>
+    <div class="card premium">Premium card (has both "card" and "premium" classes)</div>
+    <div class="card featured premium">Super special card (has all three classes!)</div>
+    
+    <h2>5. Combining Everything</h2>
+    <div id="special-section">
+        <h3>Special Section</h3>
+        <p>This section has unique styling.</p>
+        <p class="highlight">This highlighted paragraph is inside the special section.</p>
+        <button class="btn">Normal Button</button>
+        <button class="btn primary">Primary Button</button>
+    </div>
+    
+    <h2>6. Complex Example</h2>
+    <div class="article">
+        <h3>Article Title</h3>
+        <p class="intro">This is the introduction paragraph with special styling.</p>
+        <p>This is a normal paragraph in the article.</p>
+        <p>Another normal paragraph.</p>
+        <div class="quote">
+            <p>"This is a quote inside the article. It has different styling!"</p>
+        </div>
+    </div>
+    
+    <div class="article featured">
+        <h3>Featured Article</h3>
+        <p class="intro">Featured articles look different because they have the "featured" class!</p>
+        <p>The content here still looks good.</p>
+    </div>
+</body>
+</html>
