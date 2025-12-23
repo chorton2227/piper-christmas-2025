@@ -1,0 +1,212 @@
+/* Example 2: Text Properties */
+
+body {
+    background-color: #f0f0f0;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 42px;
+    margin-bottom: 40px;
+}
+
+.demo-section {
+    background-color: white;
+    padding: 25px;
+    margin: 25px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.demo-section h2 {
+    color: #3498db;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.demo-section p {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db;
+}
+
+/* Font Size */
+.size-small {
+    font-size: 12px;
+}
+
+.size-normal {
+    font-size: 16px;
+}
+
+.size-large {
+    font-size: 24px;
+}
+
+.size-xlarge {
+    font-size: 32px;
+}
+
+/* Font Weight */
+.weight-light {
+    font-weight: 300;
+}
+
+.weight-normal {
+    font-weight: 400;
+}
+
+.weight-medium {
+    font-weight: 500;
+}
+
+.weight-bold {
+    font-weight: 700;
+}
+
+.weight-bolder {
+    font-weight: 900;
+}
+
+/* Font Style */
+.style-normal {
+    font-style: normal;
+}
+
+.style-italic {
+    font-style: italic;
+}
+
+.style-oblique {
+    font-style: oblique;
+}
+
+/* Text Align */
+.align-left {
+    text-align: left;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-justify {
+    text-align: justify;
+}
+
+/* Line Height */
+.line-height-demo p {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+}
+
+.lh-tight {
+    line-height: 1.0;
+}
+
+.lh-normal {
+    line-height: 1.5;
+}
+
+.lh-spacious {
+    line-height: 2.0;
+}
+
+/* Letter Spacing */
+.letter-tight {
+    letter-spacing: -1px;
+}
+
+.letter-normal {
+    letter-spacing: 0;
+}
+
+.letter-wide {
+    letter-spacing: 3px;
+}
+
+.letter-super-wide {
+    letter-spacing: 10px;
+    text-transform: uppercase;
+}
+
+/* Text Decoration */
+.decoration-none {
+    text-decoration: none;
+}
+
+.decoration-underline {
+    text-decoration: underline;
+}
+
+.decoration-line-through {
+    text-decoration: line-through;
+}
+
+.decoration-overline {
+    text-decoration: overline;
+}
+
+/* Text Transform */
+.transform-none {
+    text-transform: none;
+}
+
+.transform-uppercase {
+    text-transform: uppercase;
+}
+
+.transform-lowercase {
+    text-transform: lowercase;
+}
+
+.transform-capitalize {
+    text-transform: capitalize;
+}
+
+/* Combined Section */
+.combined {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.combined h2 {
+    color: white;
+    border-bottom-color: white;
+}
+
+.fancy-text {
+    font-size: 28px;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    letter-spacing: 2px;
+    color: white;
+    background-color: rgba(255,255,255,0.1);
+    border-left: 4px solid white;
+}
+
+.quote-text {
+    font-size: 20px;
+    font-style: italic;
+    text-align: center;
+    color: white;
+    line-height: 1.8;
+    background-color: rgba(255,255,255,0.1);
+    border-left: 4px solid #ffd700;
+    padding: 20px;
+}

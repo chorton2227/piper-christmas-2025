@@ -1,0 +1,148 @@
+/* Example 1: Font Families */
+
+body {
+    background-color: #f5f5f5;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.font-demo {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.font-demo h2 {
+    color: #3498db;
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.font-demo p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Different Font Families */
+.arial {
+    font-family: Arial;
+}
+
+.times {
+    font-family: 'Times New Roman';
+}
+
+.georgia {
+    font-family: Georgia;
+}
+
+.courier {
+    font-family: 'Courier New';
+}
+
+.verdana {
+    font-family: Verdana;
+}
+
+/* Font Stack Demonstrations */
+.font-stack-demo {
+    background-color: white;
+    padding: 20px;
+    margin: 30px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.font-stack-demo h2 {
+    color: #e74c3c;
+    margin-top: 0;
+}
+
+.stack-1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #ecf0f1;
+    margin: 10px 0;
+}
+
+.stack-2 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #ecf0f1;
+    margin: 10px 0;
+}
+
+.stack-3 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #ecf0f1;
+    margin: 10px 0;
+}
+
+/* Generic Font Families */
+.generic-demo {
+    background-color: white;
+    padding: 20px;
+    margin: 30px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.generic-demo h2 {
+    color: #9b59b6;
+    margin-top: 0;
+}
+
+.serif-generic {
+    font-family: serif;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    margin: 10px 0;
+}
+
+.sans-serif-generic {
+    font-family: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    margin: 10px 0;
+}
+
+.monospace-generic {
+    font-family: monospace;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    margin: 10px 0;
+}
+
+.cursive-generic {
+    font-family: cursive;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    margin: 10px 0;
+}
+
+.fantasy-generic {
+    font-family: fantasy;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    margin: 10px 0;
+}
