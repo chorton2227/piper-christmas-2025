@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tournament Registration</title>
+</head>
+<body>
+    <h1>🏆 Epic Gaming Tournament 2025</h1>
+    <p>Register now for the biggest gaming event of the year!</p>
+    <p><strong>Prize Pool: $10,000 | Dates: January 15-23, 2025</strong></p>
+    
+    <form>
+        <!-- Player Information -->
+        <div class="section">
+            <h2>Player Information</h2>
+            
+            <div class="form-group">
+                <label for="gamer-tag">Gamer Tag:</label>
+                <input type="text" id="gamer-tag" name="gamer-tag" required 
+                       placeholder="Your in-game name">
+            </div>
+            
+            <div class="form-group">
+                <label for="real-name">Real Name:</label>
+                <input type="text" id="real-name" name="real-name" required 
+                       placeholder="Full legal name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="your.email@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="discord">Discord Username:</label>
+                <input type="text" id="discord" name="discord" 
+                       placeholder="username#1234">
+            </div>
+            
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" min="13" max="99" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country" required>
+                    <option value="">Select your country...</option>
+                    <option value="us">United States</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="ca">Canada</option>
+                    <option value="au">Australia</option>
+                    <option value="de">Germany</option>
+                    <option value="fr">France</option>
+                    <option value="jp">Japan</option>
+                    <option value="kr">South Korea</option>
+                    <option value="br">Brazil</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Game Selection -->
+        <div class="section">
+            <h2>Game Selection</h2>
+            
+            <div class="form-group">
+                <p><strong>Choose your game:</strong></p>
+                <label>
+                    <input type="radio" name="game" value="fortnite" required>
+                    🎮 Fortnite
+                </label><br>
+                <label>
+                    <input type="radio" name="game" value="valorant">
+                    ⚔️ Valorant
+                </label><br>
+                <label>
+                    <input type="radio" name="game" value="rocket-league">
+                    🏀 Rocket League
+                </label><br>
+                <label>
+                    <input type="radio" name="game" value="apex">
+                    🎯 Apex Legends
+                </label><br>
+                <label>
+                    <input type="radio" name="game" value="league">
+                    🗺️ League of Legends
+                </label><br>
+                <label>
+                    <input type="radio" name="game" value="cod">
+                    🔫 Call of Duty
+                </label><br>
+                <label>
+                    <input type="radio" name="game" value="other">
+                    Other
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="game-other">If "Other", specify:</label>
+                <input type="text" id="game-other" name="game-other" 
+                       placeholder="Enter game name">
+            </div>
+        </div>
+        
+        <!-- Experience Level -->
+        <div class="section">
+            <h2>Experience Level</h2>
+            
+            <div class="form-group">
+                <label for="rank">Current Rank/Division:</label>
+                <input type="text" id="rank" name="rank" 
+                       placeholder="e.g., Gold 3, Diamond, Challenger">
+            </div>
+            
+            <div class="form-group">
+                <label for="hours">Hours Played:</label>
+                <input type="number" id="hours" name="hours" min="0" max="10000" 
+                       placeholder="Total hours in this game">
+            </div>
+            
+            <div class="form-group">
+                <label for="years">Years Playing:</label>
+                <input type="number" id="years" name="years" min="0" max="20" step="0.5">
+            </div>
+            
+            <div class="form-group">
+                <p><strong>Tournament Experience:</strong></p>
+                <label>
+                    <input type="radio" name="tourney-exp" value="first" required>
+                    This is my first tournament
+                </label><br>
+                <label>
+                    <input type="radio" name="tourney-exp" value="1-3">
+                    1-3 tournaments
+                </label><br>
+                <label>
+                    <input type="radio" name="tourney-exp" value="4-10">
+                    4-10 tournaments
+                </label><br>
+                <label>
+                    <input type="radio" name="tourney-exp" value="pro">
+                    10+ tournaments (Pro level)
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="skill-level">Skill Level (1-10):</label>
+                <input type="range" id="skill-level" name="skill-level" min="1" max="10" value="5">
+                <span id="skill-value">5</span>
+            </div>
+        </div>
+        
+        <!-- Team Information -->
+        <div class="section">
+            <h2>Team Information</h2>
+            
+            <div class="form-group">
+                <p><strong>Team Status:</strong></p>
+                <label>
+                    <input type="radio" name="team-status" value="have-team" required>
+                    I have a team (need to register team)
+                </label><br>
+                <label>
+                    <input type="radio" name="team-status" value="need-team">
+                    I need teammates (looking for team)
+                </label><br>
+                <label>
+                    <input type="radio" name="team-status" value="solo">
+                    I'll play solo
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <h3>If you have a team:</h3>
+                
+                <label for="team-name">Team Name:</label>
+                <input type="text" id="team-name" name="team-name" 
+                       placeholder="Your team's name">
+            </div>
+            
+            <div class="form-group">
+                <label for="captain-email">Team Captain Email:</label>
+                <input type="email" id="captain-email" name="captain-email" 
+                       placeholder="captain@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="team-size">Number of Team Members:</label>
+                <input type="number" id="team-size" name="team-size" min="2" max="5">
+            </div>
+            
+            <div class="form-group">
+                <h3>If looking for a team:</h3>
+                
+                <label for="role">Preferred Role:</label>
+                <select id="role" name="role">
+                    <option value="">Select role...</option>
+                    <option value="tank">Tank</option>
+                    <option value="support">Support</option>
+                    <option value="dps">DPS</option>
+                    <option value="flex">Flex</option>
+                    <option value="any">Any</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <p><strong>Communication Style:</strong> (Select all that apply)</p>
+                <label>
+                    <input type="checkbox" name="comm" value="voice">
+                    Voice chat friendly
+                </label><br>
+                <label>
+                    <input type="checkbox" name="comm" value="strategic">
+                    Strategic caller
+                </label><br>
+                <label>
+                    <input type="checkbox" name="comm" value="supportive">
+                    Supportive teammate
+                </label><br>
+                <label>
+                    <input type="checkbox" name="comm" value="competitive">
+                    Competitive but friendly
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="team-color">Preferred Team Color:</label>
+                <input type="color" id="team-color" name="team-color" value="#FF0000">
+            </div>
+        </div>
+        
+        <!-- Availability -->
+        <div class="section">
+            <h2>Availability</h2>
+            
+            <div class="form-group">
+                <p><strong>Tournament Dates:</strong> (Select all dates you're available - required)</p>
+                <label>
+                    <input type="checkbox" name="dates" value="jan15" required>
+                    Saturday, January 15 (9 AM - 3 PM)
+                </label><br>
+                <label>
+                    <input type="checkbox" name="dates" value="jan16">
+                    Sunday, January 16 (9 AM - 3 PM)
+                </label><br>
+                <label>
+                    <input type="checkbox" name="dates" value="jan22">
+                    Saturday, January 22 (9 AM - 3 PM)
+                </label><br>
+                <label>
+                    <input type="checkbox" name="dates" value="jan23">
+                    Sunday, January 23 (Finals - 12 PM - 6 PM)
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="timezone">Time Zone:</label>
+                <select id="timezone" name="timezone" required>
+                    <option value="">Select time zone...</option>
+                    <option value="est">EST (Eastern)</option>
+                    <option value="cst">CST (Central)</option>
+                    <option value="mst">MST (Mountain)</option>
+                    <option value="pst">PST (Pacific)</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="start-time">Available Start Time:</label>
+                <input type="time" id="start-time" name="start-time">
+            </div>
+            
+            <div class="form-group">
+                <label for="end-time">Available End Time:</label>
+                <input type="time" id="end-time" name="end-time">
+            </div>
+        </div>
+        
+        <!-- Platform & Setup -->
+        <div class="section">
+            <h2>Platform & Setup</h2>
+            
+            <div class="form-group">
+                <p><strong>Gaming Platform:</strong> (Select all that apply)</p>
+                <label>
+                    <input type="checkbox" name="platform" value="pc">
+                    PC
+                </label><br>
+                <label>
+                    <input type="checkbox" name="platform" value="ps5">
+                    PlayStation 5
+                </label><br>
+                <label>
+                    <input type="checkbox" name="platform" value="ps4">
+                    PlayStation 4
+                </label><br>
+                <label>
+                    <input type="checkbox" name="platform" value="xbox-series">
+                    Xbox Series X/S
+                </label><br>
+                <label>
+                    <input type="checkbox" name="platform" value="xbox-one">
+                    Xbox One
+                </label><br>
+                <label>
+                    <input type="checkbox" name="platform" value="switch">
+                    Nintendo Switch
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="internet">Internet Speed (Mbps):</label>
+                <input type="number" id="internet" name="internet" min="1" required 
+                       placeholder="Download speed in Mbps">
+            </div>
+            
+            <div class="form-group">
+                <p><strong>Do you use a wired connection?</strong></p>
+                <label>
+                    <input type="radio" name="wired" value="yes" required>
+                    Yes
+                </label><br>
+                <label>
+                    <input type="radio" name="wired" value="no">
+                    No
+                </label><br>
+                <label>
+                    <input type="radio" name="wired" value="sometimes">
+                    Sometimes
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="mic">Microphone Quality:</label>
+                <select id="mic" name="mic" required>
+                    <option value="">Select quality...</option>
+                    <option value="professional">Professional (XLR/USB mic)</option>
+                    <option value="good">Good (Gaming headset)</option>
+                    <option value="decent">Decent (Standard headset)</option>
+                    <option value="phone">Phone/Laptop Mic</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Streaming & Content -->
+        <div class="section">
+            <h2>Streaming & Content</h2>
+            
+            <div class="form-group">
+                <p><strong>Will you stream your matches?</strong></p>
+                <label>
+                    <input type="radio" name="stream" value="yes">
+                    Yes
+                </label><br>
+                <label>
+                    <input type="radio" name="stream" value="no">
+                    No
+                </label><br>
+                <label>
+                    <input type="radio" name="stream" value="maybe">
+                    Maybe
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="twitch">Twitch Username (optional):</label>
+                <input type="text" id="twitch" name="twitch" 
+                       placeholder="twitch.tv/username">
+            </div>
+            
+            <div class="form-group">
+                <label for="youtube">YouTube Channel (optional):</label>
+                <input type="url" id="youtube" name="youtube" 
+                       placeholder="https://youtube.com/@channel">
+            </div>
+            
+            <div class="form-group">
+                <p><strong>Can we feature your gameplay on our channels?</strong></p>
+                <label>
+                    <input type="radio" name="feature" value="yes">
+                    Yes
+                </label><br>
+                <label>
+                    <input type="radio" name="feature" value="no">
+                    No
+                </label>
+            </div>
+        </div>
+        
+        <!-- Emergency Contact -->
+        <div class="section">
+            <h2>Emergency Contact</h2>
+            <p><em>Required for all participants</em></p>
+            
+            <div class="form-group">
+                <label for="emergency-name">Contact Name:</label>
+                <input type="text" id="emergency-name" name="emergency-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="emergency-phone">Contact Phone:</label>
+                <input type="tel" id="emergency-phone" name="emergency-phone" required 
+                       placeholder="(555) 123-4567">
+            </div>
+            
+            <div class="form-group">
+                <label for="relationship">Relationship:</label>
+                <input type="text" id="relationship" name="relationship" 
+                       placeholder="e.g., Parent, Guardian, Spouse">
+            </div>
+        </div>
+        
+        <!-- Rules & Prize -->
+        <div class="section">
+            <h2>Prize Preference</h2>
+            
+            <div class="form-group">
+                <p><strong>If you win, which prize would you prefer?</strong></p>
+                <label>
+                    <input type="radio" name="prize" value="cash" required>
+                    Cash Prize ($500)
+                </label><br>
+                <label>
+                    <input type="radio" name="prize" value="setup">
+                    Gaming Setup Upgrade ($500 value)
+                </label><br>
+                <label>
+                    <input type="radio" name="prize" value="nationals">
+                    Tournament Entry to Nationals
+                </label><br>
+                <label>
+                    <input type="radio" name="prize" value="jerseys">
+                    Custom Team Jerseys + Trophy
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <p><strong>Additional Options:</strong> (Select all that interest you)</p>
+                <label>
+                    <input type="checkbox" name="options" value="newsletter">
+                    Subscribe to tournament newsletter
+                </label><br>
+                <label>
+                    <input type="checkbox" name="options" value="discord">
+                    Join practice Discord server
+                </label><br>
+                <label>
+                    <input type="checkbox" name="options" value="coaching">
+                    Receive coaching tips via email
+                </label><br>
+                <label>
+                    <input type="checkbox" name="options" value="sponsors">
+                    Allow contact from potential sponsors
+                </label>
+            </div>
+        </div>
+        
+        <!-- Agreement & Signature -->
+        <div class="section">
+            <h2>Agreement & Digital Signature</h2>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="rules" value="agreed" required>
+                    I have read and agree to the tournament rules
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="sportsmanship" value="agreed" required>
+                    I agree to good sportsmanship and fair play
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="cheating" value="agreed" required>
+                    I understand that cheating will result in disqualification
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="parent-approval" value="agreed">
+                    Parent/Guardian approval (required if under 18)
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="signature">Digital Signature (Type your full name):</label>
+                <input type="text" id="signature" name="signature" required 
+                       placeholder="Your full legal name">
+            </div>
+            
+            <div class="form-group">
+                <label for="sig-date">Date:</label>
+                <input type="date" id="sig-date" name="sig-date" required>
+            </div>
+        </div>
+        
+        <!-- Optional Feedback -->
+        <div class="section">
+            <h2>Optional Feedback</h2>
+            
+            <div class="form-group">
+                <label for="hear-about">How did you hear about this tournament?</label>
+                <select id="hear-about" name="hear-about">
+                    <option value="">Select one...</option>
+                    <option value="social">Social Media</option>
+                    <option value="friend">Friend Referral</option>
+                    <option value="forum">Gaming Forum</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="twitch">Twitch</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="comments">Additional Comments or Questions:</label>
+                <textarea id="comments" name="comments" rows="4" 
+                          placeholder="Anything else we should know?"></textarea>
+            </div>
+        </div>
+        
+        <!-- Submit Buttons -->
+        <div class="form-actions">
+            <button type="submit">Register for Tournament</button>
+            <button type="button">Save Draft</button>
+            <button type="reset">Clear Form</button>
+        </div>
+    </form>
+    
+    <hr>
+    
+    <h2>📝 Important Information</h2>
+    <ul>
+        <li><strong>Registration Deadline:</strong> January 10, 2025</li>
+        <li><strong>Confirmation:</strong> You'll receive email confirmation within 24 hours</li>
+        <li><strong>Rules:</strong> Full tournament rules available at epicgaming.com/rules</li>
+        <li><strong>Questions:</strong> Email tournament@epicgaming.com</li>
+    </ul>
+    
+    <p><em>Good luck and may the best team win! 🏆</em></p>
+</body>
+</html>

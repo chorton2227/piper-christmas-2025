@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparison: Semantic vs Non-Semantic</title>
+</head>
+<body>
+    <header>
+        <h1>Side-by-Side Comparison</h1>
+        <p>See the difference between semantic and non-semantic HTML</p>
+    </header>
+    
+    <main>
+        <article>
+            <h2>Example 1: Simple Page Structure</h2>
+            
+            <section>
+                <h3>❌ Non-Semantic (Bad Practice)</h3>
+                <p><strong>What it looks like in code:</strong></p>
+                <pre><code>&lt;div class="header"&gt;
+    &lt;div class="title"&gt;My Website&lt;/div&gt;
+    &lt;div class="menu"&gt;
+        &lt;span&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/span&gt;
+        &lt;span&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="content"&gt;
+    &lt;div class="post"&gt;
+        &lt;div class="post-title"&gt;My Blog Post&lt;/div&gt;
+        &lt;div class="post-content"&gt;Content here...&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="footer"&gt;
+    &lt;div&gt;Copyright 2025&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                
+                <p><strong>Problems:</strong></p>
+                <ul>
+                    <li>❌ No semantic meaning</li>
+                    <li>❌ Screen readers can't navigate easily</li>
+                    <li>❌ Search engines don't understand structure</li>
+                    <li>❌ Hard to maintain and update</li>
+                    <li>❌ Requires reading class names to understand purpose</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>✅ Semantic (Best Practice)</h3>
+                <p><strong>What it looks like in code:</strong></p>
+                <pre><code>&lt;header&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;a href="#"&gt;Home&lt;/a&gt;
+        &lt;a href="#"&gt;About&lt;/a&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+    &lt;article&gt;
+        &lt;h2&gt;My Blog Post&lt;/h2&gt;
+        &lt;p&gt;Content here...&lt;/p&gt;
+    &lt;/article&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+    &lt;p&gt;Copyright 2025&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+                
+                <p><strong>Benefits:</strong></p>
+                <ul>
+                    <li>✅ Clear semantic meaning</li>
+                    <li>✅ Screen readers can jump to sections</li>
+                    <li>✅ Search engines understand content hierarchy</li>
+                    <li>✅ Easy to read and maintain</li>
+                    <li>✅ Purpose is immediately clear</li>
+                </ul>
+            </section>
+        </article>
+        
+        <article>
+            <h2>Example 2: Text Formatting</h2>
+            
+            <section>
+                <h3>❌ Non-Semantic</h3>
+                <p>
+                    <b>Warning:</b> This is <i>very</i> important! You <u>must</u> read this.
+                </p>
+                <p><strong>Problems:</strong></p>
+                <ul>
+                    <li>❌ Only visual styling, no meaning</li>
+                    <li>❌ Screen readers don't convey importance</li>
+                    <li>❌ Search engines ignore emphasis</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>✅ Semantic</h3>
+                <p>
+                    <strong>Warning:</strong> This is <em>very</em> important! You <mark>must</mark> read this.
+                </p>
+                <p><strong>Benefits:</strong></p>
+                <ul>
+                    <li>✅ Conveys meaning AND style</li>
+                    <li>✅ Screen readers emphasize properly</li>
+                    <li>✅ Search engines understand importance</li>
+                </ul>
+            </section>
+        </article>
+        
+        <article>
+            <h2>Example 3: Blog Post Structure</h2>
+            
+            <section>
+                <h3>❌ Non-Semantic</h3>
+                <pre><code>&lt;div class="blog-post"&gt;
+    &lt;div class="post-header"&gt;
+        &lt;div class="title"&gt;How to Learn HTML&lt;/div&gt;
+        &lt;div class="meta"&gt;By John | Jan 15, 2025&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="post-body"&gt;
+        &lt;div class="section"&gt;
+            &lt;div class="section-title"&gt;Introduction&lt;/div&gt;
+            &lt;div class="text"&gt;HTML is easy to learn...&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="post-footer"&gt;
+        &lt;div&gt;Tags: HTML, Tutorial&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </section>
+            
+            <section>
+                <h3>✅ Semantic</h3>
+                <pre><code>&lt;article&gt;
+    &lt;header&gt;
+        &lt;h2&gt;How to Learn HTML&lt;/h2&gt;
+        &lt;p&gt;By John | &lt;time datetime="2025-01-15"&gt;Jan 15, 2025&lt;/time&gt;&lt;/p&gt;
+    &lt;/header&gt;
+    
+    &lt;section&gt;
+        &lt;h3&gt;Introduction&lt;/h3&gt;
+        &lt;p&gt;HTML is easy to learn...&lt;/p&gt;
+    &lt;/section&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;Tags: HTML, Tutorial&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/article&gt;</code></pre>
+            </section>
+        </article>
+        
+        <article>
+            <h2>Example 4: Navigation</h2>
+            
+            <section>
+                <h3>❌ Non-Semantic</h3>
+                <pre><code>&lt;div class="menu"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#home"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+                <p>Not terrible, but not semantic either.</p>
+            </section>
+            
+            <section>
+                <h3>✅ Semantic</h3>
+                <pre><code>&lt;nav&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#home"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+                <p>
+                    Using <code>&lt;nav&gt;</code> tells screen readers: 
+                    <em>"This is navigation!"</em> and they can skip to it instantly.
+                </p>
+            </section>
+        </article>
+        
+        <article>
+            <h2>Quick Decision Guide</h2>
+            
+            <section>
+                <h3>When to Use Semantic Elements</h3>
+                <p><strong>Use semantic elements when the content has meaning:</strong></p>
+                <ul>
+                    <li>✅ Page header? Use <code>&lt;header&gt;</code></li>
+                    <li>✅ Navigation menu? Use <code>&lt;nav&gt;</code></li>
+                    <li>✅ Main content? Use <code>&lt;main&gt;</code></li>
+                    <li>✅ Blog post? Use <code>&lt;article&gt;</code></li>
+                    <li>✅ Thematic section? Use <code>&lt;section&gt;</code></li>
+                    <li>✅ Sidebar? Use <code>&lt;aside&gt;</code></li>
+                    <li>✅ Footer? Use <code>&lt;footer&gt;</code></li>
+                    <li>✅ Important text? Use <code>&lt;strong&gt;</code></li>
+                    <li>✅ Emphasized text? Use <code>&lt;em&gt;</code></li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>When Divs Are Fine</h3>
+                <p><strong>Use divs for pure layout/styling with no semantic meaning:</strong></p>
+                <ul>
+                    <li>✅ Container for centering content</li>
+                    <li>✅ Wrapper for applying background color</li>
+                    <li>✅ Grid or flexbox layout containers</li>
+                    <li>✅ Styling hooks with no semantic purpose</li>
+                </ul>
+                
+                <pre><code>&lt;!-- Divs for layout (fine!) --&gt;
+&lt;div class="container"&gt;
+    &lt;div class="card"&gt;
+        &lt;!-- Semantic elements for content --&gt;
+        &lt;article&gt;
+            &lt;h3&gt;Card Title&lt;/h3&gt;
+            &lt;p&gt;Card content...&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </section>
+        </article>
+        
+        <article>
+            <h2>Real-World Impact</h2>
+            
+            <section>
+                <h3>🔍 Search Engine Optimization (SEO)</h3>
+                <p>
+                    Search engines like Google <strong>prefer semantic HTML</strong> because 
+                    they can better understand your content structure.
+                </p>
+                <ul>
+                    <li>Articles in <code>&lt;article&gt;</code> tags are recognized as content</li>
+                    <li>Navigation in <code>&lt;nav&gt;</code> is identified as site structure</li>
+                    <li><code>&lt;time&gt;</code> elements help with date-based searches</li>
+                    <li>Better SEO = more visitors to your site!</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>♿ Accessibility</h3>
+                <p>
+                    Screen readers use semantic elements to help users navigate:
+                </p>
+                <ul>
+                    <li>Users can jump directly to <code>&lt;main&gt;</code> content</li>
+                    <li>They can list all <code>&lt;nav&gt;</code> elements</li>
+                    <li>They can skip to specific <code>&lt;section&gt;</code> or <code>&lt;article&gt;</code></li>
+                    <li><code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> are announced with emphasis</li>
+                </ul>
+                <p>
+                    <mark>Making your site accessible isn't optional—it's essential!</mark>
+                </p>
+            </section>
+            
+            <section>
+                <h3>🛠️ Maintainability</h3>
+                <p>
+                    Semantic HTML makes code <em>much</em> easier to read and maintain:
+                </p>
+                <pre><code>&lt;!-- Which is easier to understand? --&gt;
+
+&lt;!-- Non-semantic --&gt;
+&lt;div class="top-part"&gt;...&lt;/div&gt;
+
+&lt;!-- Semantic --&gt;
+&lt;header&gt;...&lt;/header&gt;</code></pre>
+                <p>
+                    When you (or another developer) return to the code months later, 
+                    semantic elements make purpose <strong>immediately clear</strong>.
+                </p>
+            </section>
+        </article>
+    </main>
+    
+    <footer>
+        <h3>Summary</h3>
+        <p>
+            <strong>Use semantic HTML whenever possible!</strong> It's better for:
+        </p>
+        <ul>
+            <li>🔍 Search engines (SEO)</li>
+            <li>♿ Accessibility</li>
+            <li>🛠️ Code maintenance</li>
+            <li>👥 Team collaboration</li>
+        </ul>
+        <p>&copy; 2025 Semantic HTML Examples</p>
+    </footer>
+</body>
+</html>

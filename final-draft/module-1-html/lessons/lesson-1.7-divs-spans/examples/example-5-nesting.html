@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nesting Divs and Spans</title>
+</head>
+<body>
+    <h1>Combining Divs and Spans</h1>
+    
+    <p>Divs and spans can be nested inside each other to create complex structures!</p>
+    
+    <h2>Example 1: Simple Nesting</h2>
+    
+    <div class="outer-container">
+        <h3>Outer Container</h3>
+        <p>This is the outer div.</p>
+        
+        <div class="inner-container">
+            <h4>Inner Container</h4>
+            <p>This div is nested inside the outer div!</p>
+        </div>
+        
+        <p>Back to the outer div.</p>
+    </div>
+    
+    <h2>Example 2: Dashboard Layout</h2>
+    
+    <div class="dashboard">
+        <div class="header">
+            <h3>Gaming Dashboard</h3>
+            <p>Welcome, <span class="username">Player123</span>!</p>
+        </div>
+        
+        <div class="content-area">
+            <div class="stats-panel">
+                <h4>Your Stats</h4>
+                <p>Level: <span class="stat-value">42</span></p>
+                <p>Score: <span class="stat-value">15,780</span></p>
+                <p>Achievements: <span class="stat-value">87/120</span></p>
+            </div>
+            
+            <div class="activity-panel">
+                <h4>Recent Activity</h4>
+                <ul>
+                    <li>Completed quest: <span class="quest-name">Dragon Slayer</span></li>
+                    <li>Reached level <span class="level">42</span></li>
+                    <li>Earned achievement: <span class="achievement">Speed Runner</span></li>
+                </ul>
+            </div>
+            
+            <div class="friends-panel">
+                <h4>Online Friends</h4>
+                <ul>
+                    <li><span class="friend-name">CoolGamer99</span> - Playing <span class="game">Minecraft</span></li>
+                    <li><span class="friend-name">ProPlayer22</span> - Playing <span class="game">Fortnite</span></li>
+                    <li><span class="friend-name">NinjaSkills</span> - Playing <span class="game">Roblox</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Last login: <span class="timestamp">Nov 19, 2025 at 3:42 PM</span></p>
+        </div>
+    </div>
+    
+    <h2>Example 3: Product Comparison</h2>
+    
+    <div class="comparison-container">
+        <div class="product">
+            <div class="product-header">
+                <h4>Budget Tablet</h4>
+                <span class="price">$199</span>
+            </div>
+            <div class="product-specs">
+                <p><span class="spec-label">Screen:</span> <span class="spec-value">10.1"</span></p>
+                <p><span class="spec-label">Storage:</span> <span class="spec-value">32GB</span></p>
+                <p><span class="spec-label">Battery:</span> <span class="spec-value">8 hours</span></p>
+            </div>
+            <div class="product-rating">
+                <span class="stars">⭐⭐⭐</span>
+                <span class="rating-text">Good for basics</span>
+            </div>
+        </div>
+        
+        <div class="product">
+            <div class="product-header">
+                <h4>Pro Tablet</h4>
+                <span class="price">$599</span>
+            </div>
+            <div class="product-specs">
+                <p><span class="spec-label">Screen:</span> <span class="spec-value">12.9"</span></p>
+                <p><span class="spec-label">Storage:</span> <span class="spec-value">256GB</span></p>
+                <p><span class="spec-label">Battery:</span> <span class="spec-value">12 hours</span></p>
+            </div>
+            <div class="product-rating">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span class="rating-text">Best performance</span>
+            </div>
+        </div>
+    </div>
+    
+    <h2>Example 4: Blog Post Structure</h2>
+    
+    <div class="blog-post">
+        <div class="post-header">
+            <h3>My First Week of Coding</h3>
+            <div class="post-meta">
+                <span class="author">By: <span class="author-name">Piper</span></span> | 
+                <span class="date">Nov 19, 2025</span> | 
+                <span class="category">Learning</span>
+            </div>
+        </div>
+        
+        <div class="post-content">
+            <p>
+                This week I learned <span class="highlight">HTML</span>! 
+                I can now create <span class="highlight">headings</span>, 
+                <span class="highlight">paragraphs</span>, 
+                <span class="highlight">lists</span>, and 
+                <span class="highlight">tables</span>. 
+                It's amazing how much you can do with just a few tags!
+            </p>
+            
+            <div class="quote-box">
+                <p>"Learning to code is like learning a superpower!" - <span class="quote-author">Me</span></p>
+            </div>
+            
+            <p>
+                Next week I'll learn <span class="topic">CSS</span> to make 
+                everything look beautiful. I can't wait to add 
+                <span class="topic">colors</span> and 
+                <span class="topic">layouts</span> to my pages!
+            </p>
+        </div>
+        
+        <div class="post-footer">
+            <div class="tags">
+                <span class="tag">HTML</span>
+                <span class="tag">Beginner</span>
+                <span class="tag">Web Development</span>
+            </div>
+            <div class="actions">
+                <span class="action-link">Share</span> | 
+                <span class="action-link">Comment</span> | 
+                <span class="action-link">Bookmark</span>
+            </div>
+        </div>
+    </div>
+    
+    <hr>
+    
+    <div class="key-lessons">
+        <h3>Key Lessons from This Example:</h3>
+        <ol>
+            <li><strong>Divs create structure:</strong> Major sections (header, content, footer)</li>
+            <li><strong>Spans target specifics:</strong> Highlighting words, values, names</li>
+            <li><strong>Nesting is powerful:</strong> Containers inside containers create complex layouts</li>
+            <li><strong>Classes organize everything:</strong> Easy to identify and style later</li>
+            <li><strong>Consistent patterns:</strong> Repeatable structures are easier to maintain</li>
+        </ol>
+        
+        <p><em>This might look complex now, but with CSS we can turn this into a beautiful, professional-looking page with colors, spacing, borders, and layouts. The HTML structure we're building now is the foundation!</em></p>
+    </div>
+</body>
+</html>
