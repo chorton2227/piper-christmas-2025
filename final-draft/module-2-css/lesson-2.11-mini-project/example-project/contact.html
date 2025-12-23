@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProGamer Hub - Join Us</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🎮 ProGamer Hub</h1>
+                    <p class="tagline">Your Ultimate Gaming Resource</p>
+                </div>
+                
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="reviews.html" class="nav-link">Game Reviews</a>
+                    <a href="tips.html" class="nav-link">Tips & Guides</a>
+                    <a href="contact.html" class="nav-link active">Join Us</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title Section -->
+    <section class="page-title">
+        <div class="container">
+            <h2>Join the ProGamer Community!</h2>
+            <p>Connect with fellow gamers and stay updated</p>
+        </div>
+    </section>
+
+    <!-- Main Content with Sidebar Layout -->
+    <div class="page-layout">
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-section">
+                <p>
+                    We're always excited to connect with fellow gamers! Whether you want to 
+                    <strong>join our community</strong>, suggest content ideas, or just say 
+                    hello, we'd love to hear from you.
+                </p>
+                
+                <p>
+                    ProGamer Hub is built by gamers, for gamers. Your <em>feedback and 
+                    suggestions</em> help us create better content and build a stronger 
+                    community.
+                </p>
+            </div>
+
+            <!-- Membership Benefits -->
+            <section class="content-section benefits-section">
+                <h3>Become a Community Member</h3>
+                
+                <p>
+                    Fill out this form to join our gaming community! Members get access to:
+                </p>
+                
+                <ul class="benefits-list">
+                    <li><strong>Exclusive Discord Server</strong> - Chat with other gamers</li>
+                    <li><strong>Weekly Newsletters</strong> - Latest gaming news and tips</li>
+                    <li><strong>Game Night Events</strong> - Play with the community</li>
+                    <li><strong>Early Access</strong> - See new reviews before they're public</li>
+                    <li><strong>Member Badges</strong> - Show off your gamer status!</li>
+                </ul>
+            </section>
+            
+            <!-- Membership Form -->
+            <section class="content-section form-section">
+                <form class="membership-form">
+                    <div class="form-group">
+                        <h4>Personal Information</h4>
+                        
+                        <label for="fullname">Full Name:</label>
+                        <input type="text" id="fullname" name="fullname" required>
+                        
+                        <label for="username">Gamer Username:</label>
+                        <input type="text" id="username" name="username" required>
+                        
+                        <label for="email">Email Address:</label>
+                        <input type="email" id="email" name="email" required>
+                        
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" name="age" min="10" max="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <h4>Gaming Preferences</h4>
+                        
+                        <label for="platform">Favorite Gaming Platform:</label>
+                        <select id="platform" name="platform">
+                            <option value="">--Choose a platform--</option>
+                            <option value="pc">PC</option>
+                            <option value="playstation">PlayStation</option>
+                            <option value="xbox">Xbox</option>
+                            <option value="nintendo">Nintendo Switch</option>
+                            <option value="mobile">Mobile</option>
+                            <option value="multiple">Multiple Platforms</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Favorite Game Genres (check all that apply):</label>
+                        
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="action" name="genres" value="action">
+                                Action/Adventure
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rpg" name="genres" value="rpg">
+                                RPG
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="fps" name="genres" value="fps">
+                                FPS/Shooter
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="strategy" name="genres" value="strategy">
+                                Strategy
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sports" name="genres" value="sports">
+                                Sports
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="indie" name="genres" value="indie">
+                                Indie Games
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="casual" name="genres" value="casual">
+                                Casual/Puzzle
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Gaming Frequency:</label>
+                        
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" id="daily" name="frequency" value="daily">
+                                Daily
+                            </label>
+                            
+                            <label class="radio-label">
+                                <input type="radio" id="weekly" name="frequency" value="weekly">
+                                Several times per week
+                            </label>
+                            
+                            <label class="radio-label">
+                                <input type="radio" id="occasional" name="frequency" value="occasional">
+                                Occasionally
+                            </label>
+                            
+                            <label class="radio-label">
+                                <input type="radio" id="casual-freq" name="frequency" value="casual">
+                                Casual player
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h4>Interests & Feedback</h4>
+                        
+                        <label for="favorite-game">Current Favorite Game:</label>
+                        <input type="text" id="favorite-game" name="favorite-game">
+                        
+                        <label for="content-interests">What content would you like to see more of?</label>
+                        <textarea id="content-interests" name="content-interests" rows="4" 
+                                  placeholder="Tell us what types of guides, reviews, or topics interest you..."></textarea>
+                        
+                        <label for="comments">Additional Comments:</label>
+                        <textarea id="comments" name="comments" rows="4" 
+                                  placeholder="Anything else you'd like to share with us..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h4>Notifications</h4>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter" name="newsletter" value="yes" checked>
+                            Yes, send me the weekly newsletter!
+                        </label>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="events" name="events" value="yes">
+                            Notify me about gaming events
+                        </label>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="updates" name="updates" value="yes">
+                            Send me updates about new reviews and guides
+                        </label>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">Join the Community!</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Other Contact Methods -->
+            <section class="content-section">
+                <h3>Other Ways to Connect</h3>
+                
+                <p>
+                    Not ready to join yet? That's okay! You can still connect with us 
+                    through these channels:
+                </p>
+                
+                <div class="contact-methods">
+                    <div class="contact-group">
+                        <h4>Email Us</h4>
+                        <ul class="contact-list">
+                            <li>
+                                General inquiries: 
+                                <a href="mailto:progamerhub@email.com" class="text-link">progamerhub@email.com</a>
+                            </li>
+                            <li>
+                                Submit a review: 
+                                <a href="mailto:reviews@progamerhub.com" class="text-link">reviews@progamerhub.com</a>
+                            </li>
+                            <li>
+                                Request a guide: 
+                                <a href="mailto:guides@progamerhub.com" class="text-link">guides@progamerhub.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="contact-group">
+                        <h4>Social Media</h4>
+                        <ul class="social-list">
+                            <li>
+                                <a href="https://discord.gg/progamerhub" target="_blank" class="external-link">Discord</a>
+                                - Join our server
+                            </li>
+                            <li>
+                                <a href="https://youtube.com/progamerhub" target="_blank" class="external-link">YouTube</a>
+                                - ProGamer Hub Channel
+                            </li>
+                            <li>
+                                <a href="https://twitch.tv/progamerhub" target="_blank" class="external-link">Twitch</a>
+                                - Watch our streams
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/progamerhub" target="_blank" class="external-link">Twitter</a>
+                                - @ProGamerHub
+                            </li>
+                            <li>
+                                <a href="https://reddit.com/r/progamerhub" target="_blank" class="external-link">Reddit</a>
+                                - r/ProGamerHub
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Guidelines -->
+            <section class="content-section guidelines-section">
+                <h3>Community Guidelines</h3>
+                
+                <p>
+                    To keep our community <strong>friendly and welcoming</strong>, we ask 
+                    all members to follow these simple rules:
+                </p>
+                
+                <ol class="guidelines-list">
+                    <li>
+                        <strong>Be Respectful</strong> - Treat everyone with kindness, 
+                        regardless of skill level or gaming preferences
+                    </li>
+                    <li>
+                        <strong>No Hate Speech</strong> - We have zero tolerance for 
+                        discrimination or harassment
+                    </li>
+                    <li>
+                        <strong>Keep it Clean</strong> - Use appropriate language suitable 
+                        for all ages
+                    </li>
+                    <li>
+                        <strong>No Spam</strong> - Don't flood chat with repetitive 
+                        messages or advertisements
+                    </li>
+                    <li>
+                        <strong>Help Each Other</strong> - Share tips, answer questions, 
+                        and support fellow gamers
+                    </li>
+                    <li>
+                        <strong>Have Fun!</strong> - Remember, gaming is about enjoyment 
+                        and community
+                    </li>
+                </ol>
+                
+                <p class="warning">
+                    <mark>Important:</mark> Members who violate these guidelines may be 
+                    removed from the community.
+                </p>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="content-section faq-section">
+                <h3>Frequently Asked Questions</h3>
+                
+                <div class="faq-item">
+                    <h4>Is membership free?</h4>
+                    <p>
+                        Yes! ProGamer Hub community membership is <strong>completely free</strong>. 
+                        We're gamers sharing our passion, not trying to make money.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>Do I need to be good at games to join?</h4>
+                    <p>
+                        Absolutely not! Our community welcomes <em>gamers of all skill levels</em>. 
+                        Whether you're a beginner or a pro, you'll fit right in.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>What age do I need to be?</h4>
+                    <p>
+                        We recommend members be at least 10 years old. Members under 13 should 
+                        have parental permission to join online communities.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>How often do you post new content?</h4>
+                    <p>
+                        We aim to publish at least 2-3 new pieces of content each week, including 
+                        reviews, guides, and news updates.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>Can I contribute content?</h4>
+                    <p>
+                        Yes! We love featuring community content. Email us your ideas at 
+                        <a href="mailto:progamerhub@email.com" class="text-link">progamerhub@email.com</a>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Thank You Section -->
+            <section class="content-section thank-you-section">
+                <h3>Thank You!</h3>
+                
+                <p>
+                    Thank you for your interest in ProGamer Hub! We're <strong>thrilled 
+                    to have you</strong> as part of our growing gaming community.
+                </p>
+                
+                <p>
+                    Whether you game for fun, competition, creativity, or relaxation, 
+                    you'll find <em>like-minded gamers</em> here. Together, we can 
+                    share our passion for gaming and help each other improve.
+                </p>
+                
+                <p class="closing-message">
+                    <mark>See you in the game!</mark> 🎮
+                </p>
+            </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section stats-widget">
+                <h2>Quick Stats</h2>
+                <div class="stat-item">
+                    <strong>Community Members:</strong> 
+                    <span class="stat-number">1,891</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Active This Week:</strong> 
+                    <span class="stat-number">543</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Discord Members:</strong> 
+                    <span class="stat-number">1,234</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-section events-widget">
+                <h2>This Week's Events</h2>
+                <ul class="events-list">
+                    <li>Monday - Minecraft Build Contest</li>
+                    <li>Wednesday - Among Us Game Night</li>
+                    <li>Friday - New Review Launch</li>
+                    <li>Saturday - Community Tournament</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About ProGamer Hub</h3>
+                    <p>
+                        ProGamer Hub is a student project created to showcase HTML & CSS skills 
+                        and share a love of gaming. All content is created for educational 
+                        purposes.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <p>
+                        <a href="mailto:progamerhub@email.com" class="footer-link">progamerhub@email.com</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>
+                    <small>&copy; 2025 ProGamer Hub. All rights reserved. | 
+                    Made with ❤️ and HTML + CSS</small>
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
