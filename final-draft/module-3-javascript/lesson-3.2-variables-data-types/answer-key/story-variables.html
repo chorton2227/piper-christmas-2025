@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Variables - Answer Key</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #00a8cc;
+            margin: 0 0 20px 0;
+            font-size: 2.5em;
+        }
+        
+        .story-icon {
+            font-size: 5em;
+            margin: 20px 0;
+        }
+        
+        .console-tip {
+            background: #00a8cc;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ðŸ“– Story Variables</h1>
+        <div class="story-icon">âœ¨ðŸ“šðŸŒŸ</div>
+        <p style="color: #666; font-size: 1.2em;">
+            Answer Key for Exercise 3
+        </p>
+        <div class="console-tip">
+            Press F12 to read the adventure!
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // EXERCISE 3: STORY VARIABLES - ANSWER KEY
+        // ==========================================
+        
+        // ==========================================
+        // STORY CONSTANTS (Fixed elements)
+        // ==========================================
+        const STORY_TITLE = 'The Quest for the Crystal of Power';
+        const SETTING = 'the Enchanted Forest';
+        const QUEST_ITEM = 'the Crystal of Power';
+        const VILLAIN_NAME = 'the Shadow King';
+        const MAGIC_NUMBER = 7;
+        
+        // ==========================================
+        // CHARACTER VARIABLES (Can change)
+        // ==========================================
+        let heroName = 'Luna';
+        let heroAge = 12;
+        let sidekickName = 'Max';
+        let heroTitle = 'Novice';
+        
+        // ==========================================
+        // STORY STATE (Track progress)
+        // ==========================================
+        let currentChapter = 1;
+        let questProgress = 0;
+        let itemsCollected = 0;
+        let enemiesDefeated = 0;
+        
+        // ==========================================
+        // STATUS BOOLEANS
+        // ==========================================
+        let hasMap = true;
+        let hasSword = false;
+        let isQuestComplete = false;
+        
+        // ==========================================
+        // BEGIN STORY
+        // ==========================================
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘                                       â•‘');
+        console.log('â•‘  ' + STORY_TITLE.toUpperCase().padEnd(36) + 'â•‘');
+        console.log('â•‘                                       â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('A tale of courage, magic, and adventure...');
+        console.log('');
+        console.log('');
+        
+        // ==========================================
+        // CHAPTER 1: THE BEGINNING
+        // ==========================================
+        
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('CHAPTER ' + currentChapter + ': The Beginning');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        console.log(heroName + ' the ' + heroTitle + ' stood at the edge of ' + SETTING + '.');
+        console.log('At only ' + heroAge + ' years old, ' + heroName + ' had a great destiny ahead.');
+        console.log('');
+        console.log('"I must find ' + QUEST_ITEM + ' before ' + VILLAIN_NAME + ' does!"');
+        console.log('');
+        console.log('The ancient prophecy spoke of ' + MAGIC_NUMBER + ' trials that must be overcome.');
+        console.log('');
+        
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('QUEST STATUS:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Progress: ' + questProgress + '%');
+        console.log('Items Collected: ' + itemsCollected);
+        console.log('Enemies Defeated: ' + enemiesDefeated);
+        console.log('');
+        console.log('INVENTORY:');
+        console.log((hasMap ? 'âœ“' : 'âœ—') + ' Map');
+        console.log((hasSword ? 'âœ“' : 'âœ—') + ' Sword');
+        console.log('');
+        console.log('Quest Complete: ' + (isQuestComplete ? 'YES' : 'NO'));
+        console.log('');
+        console.log('');
+        
+        // Update for next chapter
+        currentChapter = currentChapter + 1;
+        questProgress = 10;
+        
+        // ==========================================
+        // CHAPTER 2: THE COMPANION
+        // ==========================================
+        
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('CHAPTER ' + currentChapter + ': The Companion');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        console.log('As ' + heroName + ' ventured deeper into ' + SETTING + ',');
+        console.log('a friendly voice called out from behind a tree.');
+        console.log('');
+        console.log('"Wait! I want to help!" said ' + sidekickName + ', a brave young warrior.');
+        console.log('');
+        console.log(heroName + ' smiled. "Together, we can find ' + QUEST_ITEM + '!"');
+        console.log('');
+        console.log(sidekickName + ' handed ' + heroName + ' a shining sword.');
+        console.log('"You\'ll need this for the journey ahead."');
+        console.log('');
+        
+        // Update inventory
+        hasSword = true;
+        itemsCollected = itemsCollected + 1;
+        questProgress = 25;
+        
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('QUEST UPDATE:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Progress: ' + questProgress + '%');
+        console.log('Items Collected: ' + itemsCollected);
+        console.log('');
+        console.log('NEW ITEM: Enchanted Sword âš”ï¸');
+        console.log('');
+        console.log('INVENTORY:');
+        console.log((hasMap ? 'âœ“' : 'âœ—') + ' Map');
+        console.log((hasSword ? 'âœ“' : 'âœ—') + ' Sword');
+        console.log('');
+        console.log('');
+        
+        // Update for next chapter
+        currentChapter = currentChapter + 1;
+        
+        // ==========================================
+        // CHAPTER 3: THE FIRST TRIAL
+        // ==========================================
+        
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('CHAPTER ' + currentChapter + ': The First Trial');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        console.log(heroName + ' and ' + sidekickName + ' came to a clearing.');
+        console.log('A fierce guardian blocked their path!');
+        console.log('');
+        console.log('"This is one of the ' + MAGIC_NUMBER + ' trials!" exclaimed ' + sidekickName + '.');
+        console.log('');
+        console.log(heroName + ' drew the enchanted sword.');
+        console.log('"Stand back, ' + sidekickName + '! I\'ve got this!"');
+        console.log('');
+        console.log('âš”ï¸ BATTLE INITIATED âš”ï¸');
+        console.log('');
+        console.log('After a fierce battle, the guardian fell!');
+        console.log('');
+        
+        // Update stats
+        enemiesDefeated = enemiesDefeated + 1;
+        questProgress = 40;
+        
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('QUEST UPDATE:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Progress: ' + questProgress + '%');
+        console.log('Enemies Defeated: ' + enemiesDefeated);
+        console.log('Trials Completed: 1 of ' + MAGIC_NUMBER);
+        console.log('');
+        console.log(heroName + ' is becoming stronger!');
+        console.log('');
+        console.log('');
+        
+        // Update for next chapter
+        currentChapter = currentChapter + 1;
+        
+        // ==========================================
+        // CHAPTER 4: THE HIDDEN CAVE
+        // ==========================================
+        
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('CHAPTER ' + currentChapter + ': The Hidden Cave');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        console.log('Following the map, ' + heroName + ' and ' + sidekickName);
+        console.log('discovered a hidden cave deep in ' + SETTING + '.');
+        console.log('');
+        console.log('Inside, they found a magical amulet!');
+        console.log('');
+        console.log('"This amulet will protect us from ' + VILLAIN_NAME + '\'s dark magic!"');
+        console.log('said ' + heroName + '.');
+        console.log('');
+        
+        // Update inventory
+        itemsCollected = itemsCollected + 1;
+        questProgress = 60;
+        
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('QUEST UPDATE:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Progress: ' + questProgress + '%');
+        console.log('Items Collected: ' + itemsCollected);
+        console.log('');
+        console.log('NEW ITEM: Protective Amulet ðŸ”®');
+        console.log('');
+        console.log('"We\'re getting close to ' + QUEST_ITEM + '!"');
+        console.log('');
+        console.log('');
+        
+        // Upgrade title
+        heroTitle = 'Adventurer';
+        currentChapter = currentChapter + 1;
+        
+        // ==========================================
+        // CHAPTER 5: THE FINAL BATTLE
+        // ==========================================
+        
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('CHAPTER ' + currentChapter + ': The Final Battle');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        console.log('At last, ' + heroName + ' the ' + heroTitle + ' and ' + sidekickName);
+        console.log('reached the dark tower where ' + VILLAIN_NAME + ' waited.');
+        console.log('');
+        console.log(QUEST_ITEM + ' glowed with power at the top of the tower.');
+        console.log('');
+        console.log('"You\'ll never defeat me!" roared ' + VILLAIN_NAME + '.');
+        console.log('');
+        console.log('But ' + heroName + ', now ' + heroAge + ' and wiser,');
+        console.log('remembered all the lessons from the ' + MAGIC_NUMBER + ' trials.');
+        console.log('');
+        console.log('With the enchanted sword and protective amulet,');
+        console.log(heroName + ' and ' + sidekickName + ' fought bravely!');
+        console.log('');
+        console.log('âš”ï¸ EPIC BATTLE âš”ï¸');
+        console.log('');
+        console.log('ðŸ’¥ VICTORY! ðŸ’¥');
+        console.log('');
+        console.log(VILLAIN_NAME + ' was defeated!');
+        console.log('');
+        
+        // Update stats
+        enemiesDefeated = enemiesDefeated + 1;
+        itemsCollected = itemsCollected + 1;  // Crystal!
+        questProgress = 100;
+        isQuestComplete = true;
+        heroTitle = 'Master';
+        
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('QUEST COMPLETE!');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Progress: ' + questProgress + '%');
+        console.log('Items Collected: ' + itemsCollected);
+        console.log('Enemies Defeated: ' + enemiesDefeated);
+        console.log('');
+        console.log('âœ“ ' + QUEST_ITEM + ' obtained!');
+        console.log('');
+        console.log('');
+        
+        // ==========================================
+        // EPILOGUE
+        // ==========================================
+        
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('EPILOGUE');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        console.log(heroName + ' the ' + heroTitle + ' and ' + sidekickName);
+        console.log('returned to their village as heroes!');
+        console.log('');
+        console.log(QUEST_ITEM + ' was safely placed in the village temple,');
+        console.log('where it would protect everyone from evil.');
+        console.log('');
+        console.log('"We did it together!" said ' + heroName + '.');
+        console.log('"Together, we\'re unstoppable!" agreed ' + sidekickName + '.');
+        console.log('');
+        console.log('And so, the quest was complete.');
+        console.log('But ' + heroName + '\'s adventures were just beginning...');
+        console.log('');
+        console.log('');
+        
+        // ==========================================
+        // FINAL STATISTICS
+        // ==========================================
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘         ADVENTURE STATISTICS          â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('HERO INFORMATION:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Name: ' + heroName + ' the ' + heroTitle);
+        console.log('Age: ' + heroAge);
+        console.log('Companion: ' + sidekickName);
+        console.log('');
+        console.log('QUEST DETAILS:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Title: ' + STORY_TITLE);
+        console.log('Setting: ' + SETTING);
+        console.log('Objective: Find ' + QUEST_ITEM);
+        console.log('Villain: ' + VILLAIN_NAME);
+        console.log('Magic Number: ' + MAGIC_NUMBER);
+        console.log('');
+        console.log('FINAL STATS:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('Chapters Completed: ' + currentChapter);
+        console.log('Quest Progress: ' + questProgress + '%');
+        console.log('Items Collected: ' + itemsCollected);
+        console.log('Enemies Defeated: ' + enemiesDefeated);
+        console.log('Quest Complete: ' + (isQuestComplete ? 'YES âœ“' : 'NO'));
+        console.log('');
+        console.log('FINAL INVENTORY:');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log((hasMap ? 'âœ“' : 'âœ—') + ' Ancient Map');
+        console.log((hasSword ? 'âœ“' : 'âœ—') + ' Enchanted Sword');
+        console.log('âœ“ Protective Amulet');
+        console.log('âœ“ ' + QUEST_ITEM);
+        console.log('');
+        console.log('');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('            THE END');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('âœ¨ Thank you for reading! âœ¨');
+        console.log('');
+        console.log('ðŸŽ“ Great job using variables to create');
+        console.log('   a dynamic, interactive story!');
+    </script>
+</body>
+</html>

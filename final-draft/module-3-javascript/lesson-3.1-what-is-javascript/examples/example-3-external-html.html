@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: External JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .code-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .highlight {
+            background: rgba(255, 255, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Example 3: External JavaScript File 📁</h1>
+        
+        <p><strong>This page uses an EXTERNAL JavaScript file!</strong></p>
+        
+        <h2>Why Use External JavaScript?</h2>
+        <ul>
+            <li><strong>Organization:</strong> Keep HTML and JavaScript separate</li>
+            <li><strong>Reusable:</strong> Use the same .js file on multiple pages</li>
+            <li><strong>Cleaner:</strong> HTML stays focused on structure</li>
+            <li><strong>Professional:</strong> This is how real websites are built!</li>
+        </ul>
+
+        <h2>How to Link External JavaScript:</h2>
+        <div class="code-box">
+            &lt;!-- At the end of your &lt;body&gt; tag --&gt;<br>
+            &lt;script src="<span class="highlight">example-3-external.js</span>"&gt;&lt;/script&gt;<br>
+            &lt;/body&gt;
+        </div>
+
+        <h2>Check the Console! 🔍</h2>
+        <p>The external JavaScript file is printing messages to the console.</p>
+        <p>Press F12 to see them!</p>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <!-- Notice: Put this at the END of the body, after all HTML content -->
+    <script src="example-3-external.js"></script>
+</body>
+</html>

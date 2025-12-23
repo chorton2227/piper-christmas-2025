@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Math with Variables</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+        }
+        
+        h1 {
+            color: #f5576c;
+            margin-top: 0;
+            text-align: center;
+            font-size: 2.5em;
+        }
+        
+        .calculator-icon {
+            text-align: center;
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        
+        .feature-list {
+            background: #fff5f7;
+            border-left: 5px solid #f5576c;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .feature-list li {
+            margin: 10px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .console-tip {
+            background: #f5576c;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ðŸ§® Math with Variables</h1>
+        <div class="calculator-icon">ðŸ“Šâž•âœ–ï¸</div>
+        
+        <div class="feature-list">
+            <h2 style="color: #f5576c; margin-top: 0;">This Example Demonstrates:</h2>
+            <ul>
+                <li>Using variables in calculations</li>
+                <li>Storing calculation results</li>
+                <li>Building on previous results</li>
+                <li>Real-world math problems</li>
+            </ul>
+        </div>
+        
+        <div class="console-tip">
+            ðŸ” Open the Console (F12) to see all the calculations!
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // EXAMPLE 2: MATH WITH VARIABLES
+        // ========================================
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘   MATH WITH VARIABLES - CALCULATOR     â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        // ===== BASIC OPERATIONS WITH VARIABLES =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ“ BASIC OPERATIONS');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let x = 10;
+        let y = 5;
+        
+        console.log('x =', x);
+        console.log('y =', y);
+        console.log('');
+        
+        let sum = x + y;
+        let difference = x - y;
+        let product = x * y;
+        let quotient = x / y;
+        let remainder = x % y;
+        
+        console.log('Sum (x + y):', sum);
+        console.log('Difference (x - y):', difference);
+        console.log('Product (x * y):', product);
+        console.log('Quotient (x / y):', quotient);
+        console.log('Remainder (x % y):', remainder);
+        console.log('');
+        console.log('');
+        
+        // ===== BUILDING ON RESULTS =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ”„ BUILDING ON RESULTS');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let score = 100;
+        console.log('Starting score:', score);
+        
+        score = score + 50;
+        console.log('After gaining 50 points:', score);
+        
+        score = score + 25;
+        console.log('After gaining 25 more points:', score);
+        
+        score = score - 30;
+        console.log('After losing 30 points:', score);
+        
+        score = score * 2;
+        console.log('After doubling the score:', score);
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: SHOPPING =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ›’ SHOPPING CART CALCULATOR');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        // Item prices
+        const TSHIRT_PRICE = 15;
+        const JEANS_PRICE = 40;
+        const SHOES_PRICE = 60;
+        
+        // Quantities
+        let tshirtQty = 3;
+        let jeansQty = 2;
+        let shoesQty = 1;
+        
+        console.log('ITEMS IN CART:');
+        console.log('T-shirts: $' + TSHIRT_PRICE + ' Ã— ' + tshirtQty + ' = $' + (TSHIRT_PRICE * tshirtQty));
+        console.log('Jeans: $' + JEANS_PRICE + ' Ã— ' + jeansQty + ' = $' + (JEANS_PRICE * jeansQty));
+        console.log('Shoes: $' + SHOES_PRICE + ' Ã— ' + shoesQty + ' = $' + (SHOES_PRICE * shoesQty));
+        console.log('');
+        
+        // Calculate subtotal
+        let subtotal = (TSHIRT_PRICE * tshirtQty) + (JEANS_PRICE * jeansQty) + (SHOES_PRICE * shoesQty);
+        console.log('Subtotal: $' + subtotal);
+        
+        // Calculate tax (8%)
+        let taxRate = 0.08;
+        let tax = subtotal * taxRate;
+        console.log('Tax (8%): $' + tax);
+        
+        // Calculate total
+        let total = subtotal + tax;
+        console.log('TOTAL: $' + total);
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: GAME STATS =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸŽ® GAME STATISTICS CALCULATOR');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let gamesPlayed = 10;
+        let gamesWon = 7;
+        let gamesLost = gamesPlayed - gamesWon;
+        
+        console.log('Games Played:', gamesPlayed);
+        console.log('Games Won:', gamesWon);
+        console.log('Games Lost:', gamesLost);
+        console.log('');
+        
+        // Calculate win percentage
+        let winPercentage = (gamesWon / gamesPlayed) * 100;
+        console.log('Win Percentage:', winPercentage + '%');
+        console.log('');
+        
+        // Points calculation
+        let pointsPerWin = 100;
+        let pointsPerLoss = 10;
+        let totalPoints = (gamesWon * pointsPerWin) + (gamesLost * pointsPerLoss);
+        
+        console.log('Points from wins:', gamesWon + ' Ã— ' + pointsPerWin + ' = ' + (gamesWon * pointsPerWin));
+        console.log('Points from losses:', gamesLost + ' Ã— ' + pointsPerLoss + ' = ' + (gamesLost * pointsPerLoss));
+        console.log('Total Points:', totalPoints);
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: TEMPERATURE =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸŒ¡ï¸ TEMPERATURE CONVERTER');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        // Celsius to Fahrenheit
+        let celsius1 = 0;
+        let fahrenheit1 = (celsius1 * 9/5) + 32;
+        console.log(celsius1 + 'Â°C = ' + fahrenheit1 + 'Â°F (Freezing)');
+        
+        let celsius2 = 25;
+        let fahrenheit2 = (celsius2 * 9/5) + 32;
+        console.log(celsius2 + 'Â°C = ' + fahrenheit2 + 'Â°F (Room temperature)');
+        
+        let celsius3 = 100;
+        let fahrenheit3 = (celsius3 * 9/5) + 32;
+        console.log(celsius3 + 'Â°C = ' + fahrenheit3 + 'Â°F (Boiling)');
+        console.log('');
+        
+        // Fahrenheit to Celsius
+        let fahrenheit4 = 32;
+        let celsius4 = (fahrenheit4 - 32) * 5/9;
+        console.log(fahrenheit4 + 'Â°F = ' + celsius4 + 'Â°C');
+        
+        let fahrenheit5 = 98.6;
+        let celsius5 = (fahrenheit5 - 32) * 5/9;
+        console.log(fahrenheit5 + 'Â°F = ' + celsius5 + 'Â°C (Body temperature)');
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: TIME =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('â° TIME CALCULATOR');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        // Convert hours to minutes and seconds
+        let hours = 2;
+        let minutesInHour = 60;
+        let secondsInMinute = 60;
+        
+        let totalMinutes = hours * minutesInHour;
+        let totalSeconds = totalMinutes * secondsInMinute;
+        
+        console.log(hours + ' hours equals:');
+        console.log('- ' + totalMinutes + ' minutes');
+        console.log('- ' + totalSeconds + ' seconds');
+        console.log('');
+        
+        // Calculate time for a project
+        let daysToComplete = 30;
+        let hoursPerDay = 2;
+        let totalProjectHours = daysToComplete * hoursPerDay;
+        
+        console.log('Project Timeline:');
+        console.log('Working ' + hoursPerDay + ' hours per day for ' + daysToComplete + ' days');
+        console.log('Total project time: ' + totalProjectHours + ' hours');
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: RECIPES =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ‘¨â€ðŸ³ RECIPE SCALER');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('CHOCOLATE CHIP COOKIE RECIPE');
+        console.log('Original recipe makes 24 cookies');
+        console.log('');
+        
+        // Original amounts (for 24 cookies)
+        let flour = 2;        // cups
+        let sugar = 1;        // cup
+        let butter = 0.5;     // cup
+        let eggs = 2;         // eggs
+        
+        console.log('Original Recipe (24 cookies):');
+        console.log('- Flour: ' + flour + ' cups');
+        console.log('- Sugar: ' + sugar + ' cup');
+        console.log('- Butter: ' + butter + ' cup');
+        console.log('- Eggs: ' + eggs + ' eggs');
+        console.log('');
+        
+        // Double the recipe (for 48 cookies)
+        let scaleFactor = 2;
+        
+        console.log('Doubled Recipe (48 cookies):');
+        console.log('- Flour: ' + (flour * scaleFactor) + ' cups');
+        console.log('- Sugar: ' + (sugar * scaleFactor) + ' cups');
+        console.log('- Butter: ' + (butter * scaleFactor) + ' cup');
+        console.log('- Eggs: ' + (eggs * scaleFactor) + ' eggs');
+        console.log('');
+        console.log('');
+        
+        // ===== AVERAGE CALCULATOR =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ“Š AVERAGE CALCULATOR');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        // Test scores
+        let test1 = 85;
+        let test2 = 92;
+        let test3 = 78;
+        let test4 = 95;
+        let test5 = 88;
+        
+        console.log('Test Scores:');
+        console.log('Test 1:', test1);
+        console.log('Test 2:', test2);
+        console.log('Test 3:', test3);
+        console.log('Test 4:', test4);
+        console.log('Test 5:', test5);
+        console.log('');
+        
+        let sumScores = test1 + test2 + test3 + test4 + test5;
+        let numberOfTests = 5;
+        let average = sumScores / numberOfTests;
+        
+        console.log('Sum of scores:', sumScores);
+        console.log('Number of tests:', numberOfTests);
+        console.log('Average score:', average);
+        console.log('');
+        console.log('');
+        
+        // ===== SUMMARY =====
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘            KEY TAKEAWAYS               â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('âœ… Variables make calculations reusable');
+        console.log('âœ… Store results in variables to build on them');
+        console.log('âœ… Use descriptive names (subtotal, not x)');
+        console.log('âœ… Constants are great for prices & settings');
+        console.log('âœ… Variables help solve real-world problems');
+        console.log('');
+        console.log('ðŸŽ“ You can now use variables for math!');
+    </script>
+</body>
+</html>

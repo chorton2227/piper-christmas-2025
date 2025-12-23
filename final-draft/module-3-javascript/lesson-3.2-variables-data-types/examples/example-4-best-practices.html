@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Variable Best Practices</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 750px;
+        }
+        
+        h1 {
+            color: #2d9687;
+            margin-top: 0;
+            text-align: center;
+            font-size: 2.5em;
+            border-bottom: 4px solid #2d9687;
+            padding-bottom: 15px;
+        }
+        
+        .badge-row {
+            text-align: center;
+            font-size: 3em;
+            margin: 20px 0;
+        }
+        
+        .best-practice {
+            background: #e8f5f3;
+            border-left: 5px solid #2d9687;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .best-practice h2 {
+            margin-top: 0;
+            color: #2d9687;
+            font-size: 1.4em;
+        }
+        
+        .best-practice ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        .best-practice li {
+            margin: 8px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .good {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .bad {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .console-tip {
+            background: linear-gradient(135deg, #2d9687 0%, #4db8a8 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>âœ¨ Variable Best Practices</h1>
+        <div class="badge-row">ðŸ†âœ…ðŸ“‹</div>
+        
+        <div class="best-practice">
+            <h2>What This Example Teaches:</h2>
+            <ul>
+                <li>Good vs bad variable naming</li>
+                <li>When to use <code>let</code> vs <code>const</code></li>
+                <li>Organizing your variables</li>
+                <li>Common mistakes to avoid</li>
+                <li>Professional coding standards</li>
+            </ul>
+        </div>
+        
+        <div class="best-practice">
+            <h2>Why This Matters:</h2>
+            <ul>
+                <li>Makes code easier to read</li>
+                <li>Helps prevent bugs</li>
+                <li>Shows you're a professional coder</li>
+                <li>Makes teamwork easier</li>
+            </ul>
+        </div>
+        
+        <div class="console-tip">
+            ðŸ“š Open Console (F12) for best practices guide!
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // EXAMPLE 4: VARIABLE BEST PRACTICES
+        // ========================================
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘   VARIABLE BEST PRACTICES GUIDE        â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('Learn how to write clean, professional code!');
+        console.log('');
+        console.log('');
+        
+        // ===== NAMING: GOOD VS BAD =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ“ RULE 1: USE DESCRIPTIVE NAMES');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('âŒ BAD: Short, unclear names');
+        let x = 100;
+        let y = 'Alex';
+        let z = true;
+        console.log('x:', x, 'â† What is x?');
+        console.log('y:', y, 'â† What is y?');
+        console.log('z:', z, 'â† What is z?');
+        console.log('');
+        
+        console.log('âœ… GOOD: Descriptive, clear names');
+        let playerScore = 100;
+        let playerName = 'Alex';
+        let isGameActive2 = true;
+        console.log('playerScore:', playerScore, 'â† Clear purpose!');
+        console.log('playerName:', playerName, 'â† Clear purpose!');
+        console.log('isGameActive:', isGameActive2, 'â† Clear purpose!');
+        console.log('');
+        console.log('ðŸ’¡ Tip: Your code should be self-documenting!');
+        console.log('');
+        console.log('');
+        
+        // ===== NAMING: CAMELCASE =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸª RULE 2: USE camelCase');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('âŒ BAD: Various inconsistent styles');
+        let player_score = 100;      // snake_case (used in Python)
+        let PlayerScore = 100;       // PascalCase (for class names)
+        let playerscore = 100;       // all lowercase (hard to read)
+        let PLAYERSCORE = 100;       // all uppercase (for constants only)
+        console.log('player_score:', player_score);
+        console.log('PlayerScore:', PlayerScore);
+        console.log('playerscore:', playerscore);
+        console.log('PLAYERSCORE:', PLAYERSCORE);
+        console.log('');
+        
+        console.log('âœ… GOOD: Consistent camelCase');
+        let totalScore = 100;
+        let maxHealthPoints = 100;
+        let numberOfPlayers = 4;
+        let isLevelComplete = true;
+        console.log('totalScore:', totalScore);
+        console.log('maxHealthPoints:', maxHealthPoints);
+        console.log('numberOfPlayers:', numberOfPlayers);
+        console.log('isLevelComplete:', isLevelComplete);
+        console.log('');
+        console.log('ðŸ’¡ Tip: First word lowercase, rest uppercase!');
+        console.log('');
+        console.log('');
+        
+        // ===== LET VS CONST =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ”’ RULE 3: USE const WHEN POSSIBLE');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('Use let for values that CHANGE:');
+        let currentLevel = 1;
+        console.log('Starting level:', currentLevel);
+        currentLevel = 2;
+        console.log('After level up:', currentLevel);
+        currentLevel = 3;
+        console.log('After another level up:', currentLevel);
+        console.log('');
+        
+        console.log('Use const for values that STAY THE SAME:');
+        const MAX_LEVEL = 10;
+        const GAME_NAME = 'Super Adventure';
+        const STARTING_LIVES = 3;
+        console.log('MAX_LEVEL:', MAX_LEVEL);
+        console.log('GAME_NAME:', GAME_NAME);
+        console.log('STARTING_LIVES:', STARTING_LIVES);
+        console.log('');
+        console.log('ðŸ’¡ Tip: If it won\'t change, use const!');
+        console.log('ðŸ’¡ Tip: Use UPPERCASE for const values!');
+        console.log('');
+        console.log('');
+        
+        // ===== BOOLEAN NAMING =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('âœ… RULE 4: BOOLEAN PREFIXES');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('âŒ BAD: Unclear if it\'s true/false');
+        let active = true;
+        let winner = false;
+        let permission = true;
+        console.log('active:', active, 'â† Is this a boolean?');
+        console.log('winner:', winner, 'â† Is this a boolean?');
+        console.log('permission:', permission, 'â† Is this a boolean?');
+        console.log('');
+        
+        console.log('âœ… GOOD: Clear boolean names');
+        let isActive = true;
+        let hasWon = false;
+        let canEdit = true;
+        console.log('isActive:', isActive, 'â† Clearly a yes/no question!');
+        console.log('hasWon:', hasWon, 'â† Clearly a yes/no question!');
+        console.log('canEdit:', canEdit, 'â† Clearly a yes/no question!');
+        console.log('');
+        console.log('ðŸ’¡ Tip: Use is, has, can, should for booleans!');
+        console.log('');
+        console.log('');
+        
+        // ===== ORGANIZATION =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ“‹ RULE 5: ORGANIZE YOUR VARIABLES');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('âŒ BAD: Mixed up, no organization');
+        let score1 = 100;
+        const NAME = 'Game';
+        let health1 = 80;
+        let name1 = 'Alex';
+        const POINTS = 50;
+        console.log('Messy and hard to follow! âŒ');
+        console.log('');
+        
+        console.log('âœ… GOOD: Grouped by purpose');
+        console.log('');
+        console.log('// Game constants');
+        const GAME_TITLE = 'Super Adventure';
+        const MAX_PLAYERS = 4;
+        const POINTS_PER_LEVEL = 100;
+        console.log('GAME_TITLE:', GAME_TITLE);
+        console.log('MAX_PLAYERS:', MAX_PLAYERS);
+        console.log('POINTS_PER_LEVEL:', POINTS_PER_LEVEL);
+        console.log('');
+        
+        console.log('// Player stats (changeable)');
+        let score2 = 0;
+        let health2 = 100;
+        let level = 1;
+        console.log('score:', score2);
+        console.log('health:', health2);
+        console.log('level:', level);
+        console.log('');
+        
+        console.log('// Player info');
+        let name2 = 'Alex';
+        let age = 10;
+        let location2 = 'Portland';
+        console.log('name:', name2);
+        console.log('age:', age);
+        console.log('location:', location2);
+        console.log('');
+        console.log('ðŸ’¡ Tip: Group related variables together!');
+        console.log('ðŸ’¡ Tip: Use comments to label sections!');
+        console.log('');
+        console.log('');
+        
+        // ===== AVOIDING MAGIC NUMBERS =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸŽ© RULE 6: NO MAGIC NUMBERS');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('âŒ BAD: Random numbers without explanation');
+        let total1 = 50 * 8;
+        let bonus1 = total1 + 200;
+        console.log('total:', total1, 'â† What is 50? What is 8?');
+        console.log('bonus:', bonus1, 'â† What is 200?');
+        console.log('');
+        
+        console.log('âœ… GOOD: Use named constants');
+        const PRICE_PER_ITEM = 50;
+        const QUANTITY = 8;
+        const BONUS_AMOUNT = 200;
+        let total2 = PRICE_PER_ITEM * QUANTITY;
+        let bonus2 = total2 + BONUS_AMOUNT;
+        console.log('total:', total2, 'â† Clear what each number means!');
+        console.log('bonus:', bonus2, 'â† Easy to understand!');
+        console.log('');
+        console.log('ðŸ’¡ Tip: Give numbers descriptive names!');
+        console.log('');
+        console.log('');
+        
+        // ===== COMPLETE EXAMPLE: WELL-ORGANIZED CODE =====
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘   EXAMPLE: WELL-ORGANIZED CODE         â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        // ==========================================
+        // GAME CONSTANTS (never change)
+        // ==========================================
+        const GAME_TITLE_2 = 'Math Quest';
+        const MAX_LIVES = 3;
+        const POINTS_PER_CORRECT = 10;
+        const POINTS_PER_STREAK = 5;
+        const PASSING_SCORE = 80;
+        
+        // ==========================================
+        // PLAYER INFORMATION (set once)
+        // ==========================================
+        let playerName2 = 'Alex';
+        let playerAge2 = 10;
+        let playerGrade = 5;
+        
+        // ==========================================
+        // GAME STATE (changes during game)
+        // ==========================================
+        let currentScore = 0;
+        let livesRemaining = MAX_LIVES;
+        let questionsAnswered = 0;
+        let correctAnswers = 0;
+        let currentStreak = 0;
+        
+        // ==========================================
+        // GAME STATUS (boolean flags)
+        // ==========================================
+        let isGameActive = false;
+        let hasPassedLevel = false;
+        let isOnWinningStreak = false;
+        
+        console.log('ðŸŽ® ' + GAME_TITLE_2);
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('ðŸ“‹ PLAYER INFO:');
+        console.log('  Name: ' + playerName2);
+        console.log('  Age: ' + playerAge2);
+        console.log('  Grade: ' + playerGrade);
+        console.log('');
+        console.log('âš™ï¸ GAME SETTINGS:');
+        console.log('  Max Lives: ' + MAX_LIVES);
+        console.log('  Points per Correct: ' + POINTS_PER_CORRECT);
+        console.log('  Points per Streak: ' + POINTS_PER_STREAK);
+        console.log('  Passing Score: ' + PASSING_SCORE);
+        console.log('');
+        console.log('ðŸ“Š CURRENT STATS:');
+        console.log('  Score: ' + currentScore);
+        console.log('  Lives Remaining: ' + livesRemaining);
+        console.log('  Questions Answered: ' + questionsAnswered);
+        console.log('  Correct Answers: ' + correctAnswers);
+        console.log('  Current Streak: ' + currentStreak);
+        console.log('');
+        console.log('ðŸš¦ STATUS FLAGS:');
+        console.log('  Is Game Active: ' + isGameActive);
+        console.log('  Has Passed Level: ' + hasPassedLevel);
+        console.log('  Is On Winning Streak: ' + isOnWinningStreak);
+        console.log('');
+        console.log('âœ¨ Look how organized and easy to read!');
+        console.log('');
+        console.log('');
+        
+        // ===== SUMMARY CHECKLIST =====
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘     BEST PRACTICES CHECKLIST           â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('âœ… Use descriptive names (playerScore, not x)');
+        console.log('âœ… Use camelCase for variables (totalScore)');
+        console.log('âœ… Use UPPERCASE for constants (MAX_LEVEL)');
+        console.log('âœ… Use const for values that don\'t change');
+        console.log('âœ… Use let for values that do change');
+        console.log('âœ… Start booleans with is/has/can');
+        console.log('âœ… Group related variables together');
+        console.log('âœ… Add comments to organize sections');
+        console.log('âœ… Replace magic numbers with named constants');
+        console.log('âœ… Make your code self-documenting');
+        console.log('');
+        console.log('ðŸ† Follow these rules = professional code!');
+        console.log('');
+        console.log('');
+        
+        // ===== QUICK TIPS =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ’¡ QUICK TIPS');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        console.log('1. If someone else reads your code,');
+        console.log('   can they understand it?');
+        console.log('');
+        console.log('2. Future you will thank present you');
+        console.log('   for clear variable names!');
+        console.log('');
+        console.log('3. Good names reduce bugs and errors');
+        console.log('');
+        console.log('4. Professional developers follow these rules');
+        console.log('');
+        console.log('5. It takes practice - keep at it!');
+        console.log('');
+        console.log('ðŸŽ“ You\'re learning to code like a pro!');
+    </script>
+</body>
+</html>

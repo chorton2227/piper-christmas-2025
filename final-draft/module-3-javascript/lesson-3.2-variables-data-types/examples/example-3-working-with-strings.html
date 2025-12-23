@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Working with Strings</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+        }
+        
+        h1 {
+            color: #00a8cc;
+            margin-top: 0;
+            text-align: center;
+            font-size: 2.8em;
+        }
+        
+        .icon-row {
+            text-align: center;
+            font-size: 3.5em;
+            margin: 20px 0;
+        }
+        
+        .info-box {
+            background: #e3f6ff;
+            border-left: 5px solid #00a8cc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h2 {
+            margin-top: 0;
+            color: #00a8cc;
+        }
+        
+        .info-box p {
+            margin: 10px 0;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .console-tip {
+            background: #00a8cc;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ðŸ“ Working with Strings</h1>
+        <div class="icon-row">ðŸ’¬âœï¸ðŸ”¤</div>
+        
+        <div class="info-box">
+            <h2>What Are Strings?</h2>
+            <p>Strings are <strong>text</strong> in JavaScript. They must be wrapped in quotes.</p>
+            <p>This example shows how to:</p>
+            <ul>
+                <li>Create string variables</li>
+                <li>Combine strings together (concatenation)</li>
+                <li>Mix strings with numbers</li>
+                <li>Build messages and sentences</li>
+            </ul>
+        </div>
+        
+        <div class="info-box">
+            <h2>Remember!</h2>
+            <p>Use quotes: <span class="highlight">'Hello'</span> or <span class="highlight">"Hello"</span></p>
+            <p>Combine with <span class="highlight">+</span></p>
+        </div>
+        
+        <div class="console-tip">
+            ðŸ“– Open Console (F12) to see string magic!
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // EXAMPLE 3: WORKING WITH STRINGS
+        // ========================================
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘     WORKING WITH STRINGS               â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        
+        // ===== CREATING STRING VARIABLES =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ“ CREATING STRING VARIABLES');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let firstName = 'Alex';
+        let lastName = 'Johnson';
+        let city = 'Portland';
+        let favoriteColor = 'blue';
+        let favoriteFood = 'pizza';
+        
+        console.log('firstName:', firstName);
+        console.log('lastName:', lastName);
+        console.log('city:', city);
+        console.log('favoriteColor:', favoriteColor);
+        console.log('favoriteFood:', favoriteFood);
+        console.log('');
+        console.log('All of these are strings! âœ“');
+        console.log('');
+        console.log('');
+        
+        // ===== STRING CONCATENATION (COMBINING) =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('âž• STRING CONCATENATION');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('Combining with the + operator:');
+        console.log('');
+        
+        let fullName = firstName + ' ' + lastName;
+        console.log('Full Name:', fullName);
+        
+        let greeting = 'Hello, ' + firstName + '!';
+        console.log('Greeting:', greeting);
+        
+        let sentence = firstName + ' lives in ' + city;
+        console.log('Sentence:', sentence);
+        console.log('');
+        console.log('');
+        
+        // ===== BUILDING COMPLEX MESSAGES =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ’¬ BUILDING MESSAGES');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let message1 = 'My name is ' + firstName + ' ' + lastName + '.';
+        console.log(message1);
+        
+        let message2 = 'I live in ' + city + '.';
+        console.log(message2);
+        
+        let message3 = 'My favorite color is ' + favoriteColor + '.';
+        console.log(message3);
+        
+        let message4 = 'I love eating ' + favoriteFood + '!';
+        console.log(message4);
+        console.log('');
+        
+        // Combine multiple messages
+        let bio = message1 + ' ' + message2 + ' ' + message3 + ' ' + message4;
+        console.log('Complete Bio:');
+        console.log(bio);
+        console.log('');
+        console.log('');
+        
+        // ===== MIXING STRINGS AND NUMBERS =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ”¢ MIXING STRINGS AND NUMBERS');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let age = 10;
+        let score = 1500;
+        let level = 7;
+        
+        console.log('I am ' + age + ' years old.');
+        console.log('My score is ' + score + ' points.');
+        console.log('I am on level ' + level + '!');
+        console.log('');
+        
+        // Calculations in strings
+        let games = 20;
+        let wins = 15;
+        console.log('I played ' + games + ' games and won ' + wins + ' of them.');
+        console.log('That means I lost ' + (games - wins) + ' games.');
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: USER PROFILE =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ‘¤ USER PROFILE BUILDER');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        // User information
+        const username = 'CodeMaster99';
+        let userAge = 10;
+        let userCity = 'Seattle';
+        let memberSince = 2024;
+        let currentYear = 2025;
+        let yearsAsMember = currentYear - memberSince;
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘         USER PROFILE              â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('Username: ' + username);
+        console.log('Age: ' + userAge);
+        console.log('Location: ' + userCity);
+        console.log('Member Since: ' + memberSince);
+        console.log('Years as Member: ' + yearsAsMember);
+        console.log('');
+        
+        let profileSummary = username + ' is ' + userAge + ' years old and lives in ' + 
+                            userCity + '. They have been a member for ' + yearsAsMember + ' year.';
+        console.log('Profile Summary:');
+        console.log(profileSummary);
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: GAME CHARACTER =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸŽ® GAME CHARACTER CARD');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let characterName = 'Thunder Knight';
+        let characterClass = 'Warrior';
+        let health = 100;
+        let mana = 50;
+        let strength = 85;
+        let speed = 60;
+        
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘     ' + characterName + '     â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('Class: ' + characterClass);
+        console.log('Health: ' + health + ' HP');
+        console.log('Mana: ' + mana + ' MP');
+        console.log('Strength: ' + strength);
+        console.log('Speed: ' + speed);
+        console.log('');
+        
+        let powerLevel = strength + speed;
+        console.log('ðŸ’ª Total Power Level: ' + powerLevel);
+        console.log('');
+        
+        let characterIntro = characterName + ' the ' + characterClass + ' has ' + 
+                            health + ' health points and ' + strength + ' strength!';
+        console.log('Character Intro:');
+        console.log(characterIntro);
+        console.log('');
+        console.log('');
+        
+        // ===== REAL-WORLD EXAMPLE: STORY BUILDER =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ“– INTERACTIVE STORY BUILDER');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let heroName = 'Luna';
+        let sidekickName = 'Max';
+        let treasure = 'the Crystal of Power';
+        let monster = 'the Shadow Dragon';
+        let magicNumber = 7;
+        
+        console.log('ðŸŒŸ THE ADVENTURE BEGINS ðŸŒŸ');
+        console.log('');
+        console.log('Once upon a time, ' + heroName + ' and ' + sidekickName + ' ventured into ' + location + '.');
+        console.log('');
+        console.log('They were searching for ' + treasure + ', which was guarded by ' + monster + '.');
+        console.log('');
+        console.log('The legend said they needed to solve ' + magicNumber + ' riddles to reach the treasure.');
+        console.log('');
+        console.log(heroName + ' said, "We can do this, ' + sidekickName + '! Together, we are unstoppable!"');
+        console.log('');
+        console.log(sidekickName + ' replied, "Let\'s go! Adventure awaits!"');
+        console.log('');
+        console.log('After solving all ' + magicNumber + ' riddles, they finally reached ' + treasure + '!');
+        console.log('');
+        console.log('ðŸŽ‰ THE END ðŸŽ‰');
+        console.log('');
+        console.log('');
+        
+        // ===== BUILDING STRINGS PIECE BY PIECE =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ”¨ BUILDING STRINGS GRADUALLY');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        let story = '';  // Start with empty string
+        console.log('Starting story:', story);
+        
+        story = story + 'It was a dark and stormy night. ';
+        console.log('After line 1:', story);
+        
+        story = story + 'The wind howled through the trees. ';
+        console.log('After line 2:', story);
+        
+        story = story + 'Suddenly, a light appeared! ';
+        console.log('After line 3:', story);
+        
+        story = story + 'It was magical! ';
+        console.log('After line 4:', story);
+        console.log('');
+        
+        console.log('Complete Story:');
+        console.log(story);
+        console.log('');
+        console.log('');
+        
+        // ===== PRACTICAL TIPS =====
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('ðŸ’¡ STRING TIPS & TRICKS');
+        console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+        console.log('');
+        
+        console.log('Tip 1: Always match your quotes');
+        console.log("'Hello' âœ“");
+        console.log('"Hello" âœ“');
+        console.log("'Hello\" âœ— DON'T MIX!");
+        console.log('');
+        
+        console.log('Tip 2: Use spaces when combining');
+        let word1 = 'Hello';
+        let word2 = 'World';
+        console.log('Without space:', word1 + word2);      // HelloWorld
+        console.log('With space:', word1 + ' ' + word2);   // Hello World
+        console.log('');
+        
+        console.log('Tip 3: Numbers in quotes are strings!');
+        let numberString = '42';
+        let realNumber = 42;
+        console.log('String:', typeof numberString, 'â†’', numberString);
+        console.log('Number:', typeof realNumber, 'â†’', realNumber);
+        console.log('');
+        
+        console.log('Tip 4: Empty strings are useful');
+        let emptyStart = '';
+        emptyStart = emptyStart + 'Now ';
+        emptyStart = emptyStart + 'it ';
+        emptyStart = emptyStart + 'has ';
+        emptyStart = emptyStart + 'content!';
+        console.log(emptyStart);
+        console.log('');
+        console.log('');
+        
+        // ===== SUMMARY =====
+        console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+        console.log('â•‘            KEY TAKEAWAYS               â•‘');
+        console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('');
+        console.log('âœ… Strings are text in quotes');
+        console.log('âœ… Use + to combine strings');
+        console.log('âœ… Can mix strings and numbers');
+        console.log('âœ… Always match your quotes (\' \' or " ")');
+        console.log('âœ… Add spaces: "Hello" + " " + "World"');
+        console.log('âœ… Empty strings ("") are valid');
+        console.log('âœ… Build strings piece by piece');
+        console.log('');
+        console.log('ðŸŽ“ You\'re now a string master!');
+    </script>
+</body>
+</html>
