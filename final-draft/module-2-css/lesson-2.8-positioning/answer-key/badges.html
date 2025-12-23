@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positioned Badges - Solution</title>
+    <link rel="stylesheet" href="badges-styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Positioned Badges Demo</h1>
+        
+        <!-- Product Cards with Badges -->
+        <div class="card-grid">
+            <div class="product-card">
+                <span class="badge badge-sale">SALE</span>
+                <img src="https://via.placeholder.com/300x200/3498db/ffffff?text=Product+1" alt="Product">
+                <h3>Premium Headphones</h3>
+                <p class="price">$299.99</p>
+                <button>Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge badge-new">NEW</span>
+                <img src="https://via.placeholder.com/300x200/e74c3c/ffffff?text=Product+2" alt="Product">
+                <h3>Smart Watch</h3>
+                <p class="price">$399.99</p>
+                <button>Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge badge-hot">HOT</span>
+                <img src="https://via.placeholder.com/300x200/2ecc71/ffffff?text=Product+3" alt="Product">
+                <h3>Wireless Speaker</h3>
+                <p class="price">$149.99</p>
+                <button>Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge badge-discount">-30%</span>
+                <img src="https://via.placeholder.com/300x200/f39c12/ffffff?text=Product+4" alt="Product">
+                <h3>Laptop Stand</h3>
+                <p class="price">$79.99</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Profile Cards with Status Badges -->
+        <h2>Profile Cards</h2>
+        <div class="profile-grid">
+            <div class="profile-card">
+                <div class="avatar-container">
+                    <img src="https://via.placeholder.com/120/9b59b6/ffffff?text=User" alt="User" class="avatar">
+                    <span class="status-badge status-online"></span>
+                </div>
+                <h3>John Doe</h3>
+                <p>Web Developer</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="avatar-container">
+                    <img src="https://via.placeholder.com/120/1abc9c/ffffff?text=User" alt="User" class="avatar">
+                    <span class="status-badge status-away"></span>
+                </div>
+                <h3>Jane Smith</h3>
+                <p>UI Designer</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="avatar-container">
+                    <img src="https://via.placeholder.com/120/e67e22/ffffff?text=User" alt="User" class="avatar">
+                    <span class="status-badge status-offline"></span>
+                </div>
+                <h3>Mike Johnson</h3>
+                <p>Product Manager</p>
+            </div>
+        </div>
+
+        <!-- Notification Icon with Badge -->
+        <h2>Notification Badge</h2>
+        <div class="icon-container">
+            <button class="notification-btn">
+                <span class="icon">🔔</span>
+                <span class="notification-count">5</span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

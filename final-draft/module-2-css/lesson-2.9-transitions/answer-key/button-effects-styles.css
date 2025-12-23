@@ -1,0 +1,193 @@
+/* Button Hover Effects - Solution */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    max-width: 1000px;
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+p {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 50px;
+    opacity: 0.9;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+/* Base Button Styles */
+.btn {
+    padding: 18px 36px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: white;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+/* Grow Effect */
+.btn-grow:hover {
+    transform: scale(1.15);
+}
+
+/* Shrink Effect */
+.btn-shrink:hover {
+    transform: scale(0.9);
+}
+
+/* Slide Effect */
+.btn-slide:hover {
+    transform: translateY(-8px);
+}
+
+/* Rotate Effect */
+.btn-rotate:hover {
+    transform: rotate(5deg);
+}
+
+/* Shadow Effect */
+.btn-shadow {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-shadow:hover {
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* Border Effect */
+.btn-border:hover {
+    border-color: #667eea;
+    background-color: transparent;
+    color: white;
+}
+
+/* Gradient Effect */
+.btn-gradient {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(to right, #764ba2, #667eea);
+}
+
+/* Shine Effect */
+.btn-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-shine:hover::before {
+    left: 100%;
+}
+
+/* Pulse Effect */
+.btn-pulse:hover {
+    animation: pulse 0.6s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Bounce Effect */
+.btn-bounce:hover {
+    animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-10px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    75% {
+        transform: translateY(-7px);
+    }
+}
+
+/* Glow Effect */
+.btn-glow:hover {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.8),
+                0 0 40px rgba(102, 126, 234, 0.6),
+                0 0 60px rgba(102, 126, 234, 0.4);
+}
+
+/* Fill Effect */
+.btn-fill {
+    background-color: transparent;
+    border-color: white;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: white;
+    transition: width 0.4s ease;
+    z-index: -1;
+}
+
+.btn-fill:hover::before {
+    width: 100%;
+}
+
+.btn-fill:hover {
+    color: #667eea;
+}
