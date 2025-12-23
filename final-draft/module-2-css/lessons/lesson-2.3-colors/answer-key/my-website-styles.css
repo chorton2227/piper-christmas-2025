@@ -1,0 +1,178 @@
+/* Monochromatic Blue Color Scheme Website */
+
+/* Color Scheme:
+   - Lightest: #E8F4F8 (60% - main backgrounds)
+   - Light: #B3E0F2 (30% - cards and sections)
+   - Base: #3498DB (10% - buttons and accents)
+   - Dark: #2574A9 (headers and hover states)
+   - Darkest: #1B4F72 (text)
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #E8F4F8; /* 60% - lightest blue background */
+    color: #1B4F72; /* darkest blue for text */
+    line-height: 1.6;
+}
+
+/* Header - 30% */
+header {
+    background-color: #2574A9; /* dark blue */
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+nav {
+    margin-top: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+nav a:hover {
+    background-color: #3498DB; /* base blue */
+    transform: translateY(-2px);
+}
+
+/* Hero Section - 60% */
+.hero {
+    background: linear-gradient(135deg, #B3E0F2 0%, #E8F4F8 100%); /* light blues */
+    padding: 80px 20px;
+    text-align: center;
+    max-width: 900px;
+    margin: 40px auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.hero h2 {
+    color: #1B4F72; /* darkest blue */
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #2574A9; /* dark blue */
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Content Section - Cards use 30% */
+.content {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: #B3E0F2; /* 30% - light blue */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.card h3 {
+    color: #1B4F72; /* darkest blue */
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: #2574A9; /* dark blue */
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.7;
+}
+
+/* Buttons - 10% accent color */
+button {
+    background-color: #3498DB; /* 10% - base blue accent */
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+button:hover {
+    background-color: #2574A9; /* dark blue */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Footer - 30% */
+footer {
+    background-color: #2574A9; /* dark blue */
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 60px;
+}
+
+footer p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 32px;
+    }
+    
+    .hero h2 {
+        font-size: 36px;
+    }
+    
+    .hero p {
+        font-size: 18px;
+    }
+    
+    nav a {
+        display: block;
+        margin: 10px 0;
+    }
+    
+    .content {
+        grid-template-columns: 1fr;
+    }
+}

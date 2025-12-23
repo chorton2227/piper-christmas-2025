@@ -1,0 +1,585 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fa;
+    padding-top: 70px;
+}
+
+/* Fixed Navigation */
+.fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.nav-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+/* Page Container */
+.page-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Hero */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+/* Pattern Sections */
+.pattern-section {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pattern-section h2 {
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.pattern-section > p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Pattern Demo */
+.pattern-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.pattern-demo.center {
+    justify-content: center;
+}
+
+/* Product Cards with Badges */
+.product-card {
+    position: relative;  /* Creates positioning context for badges */
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image {
+    font-size: 64px;
+    margin-bottom: 15px;
+}
+
+.product-card h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.price {
+    color: #667eea;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.old-price {
+    color: #999;
+    font-size: 16px;
+    text-decoration: line-through;
+}
+
+.buy-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.buy-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Badges */
+.badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.badge-new {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.badge-sale {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: #333;
+}
+
+.badge-hot {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff6b6b;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* Tooltips */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-btn {
+    font-size: 32px;
+    background: white;
+    border: 2px solid #e9ecef;
+    padding: 15px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.icon-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.tooltip {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 20;
+}
+
+.tooltip-top {
+    bottom: 100%;
+    margin-bottom: 8px;
+}
+
+.tooltip-bottom {
+    top: 100%;
+    margin-top: 8px;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+}
+
+.tooltip-top::after {
+    top: 100%;
+    border-top-color: #333;
+}
+
+.tooltip-bottom::after {
+    bottom: 100%;
+    border-bottom-color: #333;
+}
+
+.tooltip-container:hover .tooltip {
+    opacity: 1;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.dropdown-btn:hover {
+    transform: translateY(-2px);
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: white;
+    min-width: 200px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+    z-index: 30;
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.dropdown-content a:hover {
+    background: #f8f9fa;
+    color: #667eea;
+}
+
+/* Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal {
+    position: relative;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    z-index: 1001;
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: #667eea;
+}
+
+.modal h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.modal p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s;
+    border: 2px solid #e9ecef;
+    background: white;
+    color: #333;
+}
+
+.modal-btn.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.modal-btn:hover {
+    transform: scale(1.05);
+}
+
+.open-modal-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.open-modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Floating Action Button */
+.fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    transition: all 0.3s;
+}
+
+.fab:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Code Example */
+.code-example {
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.code-example strong {
+    display: block;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.code-example code {
+    display: block;
+    background: #2d2d2d;
+    color: #a6e22e;
+    padding: 15px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    white-space: pre;
+}
+
+/* Summary */
+.pattern-section.summary {
+    background: linear-gradient(135deg, #fff9e6 0%, #e6f9ff 100%);
+    border: 2px solid #667eea;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.summary-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.summary-card h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.summary-card p {
+    color: #666;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.summary-card code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #d63384;
+    font-family: 'Courier New', monospace;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+    
+    .nav-content {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hero {
+        padding: 40px 20px;
+    }
+    
+    .hero h1 {
+        font-size: 32px;
+    }
+    
+    .pattern-section {
+        padding: 20px;
+    }
+    
+    .pattern-demo {
+        padding: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .product-card {
+        max-width: none;
+        width: 100%;
+    }
+    
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .fab {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: RGB and RGBA Colors</title>
+    <link rel="stylesheet" href="example-3-styles.css">
+</head>
+<body>
+    <header>
+        <h1>RGB & RGBA Colors</h1>
+        <p>Intuitive color mixing with transparency support!</p>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h2>Understanding RGB</h2>
+            <p><strong>RGB</strong> stands for Red, Green, Blue - the three colors of light that mix to create all colors!</p>
+            <p>Format: <code>rgb(red, green, blue)</code> where each value is 0-255</p>
+            <ul>
+                <li><code>rgb(0, 0, 0)</code> = Black (no light)</li>
+                <li><code>rgb(255, 255, 255)</code> = White (all light)</li>
+                <li><code>rgb(255, 0, 0)</code> = Red</li>
+                <li><code>rgb(0, 255, 0)</code> = Green</li>
+                <li><code>rgb(0, 0, 255)</code> = Blue</li>
+            </ul>
+        </section>
+        
+        <section class="rgb-primary">
+            <h2>Primary RGB Colors</h2>
+            <div class="color-grid">
+                <div class="rgb-box rgb-red">
+                    <h3>Red</h3>
+                    <code>rgb(255, 0, 0)</code>
+                </div>
+                <div class="rgb-box rgb-green">
+                    <h3>Green</h3>
+                    <code>rgb(0, 255, 0)</code>
+                </div>
+                <div class="rgb-box rgb-blue">
+                    <h3>Blue</h3>
+                    <code>rgb(0, 0, 255)</code>
+                </div>
+            </div>
+        </section>
+        
+        <section class="rgb-mixed">
+            <h2>Mixed RGB Colors</h2>
+            <div class="color-grid">
+                <div class="rgb-box rgb-yellow">
+                    <h3>Yellow</h3>
+                    <code>rgb(255, 255, 0)</code>
+                    <p>Red + Green</p>
+                </div>
+                <div class="rgb-box rgb-cyan">
+                    <h3>Cyan</h3>
+                    <code>rgb(0, 255, 255)</code>
+                    <p>Green + Blue</p>
+                </div>
+                <div class="rgb-box rgb-magenta">
+                    <h3>Magenta</h3>
+                    <code>rgb(255, 0, 255)</code>
+                    <p>Red + Blue</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="rgba-section">
+            <h2>RGBA - Adding Transparency! 🌟</h2>
+            <p>RGBA adds a fourth value (alpha) from 0 to 1 for transparency:</p>
+            <p><code>rgba(red, green, blue, alpha)</code></p>
+            
+            <div class="transparency-demo">
+                <div class="bg-layer">Background Layer</div>
+                <div class="overlay-container">
+                    <div class="overlay rgba-100">
+                        <h4>100% Opaque</h4>
+                        <code>rgba(52, 152, 219, 1.0)</code>
+                    </div>
+                    <div class="overlay rgba-75">
+                        <h4>75% Opaque</h4>
+                        <code>rgba(52, 152, 219, 0.75)</code>
+                    </div>
+                    <div class="overlay rgba-50">
+                        <h4>50% Opaque</h4>
+                        <code>rgba(52, 152, 219, 0.5)</code>
+                    </div>
+                    <div class="overlay rgba-25">
+                        <h4>25% Opaque</h4>
+                        <code>rgba(52, 152, 219, 0.25)</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="practical-rgba">
+            <h2>Practical RGBA Uses</h2>
+            
+            <div class="card with-shadow">
+                <h3>Semi-transparent Backgrounds</h3>
+                <p>This card has a semi-transparent background so you can see through it slightly.</p>
+                <code>background-color: rgba(255, 255, 255, 0.9);</code>
+            </div>
+            
+            <div class="card with-overlay">
+                <h3>Overlay Effects</h3>
+                <p>Text on images often uses RGBA backgrounds for readability.</p>
+                <code>background-color: rgba(0, 0, 0, 0.6);</code>
+            </div>
+        </section>
+        
+        <section class="comparison">
+            <h2>RGB vs Hex - Same Colors!</h2>
+            <div class="comparison-grid">
+                <div class="comp-box">
+                    <div class="comp-color" style="background-color: rgb(231, 76, 60)"></div>
+                    <code>rgb(231, 76, 60)</code>
+                    <p>=</p>
+                    <code>#e74c3c</code>
+                </div>
+                <div class="comp-box">
+                    <div class="comp-color" style="background-color: rgb(52, 152, 219)"></div>
+                    <code>rgb(52, 152, 219)</code>
+                    <p>=</p>
+                    <code>#3498db</code>
+                </div>
+                <div class="comp-box">
+                    <div class="comp-color" style="background-color: rgb(46, 204, 113)"></div>
+                    <code>rgb(46, 204, 113)</code>
+                    <p>=</p>
+                    <code>#2ecc71</code>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>RGBA is perfect when you need transparency! ✨</p>
+    </footer>
+</body>
+</html>

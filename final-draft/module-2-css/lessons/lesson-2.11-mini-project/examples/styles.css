@@ -1,0 +1,766 @@
+/* =====================================================
+   ProGamer Hub - Complete CSS Styling
+   Module 2.11: CSS Mini-Project
+   ===================================================== */
+
+/* CSS Custom Properties (Variables) */
+:root {
+    /* Color Scheme - Gaming Theme */
+    --primary-color: #6366f1;      /* Indigo */
+    --primary-dark: #4f46e5;
+    --secondary-color: #ec4899;    /* Pink */
+    --accent-color: #8b5cf6;       /* Purple */
+    --success-color: #10b981;      /* Green */
+    --warning-color: #f59e0b;      /* Orange */
+    
+    /* Neutral Colors */
+    --bg-color: #0f172a;           /* Dark blue-gray */
+    --bg-light: #1e293b;
+    --bg-lighter: #334155;
+    --text-color: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-color: #475569;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--warning-color));
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+}
+
+/* =====================================================
+   RESET & BASE STYLES
+   ===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+    background-attachment: fixed;
+}
+
+/* =====================================================
+   TYPOGRAPHY
+   ===================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-color);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--primary-color);
+    margin-top: var(--spacing-lg);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--accent-color);
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1.1rem;
+}
+
+p {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-muted);
+}
+
+strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+em {
+    color: var(--secondary-color);
+    font-style: italic;
+}
+
+mark {
+    background-color: rgba(236, 72, 153, 0.3);
+    color: var(--secondary-color);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+}
+
+small {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+    margin: var(--spacing-lg) 0;
+}
+
+/* =====================================================
+   LAYOUT CONTAINERS
+   ===================================================== */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+aside {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    background-color: var(--bg-light);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* =====================================================
+   HEADER & NAVIGATION
+   ===================================================== */
+
+header {
+    background: var(--gradient-primary);
+    padding: var(--spacing-lg);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-bottom: var(--spacing-xs);
+    /* Override gradient for header since it already has gradient bg */
+    -webkit-text-fill-color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header > p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-md);
+    font-weight: 300;
+}
+
+/* Navigation Styles */
+nav {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin: 0 var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    transition: all var(--transition-base);
+    display: inline-block;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+nav a:active {
+    transform: translateY(0);
+}
+
+/* =====================================================
+   SECTIONS & ARTICLES
+   ===================================================== */
+
+section {
+    background-color: var(--bg-light);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+section:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+article {
+    background-color: var(--bg-lighter);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--primary-color);
+}
+
+article header {
+    background: transparent;
+    padding: 0;
+    margin-bottom: var(--spacing-md);
+    position: static;
+    box-shadow: none;
+}
+
+article header h3 {
+    color: var(--primary-color);
+}
+
+article footer {
+    background: transparent;
+    padding: var(--spacing-sm) 0 0 0;
+    margin-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+/* =====================================================
+   IMAGES
+   ===================================================== */
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    margin: var(--spacing-md) 0;
+}
+
+img:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+/* =====================================================
+   LISTS
+   ===================================================== */
+
+ul, ol {
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-lg);
+}
+
+li {
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-muted);
+}
+
+li strong {
+    color: var(--primary-color);
+}
+
+/* Custom list styling */
+ul li::marker {
+    color: var(--secondary-color);
+}
+
+ol li::marker {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Navigation lists in aside */
+aside ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+aside ul li {
+    padding: var(--spacing-xs);
+    border-left: 3px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+aside ul li:hover {
+    border-left-color: var(--secondary-color);
+    padding-left: var(--spacing-sm);
+    background-color: rgba(236, 72, 153, 0.1);
+}
+
+/* =====================================================
+   LINKS
+   ===================================================== */
+
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    position: relative;
+}
+
+a:hover {
+    color: var(--warning-color);
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-secondary);
+    transition: width var(--transition-base);
+}
+
+a:hover::after {
+    width: 100%;
+}
+
+/* External links indicator */
+a[target="_blank"]::before {
+    content: '↗ ';
+    font-size: 0.875em;
+}
+
+/* Email links */
+a[href^="mailto:"] {
+    color: var(--success-color);
+}
+
+a[href^="mailto:"]:hover {
+    color: var(--accent-color);
+}
+
+/* =====================================================
+   TABLES
+   ===================================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-md) 0;
+    background-color: var(--bg-lighter);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+thead {
+    background: var(--gradient-primary);
+}
+
+thead th {
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    padding: var(--spacing-sm);
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-fast);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+}
+
+td, th {
+    padding: var(--spacing-sm);
+}
+
+td {
+    color: var(--text-muted);
+}
+
+/* Alternating row colors */
+tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* =====================================================
+   FORMS
+   ===================================================== */
+
+form {
+    background-color: var(--bg-lighter);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+form h4 {
+    color: var(--primary-color);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 2px solid var(--border-color);
+}
+
+form h4:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    background-color: var(--bg-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all var(--transition-base);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Checkbox and Radio Styles */
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: var(--spacing-xs);
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+/* Button Styles */
+button {
+    background: var(--gradient-primary);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    margin-right: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button[type="reset"] {
+    background: var(--bg-color);
+    border: 2px solid var(--border-color);
+}
+
+button[type="reset"]:hover {
+    background-color: var(--bg-lighter);
+    border-color: var(--primary-color);
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+footer {
+    background: linear-gradient(180deg, transparent, var(--bg-light));
+    padding: var(--spacing-xl) var(--spacing-lg);
+    text-align: center;
+    margin-top: var(--spacing-xl);
+    border-top: 2px solid var(--border-color);
+}
+
+footer h3 {
+    color: var(--primary-color);
+}
+
+footer p {
+    margin: var(--spacing-sm) 0;
+}
+
+/* =====================================================
+   UTILITY CLASSES
+   ===================================================== */
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.highlight {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+    /* Larger spacing */
+    :root {
+        --spacing-xl: 4rem;
+    }
+    
+    /* Two-column layout for main + aside */
+    body {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+    
+    main {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+    
+    /* Horizontal navigation */
+    nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    nav a {
+        margin: 0 var(--spacing-sm);
+    }
+    
+    /* Grid layout for image sections */
+    section h3 + img {
+        max-width: 48%;
+        display: inline-block;
+        margin-right: 2%;
+    }
+    
+    /* Table improvements */
+    td, th {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+    /* Even larger spacing */
+    :root {
+        --spacing-xl: 5rem;
+    }
+    
+    /* Larger font sizes */
+    html {
+        font-size: 18px;
+    }
+    
+    /* Three-column layout option */
+    main {
+        padding: var(--spacing-xl);
+    }
+    
+    /* Enhanced hover effects */
+    section:hover {
+        transform: translateY(-8px);
+    }
+    
+    img:hover {
+        transform: scale(1.05);
+    }
+}
+
+/* Large Desktop (1440px and up) */
+@media (min-width: 1440px) {
+    main {
+        max-width: 1400px;
+    }
+    
+    aside {
+        max-width: 1400px;
+    }
+}
+
+/* =====================================================
+   DARK MODE SUPPORT (Optional Enhancement)
+   ===================================================== */
+
+@media (prefers-color-scheme: light) {
+    /* If user prefers light mode, you could override variables here */
+    /* For now, we'll keep the dark gaming theme */
+}
+
+/* =====================================================
+   PRINT STYLES
+   ===================================================== */
+
+@media print {
+    * {
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+    }
+    
+    header, footer, aside, nav {
+        display: none;
+    }
+    
+    main {
+        max-width: 100%;
+    }
+    
+    a::after {
+        content: " (" attr(href) ")";
+    }
+}
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section, article {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* =====================================================
+   SPECIAL EFFECTS
+   ===================================================== */
+
+/* Glowing effect for rating stars */
+article header p {
+    font-size: 1.125rem;
+}
+
+/* Emoji gaming controller in header has subtle glow */
+header h1::before {
+    filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.5));
+}
+
+/* Focus states for accessibility */
+*:focus-visible {
+    outline: 3px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+::-moz-selection {
+    background-color: var(--secondary-color);
+    color: white;
+}
