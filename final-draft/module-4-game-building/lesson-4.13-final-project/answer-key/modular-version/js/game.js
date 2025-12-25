@@ -281,8 +281,17 @@ function aiTurn() {
             logAction(`${player.name} folds`);
             SoundModule.fold();
         } else if (decision.action === 'check') {
-            player.lastAction = 'check';
-            logAction(`${player.name} checks`);
+            // Double-check: can only check if no bet to call
+            if (gameState.currentBet - player.currentBet === 0) {
+                player.lastAction = 'check';
+                logAction(`${player.name} checks`);
+            } else {
+                // Should not happen, but fallback to fold if AI tries to check with a bet
+                player.folded = true;
+                player.lastAction = 'fold';
+                logAction(`${player.name} folds`);
+                SoundModule.fold();
+            }
         } else if (decision.action === 'call') {
             player.lastAction = 'call';
             const amount = Math.min(gameState.currentBet - player.currentBet, player.chips);

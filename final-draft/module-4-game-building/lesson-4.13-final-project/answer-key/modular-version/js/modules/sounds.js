@@ -18,13 +18,14 @@ const SoundModule = (function() {
     }
     
     /**
-     * Play card shuffle sound
+     * Play card shuffle sound (happy game start melody)
      */
     function shuffle() {
         if (!audioContext) return;
         
-        const duration = 0.3;
-        for (let i = 0; i < 5; i++) {
+        // Play happy ascending arpeggio: C-E-G-C
+        const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+        notes.forEach((freq, i) => {
             setTimeout(() => {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
@@ -32,16 +33,17 @@ const SoundModule = (function() {
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                oscillator.frequency.value = 200 + Math.random() * 100;
-                oscillator.type = 'square';
+                oscillator.frequency.value = freq;
+                oscillator.type = 'sine';
                 
-                gainNode.gain.setValueAtTime(masterVolume * 0.1, audioContext.currentTime);
+                const duration = 0.15;
+                gainNode.gain.setValueAtTime(masterVolume * 0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
                 
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + duration);
-            }, i * 50);
-        }
+            }, i * 100);
+        });
     }
     
     /**
