@@ -170,17 +170,49 @@ const UIModule = (function() {
      * @param {Object} player - Winning player
      * @param {string} handName - Name of winning hand
      * @param {boolean} isSplit - Whether pot was split
-     * @param {Array} winningCards - Winner's cards (optional)
+     * @param {Object} winDetails - Object containing playerCards, communityCards, winningHandCards, potAmount
      */
-    function announceWinner(player, handName, isSplit = false, winningCards = null) {
+    function announceWinner(player, handName, isSplit = false, winDetails = {}) {
         const announcement = document.getElementById('winner-announcement');
         
+        const { playerCards = [], communityCards = [], winningHandCards = [], potAmount = 0 } = winDetails;
+        
         let cardsHTML = '';
-        if (winningCards && winningCards.length > 0) {
-            cardsHTML = `<div style="margin-top: 15px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">`;
-            winningCards.forEach(card => {
-                cardsHTML += `<div class="card ${card.suit}" style="width: 50px; height: 70px; font-size: 20px;">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
-            });
+        
+        // Show pot amount if provided
+        let potHTML = '';
+        if (potAmount > 0) {
+            potHTML = `<div style="font-size: 18px; margin-top: 8px; color: #4CAF50;">Won: $${potAmount}</div>`;
+        }
+        
+        // Show player cards and community cards
+        if (playerCards.length > 0 || communityCards.length > 0) {
+            cardsHTML = '<div style="margin-top: 15px;">';
+            
+            // Player's hole cards
+            if (playerCards.length > 0) {
+                cardsHTML += `<div style="margin-bottom: 10px; font-size: 14px; color: #fff;">Player Cards:</div>`;
+                cardsHTML += `<div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;">`;
+                playerCards.forEach(card => {
+                    const isWinning = winningHandCards.some(wc => wc.rank === card.rank && wc.suit === card.suit);
+                    const highlightStyle = isWinning ? 'box-shadow: 0 0 15px #ffd700; border: 2px solid #ffd700;' : '';
+                    cardsHTML += `<div class="card ${card.suit}" style="width: 50px; height: 70px; font-size: 20px; ${highlightStyle}">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
+                });
+                cardsHTML += '</div>';
+            }
+            
+            // Community cards
+            if (communityCards.length > 0) {
+                cardsHTML += `<div style="margin-bottom: 10px; font-size: 14px; color: #fff;">Community Cards:</div>`;
+                cardsHTML += `<div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">`;
+                communityCards.forEach(card => {
+                    const isWinning = winningHandCards.some(wc => wc.rank === card.rank && wc.suit === card.suit);
+                    const highlightStyle = isWinning ? 'box-shadow: 0 0 15px #ffd700; border: 2px solid #ffd700;' : '';
+                    cardsHTML += `<div class="card ${card.suit}" style="width: 50px; height: 70px; font-size: 20px; ${highlightStyle}">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
+                });
+                cardsHTML += '</div>';
+            }
+            
             cardsHTML += '</div>';
         }
         
@@ -189,6 +221,7 @@ const UIModule = (function() {
             <div style="font-size: 20px; margin-top: 10px; font-weight: bold; color: #ffd700;">
                 ${handName}${isSplit ? ' (Split Pot)' : ''}
             </div>
+            ${potHTML}
             ${cardsHTML}
         `;
         announcement.classList.add('show');

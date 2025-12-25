@@ -98,9 +98,14 @@ const HandEvaluator = (function() {
      * @returns {Object} Best hand evaluation
      */
     function findBestHand(sevenCards) {
-        if (sevenCards.length < 7) return evaluateHand(sevenCards);
+        if (sevenCards.length < 7) {
+            const evaluation = evaluateHand(sevenCards);
+            evaluation.cards = sevenCards;
+            return evaluation;
+        }
         
         let bestHand = { rank: 0 };
+        let bestCards = [];
         
         // Generate all 5-card combinations
         for (let i = 0; i < sevenCards.length - 4; i++) {
@@ -113,6 +118,7 @@ const HandEvaluator = (function() {
                             
                             if (evaluation.rank > bestHand.rank) {
                                 bestHand = evaluation;
+                                bestCards = hand;
                             }
                         }
                     }
@@ -120,6 +126,7 @@ const HandEvaluator = (function() {
             }
         }
         
+        bestHand.cards = bestCards; // Store the actual cards used
         return bestHand;
     }
     

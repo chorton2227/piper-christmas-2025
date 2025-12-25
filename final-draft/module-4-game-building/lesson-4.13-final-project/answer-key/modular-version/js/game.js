@@ -485,9 +485,15 @@ function showdown() {
     if (activePlayers.length === 1) {
         // Everyone else folded
         const winner = activePlayers[0];
+        const potAmount = gameState.pot;
         winner.chips += gameState.pot;
-        logAction(`${winner.name} wins $${gameState.pot} (everyone else folded)`);
-        UIModule.announceWinner(winner, 'Everyone else folded', false, winner.cards);
+        logAction(`${winner.name} wins $${potAmount} (everyone else folded)`);
+        UIModule.announceWinner(winner, 'Everyone else folded', false, {
+            playerCards: winner.cards,
+            communityCards: gameState.communityCards,
+            winningHandCards: [],
+            potAmount: potAmount
+        });
     } else {
         // Evaluate hands
         const evaluations = activePlayers.map(p => ({
@@ -513,7 +519,12 @@ function showdown() {
             logAction(`${w.player.name} wins $${winAmount} with ${w.hand.name}`);
         });
         
-        UIModule.announceWinner(winners[0].player, winners[0].hand.name, winners.length > 1, winners[0].player.cards);
+        UIModule.announceWinner(winners[0].player, winners[0].hand.name, winners.length > 1, {
+            playerCards: winners[0].player.cards,
+            communityCards: gameState.communityCards,
+            winningHandCards: winners[0].hand.cards || [],
+            potAmount: winAmount
+        });
     }
     
     UIModule.updateUI(gameState);
