@@ -35,6 +35,11 @@ const AIModule = (function() {
         const potOdds = gameState.currentBet / (gameState.pot + gameState.currentBet);
         const toCall = gameState.currentBet - player.currentBet;
         
+        // If player has no chips, they can't act
+        if (player.chips === 0) {
+            return { action: 'check' };
+        }
+        
         // Difficulty adjustments
         let aggression = 0.5;
         let bluffChance = 0.1;

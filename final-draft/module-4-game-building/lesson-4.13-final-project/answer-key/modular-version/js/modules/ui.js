@@ -126,12 +126,15 @@ const UIModule = (function() {
      */
     function updateButtons(gameState) {
         const humanPlayer = gameState.players[0];
-        const isHumanTurn = gameState.currentPlayerIndex === 0 && !humanPlayer.folded;
+        const isHumanTurn = gameState.currentPlayerIndex === 0 && !humanPlayer.folded && !humanPlayer.allIn;
         const toCall = gameState.currentBet - humanPlayer.currentBet;
         
-        document.getElementById('check-btn').disabled = !isHumanTurn || toCall > 0;
-        document.getElementById('call-btn').disabled = !isHumanTurn || toCall === 0;
-        document.getElementById('call-amount').textContent = toCall;
+        // Can only check if no bet to call OR if player is all-in
+        const canCheck = toCall === 0 || humanPlayer.allIn;
+        
+        document.getElementById('check-btn').disabled = !isHumanTurn || !canCheck;
+        document.getElementById('call-btn').disabled = !isHumanTurn || toCall === 0 || humanPlayer.allIn;
+        document.getElementById('call-amount').textContent = Math.min(toCall, humanPlayer.chips);
         
         document.querySelectorAll('.btn-fold, .btn-raise, .btn-allin').forEach(btn => {
             btn.disabled = !isHumanTurn;
