@@ -192,7 +192,13 @@ function playerAction(action) {
         gameState.pot += amount;
         logAction(`${player.name} calls $${amount}`);
         
-        if (player.chips === 0) player.allIn = true;
+        if (player.chips === 0) {
+            player.allIn = true;
+            player.lastAction = 'allin';
+            SoundModule.allin();
+        } else {
+            SoundModule.bet();
+        }
     } else if (action === 'raise') {
         player.lastAction = 'raise';
         const raiseInput = parseInt(document.getElementById('raise-amount').value);
