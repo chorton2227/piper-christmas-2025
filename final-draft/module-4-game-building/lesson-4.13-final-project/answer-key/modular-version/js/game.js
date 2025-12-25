@@ -469,11 +469,20 @@ function advancePhase() {
  */
 function dealFlop() {
     gameState.deck.pop(); // Burn card
-    for (let i = 0; i < 3; i++) {
-        gameState.communityCards.push(gameState.deck.pop());
-    }
-    gameState.phase = 'flop';
-    logAction('Flop dealt');
+    
+    let cardIndex = 0;
+    const dealInterval = setInterval(() => {
+        if (cardIndex < 3) {
+            gameState.communityCards.push(gameState.deck.pop());
+            SoundModule.deal();
+            UIModule.updateUI(gameState);
+            cardIndex++;
+        } else {
+            clearInterval(dealInterval);
+            gameState.phase = 'flop';
+            logAction('Flop dealt');
+        }
+    }, 300);
 }
 
 /**
@@ -482,6 +491,7 @@ function dealFlop() {
 function dealTurn() {
     gameState.deck.pop(); // Burn card
     gameState.communityCards.push(gameState.deck.pop());
+    SoundModule.deal();
     gameState.phase = 'turn';
     logAction('Turn dealt');
 }
@@ -492,6 +502,7 @@ function dealTurn() {
 function dealRiver() {
     gameState.deck.pop(); // Burn card
     gameState.communityCards.push(gameState.deck.pop());
+    SoundModule.deal();
     gameState.phase = 'river';
     logAction('River dealt');
 }
@@ -546,6 +557,7 @@ function showdown() {
         const winner = activePlayers[0];
         const potAmount = gameState.pot;
         winner.chips += gameState.pot;
+        SoundModule.collect();
         logAction(`${winner.name} wins $${potAmount} (everyone else folded)`);
         SoundModule.collect();
         UIModule.announceWinner(winner, 'Everyone else folded', false, {
