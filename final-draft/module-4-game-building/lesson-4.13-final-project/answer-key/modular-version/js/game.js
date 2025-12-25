@@ -472,8 +472,17 @@ function advancePhase() {
     if (playersInHand.length === 1) {
         // Award pot immediately to last remaining player
         const winner = playersInHand[0];
+        const potAmount = gameState.pot;
         winner.chips += gameState.pot;
-        logAction(`${winner.name} wins $${gameState.pot} (everyone else folded)`);
+        SoundModule.collect();
+        logAction(`${winner.name} wins $${potAmount} (everyone else folded)`);
+        
+        UIModule.announceWinner(winner, 'Everyone else folded', false, {
+            playerCards: winner.cards,
+            communityCards: gameState.communityCards,
+            winningHandCards: [],
+            potAmount: potAmount
+        });
         
         UIModule.updateUI(gameState);
         
