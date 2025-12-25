@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Dealing Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Example 4: Dealing Cards</h1>
+        
+        <div class="info">
+            <h2>What This Example Shows:</h2>
+            <ul>
+                <li>Dealing single cards from the deck</li>
+                <li>Dealing multiple cards (hands)</li>
+                <li>Dealing to multiple players</li>
+                <li>Managing deck state after dealing</li>
+                <li>Preventing dealing too many cards</li>
+            </ul>
+            <p><strong>Open your browser console (F12) to see dealing in action!</strong></p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== 🎯 DEALING CARDS ===\n');
+        
+        // Helper functions from previous examples
+        function createDeck() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i]
+                    });
+                }
+            }
+            return deck;
+        }
+        
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+        
+        function displayCard(card) {
+            const symbols = { 'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣' };
+            return `${card.rank}${symbols[card.suit]}`;
+        }
+        
+        // Dealing a single card
+        console.log('--- Dealing a Single Card ---');
+        
+        function dealCard(deck) {
+            // Remove and return the last card
+            return deck.pop();
+        }
+        
+        let deck = createDeck();
+        shuffleDeck(deck);
+        
+        console.log('Cards in deck:', deck.length);
+        
+        const card1 = dealCard(deck);
+        console.log('Dealt card:', displayCard(card1));
+        console.log('Cards remaining:', deck.length);
+        
+        const card2 = dealCard(deck);
+        console.log('Dealt card:', displayCard(card2));
+        console.log('Cards remaining:', deck.length);
+        console.log('');
+        
+        // Dealing multiple cards
+        console.log('--- Dealing Multiple Cards (A Hand) ---');
+        
+        function dealCards(deck, count) {
+            const hand = [];
+            for (let i = 0; i < count; i++) {
+                hand.push(deck.pop());
+            }
+            return hand;
+        }
+        
+        deck = createDeck();
+        shuffleDeck(deck);
+        
+        const pokerHand = dealCards(deck, 5);
+        console.log('Dealt a 5-card poker hand:');
+        pokerHand.forEach((card, index) => {
+            console.log(`  Card ${index + 1}: ${displayCard(card)}`);
+        });
+        console.log('Cards remaining in deck:', deck.length);
+        console.log('');
+        
+        // Dealing to multiple players
+        console.log('--- Dealing to Multiple Players ---');
+        
+        function dealToPlayers(deck, playerCount, cardsPerPlayer) {
+            const players = [];
+            
+            for (let i = 0; i < playerCount; i++) {
+                players.push({
+                    name: `Player ${i + 1}`,
+                    hand: []
+                });
+            }
+            
+            // Deal one card at a time to each player (like real poker)
+            for (let cardNum = 0; cardNum < cardsPerPlayer; cardNum++) {
+                for (let playerNum = 0; playerNum < playerCount; playerNum++) {
+                    players[playerNum].hand.push(deck.pop());
+                }
+            }
+            
+            return players;
+        }
+        
+        deck = createDeck();
+        shuffleDeck(deck);
+        
+        const players = dealToPlayers(deck, 4, 2);
+        
+        console.log('Dealt 2 cards to 4 players:');
+        players.forEach(player => {
+            const handDisplay = player.hand.map(displayCard).join(', ');
+            console.log(`  ${player.name}: ${handDisplay}`);
+        });
+        console.log('Cards remaining in deck:', deck.length);
+        console.log('');
+        
+        // Dealing community cards (poker flop, turn, river)
+        console.log('--- Dealing Community Cards (Poker) ---');
+        
+        deck = createDeck();
+        shuffleDeck(deck);
+        
+        // Deal hole cards to 6 players
+        const pokePlayers = dealToPlayers(deck, 6, 2);
+        console.log('Dealt hole cards to 6 players');
+        console.log('Deck has', deck.length, 'cards left');
+        console.log('');
+        
+        // Burn and deal flop
+        console.log('Burn card (discard 1 card)');
+        deck.pop();  // Burn card
+        
+        const flop = dealCards(deck, 3);
+        console.log('Flop (3 community cards):', flop.map(displayCard).join(', '));
+        console.log('Deck has', deck.length, 'cards left');
+        console.log('');
+        
+        // Burn and deal turn
+        console.log('Burn card');
+        deck.pop();
+        
+        const turn = dealCard(deck);
+        console.log('Turn (4th community card):', displayCard(turn));
+        console.log('Deck has', deck.length, 'cards left');
+        console.log('');
+        
+        // Burn and deal river
+        console.log('Burn card');
+        deck.pop();
+        
+        const river = dealCard(deck);
+        console.log('River (5th community card):', displayCard(river));
+        console.log('Deck has', deck.length, 'cards left');
+        console.log('');
+        
+        console.log('All community cards:', [...flop, turn, river].map(displayCard).join(', '));
+        console.log('');
+        
+        // Safe dealing (error handling)
+        console.log('--- Safe Dealing with Error Handling ---');
+        
+        function dealCardSafe(deck) {
+            if (deck.length === 0) {
+                console.error('❌ Cannot deal - deck is empty!');
+                return null;
+            }
+            return deck.pop();
+        }
+        
+        function dealCardsSafe(deck, count) {
+            if (deck.length < count) {
+                console.error(`❌ Cannot deal ${count} cards - only ${deck.length} remaining!`);
+                return null;
+            }
+            
+            const hand = [];
+            for (let i = 0; i < count; i++) {
+                hand.push(deck.pop());
+            }
+            return hand;
+        }
+        
+        // Test with small deck
+        const smallDeck = createDeck().slice(0, 3);  // Only 3 cards
+        console.log('Small deck has', smallDeck.length, 'cards');
+        
+        const safeHand1 = dealCardsSafe(smallDeck, 2);
+        if (safeHand1) {
+            console.log('Dealt 2 cards:', safeHand1.map(displayCard).join(', '));
+        }
+        console.log('Deck now has', smallDeck.length, 'cards');
+        
+        const safeHand2 = dealCardsSafe(smallDeck, 5);  // Try to deal too many!
+        console.log('Deck still has', smallDeck.length, 'cards (wasn\'t modified)');
+        console.log('');
+        
+        // Dealing with replacement (not typical for poker)
+        console.log('--- Dealing WITH Replacement (For Learning Only) ---');
+        console.log('Note: In real poker, you don\'t replace dealt cards!');
+        console.log('This is just to show a different approach.');
+        console.log('');
+        
+        function dealCardWithReplacement(deck) {
+            const index = Math.floor(Math.random() * deck.length);
+            return deck[index];  // Don't remove it!
+        }
+        
+        deck = createDeck();
+        console.log('Deck has', deck.length, 'cards');
+        
+        const randomCard1 = dealCardWithReplacement(deck);
+        console.log('Dealt:', displayCard(randomCard1));
+        console.log('Deck still has', deck.length, 'cards (card was not removed)');
+        
+        const randomCard2 = dealCardWithReplacement(deck);
+        console.log('Dealt:', displayCard(randomCard2));
+        console.log('Deck still has', deck.length, 'cards');
+        console.log('');
+        
+        // Complete poker deal simulation
+        console.log('--- Complete Poker Game Simulation ---');
+        
+        deck = createDeck();
+        shuffleDeck(deck);
+        
+        console.log('🎴 Starting new poker hand...');
+        console.log('Deck has', deck.length, 'cards');
+        console.log('');
+        
+        const gamePlayers = dealToPlayers(deck, 5, 2);
+        console.log('👥 Dealt hole cards to 5 players:');
+        gamePlayers.forEach((player, index) => {
+            console.log(`  ${player.name}: ${player.hand.map(displayCard).join(', ')}`);
+        });
+        console.log('Deck:', deck.length, 'cards remaining');
+        console.log('');
+        
+        deck.pop();  // Burn
+        const gameFlop = dealCards(deck, 3);
+        console.log('🃏 Flop:', gameFlop.map(displayCard).join(', '));
+        console.log('Deck:', deck.length, 'cards remaining');
+        console.log('');
+        
+        deck.pop();  // Burn
+        const gameTurn = dealCard(deck);
+        console.log('🃏 Turn:', displayCard(gameTurn));
+        console.log('Deck:', deck.length, 'cards remaining');
+        console.log('');
+        
+        deck.pop();  // Burn
+        const gameRiver = dealCard(deck);
+        console.log('🃏 River:', displayCard(gameRiver));
+        console.log('Deck:', deck.length, 'cards remaining');
+        console.log('');
+        
+        const communityCards = [...gameFlop, gameTurn, gameRiver];
+        console.log('📍 All community cards:', communityCards.map(displayCard).join(' '));
+        console.log('');
+        
+        console.log('📊 Summary:');
+        console.log(`  • Players: ${gamePlayers.length}`);
+        console.log(`  • Cards per player: 2`);
+        console.log(`  • Community cards: 5`);
+        console.log(`  • Burn cards: 3`);
+        console.log(`  • Total cards used: ${gamePlayers.length * 2 + 5 + 3}`);
+        console.log(`  • Cards remaining: ${deck.length}`);
+        console.log('');
+        
+        console.log('✨ Excellent! You now know how to deal cards like a pro! ✨');
+        console.log('💡 Tip: Always shuffle before dealing, and check deck size to avoid errors!');
+    </script>
+</body>
+</html>

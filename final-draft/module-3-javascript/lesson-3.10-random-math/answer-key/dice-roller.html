@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller - Complete</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .section h2 {
+            color: #764ba2;
+            margin-top: 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .dice-display {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            min-height: 100px;
+            align-items: center;
+        }
+        
+        .die {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 4px solid #764ba2;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #764ba2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .die.rolling {
+            animation: roll 0.5s ease-in-out;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .die.critical {
+            background: #ffd700;
+            border-color: #ff6b6b;
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes roll {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .result-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            color: #764ba2;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .message-critical {
+            background: #ffd700;
+            color: #333;
+            border: 3px solid #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎲 Ultimate Dice Roller</h1>
+    
+    <div class="container">
+        <!-- Quick Roll Section -->
+        <div class="section">
+            <h2>Quick Roll</h2>
+            <button onclick="rollDice(1, 6)">1d6</button>
+            <button onclick="rollDice(2, 6)">2d6</button>
+            <button onclick="rollDice(3, 6)">3d6</button>
+            <button onclick="rollDice(5, 6)">5d6</button>
+        </div>
+        
+        <!-- Different Die Types -->
+        <div class="section">
+            <h2>Different Die Types</h2>
+            <button onclick="rollDice(1, 4)">d4</button>
+            <button onclick="rollDice(1, 6)">d6</button>
+            <button onclick="rollDice(1, 8)">d8</button>
+            <button onclick="rollDice(1, 10)">d10</button>
+            <button onclick="rollDice(1, 12)">d12</button>
+            <button onclick="rollDice(1, 20)">d20</button>
+            <button onclick="rollDice(1, 100)">d100</button>
+        </div>
+        
+        <!-- Dice Display -->
+        <div class="dice-display" id="dice-display">
+            <div style="color: #6c757d; font-size: 18px;">Roll some dice to get started!</div>
+        </div>
+        
+        <!-- Result Display -->
+        <div id="result-display" class="result-display" style="display: none;"></div>
+        
+        <!-- Critical Hit Message -->
+        <div id="message-display"></div>
+        
+        <!-- Statistics -->
+        <div class="section">
+            <h2>Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Total Rolls</div>
+                    <div class="stat-value" id="stat-rolls">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Highest Roll</div>
+                    <div class="stat-value" id="stat-highest">-</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Lowest Roll</div>
+                    <div class="stat-value" id="stat-lowest">-</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Average Roll</div>
+                    <div class="stat-value" id="stat-average">-</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Total Value</div>
+                    <div class="stat-value" id="stat-total-value">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Critical Hits</div>
+                    <div class="stat-value" id="stat-criticals">0</div>
+                </div>
+            </div>
+            <button onclick="resetStats()" style="background: #dc3545;">Reset Statistics</button>
+        </div>
+    </div>
+    
+    <script>
+        // Statistics tracking
+        let stats = {
+            totalRolls: 0,
+            highestRoll: null,
+            lowestRoll: null,
+            totalValue: 0,
+            criticalHits: 0
+        };
+        
+        function rollDice(count, sides) {
+            let display = document.getElementById('dice-display');
+            let resultDisplay = document.getElementById('result-display');
+            let messageDisplay = document.getElementById('message-display');
+            
+            // Clear previous roll
+            display.innerHTML = '';
+            messageDisplay.innerHTML = '';
+            
+            // Create dice elements
+            let diceElements = [];
+            for (let i = 0; i < count; i++) {
+                let die = document.createElement('div');
+                die.className = 'die rolling';
+                die.textContent = '?';
+                display.appendChild(die);
+                diceElements.push(die);
+            }
+            
+            // Roll dice after animation
+            setTimeout(function() {
+                let rolls = [];
+                let total = 0;
+                let hasCritical = false;
+                
+                // Roll each die
+                for (let i = 0; i < count; i++) {
+                    let roll = Math.floor(Math.random() * sides) + 1;
+                    rolls.push(roll);
+                    total += roll;
+                    
+                    // Update die display
+                    diceElements[i].textContent = roll;
+                    diceElements[i].classList.remove('rolling');
+                    
+                    // Check for critical hit (max value)
+                    if (roll === sides) {
+                        diceElements[i].classList.add('critical');
+                        hasCritical = true;
+                        stats.criticalHits++;
+                    }
+                }
+                
+                // Show result
+                resultDisplay.style.display = 'block';
+                resultDisplay.innerHTML = count + 'd' + sides + ' = ' + total;
+                if (rolls.length > 1) {
+                    resultDisplay.innerHTML += '<br><span style="font-size: 16px;">(' + rolls.join(' + ') + ')</span>';
+                }
+                
+                // Show critical hit message
+                if (hasCritical) {
+                    messageDisplay.innerHTML = '<div class="message message-critical">🎉 CRITICAL HIT! Maximum roll!</div>';
+                }
+                
+                // Update statistics
+                updateStats(total);
+                
+                console.log('Rolled', count + 'd' + sides + ':', rolls, '= Total:', total);
+            }, 500);
+        }
+        
+        function updateStats(rollValue) {
+            stats.totalRolls++;
+            stats.totalValue += rollValue;
+            
+            // Update highest
+            if (stats.highestRoll === null || rollValue > stats.highestRoll) {
+                stats.highestRoll = rollValue;
+            }
+            
+            // Update lowest
+            if (stats.lowestRoll === null || rollValue < stats.lowestRoll) {
+                stats.lowestRoll = rollValue;
+            }
+            
+            // Calculate average
+            let average = stats.totalValue / stats.totalRolls;
+            
+            // Update display
+            document.getElementById('stat-rolls').textContent = stats.totalRolls;
+            document.getElementById('stat-highest').textContent = stats.highestRoll;
+            document.getElementById('stat-lowest').textContent = stats.lowestRoll;
+            document.getElementById('stat-average').textContent = average.toFixed(1);
+            document.getElementById('stat-total-value').textContent = stats.totalValue;
+            document.getElementById('stat-criticals').textContent = stats.criticalHits;
+        }
+        
+        function resetStats() {
+            if (confirm('Are you sure you want to reset all statistics?')) {
+                stats = {
+                    totalRolls: 0,
+                    highestRoll: null,
+                    lowestRoll: null,
+                    totalValue: 0,
+                    criticalHits: 0
+                };
+                
+                document.getElementById('stat-rolls').textContent = '0';
+                document.getElementById('stat-highest').textContent = '-';
+                document.getElementById('stat-lowest').textContent = '-';
+                document.getElementById('stat-average').textContent = '-';
+                document.getElementById('stat-total-value').textContent = '0';
+                document.getElementById('stat-criticals').textContent = '0';
+                
+                document.getElementById('dice-display').innerHTML = '<div style="color: #6c757d; font-size: 18px;">Statistics reset! Roll some dice!</div>';
+                document.getElementById('result-display').style.display = 'none';
+                document.getElementById('message-display').innerHTML = '';
+                
+                console.log('Statistics reset');
+            }
+        }
+        
+        console.log('🎲 Dice Roller loaded!');
+        console.log('Roll dice and watch your statistics grow!');
+    </script>
+</body>
+</html>

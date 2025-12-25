@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 2 Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success {
+            background: #4caf50;
+            color: white;
+        }
+        .fail {
+            background: #f44336;
+            color: white;
+        }
+        button {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exercise 2 Solution: Detect Pairs and Trips</h1>
+        
+        <div class="test-section">
+            <h2>Test Results</h2>
+            <div id="results"></div>
+        </div>
+        
+        <button onclick="runTests()">Run All Tests</button>
+    </div>
+
+    <script>
+        function createCard(suit, rank, value) {
+            return { suit, rank, value };
+        }
+
+        function countRanks(cards) {
+            const counts = {};
+            for (const card of cards) {
+                counts[card.rank] = (counts[card.rank] || 0) + 1;
+            }
+            return counts;
+        }
+
+        function hasPair(cards) {
+            const counts = countRanks(cards);
+            for (const rank in counts) {
+                if (counts[rank] === 2) {
+                    return { hasPair: true, rank: rank };
+                }
+            }
+            return { hasPair: false };
+        }
+
+        function hasTwoPair(cards) {
+            const counts = countRanks(cards);
+            const pairs = [];
+            for (const rank in counts) {
+                if (counts[rank] === 2) {
+                    pairs.push(rank);
+                }
+            }
+            if (pairs.length >= 2) {
+                return { hasTwoPair: true, ranks: pairs };
+            }
+            return { hasTwoPair: false };
+        }
+
+        function hasThreeOfAKind(cards) {
+            const counts = countRanks(cards);
+            for (const rank in counts) {
+                if (counts[rank] === 3) {
+                    return { hasTrips: true, rank: rank };
+                }
+            }
+            return { hasTrips: false };
+        }
+
+        function hasFourOfAKind(cards) {
+            const counts = countRanks(cards);
+            for (const rank in counts) {
+                if (counts[rank] === 4) {
+                    return { hasQuads: true, rank: rank };
+                }
+            }
+            return { hasQuads: false };
+        }
+
+        function runTests() {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+
+            // Test 1: Pair
+            const pairHand = [
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            const pairResult = hasPair(pairHand);
+            results.innerHTML += `<div class="result ${pairResult.hasPair ? 'success' : 'fail'}">
+                Test 1: Pair - ${pairResult.hasPair ? '✓ PASS' : '✗ FAIL'} ${pairResult.hasPair ? '(Found pair of ' + pairResult.rank + 's)' : ''}
+            </div>`;
+
+            // Test 2: Two Pair
+            const twoPairHand = [
+                createCard('hearts', 'K', 13),
+                createCard('spades', 'K', 13),
+                createCard('diamonds', '7', 7),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            const twoPairResult = hasTwoPair(twoPairHand);
+            results.innerHTML += `<div class="result ${twoPairResult.hasTwoPair ? 'success' : 'fail'}">
+                Test 2: Two Pair - ${twoPairResult.hasTwoPair ? '✓ PASS' : '✗ FAIL'}
+            </div>`;
+
+            // Test 3: Three of a Kind
+            const tripsHand = [
+                createCard('hearts', '7', 7),
+                createCard('spades', '7', 7),
+                createCard('diamonds', '7', 7),
+                createCard('clubs', 'A', 14),
+                createCard('hearts', 'K', 13)
+            ];
+            const tripsResult = hasThreeOfAKind(tripsHand);
+            results.innerHTML += `<div class="result ${tripsResult.hasTrips ? 'success' : 'fail'}">
+                Test 3: Three of a Kind - ${tripsResult.hasTrips ? '✓ PASS' : '✗ FAIL'}
+            </div>`;
+
+            // Test 4: Four of a Kind
+            const quadsHand = [
+                createCard('hearts', 'Q', 12),
+                createCard('spades', 'Q', 12),
+                createCard('diamonds', 'Q', 12),
+                createCard('clubs', 'Q', 12),
+                createCard('hearts', '5', 5)
+            ];
+            const quadsResult = hasFourOfAKind(quadsHand);
+            results.innerHTML += `<div class="result ${quadsResult.hasQuads ? 'success' : 'fail'}">
+                Test 4: Four of a Kind - ${quadsResult.hasQuads ? '✓ PASS' : '✗ FAIL'}
+            </div>`;
+
+            // Test 5: High Card (no pairs)
+            const highCardHand = [
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'K', 13),
+                createCard('diamonds', 'Q', 12),
+                createCard('clubs', '9', 9),
+                createCard('hearts', '5', 5)
+            ];
+            const noPairResult = hasPair(highCardHand);
+            results.innerHTML += `<div class="result ${!noPairResult.hasPair ? 'success' : 'fail'}">
+                Test 5: High Card (no pair) - ${!noPairResult.hasPair ? '✓ PASS' : '✗ FAIL'}
+            </div>`;
+        }
+
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

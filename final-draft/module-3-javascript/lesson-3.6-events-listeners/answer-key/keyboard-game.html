@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 3 Solution: Keyboard Adventure Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        /* Game Info Bar */
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        /* Game Area */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        /* Player */
+        .player {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            z-index: 10;
+        }
+
+        /* Items */
+        .item {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .item:hover {
+            transform: scale(1.2);
+        }
+
+        .item.collected {
+            animation: collect 0.5s ease-out forwards;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes collect {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2) translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        /* Pause Overlay */
+        .pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .pause-overlay.visible {
+            display: flex;
+        }
+
+        .pause-message {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .pause-message h2 {
+            color: #4facfe;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-pause {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions h3 {
+            color: #4facfe;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .instructions li:last-child {
+            border-bottom: none;
+        }
+
+        .key {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        /* Position indicator */
+        .position-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Keyboard Adventure Game</h1>
+        <p class="subtitle">Use arrow keys or WASD to move and collect items!</p>
+
+        <!-- Game Info -->
+        <div class="game-info">
+            <div class="info-card">
+                <div class="info-label">Score</div>
+                <div class="info-value" id="scoreDisplay">0</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Items Collected</div>
+                <div class="info-value" id="itemsCollected">0</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Time</div>
+                <div class="info-value" id="timeDisplay">0s</div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area" id="gameArea">
+            <div class="player" id="player">🚀</div>
+            <div class="position-info" id="positionInfo">X: 0, Y: 0</div>
+            
+            <!-- Pause Overlay -->
+            <div class="pause-overlay" id="pauseOverlay">
+                <div class="pause-message">
+                    <h2>⏸️ PAUSED</h2>
+                    <p>Press SPACE to continue</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-pause" id="pauseBtn">⏸️ Pause</button>
+            <button class="btn btn-reset" id="resetBtn">🔄 Reset</button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>📖 How to Play</h3>
+            <ul>
+                <li><span class="key">↑ ↓ ← →</span> or <span class="key">W A S D</span> - Move your rocket</li>
+                <li><span class="key">SPACE</span> - Pause/Resume game</li>
+                <li><span class="key">ENTER</span> - Reset game</li>
+                <li>⭐ Stars = 5 points | 💎 Gems = 10 points | 🪙 Coins = 3 points</li>
+                <li>Collect all items to increase your score!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXERCISE 3 SOLUTION: KEYBOARD ADVENTURE GAME ===\n');
+
+        // Game state
+        let playerX = 50;
+        let playerY = 50;
+        let score = 0;
+        let itemsCollected = 0;
+        let isPaused = false;
+        let gameTime = 0;
+        let moveSpeed = 15;
+        let items = [];
+        let timerInterval;
+
+        // Get elements
+        let player = document.getElementById('player');
+        let gameArea = document.getElementById('gameArea');
+        let scoreDisplay = document.getElementById('scoreDisplay');
+        let itemsCollectedDisplay = document.getElementById('itemsCollected');
+        let timeDisplay = document.getElementById('timeDisplay');
+        let positionInfo = document.getElementById('positionInfo');
+        let pauseOverlay = document.getElementById('pauseOverlay');
+        let pauseBtn = document.getElementById('pauseBtn');
+        let resetBtn = document.getElementById('resetBtn');
+
+        // Item types
+        let itemTypes = [
+            { emoji: '⭐', points: 5, name: 'Star' },
+            { emoji: '💎', points: 10, name: 'Gem' },
+            { emoji: '🪙', points: 3, name: 'Coin' }
+        ];
+
+        // Initialize game
+        function initGame() {
+            console.log('Initializing game...');
+            
+            // Set initial player position
+            updatePlayerPosition();
+            
+            // Create initial items
+            spawnItems(8);
+            
+            // Start timer
+            startTimer();
+            
+            console.log('✓ Game initialized!');
+        }
+
+        // Update player position
+        function updatePlayerPosition() {
+            // Get game area dimensions
+            let gameRect = gameArea.getBoundingClientRect();
+            let maxX = gameArea.offsetWidth - 50;
+            let maxY = gameArea.offsetHeight - 50;
+            
+            // Keep player in bounds
+            if (playerX < 0) playerX = 0;
+            if (playerX > maxX) playerX = maxX;
+            if (playerY < 0) playerY = 0;
+            if (playerY > maxY) playerY = maxY;
+            
+            // Update position
+            player.style.left = playerX + 'px';
+            player.style.top = playerY + 'px';
+            
+            // Update position display
+            positionInfo.textContent = 'X: ' + Math.floor(playerX) + ', Y: ' + Math.floor(playerY);
+            
+            // Check for collisions
+            checkCollisions();
+        }
+
+        // Move player
+        function movePlayer(direction) {
+            if (isPaused) return;
+            
+            if (direction === 'up') {
+                playerY -= moveSpeed;
+                console.log('Moving up');
+            } else if (direction === 'down') {
+                playerY += moveSpeed;
+                console.log('Moving down');
+            } else if (direction === 'left') {
+                playerX -= moveSpeed;
+                console.log('Moving left');
+            } else if (direction === 'right') {
+                playerX += moveSpeed;
+                console.log('Moving right');
+            }
+            
+            updatePlayerPosition();
+        }
+
+        // Spawn items
+        function spawnItems(count) {
+            let gameRect = gameArea.getBoundingClientRect();
+            let maxX = gameArea.offsetWidth - 40;
+            let maxY = gameArea.offsetHeight - 40;
+            
+            for (let i = 0; i < count; i++) {
+                // Random item type
+                let itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)];
+                
+                // Random position
+                let x = Math.floor(Math.random() * maxX);
+                let y = Math.floor(Math.random() * maxY);
+                
+                // Create item element
+                let item = document.createElement('div');
+                item.className = 'item';
+                item.textContent = itemType.emoji;
+                item.style.left = x + 'px';
+                item.style.top = y + 'px';
+                item.dataset.points = itemType.points;
+                item.dataset.name = itemType.name;
+                
+                // Add to DOM and array
+                gameArea.appendChild(item);
+                items.push(item);
+            }
+            
+            console.log('Spawned ' + count + ' items');
+        }
+
+        // Check collisions
+        function checkCollisions() {
+            let playerRect = player.getBoundingClientRect();
+            
+            items.forEach(function(item, index) {
+                if (item.classList.contains('collected')) return;
+                
+                let itemRect = item.getBoundingClientRect();
+                
+                // Check if rectangles overlap
+                let collision = !(playerRect.right < itemRect.left || 
+                                 playerRect.left > itemRect.right || 
+                                 playerRect.bottom < itemRect.top || 
+                                 playerRect.top > itemRect.bottom);
+                
+                if (collision) {
+                    collectItem(item, index);
+                }
+            });
+        }
+
+        // Collect item
+        function collectItem(item, index) {
+            let points = parseInt(item.dataset.points);
+            let name = item.dataset.name;
+            
+            // Add points
+            score += points;
+            itemsCollected++;
+            
+            // Update displays
+            scoreDisplay.textContent = score;
+            itemsCollectedDisplay.textContent = itemsCollected;
+            
+            // Add collected class for animation
+            item.classList.add('collected');
+            
+            console.log('Collected ' + name + ' (+' + points + ' points) - Total: ' + score);
+            
+            // Remove after animation
+            setTimeout(function() {
+                if (item.parentNode) {
+                    gameArea.removeChild(item);
+                }
+                items.splice(index, 1);
+                
+                // Spawn new item
+                spawnItems(1);
+            }, 500);
+        }
+
+        // Start timer
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                if (!isPaused) {
+                    gameTime++;
+                    timeDisplay.textContent = gameTime + 's';
+                }
+            }, 1000);
+        }
+
+        // Pause game
+        function togglePause() {
+            isPaused = !isPaused;
+            
+            if (isPaused) {
+                pauseOverlay.classList.add('visible');
+                pauseBtn.textContent = '▶️ Resume';
+                console.log('Game paused');
+            } else {
+                pauseOverlay.classList.remove('visible');
+                pauseBtn.textContent = '⏸️ Pause';
+                console.log('Game resumed');
+            }
+        }
+
+        // Reset game
+        function resetGame() {
+            console.log('Resetting game...');
+            
+            // Reset state
+            playerX = 50;
+            playerY = 50;
+            score = 0;
+            itemsCollected = 0;
+            gameTime = 0;
+            isPaused = false;
+            
+            // Update displays
+            scoreDisplay.textContent = '0';
+            itemsCollectedDisplay.textContent = '0';
+            timeDisplay.textContent = '0s';
+            pauseOverlay.classList.remove('visible');
+            pauseBtn.textContent = '⏸️ Pause';
+            
+            // Remove all items
+            items.forEach(function(item) {
+                if (item.parentNode) {
+                    gameArea.removeChild(item);
+                }
+            });
+            items = [];
+            
+            // Respawn items
+            spawnItems(8);
+            
+            // Update player position
+            updatePlayerPosition();
+            
+            console.log('✓ Game reset!');
+        }
+
+        // Keyboard event listener
+        document.addEventListener('keydown', function(event) {
+            let key = event.key.toLowerCase();
+            
+            // Movement keys
+            if (key === 'arrowup' || key === 'w') {
+                event.preventDefault();
+                movePlayer('up');
+            }
+            else if (key === 'arrowdown' || key === 's') {
+                event.preventDefault();
+                movePlayer('down');
+            }
+            else if (key === 'arrowleft' || key === 'a') {
+                event.preventDefault();
+                movePlayer('left');
+            }
+            else if (key === 'arrowright' || key === 'd') {
+                event.preventDefault();
+                movePlayer('right');
+            }
+            // Pause key
+            else if (key === ' ') {
+                event.preventDefault();
+                togglePause();
+            }
+            // Reset key
+            else if (key === 'enter') {
+                event.preventDefault();
+                resetGame();
+            }
+        });
+
+        // Button event listeners
+        if (pauseBtn) {
+            pauseBtn.addEventListener('click', togglePause);
+            console.log('✓ Pause button listener added');
+        }
+
+        if (resetBtn) {
+            resetBtn.addEventListener('click', resetGame);
+            console.log('✓ Reset button listener added');
+        }
+
+        console.log('\n✓ All event listeners loaded!');
+        console.log('Controls:');
+        console.log('  - Arrow Keys or WASD: Move');
+        console.log('  - SPACE: Pause/Resume');
+        console.log('  - ENTER: Reset');
+        console.log('\nStart playing!');
+        
+        // Initialize game
+        initGame();
+    </script>
+</body>
+</html>

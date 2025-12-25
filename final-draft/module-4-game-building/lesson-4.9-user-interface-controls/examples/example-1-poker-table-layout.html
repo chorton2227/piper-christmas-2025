@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Poker Table Layout - User Interface & Controls</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 { 
+            color: #4CAF50; 
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .description {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+        
+        /* Poker Table Styles */
+        .poker-table {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #0a5f38 0%, #0d7a4a 100%);
+            border-radius: 200px;
+            border: 15px solid #8b4513;
+            box-shadow: 
+                inset 0 0 50px rgba(0, 0, 0, 0.3),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Felt texture effect */
+        .poker-table::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                );
+            pointer-events: none;
+        }
+        
+        /* Community Cards Area */
+        .community-area {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .community-cards {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            min-width: 400px;
+            min-height: 140px;
+            align-items: center;
+        }
+        
+        .pot-display {
+            background: rgba(255, 215, 0, 0.9);
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: inline-block;
+        }
+        
+        .pot-amount {
+            color: #d32f2f;
+        }
+        
+        /* Card Visual Representation */
+        .card {
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 15px 10px;
+            font-size: 28px;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+        }
+        
+        .card.hearts, .card.diamonds { 
+            color: #d32f2f; 
+        }
+        
+        .card.clubs, .card.spades { 
+            color: #000; 
+        }
+        
+        /* Table Markings */
+        .table-logo {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: rgba(255, 215, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+        
+        .betting-line {
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 1px;
+        }
+        
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            background: #45a049; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .debug {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Example 1: Poker Table Layout</h1>
+        <p class="description">Creating a professional poker table with green felt, wood rail, and center area for community cards and pot</p>
+        
+        <!-- Poker Table -->
+        <div class="poker-table">
+            <div class="table-logo">TEXAS HOLD'EM</div>
+            <div class="betting-line"></div>
+            
+            <div class="community-area">
+                <div id="community-cards" class="community-cards">
+                    <!-- Community cards will appear here -->
+                </div>
+                <div class="pot-display">
+                    Pot: $<span id="pot-amount" class="pot-amount">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button onclick="testTableLayout()">Test Table Layout</button>
+            <button onclick="testPotDisplay()">Test Pot Display</button>
+            <button onclick="testCommunityArea()">Test Community Area</button>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        console.log('Example 1: Poker Table Layout');
+        console.log('Creating professional poker table UI\n');
+        
+        // Card rendering function
+        function createCard(rank, suit) {
+            const card = document.createElement('div');
+            card.className = 'card ' + suit;
+            
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            
+            card.textContent = rank + symbols[suit];
+            return card;
+        }
+        
+        // Clear community cards
+        function clearCommunityCards() {
+            const container = document.getElementById('community-cards');
+            container.innerHTML = '';
+        }
+        
+        // Add community cards to table
+        function addCommunityCards(cards) {
+            const container = document.getElementById('community-cards');
+            container.innerHTML = '';
+            
+            cards.forEach(cardData => {
+                const card = createCard(cardData.rank, cardData.suit);
+                container.appendChild(card);
+            });
+        }
+        
+        // Update pot amount
+        function updatePot(amount) {
+            const potElement = document.getElementById('pot-amount');
+            potElement.textContent = amount;
+        }
+        
+        // Test Case 1: Table Layout
+        function testTableLayout() {
+            console.log('\n=== Test Case 1: Table Layout ===');
+            
+            const table = document.querySelector('.poker-table');
+            const width = table.offsetWidth;
+            const height = table.offsetHeight;
+            
+            clearCommunityCards();
+            updatePot(0);
+            
+            console.log(`✓ Table dimensions: ${width}px × ${height}px`);
+            console.log(`✓ Table has rounded edges (border-radius: 200px)`);
+            console.log(`✓ Green felt gradient background applied`);
+            console.log(`✓ Wood rail border (15px solid)`);
+            console.log(`✓ Felt texture overlay created`);
+            console.log(`✓ Table logo "TEXAS HOLD'EM" displayed`);
+            console.log(`✓ Betting line visible at 70% height`);
+            console.log('✓ Table layout is properly centered and styled');
+            
+            // Visual demonstration
+            const demoOutput = `
+Table Structure:
+┌────────────────────────────────────┐
+│        TEXAS HOLD'EM              │
+│                                    │
+│     [Community Cards Area]         │
+│     [Pot Display: $0]             │
+│                                    │
+│  ────────────────────────────────  │ ← Betting Line
+│                                    │
+└────────────────────────────────────┘
+            `;
+            console.log(demoOutput);
+        }
+        
+        // Test Case 2: Pot Display
+        function testPotDisplay() {
+            console.log('\n=== Test Case 2: Pot Display ===');
+            
+            const potAmounts = [0, 50, 150, 500, 1250, 2500];
+            let testPot = potAmounts[Math.floor(Math.random() * potAmounts.length)];
+            
+            updatePot(testPot);
+            
+            console.log(`✓ Pot display updated to: $${testPot}`);
+            console.log(`✓ Pot has golden background (rgba(255, 215, 0, 0.9))`);
+            console.log(`✓ Pot amount shown in red color (#d32f2f)`);
+            console.log(`✓ Pot positioned in center below community cards`);
+            console.log(`✓ Pot has rounded corners (border-radius: 30px)`);
+            console.log(`✓ Pot has shadow for depth (box-shadow applied)`);
+            console.log('✓ Pot display is clearly visible and styled');
+            
+            // Demonstrate different pot amounts
+            console.log('\nPot progression example:');
+            [0, 50, 150, 500].forEach((amount, i) => {
+                console.log(`  Round ${i + 1}: $${amount}`);
+            });
+        }
+        
+        // Test Case 3: Community Area
+        function testCommunityArea() {
+            console.log('\n=== Test Case 3: Community Area ===');
+            
+            // Test with flop (3 cards)
+            const flopCards = [
+                { rank: 'A', suit: 'hearts' },
+                { rank: 'K', suit: 'spades' },
+                { rank: 'Q', suit: 'diamonds' }
+            ];
+            
+            addCommunityCards(flopCards);
+            updatePot(150);
+            
+            console.log(`✓ Community area centered on table`);
+            console.log(`✓ Cards container has semi-transparent background`);
+            console.log(`✓ Min-width: 400px for card display`);
+            console.log(`✓ Min-height: 140px for standard card size`);
+            console.log(`✓ Pot display positioned below cards area`);
+            console.log(`✓ Cards displayed with proper spacing (15px gap)`);
+            console.log('✓ Community area layout is properly structured');
+            
+            console.log('\nDisplayed cards:');
+            flopCards.forEach(card => {
+                const symbol = card.suit === 'hearts' ? '♥' :
+                              card.suit === 'diamonds' ? '♦' :
+                              card.suit === 'clubs' ? '♣' : '♠';
+                const color = (card.suit === 'hearts' || card.suit === 'diamonds') ? 'RED' : 'BLACK';
+                console.log(`  ${card.rank}${symbol} (${color})`);
+            });
+            
+            // Test with full board (5 cards)
+            setTimeout(() => {
+                console.log('\n--- Adding Turn card ---');
+                const turnCards = [...flopCards, { rank: 'J', suit: 'clubs' }];
+                addCommunityCards(turnCards);
+                updatePot(300);
+                console.log('✓ Turn card added (4 cards total)');
+                
+                setTimeout(() => {
+                    console.log('\n--- Adding River card ---');
+                    const riverCards = [...turnCards, { rank: '10', suit: 'hearts' }];
+                    addCommunityCards(riverCards);
+                    updatePot(600);
+                    console.log('✓ River card added (5 cards total)');
+                    console.log('✓ Full community board displayed: A♥ K♠ Q♦ J♣ 10♥');
+                }, 1000);
+            }, 1000);
+        }
+        
+        // Capture console output to debug div
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+        
+        // Initialize
+        console.log('✓ Poker table layout initialized');
+        console.log('✓ Green felt with texture applied');
+        console.log('✓ Wood rail border added');
+        console.log('✓ Community area centered');
+        console.log('✓ Pot display ready');
+        console.log('✓ Card rendering functions loaded');
+        console.log('Ready to test table components!');
+        console.log('\nClick buttons above to test different aspects of the table layout.');
+    </script>
+</body>
+</html>

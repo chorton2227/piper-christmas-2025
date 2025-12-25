@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 2 Solution: Hand of Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .hand {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: 80px;
+            height: 112px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-rank {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .card-suit {
+            font-size: 36px;
+            line-height: 1;
+            margin-top: 4px;
+        }
+
+        /* Red suits */
+        .hearts .card-rank,
+        .hearts .card-suit,
+        .diamonds .card-rank,
+        .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        /* Black suits */
+        .spades .card-rank,
+        .spades .card-suit,
+        .clubs .card-rank,
+        .clubs .card-suit {
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: 60px;
+                height: 84px;
+            }
+
+            .card-rank {
+                font-size: 20px;
+            }
+
+            .card-suit {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hand">
+        <div class="card hearts">
+            <div class="card-rank">A</div>
+            <div class="card-suit">♥</div>
+        </div>
+
+        <div class="card spades">
+            <div class="card-rank">K</div>
+            <div class="card-suit">♠</div>
+        </div>
+
+        <div class="card diamonds">
+            <div class="card-rank">Q</div>
+            <div class="card-suit">♦</div>
+        </div>
+
+        <div class="card clubs">
+            <div class="card-rank">J</div>
+            <div class="card-suit">♣</div>
+        </div>
+
+        <div class="card hearts">
+            <div class="card-rank">10</div>
+            <div class="card-suit">♥</div>
+        </div>
+    </div>
+</body>
+</html>

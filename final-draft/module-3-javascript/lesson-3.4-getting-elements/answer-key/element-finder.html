@@ -1,0 +1,453 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1 Solution: Element Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        #page-title {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+
+        #description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        #game-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        #start-btn {
+            background: #28a745;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .info {
+            background: #e3f6ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        #username {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+
+        .stats {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        [data-type="enemy"] {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        [data-type="item"] {
+            background: #4dabf7;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="page-title">Element Finder Challenge</h1>
+        <p id="description">
+            This page contains various HTML elements with different IDs, classes, and attributes.
+            Open the console (F12) to see JavaScript finding and working with all these elements!
+        </p>
+
+        <div id="game-area">
+            <h2>Game Area</h2>
+            <p class="info">Welcome to the game! Get ready for adventure.</p>
+            <p class="info">Your quest begins here.</p>
+            <p class="info">Explore, battle, and grow stronger!</p>
+            <p class="info">The fate of the world rests in your hands.</p>
+            
+            <label for="username">Enter Your Name:</label>
+            <input type="text" id="username" placeholder="Hero name">
+            
+            <div style="margin-top: 20px;">
+                <button id="start-btn" class="action-btn">Start Adventure</button>
+                <button class="action-btn">Load Game</button>
+                <button class="action-btn">Options</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2>Player Cards</h2>
+            <div class="card">
+                <h3>Warrior Card</h3>
+                <p>Strength-based fighter with heavy armor</p>
+            </div>
+            <div class="card">
+                <h3>Mage Card</h3>
+                <p>Intelligence-based spellcaster</p>
+            </div>
+            <div class="card">
+                <h3>Rogue Card</h3>
+                <p>Agility-based stealth character</p>
+            </div>
+            <div class="card">
+                <h3>Paladin Card</h3>
+                <p>Balanced holy warrior</p>
+            </div>
+            <div class="card">
+                <h3>Ranger Card</h3>
+                <p>Nature-based archer</p>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2>Enemies</h2>
+            <div data-type="enemy" data-level="2">Green Slime - HP: 30</div>
+            <div data-type="enemy" data-level="5">Goblin Scout - HP: 50</div>
+            <div data-type="enemy" data-level="8">Orc Warrior - HP: 100</div>
+        </div>
+
+        <div class="stats">
+            <h2>Items</h2>
+            <div data-type="item" data-rarity="common">Health Potion</div>
+            <div data-type="item" data-rarity="rare">Magic Sword</div>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXERCISE 1 SOLUTION: ELEMENT FINDER ===\n');
+        
+        // ====================
+        // PART 2: Get Single Elements by ID
+        // ====================
+        console.log('=== PART 2: Getting Elements by ID ===\n');
+
+        // Get each element with an ID
+        let pageTitle = document.getElementById('page-title');
+        let description = document.getElementById('description');
+        let gameArea = document.getElementById('game-area');
+        let startBtn = document.getElementById('start-btn');
+        let username = document.getElementById('username');
+
+        // Log elements and check they exist
+        console.log('Element 1: page-title');
+        if (pageTitle) {
+            console.log('  ✓ Found!');
+            console.log('  Element:', pageTitle);
+            console.log('  Text:', pageTitle.textContent);
+        } else {
+            console.log('  ✗ Not found!');
+        }
+        console.log('');
+
+        console.log('Element 2: description');
+        if (description) {
+            console.log('  ✓ Found!');
+            console.log('  Text:', description.textContent.substring(0, 50) + '...');
+        }
+        console.log('');
+
+        console.log('Element 3: game-area');
+        if (gameArea) {
+            console.log('  ✓ Found!');
+            console.log('  Element:', gameArea);
+        }
+        console.log('');
+
+        console.log('Element 4: start-btn');
+        if (startBtn) {
+            console.log('  ✓ Found!');
+            console.log('  Button text:', startBtn.textContent);
+        }
+        console.log('');
+
+        console.log('Element 5: username');
+        if (username) {
+            console.log('  ✓ Found!');
+            console.log('  Placeholder:', username.placeholder);
+            console.log('  Current value:', username.value || '(empty)');
+        }
+        console.log('');
+
+        // ====================
+        // PART 3: Get First Matches with querySelector
+        // ====================
+        console.log('\n=== PART 3: Getting First Matches ===\n');
+
+        // Get first card
+        let firstCard = document.querySelector('.card');
+        console.log('First .card element:');
+        console.log('  Element:', firstCard);
+        console.log('  Text:', firstCard.textContent.trim().replace(/\s+/g, ' ').substring(0, 40) + '...');
+        console.log('');
+
+        // Get first action button
+        let firstActionBtn = document.querySelector('.action-btn');
+        console.log('First .action-btn:');
+        console.log('  Button text:', firstActionBtn.textContent);
+        console.log('');
+
+        // Get first info paragraph
+        let firstInfo = document.querySelector('.info');
+        console.log('First .info paragraph:');
+        console.log('  Text:', firstInfo.textContent);
+        console.log('');
+
+        // Get first element with data-type attribute
+        let firstWithType = document.querySelector('[data-type]');
+        console.log('First element with data-type:');
+        console.log('  Type:', firstWithType.getAttribute('data-type'));
+        console.log('  Text:', firstWithType.textContent);
+        console.log('');
+
+        // Get first enemy
+        let firstEnemy = document.querySelector('[data-type="enemy"]');
+        console.log('First enemy:');
+        console.log('  Text:', firstEnemy.textContent);
+        console.log('  Level:', firstEnemy.getAttribute('data-level'));
+        console.log('');
+
+        // ====================
+        // PART 4: Get ALL Matches with querySelectorAll
+        // ====================
+        console.log('\n=== PART 4: Getting All Matches ===\n');
+
+        // Get all cards
+        let allCards = document.querySelectorAll('.card');
+        console.log('All .card elements:');
+        console.log('  Count:', allCards.length);
+        console.log('  Cards:');
+        allCards.forEach(function(card, index) {
+            let title = card.querySelector('h3').textContent;
+            console.log('    ' + (index + 1) + '. ' + title);
+        });
+        console.log('');
+
+        // Get all action buttons
+        let allActionBtns = document.querySelectorAll('.action-btn');
+        console.log('All .action-btn buttons:');
+        console.log('  Count:', allActionBtns.length);
+        allActionBtns.forEach(function(btn, index) {
+            console.log('    Button ' + (index + 1) + ':', btn.textContent);
+        });
+        console.log('');
+
+        // Get all info paragraphs
+        let allInfo = document.querySelectorAll('.info');
+        console.log('All .info paragraphs:');
+        console.log('  Count:', allInfo.length);
+        allInfo.forEach(function(info, index) {
+            console.log('    ' + (index + 1) + ':', info.textContent);
+        });
+        console.log('');
+
+        // Get all enemies
+        let allEnemies = document.querySelectorAll('[data-type="enemy"]');
+        console.log('All enemies:');
+        console.log('  Count:', allEnemies.length);
+        allEnemies.forEach(function(enemy, index) {
+            let level = enemy.getAttribute('data-level');
+            console.log('    Enemy ' + (index + 1) + ':', enemy.textContent, '(Level ' + level + ')');
+        });
+        console.log('');
+
+        // Get all items
+        let allItems = document.querySelectorAll('[data-type="item"]');
+        console.log('All items:');
+        console.log('  Count:', allItems.length);
+        allItems.forEach(function(item, index) {
+            let rarity = item.getAttribute('data-rarity');
+            console.log('    Item ' + (index + 1) + ':', item.textContent, '(Rarity: ' + rarity + ')');
+        });
+        console.log('');
+
+        // ====================
+        // PART 5: Element Analysis
+        // ====================
+        console.log('\n=== PART 5: Element Analysis ===\n');
+
+        let totalCards = document.querySelectorAll('.card').length;
+        let totalButtons = document.querySelectorAll('button').length;
+        let totalParagraphs = document.querySelectorAll('p').length;
+        let totalEnemies = document.querySelectorAll('[data-type="enemy"]').length;
+        let totalItems = document.querySelectorAll('[data-type="item"]').length;
+        let elementsWithClasses = document.querySelectorAll('[class]').length;
+
+        console.log('📊 Page Statistics:');
+        console.log('  Total cards:', totalCards);
+        console.log('  Total buttons:', totalButtons);
+        console.log('  Total paragraphs:', totalParagraphs);
+        console.log('  Total enemies:', totalEnemies);
+        console.log('  Total items:', totalItems);
+        console.log('  Elements with classes:', elementsWithClasses);
+        console.log('');
+
+        console.log('🎯 Game Content:');
+        console.log('  Enemy count:', totalEnemies);
+        console.log('  Item count:', totalItems);
+        console.log('  Total threats and resources:', totalEnemies + totalItems);
+        console.log('');
+
+        // ====================
+        // PART 6: Complex Selectors
+        // ====================
+        console.log('\n=== PART 6: Complex Selectors ===\n');
+
+        // Get button inside game-area
+        let gameButton = document.querySelector('#game-area button');
+        console.log('Button inside #game-area:');
+        console.log('  Text:', gameButton.textContent);
+        console.log('');
+
+        // Get all paragraphs inside cards
+        let cardParagraphs = document.querySelectorAll('.card p');
+        console.log('Paragraphs inside .card elements:');
+        console.log('  Count:', cardParagraphs.length);
+        console.log('');
+
+        // Get elements with data-type attribute
+        let typedElements = document.querySelectorAll('[data-type]');
+        console.log('Elements with data-type attribute:');
+        console.log('  Count:', typedElements.length);
+        console.log('');
+
+        // Get high-level enemies (level 5+)
+        let highLevelEnemies = [];
+        let enemiesWithLevel = document.querySelectorAll('[data-level]');
+        enemiesWithLevel.forEach(function(enemy) {
+            if (parseInt(enemy.getAttribute('data-level')) >= 5) {
+                highLevelEnemies.push(enemy);
+            }
+        });
+        console.log('High-level enemies (5+):');
+        console.log('  Count:', highLevelEnemies.length);
+        highLevelEnemies.forEach(function(enemy) {
+            console.log('    -', enemy.textContent);
+        });
+        console.log('');
+
+        // ====================
+        // BONUS: Organized Summary
+        // ====================
+        console.log('\n=== BONUS: Organized Summary ===\n');
+
+        let elementCollection = {
+            unique: {
+                pageTitle: pageTitle,
+                description: description,
+                gameArea: gameArea,
+                startBtn: startBtn,
+                username: username
+            },
+            
+            collections: {
+                cards: allCards,
+                buttons: allActionBtns,
+                info: allInfo,
+                enemies: allEnemies,
+                items: allItems
+            },
+            
+            stats: {
+                totalCards: totalCards,
+                totalButtons: totalButtons,
+                totalParagraphs: totalParagraphs,
+                totalEnemies: totalEnemies,
+                totalItems: totalItems
+            }
+        };
+
+        console.log('✓ Created elementCollection object!');
+        console.log('  Access unique elements: elementCollection.unique.pageTitle');
+        console.log('  Access collections: elementCollection.collections.cards');
+        console.log('  Access stats: elementCollection.stats.totalCards');
+        console.log('');
+
+        console.log('Example usage:');
+        console.log('  Page title:', elementCollection.unique.pageTitle.textContent);
+        console.log('  Number of cards:', elementCollection.collections.cards.length);
+        console.log('  Total enemies:', elementCollection.stats.totalEnemies);
+        console.log('');
+
+        console.log('=== SOLUTION COMPLETE ===');
+        console.log('All elements found and organized successfully!');
+        console.log('✓ Part 2: Single elements retrieved');
+        console.log('✓ Part 3: First matches found');
+        console.log('✓ Part 4: Collections retrieved');
+        console.log('✓ Part 5: Analysis completed');
+        console.log('✓ Part 6: Complex selectors working');
+        console.log('✓ Bonus: Organized structure created');
+
+        // Make available globally for inspection
+        window.elementCollection = elementCollection;
+        console.log('');
+        console.log('💡 Type "elementCollection" in console to explore!');
+    </script>
+</body>
+</html>

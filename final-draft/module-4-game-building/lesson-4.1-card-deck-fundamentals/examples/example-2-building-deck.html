@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Building a Complete Deck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎴 Example 2: Building a Deck</h1>
+        
+        <div class="info">
+            <h2>What This Example Shows:</h2>
+            <ul>
+                <li>Creating a complete 52-card deck programmatically</li>
+                <li>Using nested loops to generate all combinations</li>
+                <li>Organizing cards by suit and rank</li>
+                <li>Displaying deck information</li>
+            </ul>
+            <p><strong>Open your browser console (F12) to see the complete deck!</strong></p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== 🎴 BUILDING A COMPLETE DECK ===\n');
+        
+        // Method 1: Manual approach (too much typing!)
+        console.log('--- Manual Deck Creation (DON\'T DO THIS!) ---');
+        console.log('We COULD type out all 52 cards manually...');
+        console.log('const deck = [');
+        console.log('  { suit: "spades", rank: "A", value: 14 },');
+        console.log('  { suit: "spades", rank: "2", value: 2 },');
+        console.log('  ... 50 more cards ...');
+        console.log('];');
+        console.log('But that would be tedious and error-prone!');
+        console.log('Let\'s use loops instead! 🔄');
+        console.log('');
+        
+        // Method 2: Using loops (the smart way!)
+        console.log('--- Smart Deck Creation with Loops ---');
+        
+        function createDeck() {
+            // Define all suits
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            
+            // Define all ranks
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            
+            // Define corresponding values
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            // Empty array to hold our deck
+            const deck = [];
+            
+            // Outer loop: for each suit
+            for (let suit of suits) {
+                // Inner loop: for each rank
+                for (let i = 0; i < ranks.length; i++) {
+                    // Create a card and add it to the deck
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i]
+                    });
+                }
+            }
+            
+            return deck;
+        }
+        
+        const deck = createDeck();
+        
+        console.log('Deck created!');
+        console.log('Total cards:', deck.length);
+        console.log('');
+        
+        // Display first few cards
+        console.log('--- First 5 Cards in Deck ---');
+        for (let i = 0; i < 5; i++) {
+            const card = deck[i];
+            console.log(`${i + 1}. ${card.rank} of ${card.suit} (value: ${card.value})`);
+        }
+        console.log('');
+        
+        // Display last few cards
+        console.log('--- Last 5 Cards in Deck ---');
+        for (let i = deck.length - 5; i < deck.length; i++) {
+            const card = deck[i];
+            console.log(`${i + 1}. ${card.rank} of ${card.suit} (value: ${card.value})`);
+        }
+        console.log('');
+        
+        // Count cards per suit
+        console.log('--- Cards Per Suit ---');
+        const suitCounts = {};
+        
+        for (let card of deck) {
+            if (suitCounts[card.suit]) {
+                suitCounts[card.suit]++;
+            } else {
+                suitCounts[card.suit] = 1;
+            }
+        }
+        
+        for (let suit in suitCounts) {
+            console.log(`${suit}: ${suitCounts[suit]} cards`);
+        }
+        console.log('');
+        
+        // Get all cards of a specific suit
+        console.log('--- All Hearts in the Deck ---');
+        const hearts = deck.filter(card => card.suit === 'hearts');
+        hearts.forEach(card => {
+            console.log(`  ${card.rank}♥ (value: ${card.value})`);
+        });
+        console.log('');
+        
+        // Get all face cards (J, Q, K, A)
+        console.log('--- All Face Cards ---');
+        const faceCards = deck.filter(card => card.value >= 11);
+        console.log(`Total face cards: ${faceCards.length}`);
+        faceCards.forEach(card => {
+            const symbols = { 'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣' };
+            console.log(`  ${card.rank}${symbols[card.suit]}`);
+        });
+        console.log('');
+        
+        // Verify deck integrity
+        console.log('--- Deck Integrity Check ---');
+        
+        // Check total count
+        console.log('✓ Total cards:', deck.length === 52 ? '52 (correct!)' : `${deck.length} (ERROR!)`);
+        
+        // Check for duplicates
+        const cardStrings = deck.map(card => `${card.rank}-${card.suit}`);
+        const uniqueCards = new Set(cardStrings);
+        console.log('✓ Unique cards:', uniqueCards.size === 52 ? '52 (no duplicates!)' : `${uniqueCards.size} (ERROR!)`);
+        
+        // Check suit distribution
+        const allSuitsCorrect = Object.values(suitCounts).every(count => count === 13);
+        console.log('✓ Each suit has 13 cards:', allSuitsCorrect ? 'Yes!' : 'No (ERROR!)');
+        console.log('');
+        
+        // Alternative deck creation method
+        console.log('--- Alternative: Compact Deck Creation ---');
+        
+        function createDeckCompact() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            
+            return suits.flatMap(suit =>
+                ranks.map((rank, index) => ({
+                    suit: suit,
+                    rank: rank,
+                    value: index + 2
+                }))
+            );
+        }
+        
+        const compactDeck = createDeckCompact();
+        console.log('Compact method created', compactDeck.length, 'cards');
+        console.log('First card:', compactDeck[0]);
+        console.log('Last card:', compactDeck[compactDeck.length - 1]);
+        console.log('');
+        
+        // Find specific cards
+        console.log('--- Finding Specific Cards ---');
+        
+        function findCard(deck, rank, suit) {
+            return deck.find(card => card.rank === rank && card.suit === suit);
+        }
+        
+        const aceOfSpades = findCard(deck, 'A', 'spades');
+        console.log('Found Ace of Spades:', aceOfSpades);
+        
+        const sevenOfHearts = findCard(deck, '7', 'hearts');
+        console.log('Found Seven of Hearts:', sevenOfHearts);
+        console.log('');
+        
+        // Get random card
+        console.log('--- Pick a Random Card ---');
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const randomCard = deck[randomIndex];
+        console.log('Random card:', `${randomCard.rank} of ${randomCard.suit}`);
+        console.log('');
+        
+        // Display entire deck organized by suit
+        console.log('--- Complete Deck (Organized by Suit) ---');
+        const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+        const suitSymbols = { 'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣' };
+        
+        suits.forEach(suit => {
+            const suitCards = deck.filter(card => card.suit === suit);
+            const cardDisplay = suitCards.map(card => card.rank).join(' ');
+            console.log(`${suitSymbols[suit]} ${suit.toUpperCase()}: ${cardDisplay}`);
+        });
+        console.log('');
+        
+        console.log('✨ Perfect! You can now create a complete deck programmatically! ✨');
+        console.log('💡 Tip: Using loops is MUCH easier than typing 52 cards manually!');
+    </script>
+</body>
+</html>

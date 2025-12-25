@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Deal Flop - Game Flow & Dealing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2c5530;
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; margin-top: 0; }
+        .game-table {
+            background: #0a5f0a;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            min-height: 400px;
+            position: relative;
+        }
+        .deck-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+        .community-cards {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .card {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 10px;
+            padding: 20px 25px;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        .burn-pile {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 8px;
+            color: #333;
+        }
+        .burn-count {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .controls {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Example 2: Deal the Flop</h1>
+        <p>This example demonstrates <strong>burning a card and dealing 3 community cards (the flop)</strong>.</p>
+        <p><strong>Key Concept:</strong> Always burn the top card BEFORE dealing the flop!</p>
+        
+        <div class="game-table">
+            <div class="deck-info">
+                Cards in deck: <span id="deckCount">52</span>
+            </div>
+            
+            <div class="burn-pile">
+                Burned cards: <span id="burnCount" class="burn-count">0</span>
+            </div>
+            
+            <div id="communityCards" class="community-cards"></div>
+        </div>
+
+        <div class="controls">
+            <button onclick="dealTheFlop()">Deal Flop (Burn + 3 Cards)</button>
+            <button onclick="resetGame()">Reset Game</button>
+        </div>
+
+        <button onclick="testCase1()">Test Case 1: Normal Flop</button>
+        <button onclick="testCase2()">Test Case 2: Multiple Flops</button>
+        <button onclick="testCase3()">Test Case 3: Insufficient Cards</button>
+        
+        <div id="output" class="output">
+            <h3>Click "Deal Flop" to start!</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        // Create a standard 52-card deck
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (const suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i]
+                    });
+                }
+            }
+            return deck;
+        }
+
+        // Fisher-Yates shuffle algorithm
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            console.log('Deck shuffled');
+        }
+
+        // Get suit symbol
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit];
+        }
+
+        // Burn a card from the deck
+        function burnCard(gameState) {
+            if (gameState.deck.length === 0) {
+                return { success: false, error: 'No cards left to burn' };
+            }
+            
+            const burnedCard = gameState.deck.pop();
+            gameState.burnedCards.push(burnedCard);
+            
+            console.log(`🔥 Burned: ${burnedCard.rank}${getSuitSymbol(burnedCard.suit)}`);
+            
+            return { success: true, card: burnedCard };
+        }
+
+        // Deal the flop (burn 1, deal 3 community cards)
+        function dealFlop(gameState) {
+            console.log('\n=== Dealing the Flop ===');
+            
+            if (gameState.deck.length < 4) {
+                return { 
+                    success: false, 
+                    error: 'Not enough cards (need 4: 1 burn + 3 flop)' 
+                };
+            }
+            
+            // Burn one card
+            const burnResult = burnCard(gameState);
+            if (!burnResult.success) {
+                return burnResult;
+            }
+            
+            // Deal 3 community cards
+            console.log('Dealing flop:');
+            for (let i = 0; i < 3; i++) {
+                const card = gameState.deck.pop();
+                gameState.communityCards.push(card);
+                console.log(`  ${card.rank}${getSuitSymbol(card.suit)}`);
+            }
+            
+            console.log(`\nFlop complete! ${gameState.deck.length} cards remaining`);
+            
+            return {
+                success: true,
+                flop: gameState.communityCards.slice(-3),
+                remainingCards: gameState.deck.length
+            };
+        }
+
+        // Game state
+        let gameState = {
+            deck: createDeck(),
+            communityCards: [],
+            burnedCards: []
+        };
+
+        // Initialize
+        shuffleDeck(gameState.deck);
+
+        // Display functions
+        function updateDisplay() {
+            const communityDiv = document.getElementById('communityCards');
+            communityDiv.innerHTML = '';
+            
+            if (gameState.communityCards.length === 0) {
+                communityDiv.innerHTML = '<div style="color: white; font-size: 24px;">No community cards yet</div>';
+            } else {
+                gameState.communityCards.forEach(card => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = `card ${card.suit}`;
+                    cardDiv.textContent = `${card.rank}${getSuitSymbol(card.suit)}`;
+                    communityDiv.appendChild(cardDiv);
+                });
+            }
+            
+            document.getElementById('deckCount').textContent = gameState.deck.length;
+            document.getElementById('burnCount').textContent = gameState.burnedCards.length;
+        }
+
+        function logOutput(message) {
+            const output = document.getElementById('output');
+            output.innerHTML = `<h3>${message}</h3>`;
+        }
+
+        // Actions
+        function dealTheFlop() {
+            const result = dealFlop(gameState);
+            
+            if (!result.success) {
+                logOutput(`❌ ${result.error}`);
+                return;
+            }
+            
+            updateDisplay();
+            logOutput(`✅ Flop dealt! 1 card burned, 3 cards on board.`);
+        }
+
+        function resetGame() {
+            gameState.deck = createDeck();
+            shuffleDeck(gameState.deck);
+            gameState.communityCards = [];
+            gameState.burnedCards = [];
+            updateDisplay();
+            logOutput('🔄 Game reset!');
+            console.log('\n=== Game Reset ===');
+        }
+
+        // Test Cases
+        function testCase1() {
+            console.log('\n========== TEST CASE 1: Normal Flop ==========');
+            resetGame();
+            dealTheFlop();
+            console.log('Expected: 1 burned, 3 community cards, 48 remaining');
+        }
+
+        function testCase2() {
+            console.log('\n========== TEST CASE 2: Multiple Flops ==========');
+            resetGame();
+            console.log('Dealing first flop:');
+            dealTheFlop();
+            console.log('\nDealing second flop (should work):');
+            dealTheFlop();
+            console.log('Expected: 2 burned, 6 community cards total, 44 remaining');
+        }
+
+        function testCase3() {
+            console.log('\n========== TEST CASE 3: Insufficient Cards ==========');
+            resetGame();
+            // Manually drain deck to have only 3 cards
+            while (gameState.deck.length > 3) {
+                gameState.deck.pop();
+            }
+            updateDisplay();
+            console.log(`Deck has ${gameState.deck.length} cards`);
+            dealTheFlop();
+            console.log('Expected: Error - not enough cards to burn and deal');
+        }
+
+        // Capture console output to debug div
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Initial display
+        updateDisplay();
+        console.log('Example 2: Deal Flop loaded');
+        console.log('Remember: Burn 1 card, then deal 3 community cards!');
+    </script>
+</body>
+</html>

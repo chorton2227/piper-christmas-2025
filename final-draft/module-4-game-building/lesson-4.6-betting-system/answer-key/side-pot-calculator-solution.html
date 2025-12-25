@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution: Side Pot Calculator - Complete Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3d20 0%, #2c5530 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2c5530;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .main-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .players-section {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .player-item {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .player-item.all-in {
+            border-color: #e91e63;
+            background: #fce4ec;
+        }
+        .player-item.folded {
+            opacity: 0.4;
+            border-color: #999;
+        }
+        .player-info {
+            flex: 1;
+        }
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 5px;
+        }
+        .player-chips {
+            font-size: 14px;
+            color: #666;
+        }
+        .player-bet {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e91e63;
+        }
+        .pots-section {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .pot-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pot-item.main {
+            border-left: 6px solid #ffd700;
+        }
+        .pot-item.side {
+            border-left: 6px solid #2196F3;
+        }
+        .pot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .pot-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        .pot-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .pot-calculation {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        .eligible-players {
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .eligible-title {
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 5px;
+        }
+        .player-tag {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            margin: 3px;
+            font-size: 12px;
+        }
+        .total-pot {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .total-pot-label {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .total-pot-amount {
+            font-size: 42px;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        .controls-panel {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .scenario-builder {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .player-input {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            align-items: center;
+        }
+        .player-input input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .player-input input[type="text"] {
+            flex: 1;
+        }
+        .player-input input[type="number"] {
+            width: 120px;
+        }
+        .player-input label {
+            min-width: 100px;
+            font-weight: bold;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .btn-calculate { background: #2196F3; }
+        .btn-calculate:hover { background: #1976D2; }
+        .btn-award { background: #ff9800; }
+        .btn-award:hover { background: #f57c00; }
+        .output {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+        }
+        .output h3 {
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+        .winner-announcement {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💎 Side Pot Calculator - Complete Implementation</h1>
+        <p class="subtitle">Calculate and distribute complex side pots with multiple all-in players</p>
+        
+        <div class="total-pot">
+            <div class="total-pot-label">Total Pot</div>
+            <div class="total-pot-amount">$<span id="totalPot">0</span></div>
+        </div>
+
+        <div class="main-display">
+            <div class="players-section">
+                <div class="section-title">👥 Players</div>
+                <div id="playersList"></div>
+            </div>
+
+            <div class="pots-section">
+                <div class="section-title">💰 Pot Breakdown</div>
+                <div id="potsList"></div>
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="section-title">Control Panel</div>
+            <button onclick="calculatePots()" class="btn-calculate">Calculate Side Pots</button>
+            <button onclick="awardPots()" class="btn-award">Award Pots to Winners</button>
+            <button onclick="resetScenario()">Reset</button>
+        </div>
+
+        <button onclick="testCase1()">Test 1: Classic 4-Player</button>
+        <button onclick="testCase2()">Test 2: Complex 5-Player</button>
+        <button onclick="testCase3()">Test 3: Split Pot</button>
+        
+        <div id="output" class="output">
+            <h3>Click "Calculate Side Pots" to see the breakdown</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            players: [
+                { id: 0, name: 'Player 1', chips: 0, bet: 100, folded: false, handRank: 8 },
+                { id: 1, name: 'Player 2', chips: 0, bet: 500, folded: false, handRank: 7 },
+                { id: 2, name: 'Player 3', chips: 0, bet: 1000, folded: false, handRank: 9 },
+                { id: 3, name: 'Player 4', chips: 0, bet: 1000, folded: false, handRank: 5 }
+            ],
+            pots: [],
+            totalPot: 0
+        };
+
+        // Calculate side pots
+        function calculateSidePots(state) {
+            const pots = [];
+            const activePlayers = state.players.filter(p => !p.folded);
+            
+            if (activePlayers.length === 0) {
+                return pots;
+            }
+            
+            console.log('\n=== Calculating Side Pots ===');
+            console.log('Active players:');
+            activePlayers.forEach(p => {
+                console.log(`  ${p.name}: $${p.bet}`);
+            });
+            
+            // Sort players by bet amount
+            const playerBets = activePlayers
+                .map(p => ({ 
+                    id: p.id, 
+                    name: p.name, 
+                    bet: p.bet,
+                    handRank: p.handRank 
+                }))
+                .sort((a, b) => a.bet - b.bet);
+            
+            let previousBet = 0;
+            let remainingPlayers = [...playerBets];
+            
+            for (let i = 0; i < playerBets.length; i++) {
+                const currentBet = playerBets[i].bet;
+                const betDifference = currentBet - previousBet;
+                
+                if (betDifference > 0 && remainingPlayers.length > 0) {
+                    const potAmount = betDifference * remainingPlayers.length;
+                    
+                    const potType = pots.length === 0 ? 'Main Pot' : `Side Pot ${pots.length}`;
+                    
+                    pots.push({
+                        type: potType,
+                        amount: potAmount,
+                        eligiblePlayers: remainingPlayers.map(p => ({ 
+                            id: p.id, 
+                            name: p.name,
+                            handRank: p.handRank 
+                        })),
+                        betLevel: currentBet,
+                        calculation: `${remainingPlayers.length} players × $${betDifference} = $${potAmount}`
+                    });
+                    
+                    console.log(`${potType}: $${potAmount}`);
+                    console.log(`  Calculation: ${remainingPlayers.length} × $${betDifference}`);
+                    console.log(`  Eligible: ${remainingPlayers.map(p => p.name).join(', ')}`);
+                }
+                
+                remainingPlayers = remainingPlayers.filter(p => p.id !== playerBets[i].id);
+                previousBet = currentBet;
+            }
+            
+            return pots;
+        }
+
+        // Find best hand among eligible players
+        function findBestHand(players) {
+            // Higher handRank is better (9 = best, 1 = worst)
+            let bestPlayers = [players[0]];
+            let bestRank = players[0].handRank;
+            
+            for (let i = 1; i < players.length; i++) {
+                if (players[i].handRank > bestRank) {
+                    bestRank = players[i].handRank;
+                    bestPlayers = [players[i]];
+                } else if (players[i].handRank === bestRank) {
+                    bestPlayers.push(players[i]);
+                }
+            }
+            
+            return bestPlayers;
+        }
+
+        // Award pots to winners
+        function awardSidePots(state, pots) {
+            console.log('\n=== Awarding Pots ===');
+            const winnings = new Map();
+            
+            pots.forEach((pot, idx) => {
+                console.log(`\n${pot.type} ($${pot.amount}):`);
+                
+                const eligiblePlayers = pot.eligiblePlayers.map(ep => 
+                    state.players.find(p => p.id === ep.id)
+                );
+                
+                const winners = findBestHand(eligiblePlayers);
+                const amountPerWinner = Math.floor(pot.amount / winners.length);
+                
+                if (winners.length === 1) {
+                    console.log(`  Winner: ${winners[0].name} (Hand Rank: ${winners[0].handRank})`);
+                    console.log(`  Award: $${pot.amount}`);
+                    
+                    winners[0].chips += pot.amount;
+                    
+                    if (!winnings.has(winners[0].id)) {
+                        winnings.set(winners[0].id, { name: winners[0].name, amount: 0 });
+                    }
+                    winnings.get(winners[0].id).amount += pot.amount;
+                } else {
+                    console.log(`  Split between ${winners.length} players:`);
+                    winners.forEach(w => {
+                        console.log(`    ${w.name}: $${amountPerWinner}`);
+                        w.chips += amountPerWinner;
+                        
+                        if (!winnings.has(w.id)) {
+                            winnings.set(w.id, { name: w.name, amount: 0 });
+                        }
+                        winnings.get(w.id).amount += amountPerWinner;
+                    });
+                }
+            });
+            
+            return winnings;
+        }
+
+        // UI Functions
+        function updateDisplay() {
+            const totalPot = gameState.players.reduce((sum, p) => sum + p.bet, 0);
+            gameState.totalPot = totalPot;
+            document.getElementById('totalPot').textContent = totalPot;
+            
+            // Update players list
+            const playersList = document.getElementById('playersList');
+            playersList.innerHTML = '';
+            
+            gameState.players.forEach(player => {
+                const div = document.createElement('div');
+                div.className = 'player-item' + (player.folded ? ' folded' : ' all-in');
+                div.innerHTML = `
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-chips">
+                            Hand Rank: ${player.handRank}/9 | 
+                            Chips: $${player.chips}
+                        </div>
+                    </div>
+                    <div class="player-bet">$${player.bet}</div>
+                `;
+                playersList.appendChild(div);
+            });
+        }
+
+        function displayPots(pots) {
+            const potsList = document.getElementById('potsList');
+            potsList.innerHTML = '';
+            
+            if (pots.length === 0) {
+                potsList.innerHTML = '<p style="padding: 20px; text-align: center; color: #999;">No pots calculated yet</p>';
+                return;
+            }
+            
+            pots.forEach((pot, idx) => {
+                const div = document.createElement('div');
+                div.className = `pot-item ${idx === 0 ? 'main' : 'side'}`;
+                div.innerHTML = `
+                    <div class="pot-header">
+                        <div class="pot-name">${pot.type}</div>
+                        <div class="pot-amount">$${pot.amount}</div>
+                    </div>
+                    <div class="pot-calculation">${pot.calculation}</div>
+                    <div class="eligible-players">
+                        <div class="eligible-title">✅ Eligible Players (${pot.eligiblePlayers.length}):</div>
+                        ${pot.eligiblePlayers.map(p => 
+                            `<span class="player-tag">${p.name} (Rank: ${p.handRank})</span>`
+                        ).join('')}
+                    </div>
+                `;
+                potsList.appendChild(div);
+            });
+        }
+
+        function logOutput(message, isError = false) {
+            const output = document.getElementById('output');
+            const color = isError ? '#d32f2f' : '#2c5530';
+            output.innerHTML = `<h3 style="color: ${color}">${message}</h3>`;
+        }
+
+        // Actions
+        function calculatePots() {
+            console.log('\n=== Calculate Pots Action ===');
+            
+            const pots = calculateSidePots(gameState);
+            gameState.pots = pots;
+            
+            displayPots(pots);
+            
+            const totalCalculated = pots.reduce((sum, pot) => sum + pot.amount, 0);
+            logOutput(`✅ Calculated ${pots.length} pot(s)! Total: $${totalCalculated}`);
+        }
+
+        function awardPots() {
+            if (gameState.pots.length === 0) {
+                logOutput('Calculate pots first!', true);
+                return;
+            }
+            
+            console.log('\n=== Award Pots Action ===');
+            
+            const winnings = awardSidePots(gameState, gameState.pots);
+            
+            let message = '🎉 Pots Awarded!\n\n';
+            winnings.forEach((w, id) => {
+                message += `${w.name}: $${w.amount}\n`;
+            });
+            
+            updateDisplay();
+            logOutput(`✅ ${message}`);
+        }
+
+        function resetScenario() {
+            gameState = {
+                players: [
+                    { id: 0, name: 'Player 1', chips: 0, bet: 100, folded: false, handRank: 8 },
+                    { id: 1, name: 'Player 2', chips: 0, bet: 500, folded: false, handRank: 7 },
+                    { id: 2, name: 'Player 3', chips: 0, bet: 1000, folded: false, handRank: 9 },
+                    { id: 3, name: 'Player 4', chips: 0, bet: 1000, folded: false, handRank: 5 }
+                ],
+                pots: [],
+                totalPot: 0
+            };
+            
+            displayPots([]);
+            updateDisplay();
+            logOutput('Scenario reset!');
+        }
+
+        // Test Cases
+        function testCase1() {
+            console.log('\n=== Test Case 1: Classic 4-Player Side Pots ===');
+            gameState = {
+                players: [
+                    { id: 0, name: 'P1 (100)', chips: 0, bet: 100, folded: false, handRank: 6 },
+                    { id: 1, name: 'P2 (500)', chips: 0, bet: 500, folded: false, handRank: 7 },
+                    { id: 2, name: 'P3 (1000)', chips: 0, bet: 1000, folded: false, handRank: 9 },
+                    { id: 3, name: 'P4 (1000)', chips: 0, bet: 1000, folded: false, handRank: 5 }
+                ],
+                pots: [],
+                totalPot: 0
+            };
+            
+            updateDisplay();
+            calculatePots();
+            
+            logOutput('✅ Test 1: Classic example - Main pot ($400) + 2 side pots ($1200, $1000)');
+            console.log('Expected: 3 pots totaling $2600');
+        }
+
+        function testCase2() {
+            console.log('\n=== Test Case 2: Complex 5-Player Scenario ===');
+            gameState = {
+                players: [
+                    { id: 0, name: 'Micro (50)', chips: 0, bet: 50, folded: false, handRank: 4 },
+                    { id: 1, name: 'Small (150)', chips: 0, bet: 150, folded: false, handRank: 8 },
+                    { id: 2, name: 'Medium (400)', chips: 0, bet: 400, folded: false, handRank: 7 },
+                    { id: 3, name: 'Big (800)', chips: 0, bet: 800, folded: false, handRank: 9 },
+                    { id: 4, name: 'Huge (800)', chips: 0, bet: 800, folded: false, handRank: 6 }
+                ],
+                pots: [],
+                totalPot: 0
+            };
+            
+            updateDisplay();
+            calculatePots();
+            
+            logOutput('✅ Test 2: Complex scenario with 5 different bet levels!');
+            console.log('Creates multiple side pots with different eligible players');
+        }
+
+        function testCase3() {
+            console.log('\n=== Test Case 3: Split Pot (Tie) ===');
+            gameState = {
+                players: [
+                    { id: 0, name: 'Alice', chips: 0, bet: 500, folded: false, handRank: 9 },
+                    { id: 1, name: 'Bob', chips: 0, bet: 500, folded: false, handRank: 9 },
+                    { id: 2, name: 'Charlie', chips: 0, bet: 500, folded: false, handRank: 5 }
+                ],
+                pots: [],
+                totalPot: 0
+            };
+            
+            updateDisplay();
+            calculatePots();
+            awardPots();
+            
+            logOutput('✅ Test 3: Alice and Bob tie (both rank 9), split the pot!');
+            console.log('Pot split evenly between tied winners');
+        }
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Initialize
+        console.log('=== Side Pot Calculator ===');
+        console.log('Calculate and award complex side pots');
+        console.log('Hand Rank: 9 = best, 1 = worst');
+        updateDisplay();
+    </script>
+</body>
+</html>

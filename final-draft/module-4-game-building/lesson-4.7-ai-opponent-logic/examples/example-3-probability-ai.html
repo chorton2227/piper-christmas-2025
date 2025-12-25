@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Probability-Based AI with Pot Odds</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .description {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .description h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .formula-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .formula-box h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .scenarios {
+            display: grid;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #dee2e6;
+        }
+
+        .scenario-header {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+
+        .game-state {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .stat-value.money {
+            color: #28a745;
+        }
+
+        .hand-cards {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .card.hearts, .card.diamonds {
+            color: #dc3545;
+        }
+
+        .card.clubs, .card.spades {
+            color: #212529;
+        }
+
+        .card .suit {
+            font-size: 1.2em;
+        }
+
+        .analysis {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .analysis-step {
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 1.05em;
+        }
+
+        .analysis-step:last-child {
+            border-bottom: none;
+        }
+
+        .analysis-step strong {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+        }
+
+        .comparison-item {
+            text-align: center;
+        }
+
+        .comparison-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .comparison-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .comparison-vs {
+            font-size: 2em;
+            font-weight: 700;
+            color: #6c757d;
+        }
+
+        .final-decision {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.4em;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .final-decision.fold {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .final-decision.call {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .final-decision.raise {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .reasoning {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .reasoning strong {
+            color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-bottom: 30px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Probability-Based AI with Pot Odds</h1>
+        <p class="subtitle">AI that considers pot odds and expected value</p>
+
+        <div class="description">
+            <h3>How Pot Odds Work</h3>
+            <p>Good poker AI doesn't just look at hand strength - it also considers <strong>pot odds</strong>. This means comparing the risk (amount to call) versus the reward (total pot).</p>
+            <p style="margin-top: 10px;">The AI calls if its hand strength is better than the pot odds percentage.</p>
+        </div>
+
+        <div class="formula-box">
+            <h4>Pot Odds Formula</h4>
+            <div class="formula">Pot Odds = Amount to Call / (Pot + Amount to Call)</div>
+            <p style="margin-top: 15px; color: #856404;">Lower pot odds = better deal (risking less to win more)</p>
+            <p style="color: #856404;">Higher pot odds = worse deal (risking more for smaller pot)</p>
+            
+            <h4 style="margin-top: 20px;">AI Decision Logic</h4>
+            <div class="formula">If Hand Strength > Pot Odds → Call or Raise</div>
+            <div class="formula">If Hand Strength < Pot Odds → Fold</div>
+        </div>
+
+        <button onclick="runAllScenarios()">Run All Scenarios</button>
+
+        <div id="scenariosContainer" class="scenarios"></div>
+    </div>
+
+    <script>
+        const rankNames = {
+            14: 'A', 13: 'K', 12: 'Q', 11: 'J',
+            10: '10', 9: '9', 8: '8', 7: '7',
+            6: '6', 5: '5', 4: '4', 3: '3', 2: '2'
+        };
+
+        const suitSymbols = {
+            hearts: '♥',
+            diamonds: '♦',
+            clubs: '♣',
+            spades: '♠'
+        };
+
+        function evaluatePreFlopHand(card1, card2) {
+            const v1 = card1.value;
+            const v2 = card2.value;
+            const suited = card1.suit === card2.suit;
+            
+            const high = Math.max(v1, v2);
+            const low = Math.min(v1, v2);
+            const isPair = v1 === v2;
+            
+            if (isPair && high >= 11) return { strength: 0.95, category: 'premium' };
+            if (high === 14 && low >= 13) return { strength: suited ? 0.93 : 0.88, category: 'premium' };
+            if (isPair && high >= 9) return { strength: 0.80, category: 'strong' };
+            if (high >= 13 && low >= 11 && suited) return { strength: 0.75, category: 'strong' };
+            if (high === 14 && low >= 11) return { strength: 0.72, category: 'strong' };
+            if (isPair && high >= 7) return { strength: 0.65, category: 'medium' };
+            if (suited && high - low <= 2 && high >= 9) return { strength: 0.60, category: 'medium' };
+            if (high >= 11 && low >= 9) return { strength: suited ? 0.58 : 0.50, category: 'medium' };
+            if (isPair) return { strength: 0.45, category: 'weak' };
+            if (high >= 12) return { strength: suited ? 0.40 : 0.30, category: 'weak' };
+            if (suited && high - low <= 3) return { strength: 0.35, category: 'weak' };
+            return { strength: 0.15, category: 'trash' };
+        }
+
+        function calculatePotOdds(pot, amountToCall) {
+            return amountToCall / (pot + amountToCall);
+        }
+
+        function makeAIDecisionWithPotOdds(handStrength, pot, amountToCall) {
+            const potOdds = calculatePotOdds(pot, amountToCall);
+            
+            console.log('\nAI Thinking Process:');
+            console.log(`  Hand Strength: ${(handStrength * 100).toFixed(1)}%`);
+            console.log(`  Pot: $${pot}`);
+            console.log(`  Amount to Call: $${amountToCall}`);
+            console.log(`  Pot Odds: ${(potOdds * 100).toFixed(1)}%`);
+            
+            // Compare hand strength to pot odds
+            if (handStrength > potOdds) {
+                // Hand is strong enough for the pot odds
+                if (handStrength >= 0.75) {
+                    console.log(`  Decision: RAISE (hand strength ${(handStrength * 100).toFixed(0)}% >> pot odds ${(potOdds * 100).toFixed(0)}%)`);
+                    return 'raise';
+                } else {
+                    console.log(`  Decision: CALL (hand strength ${(handStrength * 100).toFixed(0)}% > pot odds ${(potOdds * 100).toFixed(0)}%)`);
+                    return 'call';
+                }
+            } else {
+                console.log(`  Decision: FOLD (hand strength ${(handStrength * 100).toFixed(0)}% < pot odds ${(potOdds * 100).toFixed(0)}%)`);
+                return 'fold';
+            }
+        }
+
+        function createCardHTML(card) {
+            return `
+                <div class="card ${card.suit}">
+                    <div>${card.rank}</div>
+                    <div class="suit">${suitSymbols[card.suit]}</div>
+                </div>
+            `;
+        }
+
+        function createScenarioHTML(scenario, index) {
+            const handEval = evaluatePreFlopHand(scenario.cards[0], scenario.cards[1]);
+            const potOdds = calculatePotOdds(scenario.pot, scenario.toCall);
+            const decision = makeAIDecisionWithPotOdds(handEval.strength, scenario.pot, scenario.toCall);
+            
+            const handStrengthPercent = (handEval.strength * 100).toFixed(0);
+            const potOddsPercent = (potOdds * 100).toFixed(0);
+            const isProfitable = handEval.strength > potOdds;
+            
+            return `
+                <div class="scenario">
+                    <div class="scenario-header">
+                        Scenario ${index + 1}: ${scenario.title}
+                    </div>
+                    
+                    <div class="hand-cards">
+                        ${createCardHTML(scenario.cards[0])}
+                        ${createCardHTML(scenario.cards[1])}
+                    </div>
+                    
+                    <div class="game-state">
+                        <div class="stat-box">
+                            <div class="stat-label">Pot Size</div>
+                            <div class="stat-value money">$${scenario.pot}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">To Call</div>
+                            <div class="stat-value money">$${scenario.toCall}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Pot Odds</div>
+                            <div class="stat-value">${potOddsPercent}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis">
+                        <div class="analysis-step">
+                            <strong>Step 1:</strong> Evaluate hand strength → ${handStrengthPercent}%
+                        </div>
+                        <div class="analysis-step">
+                            <strong>Step 2:</strong> Calculate pot odds → ${scenario.toCall} / (${scenario.pot} + ${scenario.toCall}) = ${potOddsPercent}%
+                        </div>
+                        <div class="analysis-step">
+                            <strong>Step 3:</strong> Compare: Hand strength (${handStrengthPercent}%) ${isProfitable ? '>' : '<'} Pot odds (${potOddsPercent}%)
+                        </div>
+                        <div class="analysis-step">
+                            <strong>Step 4:</strong> ${isProfitable ? 'Profitable to call/raise' : 'Not profitable - fold'}
+                        </div>
+                    </div>
+                    
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <div class="comparison-label">Hand Strength</div>
+                            <div class="comparison-value" style="color: #28a745;">${handStrengthPercent}%</div>
+                        </div>
+                        <div class="comparison-vs">VS</div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Pot Odds</div>
+                            <div class="comparison-value" style="color: #dc3545;">${potOddsPercent}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="reasoning">
+                        <strong>Reasoning:</strong> ${scenario.reasoning}
+                    </div>
+                    
+                    <div class="final-decision ${decision}">
+                        AI Decision: ${decision.toUpperCase()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function runAllScenarios() {
+            console.log('\n=== Running Pot Odds AI Scenarios ===\n');
+            
+            const scenarios = [
+                {
+                    title: 'Small Pot, Small Bet - Good Pot Odds',
+                    cards: [
+                        { value: 11, suit: 'hearts', rank: 'J' },
+                        { value: 10, suit: 'hearts', rank: '10' }
+                    ],
+                    pot: 200,
+                    toCall: 20,
+                    reasoning: 'Pot odds are only 9% (20/220), but hand is 58% strong. Excellent value - AI should call or raise.'
+                },
+                {
+                    title: 'Large Pot, Medium Bet - Good Pot Odds',
+                    cards: [
+                        { value: 8, suit: 'diamonds', rank: '8' },
+                        { value: 8, suit: 'clubs', rank: '8' }
+                    ],
+                    pot: 500,
+                    toCall: 50,
+                    reasoning: 'Pot odds are only 9% (50/550), and we have a strong pair (65%). Easy call.'
+                },
+                {
+                    title: 'Small Pot, Large Bet - Bad Pot Odds',
+                    cards: [
+                        { value: 12, suit: 'spades', rank: 'Q' },
+                        { value: 9, suit: 'hearts', rank: '9' }
+                    ],
+                    pot: 100,
+                    toCall: 150,
+                    reasoning: 'Pot odds are 60% (150/250), but hand is only 30% strong. Too expensive - fold.'
+                },
+                {
+                    title: 'Medium Pot, All-In - Borderline Decision',
+                    cards: [
+                        { value: 14, suit: 'clubs', rank: 'A' },
+                        { value: 11, suit: 'diamonds', rank: 'J' }
+                    ],
+                    pot: 300,
+                    toCall: 200,
+                    reasoning: 'Pot odds are 40% (200/500), and hand is 72% strong. Hand is better than pot odds - call.'
+                },
+                {
+                    title: 'Huge Pot, Small Call - Always Call',
+                    cards: [
+                        { value: 7, suit: 'hearts', rank: '7' },
+                        { value: 2, suit: 'spades', rank: '2' }
+                    ],
+                    pot: 800,
+                    toCall: 25,
+                    reasoning: 'Even with a trash hand (15%), pot odds are only 3% (25/825). Too good to fold - call.'
+                },
+                {
+                    title: 'Premium Hand - Always Play',
+                    cards: [
+                        { value: 14, suit: 'spades', rank: 'A' },
+                        { value: 14, suit: 'hearts', rank: 'A' }
+                    ],
+                    pot: 200,
+                    toCall: 100,
+                    reasoning: 'Premium hand (95%) vs pot odds of 33% (100/300). Massive edge - raise!'
+                }
+            ];
+
+            const container = document.getElementById('scenariosContainer');
+            container.innerHTML = scenarios.map((scenario, index) => {
+                console.log(`\n--- Scenario ${index + 1}: ${scenario.title} ---`);
+                return createScenarioHTML(scenario, index);
+            }).join('');
+            
+            console.log('\n=== All Scenarios Complete ===');
+        }
+
+        window.addEventListener('load', () => {
+            console.log('Pot Odds AI - Example 3');
+            console.log('This example demonstrates probability-based decision making');
+            runAllScenarios();
+        });
+    </script>
+</body>
+</html>

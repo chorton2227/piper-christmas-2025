@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1 Solution: Create and Display Deck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Exercise 1 Solution</h1>
+        <div class="info">
+            <h2>Create and Display a Full Deck</h2>
+            <p><strong>Open the console (F12) to see the complete solution!</strong></p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXERCISE 1 SOLUTION ===\n');
+        
+        // Part 1: Create the Deck
+        function createDeck() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            
+            // Nested loops to create all 52 cards
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i]
+                    });
+                }
+            }
+            
+            return deck;
+        }
+        
+        // Part 2: Display the Deck
+        function displayDeck(deck) {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const suitSymbols = {
+                'spades': '♠',
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣'
+            };
+            
+            console.log('--- DECK DISPLAY ---');
+            
+            suits.forEach(suit => {
+                // Filter cards by suit
+                const suitCards = deck.filter(card => card.suit === suit);
+                
+                // Get ranks as string
+                const ranks = suitCards.map(card => card.rank).join(' ');
+                
+                // Display
+                console.log(`${suitSymbols[suit]} ${suit.toUpperCase()}: ${ranks}`);
+            });
+            
+            console.log('');
+        }
+        
+        // Part 3: Verify the Deck
+        function verifyDeck(deck) {
+            console.log('--- DECK VERIFICATION ---');
+            
+            // Check total cards
+            const totalCards = deck.length;
+            const correctTotal = totalCards === 52;
+            console.log(`Total cards: ${totalCards} ${correctTotal ? '✓' : '✗ SHOULD BE 52'}`);
+            
+            // Check each suit has 13 cards
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            let allSuitsCorrect = true;
+            
+            suits.forEach(suit => {
+                const count = deck.filter(card => card.suit === suit).length;
+                const correct = count === 13;
+                if (!correct) allSuitsCorrect = false;
+                console.log(`${suit}: ${count} cards ${correct ? '✓' : '✗ SHOULD BE 13'}`);
+            });
+            
+            // Check for duplicates
+            const cardStrings = deck.map(card => `${card.rank}-${card.suit}`);
+            const uniqueCards = new Set(cardStrings);
+            const noDuplicates = uniqueCards.size === deck.length;
+            console.log(`Unique cards: ${uniqueCards.size} ${noDuplicates ? '✓ No duplicates' : '✗ DUPLICATES FOUND!'}`);
+            
+            // Final result
+            console.log('');
+            if (correctTotal && allSuitsCorrect && noDuplicates) {
+                console.log('✓ DECK VERIFIED: All checks passed! 🎉');
+            } else {
+                console.log('✗ DECK VERIFICATION FAILED');
+            }
+            console.log('');
+        }
+        
+        // Test the functions
+        console.log('Creating deck...');
+        const deck = createDeck();
+        console.log(`Created deck with ${deck.length} cards\n`);
+        
+        displayDeck(deck);
+        verifyDeck(deck);
+        
+        // BONUS 1: Add Color Property
+        console.log('=== BONUS 1: Color Property ===\n');
+        
+        function createDeckWithColor() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            
+            for (let suit of suits) {
+                // Determine color
+                const color = (suit === 'hearts' || suit === 'diamonds') ? 'red' : 'black';
+                
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i],
+                        color: color  // Added color property
+                    });
+                }
+            }
+            
+            return deck;
+        }
+        
+        const colorDeck = createDeckWithColor();
+        console.log('Sample cards with color:');
+        console.log('  A♠:', colorDeck[12]);  // Ace of spades (black)
+        console.log('  K♥:', colorDeck[25]);  // King of hearts (red)
+        console.log('');
+        
+        // BONUS 2: Find Specific Cards
+        console.log('=== BONUS 2: Find Specific Card ===\n');
+        
+        function findCard(deck, rank, suit) {
+            return deck.find(card => card.rank === rank && card.suit === suit);
+        }
+        
+        const aceOfSpades = findCard(deck, 'A', 'spades');
+        console.log('Finding Ace of Spades:', aceOfSpades);
+        
+        const sevenOfHearts = findCard(deck, '7', 'hearts');
+        console.log('Finding Seven of Hearts:', sevenOfHearts);
+        console.log('');
+        
+        // BONUS 3: Get High Cards
+        console.log('=== BONUS 3: High Cards (Value >= 10) ===\n');
+        
+        function getHighCards(deck) {
+            return deck.filter(card => card.value >= 10);
+        }
+        
+        const highCards = getHighCards(deck);
+        console.log(`Total high cards: ${highCards.length}`);
+        console.log('First 5 high cards:');
+        highCards.slice(0, 5).forEach(card => {
+            console.log(`  ${card.rank} of ${card.suit} (value: ${card.value})`);
+        });
+        console.log('');
+        
+        // BONUS 4: Deck Statistics
+        console.log('=== BONUS 4: Deck Statistics ===\n');
+        
+        function getDeckStatistics(deck) {
+            // Calculate average value
+            const totalValue = deck.reduce((sum, card) => sum + card.value, 0);
+            const averageValue = totalValue / deck.length;
+            
+            // Find highest value
+            const maxValue = Math.max(...deck.map(card => card.value));
+            const highestCards = deck.filter(card => card.value === maxValue);
+            
+            // Count face cards (J, Q, K, A)
+            const faceCards = deck.filter(card => card.value >= 11);
+            
+            return {
+                averageValue: averageValue,
+                maxValue: maxValue,
+                highestCards: highestCards,
+                faceCardCount: faceCards.length
+            };
+        }
+        
+        const stats = getDeckStatistics(deck);
+        console.log('Deck Statistics:');
+        console.log(`  Average card value: ${stats.averageValue.toFixed(2)}`);
+        console.log(`  Highest value: ${stats.maxValue}`);
+        console.log(`  Highest cards: ${stats.highestCards.length} (all Aces)`);
+        console.log(`  Face cards: ${stats.faceCardCount} (J, Q, K, A)`);
+        console.log('');
+        
+        console.log('✨ All solutions complete! Great job! ✨');
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Basic Card Styling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .card-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .card {
+            width: 120px;
+            height: 168px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-rank-top {
+            font-size: 24px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            left: 12px;
+        }
+        
+        .card-suit-center {
+            font-size: 60px;
+            line-height: 1;
+        }
+        
+        .card-rank-bottom {
+            font-size: 24px;
+            font-weight: bold;
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            transform: rotate(180deg);
+        }
+        
+        /* Color for red suits */
+        .card.hearts .card-rank-top,
+        .card.hearts .card-suit-center,
+        .card.hearts .card-rank-bottom,
+        .card.diamonds .card-rank-top,
+        .card.diamonds .card-suit-center,
+        .card.diamonds .card-rank-bottom {
+            color: #e74c3c;
+        }
+        
+        /* Color for black suits */
+        .card.spades .card-rank-top,
+        .card.spades .card-suit-center,
+        .card.spades .card-rank-bottom,
+        .card.clubs .card-rank-top,
+        .card.clubs .card-suit-center,
+        .card.clubs .card-rank-bottom {
+            color: #2c3e50;
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 40px;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎴 Example 1: Basic Card Styling</h1>
+    
+    <div class="card-container">
+        <!-- Ace of Spades -->
+        <div class="card spades">
+            <div class="card-rank-top">A</div>
+            <div class="card-suit-center">♠</div>
+            <div class="card-rank-bottom">A</div>
+        </div>
+        
+        <!-- Seven of Hearts -->
+        <div class="card hearts">
+            <div class="card-rank-top">7</div>
+            <div class="card-suit-center">♥</div>
+            <div class="card-rank-bottom">7</div>
+        </div>
+        
+        <!-- King of Diamonds -->
+        <div class="card diamonds">
+            <div class="card-rank-top">K</div>
+            <div class="card-suit-center">♦</div>
+            <div class="card-rank-bottom">K</div>
+        </div>
+        
+        <!-- Three of Clubs -->
+        <div class="card clubs">
+            <div class="card-rank-top">3</div>
+            <div class="card-suit-center">♣</div>
+            <div class="card-rank-bottom">3</div>
+        </div>
+    </div>
+    
+    <div class="info-box">
+        <h2>What This Example Shows:</h2>
+        <ul>
+            <li><strong>Card Structure:</strong> White background with rounded corners</li>
+            <li><strong>Unicode Symbols:</strong> ♠ ♥ ♦ ♣ for suits</li>
+            <li><strong>Color Coding:</strong> Red for hearts/diamonds, black for spades/clubs</li>
+            <li><strong>Layout:</strong> Rank in corners, suit in center</li>
+            <li><strong>Hover Effect:</strong> Cards lift up when you hover over them</li>
+            <li><strong>Professional Look:</strong> Shadows and borders for depth</li>
+        </ul>
+        
+        <h3>Try This:</h3>
+        <p>Hover over the cards to see them lift up!</p>
+        
+        <h3>Key CSS Techniques:</h3>
+        <ul>
+            <li><code>border-radius</code> - Rounded corners</li>
+            <li><code>box-shadow</code> - 3D depth effect</li>
+            <li><code>flexbox</code> - Centering content</li>
+            <li><code>position: absolute</code> - Corners for rank</li>
+            <li><code>transform</code> - Hover animation</li>
+            <li><code>transition</code> - Smooth effects</li>
+        </ul>
+    </div>
+    
+    <script>
+        console.log('=== CARD STYLING EXAMPLE ===');
+        console.log('Cards displayed using:');
+        console.log('• HTML structure with semantic classes');
+        console.log('• CSS for beautiful styling');
+        console.log('• Unicode symbols for suits (♠ ♥ ♦ ♣)');
+        console.log('• Hover effects for interactivity');
+        console.log('\n✨ Hover over the cards to see them in action!');
+    </script>
+</body>
+</html>

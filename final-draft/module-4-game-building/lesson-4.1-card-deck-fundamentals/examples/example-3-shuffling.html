@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Shuffling Algorithms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: rgba(255, 100, 100, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 100, 100, 0.5);
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔀 Example 3: Shuffling Algorithms</h1>
+        
+        <div class="info">
+            <h2>What This Example Shows:</h2>
+            <ul>
+                <li>The WRONG way to shuffle (and why it's bad)</li>
+                <li>The Fisher-Yates shuffle algorithm (the right way!)</li>
+                <li>How to implement a proper shuffle</li>
+                <li>Comparing shuffled vs unshuffled decks</li>
+            </ul>
+            <p><strong>Open your browser console (F12) to see shuffling in action!</strong></p>
+        </div>
+        
+        <div class="warning">
+            <h3>⚠️ Important!</h3>
+            <p>Not all shuffle methods are created equal! We'll show you the BAD way and the GOOD way.</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== 🔀 SHUFFLING ALGORITHMS ===\n');
+        
+        // Create a deck first
+        function createDeck() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i]
+                    });
+                }
+            }
+            return deck;
+        }
+        
+        // Display helper function
+        function displayCard(card) {
+            const symbols = { 'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣' };
+            return `${card.rank}${symbols[card.suit]}`;
+        }
+        
+        // Show deck state
+        console.log('--- Original Deck (Not Shuffled) ---');
+        const originalDeck = createDeck();
+        console.log('First 10 cards:');
+        for (let i = 0; i < 10; i++) {
+            console.log(`  ${i + 1}. ${displayCard(originalDeck[i])}`);
+        }
+        console.log('Notice: All cards are in perfect order (all spades first)');
+        console.log('');
+        
+        // BAD SHUFFLE METHOD (don't use this!)
+        console.log('--- ❌ BAD SHUFFLE: Using sort() with Math.random() ---');
+        console.log('This is a common but INCORRECT shuffle method:');
+        console.log('');
+        
+        function badShuffle(deck) {
+            // Create a copy so we don't mutate original
+            const shuffled = [...deck];
+            // ❌ BAD: This creates biased shuffles!
+            shuffled.sort(() => Math.random() - 0.5);
+            return shuffled;
+        }
+        
+        const badShuffled = badShuffle(originalDeck);
+        console.log('First 10 cards after bad shuffle:');
+        for (let i = 0; i < 10; i++) {
+            console.log(`  ${i + 1}. ${displayCard(badShuffled[i])}`);
+        }
+        console.log('');
+        console.log('Why is this BAD?');
+        console.log('  • Not truly random (some card orders more likely than others)');
+        console.log('  • Violates assumptions of sort() algorithm');
+        console.log('  • Can be exploited in gambling/gaming');
+        console.log('  • Different browsers may behave differently');
+        console.log('');
+        
+        // GOOD SHUFFLE METHOD: Fisher-Yates
+        console.log('--- ✅ GOOD SHUFFLE: Fisher-Yates Algorithm ---');
+        console.log('This is the CORRECT way to shuffle:');
+        console.log('');
+        
+        function fisherYatesShuffle(deck) {
+            // Create a copy so we don't mutate original
+            const shuffled = [...deck];
+            
+            // Start from the end and work backwards
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                // Pick random index from 0 to i
+                const j = Math.floor(Math.random() * (i + 1));
+                
+                // Swap cards at positions i and j
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            return shuffled;
+        }
+        
+        const goodShuffled = fisherYatesShuffle(originalDeck);
+        console.log('First 10 cards after Fisher-Yates shuffle:');
+        for (let i = 0; i < 10; i++) {
+            console.log(`  ${i + 1}. ${displayCard(goodShuffled[i])}`);
+        }
+        console.log('');
+        console.log('Why is this GOOD?');
+        console.log('  • Truly random (each arrangement equally likely)');
+        console.log('  • Fast (O(n) time complexity)');
+        console.log('  • Used in professional gaming and cryptography');
+        console.log('  • Consistent across all browsers');
+        console.log('');
+        
+        // Detailed walkthrough of Fisher-Yates
+        console.log('--- Fisher-Yates Step-by-Step Example ---');
+        console.log('Let\'s shuffle a small array to see how it works:');
+        console.log('');
+        
+        const smallDeck = [
+            { rank: 'A', suit: 'spades' },
+            { rank: '2', suit: 'spades' },
+            { rank: '3', suit: 'spades' },
+            { rank: '4', suit: 'spades' },
+            { rank: '5', suit: 'spades' }
+        ];
+        
+        console.log('Starting array:', smallDeck.map(displayCard).join(', '));
+        console.log('');
+        
+        // Manual shuffle with logging
+        const manualShuffle = [...smallDeck];
+        for (let i = manualShuffle.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            console.log(`Step ${manualShuffle.length - i}:`);
+            console.log(`  Current position: ${i} (${displayCard(manualShuffle[i])})`);
+            console.log(`  Random position: ${j} (${displayCard(manualShuffle[j])})`);
+            console.log(`  Swapping these two cards...`);
+            
+            [manualShuffle[i], manualShuffle[j]] = [manualShuffle[j], manualShuffle[i]];
+            
+            console.log(`  Result: ${manualShuffle.map(displayCard).join(', ')}`);
+            console.log('');
+        }
+        
+        console.log('Final shuffled array:', manualShuffle.map(displayCard).join(', '));
+        console.log('');
+        
+        // In-place shuffle (mutates original)
+        console.log('--- In-Place Shuffle (Mutates Original) ---');
+        
+        function shuffleInPlace(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            // No return needed - original array is modified
+        }
+        
+        const testDeck = createDeck();
+        console.log('Before shuffle - first 5:', testDeck.slice(0, 5).map(displayCard).join(', '));
+        shuffleInPlace(testDeck);
+        console.log('After shuffle - first 5:', testDeck.slice(0, 5).map(displayCard).join(', '));
+        console.log('Note: The original array was modified!');
+        console.log('');
+        
+        // Multiple shuffles
+        console.log('--- Multiple Shuffles ---');
+        console.log('Each shuffle produces a DIFFERENT random order:');
+        console.log('');
+        
+        for (let shuffleNum = 1; shuffleNum <= 3; shuffleNum++) {
+            const shuffled = fisherYatesShuffle(originalDeck);
+            console.log(`Shuffle #${shuffleNum} - first 5 cards:`, 
+                shuffled.slice(0, 5).map(displayCard).join(', '));
+        }
+        console.log('');
+        
+        // Verify randomness (statistical test)
+        console.log('--- Testing Shuffle Randomness ---');
+        console.log('Let\'s shuffle 1000 times and track first card position:');
+        
+        const positionCounts = Array(52).fill(0);
+        const testCard = originalDeck[0];  // Track the A♠
+        
+        for (let i = 0; i < 1000; i++) {
+            const shuffled = fisherYatesShuffle(originalDeck);
+            // Find where A♠ ended up
+            const position = shuffled.findIndex(card => 
+                card.rank === testCard.rank && card.suit === testCard.suit
+            );
+            positionCounts[position]++;
+        }
+        
+        // Show distribution
+        const avgCount = 1000 / 52;
+        console.log(`Expected average per position: ${avgCount.toFixed(1)}`);
+        console.log('Actual distribution (showing first 10 positions):');
+        for (let i = 0; i < 10; i++) {
+            console.log(`  Position ${i + 1}: ${positionCounts[i]} times`);
+        }
+        console.log('✓ All values should be close to 19-20 (fairly random!)');
+        console.log('');
+        
+        // Performance comparison
+        console.log('--- Performance Test ---');
+        
+        function timeFunction(func, iterations) {
+            const start = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                func(originalDeck);
+            }
+            const end = performance.now();
+            return end - start;
+        }
+        
+        const iterations = 10000;
+        const badTime = timeFunction(badShuffle, iterations);
+        const goodTime = timeFunction(fisherYatesShuffle, iterations);
+        
+        console.log(`Shuffling ${iterations} times:`);
+        console.log(`  Bad shuffle: ${badTime.toFixed(2)}ms`);
+        console.log(`  Fisher-Yates: ${goodTime.toFixed(2)}ms`);
+        console.log(`  Fisher-Yates is ${(badTime / goodTime).toFixed(2)}x faster!`);
+        console.log('');
+        
+        console.log('✨ Remember: Always use Fisher-Yates for proper shuffling! ✨');
+        console.log('💡 Tip: Copy this function and use it in all your card games!');
+    </script>
+</body>
+</html>

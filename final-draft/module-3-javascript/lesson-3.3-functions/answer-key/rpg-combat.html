@@ -1,0 +1,352 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Combat System - Answer Key</title>
+</head>
+<body>
+    <h1>⚔️ RPG Combat System</h1>
+    <p>Open the console (F12) to watch the epic battle!</p>
+
+    <script>
+        console.log('='.repeat(60));
+        console.log('⚔️  RPG COMBAT SYSTEM');
+        console.log('='.repeat(60));
+
+        // =============================
+        // COMBAT CALCULATION FUNCTIONS
+        // =============================
+
+        // Calculate damage dealt (can't be negative)
+        function calculateDamage(attackPower, defense) {
+            let damage = attackPower - defense;
+            if (damage < 0) {
+                damage = 0;
+            }
+            return damage;
+        }
+
+        // Calculate critical hit (double damage)
+        function calculateCriticalHit(normalDamage) {
+            return normalDamage * 2;
+        }
+
+        // Calculate healing (can't exceed max health)
+        function calculateHealing(currentHealth, healAmount, maxHealth) {
+            let newHealth = currentHealth + healAmount;
+            if (newHealth > maxHealth) {
+                newHealth = maxHealth;
+            }
+            return newHealth;
+        }
+
+        // Calculate mana cost for spell
+        function calculateManaCost(spellPower) {
+            return Math.floor(spellPower / 2);
+        }
+
+        // =============================
+        // STATUS CHECK FUNCTIONS
+        // =============================
+
+        // Check if character is alive
+        function isAlive(health) {
+            return health > 0;
+        }
+
+        // Check if can cast spell
+        function canCastSpell(currentMana, manaCost) {
+            return currentMana >= manaCost;
+        }
+
+        // Check if health is critical (below 25%)
+        function isCriticalHealth(health, maxHealth) {
+            let percentage = (health / maxHealth) * 100;
+            return percentage < 25;
+        }
+
+        // Get health percentage
+        function getHealthPercentage(currentHealth, maxHealth) {
+            return Math.floor((currentHealth / maxHealth) * 100);
+        }
+
+        // Get health status message
+        function getHealthStatus(health, maxHealth) {
+            let percentage = getHealthPercentage(health, maxHealth);
+            if (percentage === 0) return '💀 Defeated';
+            if (percentage < 25) return '🔴 Critical';
+            if (percentage < 50) return '🟡 Injured';
+            if (percentage < 75) return '🟢 Healthy';
+            return '💚 Full Health';
+        }
+
+        // =============================
+        // DISPLAY FUNCTIONS
+        // =============================
+
+        // Display character card
+        function displayCharacter(name, health, maxHealth, mana, maxMana, level) {
+            console.log('\n╔════════════════════════════╗');
+            console.log('║  ' + name.padEnd(24) + '  ║');
+            console.log('╠════════════════════════════╣');
+            console.log('║ Level: ' + level);
+            console.log('║ HP: ' + health + '/' + maxHealth + ' (' + getHealthPercentage(health, maxHealth) + '%)');
+            console.log('║ MP: ' + mana + '/' + maxMana);
+            console.log('║ Status: ' + getHealthStatus(health, maxHealth));
+            console.log('╚════════════════════════════╝');
+        }
+
+        // Display action
+        function displayAction(attacker, action, target, result) {
+            console.log('\n⚔️  ' + attacker + ' ' + action + ' ' + target + '!');
+            console.log('   Result: ' + result);
+        }
+
+        // Display battle result
+        function displayBattleResult(winner, loser) {
+            console.log('\n' + '='.repeat(60));
+            console.log('🏆 ' + winner + ' is VICTORIOUS!');
+            console.log('💀 ' + loser + ' has been defeated!');
+            console.log('='.repeat(60));
+        }
+
+        // Display round header
+        function displayRoundHeader(roundNumber) {
+            console.log('\n' + '─'.repeat(60));
+            console.log('ROUND ' + roundNumber);
+            console.log('─'.repeat(60));
+        }
+
+        // =============================
+        // BONUS FUNCTIONS
+        // =============================
+
+        // Calculate experience gained
+        function calculateExperience(enemyLevel) {
+            return enemyLevel * 50;
+        }
+
+        // Get level title
+        function getLevelTitle(level) {
+            if (level >= 10) return 'Master';
+            if (level >= 7) return 'Expert';
+            if (level >= 5) return 'Warrior';
+            if (level >= 3) return 'Apprentice';
+            if (level >= 2) return 'Novice';
+            return 'Beginner';
+        }
+
+        // Check if should dodge (based on speed)
+        function shouldDodge(speed) {
+            let dodgeChance = speed / 200;  // Higher speed = better dodge chance
+            let randomValue = Math.random();
+            return randomValue < dodgeChance;
+        }
+
+        // =============================
+        // BATTLE SETUP
+        // =============================
+
+        console.log('\n🎮 BATTLE BEGINS!');
+        console.log('='.repeat(60));
+
+        // Hero stats
+        let heroName = 'Thunder Knight';
+        let heroLevel = 5;
+        let heroHealth = 100;
+        let heroMaxHealth = 100;
+        let heroMana = 50;
+        let heroMaxMana = 50;
+        let heroAttack = 30;
+        let heroDefense = 15;
+        let heroSpeed = 60;
+
+        // Enemy stats
+        let enemyName = 'Shadow Beast';
+        let enemyLevel = 4;
+        let enemyHealth = 80;
+        let enemyMaxHealth = 80;
+        let enemyMana = 30;
+        let enemyMaxMana = 30;
+        let enemyAttack = 25;
+        let enemyDefense = 10;
+        let enemySpeed = 40;
+
+        // =============================
+        // DISPLAY STARTING STATS
+        // =============================
+
+        console.log('\n📋 COMBATANTS:');
+        displayCharacter(heroName, heroHealth, heroMaxHealth, heroMana, heroMaxMana, heroLevel);
+        displayCharacter(enemyName, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, enemyLevel);
+
+        // =============================
+        // ROUND 1: BASIC ATTACKS
+        // =============================
+
+        displayRoundHeader(1);
+
+        // Hero attacks
+        let damage1 = calculateDamage(heroAttack, enemyDefense);
+        enemyHealth = enemyHealth - damage1;
+        displayAction(heroName, 'attacks', enemyName, damage1 + ' damage dealt');
+
+        // Enemy counterattacks
+        let damage2 = calculateDamage(enemyAttack, heroDefense);
+        heroHealth = heroHealth - damage2;
+        displayAction(enemyName, 'attacks', heroName, damage2 + ' damage dealt');
+
+        // Show status
+        console.log('\n📊 Status after Round 1:');
+        console.log(heroName + ': ' + heroHealth + '/' + heroMaxHealth + ' HP - ' + getHealthStatus(heroHealth, heroMaxHealth));
+        console.log(enemyName + ': ' + enemyHealth + '/' + enemyMaxHealth + ' HP - ' + getHealthStatus(enemyHealth, enemyMaxHealth));
+
+        // =============================
+        // ROUND 2: SPECIAL ATTACKS
+        // =============================
+
+        displayRoundHeader(2);
+
+        // Hero casts spell
+        let spellPower = 40;
+        let manaCost = calculateManaCost(spellPower);
+
+        if (canCastSpell(heroMana, manaCost)) {
+            console.log('\n✨ ' + heroName + ' casts Lightning Strike!');
+            heroMana = heroMana - manaCost;
+            
+            let spellDamage = calculateDamage(spellPower, enemyDefense);
+            enemyHealth = enemyHealth - spellDamage;
+            
+            console.log('   Mana used: ' + manaCost + ' MP');
+            console.log('   Spell damage: ' + spellDamage);
+            console.log('   ' + heroName + ' mana: ' + heroMana + '/' + heroMaxMana + ' MP');
+        } else {
+            console.log('\n❌ ' + heroName + ' tried to cast spell but not enough mana!');
+        }
+
+        // Enemy attacks (might miss due to dodge)
+        console.log('\n⚔️  ' + enemyName + ' attacks ' + heroName + '!');
+        if (shouldDodge(heroSpeed)) {
+            console.log('   💨 ' + heroName + ' dodged the attack!');
+        } else {
+            let damage3 = calculateDamage(enemyAttack, heroDefense);
+            heroHealth = heroHealth - damage3;
+            console.log('   Result: ' + damage3 + ' damage dealt');
+        }
+
+        // Show status
+        console.log('\n📊 Status after Round 2:');
+        console.log(heroName + ': ' + heroHealth + '/' + heroMaxHealth + ' HP, ' + heroMana + '/' + heroMaxMana + ' MP - ' + getHealthStatus(heroHealth, heroMaxHealth));
+        console.log(enemyName + ': ' + enemyHealth + '/' + enemyMaxHealth + ' HP - ' + getHealthStatus(enemyHealth, enemyMaxHealth));
+
+        // Check for critical health
+        if (isCriticalHealth(heroHealth, heroMaxHealth)) {
+            console.log('⚠️  WARNING: ' + heroName + ' is at critical health!');
+        }
+        if (isCriticalHealth(enemyHealth, enemyMaxHealth)) {
+            console.log('⚠️  ' + enemyName + ' is at critical health!');
+        }
+
+        // =============================
+        // ROUND 3: HEALING & FINISHING
+        // =============================
+
+        displayRoundHeader(3);
+
+        // Hero uses healing potion
+        console.log('\n💚 ' + heroName + ' uses a Healing Potion!');
+        let oldHeroHealth = heroHealth;
+        heroHealth = calculateHealing(heroHealth, 30, heroMaxHealth);
+        let actualHealing = heroHealth - oldHeroHealth;
+        console.log('   Healed: ' + actualHealing + ' HP');
+        console.log('   ' + heroName + ' health: ' + heroHealth + '/' + heroMaxHealth + ' HP');
+
+        // Hero critical hit!
+        console.log('\n⚔️  ' + heroName + ' attacks with all their might!');
+        let normalDamage = calculateDamage(heroAttack, enemyDefense);
+        let criticalDamage = calculateCriticalHit(normalDamage);
+        enemyHealth = enemyHealth - criticalDamage;
+        console.log('   💥 CRITICAL HIT!');
+        console.log('   Result: ' + criticalDamage + ' damage dealt! (Normal: ' + normalDamage + ' × 2)');
+
+        // Check if enemy is defeated
+        if (!isAlive(enemyHealth)) {
+            console.log('\n💀 ' + enemyName + ' has been defeated!');
+        } else {
+            // Enemy final attack
+            let damage4 = calculateDamage(enemyAttack, heroDefense);
+            heroHealth = heroHealth - damage4;
+            displayAction(enemyName, 'attacks', heroName, damage4 + ' damage dealt');
+        }
+
+        // =============================
+        // BATTLE RESULTS
+        // =============================
+
+        console.log('\n📊 FINAL STATUS:');
+        displayCharacter(heroName, heroHealth, heroMaxHealth, heroMana, heroMaxMana, heroLevel);
+        displayCharacter(enemyName, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, enemyLevel);
+
+        // Determine winner
+        if (isAlive(heroHealth) && !isAlive(enemyHealth)) {
+            displayBattleResult(heroName, enemyName);
+            
+            // Award experience
+            let xpGained = calculateExperience(enemyLevel);
+            let goldGained = enemyLevel * 25;
+            
+            console.log('\n🎁 Victory Rewards:');
+            console.log('   Experience: +' + xpGained + ' XP');
+            console.log('   Gold: +' + goldGained + ' gold');
+            console.log('   Title: ' + getLevelTitle(heroLevel));
+            
+        } else if (isAlive(enemyHealth) && !isAlive(heroHealth)) {
+            displayBattleResult(enemyName, heroName);
+            console.log('\n💀 You have been defeated... Try again!');
+            
+        } else if (!isAlive(heroHealth) && !isAlive(enemyHealth)) {
+            console.log('\n' + '='.repeat(60));
+            console.log('⚔️  DOUBLE KNOCKOUT!');
+            console.log('Both combatants have fallen!');
+            console.log('='.repeat(60));
+        }
+
+        // =============================
+        // BATTLE STATISTICS
+        // =============================
+
+        console.log('\n📊 BATTLE STATISTICS:');
+        console.log('─'.repeat(60));
+        console.log('Rounds fought: 3');
+        console.log('Hero damage dealt: ' + (enemyMaxHealth - Math.max(enemyHealth, 0)));
+        console.log('Hero damage taken: ' + (heroMaxHealth - heroHealth));
+        console.log('Spells cast: 1');
+        console.log('Critical hits: 1');
+        console.log('Healing used: 1');
+        console.log('Hero final health: ' + heroHealth + '/' + heroMaxHealth + ' (' + getHealthPercentage(heroHealth, heroMaxHealth) + '%)');
+
+        console.log('\n' + '='.repeat(60));
+        console.log('✅ COMBAT SYSTEM DEMONSTRATION COMPLETE!');
+        console.log('='.repeat(60));
+        console.log('Functions demonstrated:');
+        console.log('✓ calculateDamage() - Damage calculation');
+        console.log('✓ calculateCriticalHit() - Double damage');
+        console.log('✓ calculateHealing() - Health restoration');
+        console.log('✓ calculateManaCost() - Spell costs');
+        console.log('✓ isAlive() - Check if character alive');
+        console.log('✓ canCastSpell() - Check mana availability');
+        console.log('✓ isCriticalHealth() - Low health warning');
+        console.log('✓ getHealthPercentage() - HP percentage');
+        console.log('✓ getHealthStatus() - Status messages');
+        console.log('✓ displayCharacter() - Character cards');
+        console.log('✓ displayAction() - Action messages');
+        console.log('✓ displayBattleResult() - Victory screen');
+        console.log('✓ calculateExperience() - XP rewards');
+        console.log('✓ getLevelTitle() - Rank titles');
+        console.log('✓ shouldDodge() - Dodge chance');
+        console.log('='.repeat(60));
+    </script>
+</body>
+</html>

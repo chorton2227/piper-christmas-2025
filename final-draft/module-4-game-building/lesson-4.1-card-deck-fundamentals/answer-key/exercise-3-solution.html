@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 3 Solution: War Card Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { text-align: center; }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Exercise 3 Solution</h1>
+        <div class="info">
+            <h2>War Card Game</h2>
+            <p><strong>Open the console (F12) to see the game!</strong></p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== WAR CARD GAME SOLUTION ===\n');
+        
+        // Setup functions
+        function createDeck() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({ suit, rank: ranks[i], value: values[i] });
+                }
+            }
+            return deck;
+        }
+        
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+        
+        function splitDeck(deck) {
+            const mid = Math.floor(deck.length / 2);
+            return {
+                player1: deck.slice(0, mid),
+                player2: deck.slice(mid)
+            };
+        }
+        
+        // Display functions
+        function displayCard(card) {
+            const symbols = { 'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣' };
+            return `${card.rank}${symbols[card.suit]}`;
+        }
+        
+        function displayRoundResult(result) {
+            console.log(`  Player 1 plays: ${result.player1Card}`);
+            console.log(`  Player 2 plays: ${result.player2Card}`);
+            
+            if (result.winner === 1) {
+                console.log(`  Player 1 wins!`);
+            } else if (result.winner === 2) {
+                console.log(`  Player 2 wins!`);
+            } else {
+                console.log(`  It's a tie! (War)`);
+            }
+        }
+        
+        function displayGameSummary(player1Wins, player2Wins, ties) {
+            console.log('\n=== GAME OVER ===');
+            console.log(`Player 1 wins: ${player1Wins}`);
+            console.log(`Player 2 wins: ${player2Wins}`);
+            console.log(`Ties: ${ties}`);
+            
+            if (player1Wins > player2Wins) {
+                console.log('🏆 Player 1 is the winner!');
+            } else if (player2Wins > player1Wins) {
+                console.log('🏆 Player 2 is the winner!');
+            } else {
+                console.log('🤝 It\'s a tie game!');
+            }
+        }
+        
+        // Game logic
+        function compareCards(card1, card2) {
+            if (card1.value > card2.value) return 1;
+            if (card2.value > card1.value) return 2;
+            return 0;
+        }
+        
+        function playRound(player1Hand, player2Hand) {
+            // Each player plays top card
+            const card1 = player1Hand.shift();
+            const card2 = player2Hand.shift();
+            
+            const winner = compareCards(card1, card2);
+            
+            // Winner gets both cards
+            if (winner === 1) {
+                player1Hand.push(card1, card2);
+            } else if (winner === 2) {
+                player2Hand.push(card1, card2);
+            } else {
+                // Tie - each keeps their own card
+                player1Hand.push(card1);
+                player2Hand.push(card2);
+            }
+            
+            return {
+                player1Card: displayCard(card1),
+                player2Card: displayCard(card2),
+                winner: winner,
+                message: winner === 1 ? 'Player 1 wins' : winner === 2 ? 'Player 2 wins' : 'Tie'
+            };
+        }
+        
+        // Main game function
+        function playWarGame(rounds) {
+            console.log('=== WAR CARD GAME ===');
+            
+            // Setup
+            const deck = createDeck();
+            shuffleDeck(deck);
+            const hands = splitDeck(deck);
+            
+            let player1Hand = hands.player1;
+            let player2Hand = hands.player2;
+            
+            console.log(`Starting with ${player1Hand.length} cards each\n`);
+            
+            let player1Wins = 0;
+            let player2Wins = 0;
+            let ties = 0;
+            
+            // Play rounds
+            for (let i = 1; i <= rounds; i++) {
+                if (player1Hand.length === 0 || player2Hand.length === 0) {
+                    console.log('One player is out of cards!');
+                    break;
+                }
+                
+                console.log(`Round ${i}:`);
+                const result = playRound(player1Hand, player2Hand);
+                displayRoundResult(result);
+                
+                if (result.winner === 1) player1Wins++;
+                else if (result.winner === 2) player2Wins++;
+                else ties++;
+                
+                console.log(`  Score: P1: ${player1Hand.length} cards | P2: ${player2Hand.length} cards\n`);
+            }
+            
+            // Display summary
+            displayGameSummary(player1Wins, player2Wins, ties);
+            console.log(`Final: P1: ${player1Hand.length} cards | P2: ${player2Hand.length} cards`);
+        }
+        
+        // Play the game!
+        playWarGame(10);
+        
+        console.log('\n✨ War game complete! Great job implementing game logic! ✨');
+    </script>
+</body>
+</html>

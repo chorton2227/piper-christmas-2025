@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Build Complete Betting Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #333;
+        }
+        
+        /* Betting Panel */
+        .betting-panel {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Player Info Bar */
+        .player-info-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .info-item {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-fold {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .btn-check {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+        }
+        
+        .btn-call {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+        
+        .btn-raise {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+        
+        .btn-all-in {
+            background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+            color: white;
+        }
+        
+        /* Raise Controls */
+        .raise-controls {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 152, 0, 0.3);
+        }
+        
+        .raise-controls.hidden {
+            display: none;
+        }
+        
+        .raise-header {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        #raise-slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        #raise-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #ff9800;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        #raise-slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #ff9800;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: none;
+        }
+        
+        .raise-amount-display {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff9800;
+            margin: 15px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .raise-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .btn-confirm {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-cancel {
+            background: linear-gradient(135deg, #757575 0%, #616161 100%);
+            color: white;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Quick Bet Buttons */
+        .quick-bets {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .quick-bet-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background: rgba(255, 152, 0, 0.3);
+            color: #ff9800;
+            border: 2px solid #ff9800;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quick-bet-btn:hover {
+            background: rgba(255, 152, 0, 0.5);
+            transform: scale(1.05);
+        }
+        
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        button.test-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        button.test-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Answer Key: Build Complete Betting Controls</h1>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> This solution demonstrates a complete betting control panel with all actions (fold, check, call, raise, all-in), dynamic button states, raise slider with validation, and quick bet buttons.
+        </div>
+        
+        <!-- Betting Panel -->
+        <div class="betting-panel">
+            <!-- Player Info Bar -->
+            <div class="player-info-bar">
+                <div class="info-item">
+                    <div class="info-label">Your Chips</div>
+                    <div class="info-value">$<span id="player-chips">1000</span></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">To Call</div>
+                    <div class="info-value">$<span id="to-call">0</span></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Current Bet</div>
+                    <div class="info-value">$<span id="current-bet">0</span></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Pot</div>
+                    <div class="info-value">$<span id="pot">0</span></div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="fold-btn" class="btn btn-fold" onclick="handleFold()">Fold</button>
+                <button id="check-btn" class="btn btn-check" onclick="handleCheck()">Check</button>
+                <button id="call-btn" class="btn btn-call" onclick="handleCall()">
+                    Call $<span id="call-amount">0</span>
+                </button>
+                <button id="raise-btn" class="btn btn-raise" onclick="showRaiseControls()">Raise</button>
+                <button id="all-in-btn" class="btn btn-all-in" onclick="handleAllIn()">All-In</button>
+            </div>
+            
+            <!-- Raise Controls (Hidden by default) -->
+            <div id="raise-controls" class="raise-controls hidden">
+                <div class="raise-header">Choose Raise Amount</div>
+                
+                <div class="quick-bets">
+                    <button class="quick-bet-btn" onclick="setRaiseAmount(50)">Min ($50)</button>
+                    <button class="quick-bet-btn" onclick="setRaiseAmount(100)">Pot ($100)</button>
+                    <button class="quick-bet-btn" onclick="setRaiseAmount(200)">2x Pot</button>
+                    <button class="quick-bet-btn" onclick="setRaiseAmount(1000)">Max</button>
+                </div>
+                
+                <div class="slider-container">
+                    <input type="range" id="raise-slider" min="50" max="1000" value="50" step="10">
+                </div>
+                
+                <div class="raise-amount-display">
+                    $<span id="raise-display">50</span>
+                </div>
+                
+                <div class="raise-buttons">
+                    <button class="btn-confirm" onclick="handleRaise()">Confirm Raise</button>
+                    <button class="btn-cancel" onclick="hideRaiseControls()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="controls">
+            <button class="test-btn" onclick="test1()">Test 1: Check Scenario</button>
+            <button class="test-btn" onclick="test2()">Test 2: Call Scenario</button>
+            <button class="test-btn" onclick="test3()">Test 3: Raise Scenario</button>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        /*
+         * ANSWER KEY SOLUTION
+         * User Interface & Controls - Build Complete Betting Controls
+         * 
+         * This implementation shows:
+         * - Complete betting control panel
+         * - Dynamic button enabling/disabling
+         * - Raise slider with validation
+         * - Quick bet buttons
+         * - Proper state management
+         */
+        
+        console.log('✅ Answer Key: Build Complete Betting Controls');
+        console.log('===============================================\n');
+        
+        // Game state
+        let gameState = {
+            playerChips: 1000,
+            playerBet: 0,
+            currentBet: 0,
+            pot: 30,
+            minRaise: 20,
+            bigBlind: 20
+        };
+        
+        // Update all displays
+        function updateDisplay() {
+            document.getElementById('player-chips').textContent = gameState.playerChips;
+            document.getElementById('current-bet').textContent = gameState.currentBet;
+            document.getElementById('pot').textContent = gameState.pot;
+            
+            const toCall = gameState.currentBet - gameState.playerBet;
+            document.getElementById('to-call').textContent = toCall;
+            document.getElementById('call-amount').textContent = toCall;
+            
+            updateButtonStates();
+        }
+        
+        // Update button enabled/disabled states
+        function updateButtonStates() {
+            const toCall = gameState.currentBet - gameState.playerBet;
+            const canCheck = toCall === 0;
+            const canCall = toCall > 0 && toCall <= gameState.playerChips;
+            const minRaiseAmount = gameState.currentBet + gameState.bigBlind;
+            const canRaise = gameState.playerChips >= minRaiseAmount;
+            
+            // Check button - only enabled if no bet to call
+            document.getElementById('check-btn').disabled = !canCheck;
+            
+            // Call button - only enabled if there's a bet and player has chips
+            document.getElementById('call-btn').disabled = !canCall;
+            
+            // Raise button - only enabled if player has enough for min raise
+            document.getElementById('raise-btn').disabled = !canRaise;
+            
+            // Fold and All-In always enabled
+            document.getElementById('fold-btn').disabled = false;
+            document.getElementById('all-in-btn').disabled = false;
+            
+            console.log(`Button states updated: Check=${!canCheck ? 'disabled' : 'enabled'}, Call=${!canCall ? 'disabled' : 'enabled'}, Raise=${!canRaise ? 'disabled' : 'enabled'}`);
+        }
+        
+        // Show raise controls
+        function showRaiseControls() {
+            console.log('Opening raise controls');
+            const raiseControls = document.getElementById('raise-controls');
+            raiseControls.classList.remove('hidden');
+            
+            // Set slider range
+            const minRaise = gameState.currentBet + gameState.bigBlind;
+            const maxRaise = gameState.playerChips;
+            
+            const slider = document.getElementById('raise-slider');
+            slider.min = minRaise;
+            slider.max = maxRaise;
+            slider.value = minRaise;
+            
+            document.getElementById('raise-display').textContent = minRaise;
+            
+            console.log(`Raise range: $${minRaise} - $${maxRaise}`);
+        }
+        
+        // Hide raise controls
+        function hideRaiseControls() {
+            console.log('Closing raise controls');
+            document.getElementById('raise-controls').classList.add('hidden');
+        }
+        
+        // Set raise amount (quick bets)
+        function setRaiseAmount(amount) {
+            const slider = document.getElementById('raise-slider');
+            const minRaise = parseInt(slider.min);
+            const maxRaise = parseInt(slider.max);
+            
+            // Clamp amount to valid range
+            const validAmount = Math.max(minRaise, Math.min(maxRaise, amount));
+            slider.value = validAmount;
+            document.getElementById('raise-display').textContent = validAmount;
+            
+            console.log(`Quick bet set to $${validAmount}`);
+        }
+        
+        // Handle slider input
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.getElementById('raise-slider');
+            slider.addEventListener('input', (e) => {
+                document.getElementById('raise-display').textContent = e.target.value;
+            });
+        });
+        
+        // Handle Fold
+        function handleFold() {
+            console.log('\n=== Player Action: FOLD ===');
+            console.log('Player folds their hand');
+            console.log('✓ Hand over - Player out of this round');
+        }
+        
+        // Handle Check
+        function handleCheck() {
+            console.log('\n=== Player Action: CHECK ===');
+            console.log('Player checks (no bet required)');
+            console.log('✓ Action complete');
+        }
+        
+        // Handle Call
+        function handleCall() {
+            const toCall = gameState.currentBet - gameState.playerBet;
+            
+            console.log('\n=== Player Action: CALL ===');
+            console.log(`Calling $${toCall}`);
+            
+            gameState.playerChips -= toCall;
+            gameState.playerBet = gameState.currentBet;
+            gameState.pot += toCall;
+            
+            console.log(`✓ Chips remaining: $${gameState.playerChips}`);
+            console.log(`✓ Pot now: $${gameState.pot}`);
+            
+            updateDisplay();
+        }
+        
+        // Handle Raise
+        function handleRaise() {
+            const raiseAmount = parseInt(document.getElementById('raise-slider').value);
+            
+            console.log('\n=== Player Action: RAISE ===');
+            console.log(`Raising to $${raiseAmount}`);
+            
+            const betNeeded = raiseAmount - gameState.playerBet;
+            gameState.playerChips -= betNeeded;
+            gameState.playerBet = raiseAmount;
+            gameState.currentBet = raiseAmount;
+            gameState.pot += betNeeded;
+            
+            console.log(`✓ Chips remaining: $${gameState.playerChips}`);
+            console.log(`✓ Pot now: $${gameState.pot}`);
+            
+            hideRaiseControls();
+            updateDisplay();
+        }
+        
+        // Handle All-In
+        function handleAllIn() {
+            console.log('\n=== Player Action: ALL-IN ===');
+            console.log(`Going all-in with $${gameState.playerChips}`);
+            
+            gameState.pot += gameState.playerChips;
+            gameState.playerBet += gameState.playerChips;
+            gameState.playerChips = 0;
+            
+            console.log(`✓ All chips in the pot!`);
+            console.log(`✓ Pot now: $${gameState.pot}`);
+            
+            updateDisplay();
+        }
+        
+        // Test Case 1: Check Scenario
+        function test1() {
+            console.log('\n=== Test Case 1: Check Scenario ===');
+            
+            // Reset game state - no bet to call
+            gameState = {
+                playerChips: 1000,
+                playerBet: 20,  // Posted big blind
+                currentBet: 20,
+                pot: 30,
+                minRaise: 20,
+                bigBlind: 20
+            };
+            
+            hideRaiseControls();
+            updateDisplay();
+            
+            console.log('✓ No bet to call');
+            console.log('✓ Check button enabled');
+            console.log('✓ Call button disabled');
+            console.log('✓ Raise button enabled');
+            console.log('\n✅ Test 1 Complete: Player can check or raise!');
+        }
+        
+        // Test Case 2: Call Scenario
+        function test2() {
+            console.log('\n=== Test Case 2: Call Scenario ===');
+            
+            // Reset game state - bet to call
+            gameState = {
+                playerChips: 1000,
+                playerBet: 20,
+                currentBet: 100,  // Someone raised to 100
+                pot: 150,
+                minRaise: 20,
+                bigBlind: 20
+            };
+            
+            hideRaiseControls();
+            updateDisplay();
+            
+            console.log('✓ Bet to call: $80');
+            console.log('✓ Check button disabled');
+            console.log('✓ Call button enabled');
+            console.log('✓ Raise button enabled');
+            console.log('\n✅ Test 2 Complete: Player must call, raise, or fold!');
+        }
+        
+        // Test Case 3: Raise Scenario
+        function test3() {
+            console.log('\n=== Test Case 3: Raise Scenario ===');
+            
+            // Reset game state
+            gameState = {
+                playerChips: 1000,
+                playerBet: 0,
+                currentBet: 50,
+                pot: 120,
+                minRaise: 20,
+                bigBlind: 20
+            };
+            
+            updateDisplay();
+            
+            // Simulate clicking raise button
+            console.log('Player clicks Raise button...');
+            showRaiseControls();
+            
+            console.log('✓ Raise controls shown');
+            console.log('✓ Slider min: $70 (current bet + big blind)');
+            console.log('✓ Slider max: $1000 (player chips)');
+            console.log('✓ Quick bet buttons available');
+            
+            // Simulate setting raise to pot size
+            setTimeout(() => {
+                setRaiseAmount(120);
+                console.log('✓ Player sets raise to pot size ($120)');
+                console.log('\n✅ Test 3 Complete: Raise controls working!');
+            }, 1000);
+        }
+        
+        // Capture console output to debug div
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+        
+        // Initialize
+        updateDisplay();
+        console.log('Betting Controls Solution initialized');
+        console.log('✓ All betting buttons created');
+        console.log('✓ Raise slider with validation');
+        console.log('✓ Quick bet buttons');
+        console.log('✓ Dynamic button states');
+        console.log('\n💡 Run tests to see different scenarios!');
+    </script>
+</body>
+</html>

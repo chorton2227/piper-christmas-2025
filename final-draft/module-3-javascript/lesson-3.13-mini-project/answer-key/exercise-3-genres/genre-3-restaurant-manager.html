@@ -1,0 +1,909 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Bistro Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, #fff5e6 0%, #ffe6cc 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 42px;
+        }
+        
+        .restaurant-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .main-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .kitchen {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .kitchen h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #ff6b6b;
+            padding-bottom: 10px;
+        }
+        
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .recipe-card {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 3px solid transparent;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border-color: #ff6b6b;
+        }
+        
+        .recipe-card.cooking {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            animation: cooking 1s infinite;
+        }
+        
+        @keyframes cooking {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .recipe-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .recipe-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .recipe-time {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .customers-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .customers-panel h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #ff6b6b;
+            padding-bottom: 10px;
+        }
+        
+        .customer-queue {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .customer {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            position: relative;
+        }
+        
+        .customer-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        
+        .customer-order {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .customer-patience {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .patience-bar {
+            height: 100%;
+            background: #00b894;
+            transition: width 0.3s;
+        }
+        
+        .patience-bar.low {
+            background: #fdcb6e;
+        }
+        
+        .patience-bar.critical {
+            background: #d63031;
+        }
+        
+        .serve-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            background: #00b894;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .serve-btn:hover {
+            background: #00d9a5;
+        }
+        
+        .serve-btn:disabled {
+            background: #dfe6e9;
+            cursor: not-allowed;
+        }
+        
+        .inventory {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .inventory h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .ingredient-item {
+            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .ingredient-icon {
+            font-size: 32px;
+        }
+        
+        .ingredient-name {
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        
+        .ingredient-amount {
+            font-size: 18px;
+            color: #0984e3;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .shop {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .shop h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .shop-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .shop-item {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .shop-item-info {
+            flex: 1;
+        }
+        
+        .shop-item button {
+            padding: 8px 16px;
+            background: #00b894;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .shop-item button:hover {
+            background: #00d9a5;
+        }
+        
+        .shop-item button:disabled {
+            background: #dfe6e9;
+            cursor: not-allowed;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.4);
+        }
+        
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 300px;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            animation: slideIn 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .message.success { background: #00b894; }
+        .message.error { background: #d63031; }
+        .message.info { background: #0984e3; }
+        
+        @media (max-width: 768px) {
+            .main-area {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="messages" class="messages"></div>
+    
+    <div class="container">
+        <h1>🍳 Tasty Bistro Manager 🍽️</h1>
+        
+        <div class="restaurant-stats">
+            <div class="stat-card">
+                <div class="stat-label">💰 Money</div>
+                <div class="stat-value" id="money">200</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">⭐ Reputation</div>
+                <div class="stat-value" id="reputation">50</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">👥 Served</div>
+                <div class="stat-value" id="served">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📅 Day</div>
+                <div class="stat-value" id="day">1</div>
+            </div>
+        </div>
+        
+        <div class="main-area">
+            <div class="kitchen">
+                <h2>🍳 Kitchen</h2>
+                <p>Click a recipe to start cooking!</p>
+                <div class="recipe-grid" id="recipes"></div>
+            </div>
+            
+            <div class="customers-panel">
+                <h2>👥 Customers (<span id="queue-count">0</span>)</h2>
+                <div class="customer-queue" id="customer-queue"></div>
+            </div>
+        </div>
+        
+        <div class="inventory">
+            <h2>🥬 Ingredients</h2>
+            <div class="ingredient-grid" id="ingredients"></div>
+        </div>
+        
+        <div class="shop">
+            <h2>🛒 Ingredient Shop</h2>
+            <div class="shop-items" id="shop"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn-primary" onclick="game.nextDay()">⏰ End Day</button>
+            <button class="btn-primary" onclick="game.saveGame()">💾 Save</button>
+            <button class="btn-primary" onclick="game.loadGame()">📂 Load</button>
+            <button class="btn-primary" onclick="game.resetGame()">🔄 Reset</button>
+        </div>
+    </div>
+    
+    <script>
+        // ========================================
+        // GAME DATA
+        // ========================================
+        
+        const INGREDIENTS = {
+            bread: { id: 'bread', name: 'Bread', icon: '🍞', cost: 5 },
+            cheese: { id: 'cheese', name: 'Cheese', icon: '🧀', cost: 8 },
+            tomato: { id: 'tomato', name: 'Tomato', icon: '🍅', cost: 6 },
+            lettuce: { id: 'lettuce', name: 'Lettuce', icon: '🥬', cost: 4 },
+            meat: { id: 'meat', name: 'Meat', icon: '🥩', cost: 15 },
+            pasta: { id: 'pasta', name: 'Pasta', icon: '🍝', cost: 7 },
+            sauce: { id: 'sauce', name: 'Sauce', icon: '🥫', cost: 5 },
+            rice: { id: 'rice', name: 'Rice', icon: '🍚', cost: 6 },
+            egg: { id: 'egg', name: 'Egg', icon: '🥚', cost: 3 }
+        };
+        
+        const RECIPES = {
+            sandwich: {
+                id: 'sandwich',
+                name: 'Sandwich',
+                icon: '🥪',
+                cookTime: 2,
+                ingredients: { bread: 2, cheese: 1, lettuce: 1 },
+                price: 30,
+                reputation: 5
+            },
+            burger: {
+                id: 'burger',
+                name: 'Burger',
+                icon: '🍔',
+                cookTime: 3,
+                ingredients: { bread: 1, meat: 1, tomato: 1, lettuce: 1 },
+                price: 50,
+                reputation: 10
+            },
+            pasta: {
+                id: 'pasta',
+                name: 'Pasta',
+                icon: '🍝',
+                cookTime: 4,
+                ingredients: { pasta: 2, sauce: 1, cheese: 1 },
+                price: 45,
+                reputation: 8
+            },
+            pizza: {
+                id: 'pizza',
+                name: 'Pizza',
+                icon: '🍕',
+                cookTime: 5,
+                ingredients: { bread: 1, cheese: 2, tomato: 2, meat: 1 },
+                price: 70,
+                reputation: 15
+            },
+            friedRice: {
+                id: 'friedRice',
+                name: 'Fried Rice',
+                icon: '🍳',
+                cookTime: 3,
+                ingredients: { rice: 2, egg: 2, meat: 1 },
+                price: 40,
+                reputation: 8
+            },
+            salad: {
+                id: 'salad',
+                name: 'Salad',
+                icon: '🥗',
+                cookTime: 1,
+                ingredients: { lettuce: 2, tomato: 1 },
+                price: 20,
+                reputation: 3
+            }
+        };
+        
+        const CUSTOMER_TYPES = [
+            { icon: '👨', patience: 30 },
+            { icon: '👩', patience: 35 },
+            { icon: '👴', patience: 40 },
+            { icon: '👵', patience: 45 },
+            { icon: '👦', patience: 25 },
+            { icon: '👧', patience: 28 }
+        ];
+        
+        // ========================================
+        // GAME OBJECT
+        // ========================================
+        
+        const game = {
+            money: 200,
+            reputation: 50,
+            day: 1,
+            customersServed: 0,
+            
+            inventory: {
+                bread: 10,
+                cheese: 5,
+                tomato: 5,
+                lettuce: 5,
+                meat: 3,
+                pasta: 5,
+                sauce: 5,
+                rice: 5,
+                egg: 5
+            },
+            
+            cooking: [],
+            customers: [],
+            nextCustomerId: 1,
+            
+            customerTimer: null,
+            cookingTimer: null,
+            patienceTimer: null,
+            
+            init() {
+                this.updateUI();
+                this.renderRecipes();
+                this.renderIngredients();
+                this.renderShop();
+                
+                this.startCustomerTimer();
+                this.startCookingTimer();
+                this.startPatienceTimer();
+                
+                if (localStorage.getItem('restaurantGame')) {
+                    this.showMessage('Saved game found! Click Load.', 'info');
+                }
+            },
+            
+            updateUI() {
+                document.getElementById('money').textContent = this.money;
+                document.getElementById('reputation').textContent = this.reputation;
+                document.getElementById('served').textContent = this.customersServed;
+                document.getElementById('day').textContent = this.day;
+                document.getElementById('queue-count').textContent = this.customers.length;
+            },
+            
+            startCustomerTimer() {
+                this.customerTimer = setInterval(() => {
+                    if (this.customers.length < 5 && Math.random() < 0.3) {
+                        this.addCustomer();
+                    }
+                }, 3000);
+            },
+            
+            startCookingTimer() {
+                this.cookingTimer = setInterval(() => {
+                    this.cooking.forEach(item => {
+                        item.timeLeft--;
+                        if (item.timeLeft <= 0) {
+                            item.done = true;
+                        }
+                    });
+                    this.renderRecipes();
+                }, 1000);
+            },
+            
+            startPatienceTimer() {
+                this.patienceTimer = setInterval(() => {
+                    let changed = false;
+                    this.customers.forEach((customer, index) => {
+                        customer.patience--;
+                        if (customer.patience <= 0) {
+                            this.customerLeaves(index);
+                            changed = true;
+                        }
+                    });
+                    if (changed) {
+                        this.customers = this.customers.filter(c => c.patience > 0);
+                    }
+                    this.renderCustomers();
+                }, 1000);
+            },
+            
+            addCustomer() {
+                const type = CUSTOMER_TYPES[Math.floor(Math.random() * CUSTOMER_TYPES.length)];
+                const recipeIds = Object.keys(RECIPES);
+                const wantedRecipe = recipeIds[Math.floor(Math.random() * recipeIds.length)];
+                
+                this.customers.push({
+                    id: this.nextCustomerId++,
+                    icon: type.icon,
+                    maxPatience: type.patience,
+                    patience: type.patience,
+                    order: wantedRecipe
+                });
+                
+                this.renderCustomers();
+                this.updateUI();
+            },
+            
+            customerLeaves(index) {
+                const customer = this.customers[index];
+                this.reputation = Math.max(0, this.reputation - 5);
+                this.showMessage('Customer left angry! -5 reputation', 'error');
+            },
+            
+            renderRecipes() {
+                const container = document.getElementById('recipes');
+                container.innerHTML = '';
+                
+                for (let id in RECIPES) {
+                    const recipe = RECIPES[id];
+                    const cooking = this.cooking.find(c => c.recipeId === id);
+                    
+                    const div = document.createElement('div');
+                    div.className = 'recipe-card';
+                    if (cooking) div.classList.add('cooking');
+                    
+                    let timeDisplay = '';
+                    if (cooking) {
+                        if (cooking.done) {
+                            timeDisplay = 'Ready! ✓';
+                        } else {
+                            timeDisplay = `${cooking.timeLeft}s...`;
+                        }
+                    } else {
+                        timeDisplay = `${recipe.cookTime}s`;
+                    }
+                    
+                    div.innerHTML = `
+                        <div class="recipe-icon">${recipe.icon}</div>
+                        <div class="recipe-name">${recipe.name}</div>
+                        <div class="recipe-time">${timeDisplay}</div>
+                        <div style="font-size: 12px; margin-top: 5px;">$${recipe.price}</div>
+                    `;
+                    
+                    if (!cooking) {
+                        div.onclick = () => this.startCooking(id);
+                    }
+                    
+                    container.appendChild(div);
+                }
+            },
+            
+            startCooking(recipeId) {
+                const recipe = RECIPES[recipeId];
+                
+                // Check if already cooking this
+                if (this.cooking.find(c => c.recipeId === recipeId)) {
+                    this.showMessage('Already cooking this!', 'error');
+                    return;
+                }
+                
+                // Check ingredients
+                for (let ingId in recipe.ingredients) {
+                    const needed = recipe.ingredients[ingId];
+                    if ((this.inventory[ingId] || 0) < needed) {
+                        this.showMessage(`Not enough ${INGREDIENTS[ingId].name}!`, 'error');
+                        return;
+                    }
+                }
+                
+                // Consume ingredients
+                for (let ingId in recipe.ingredients) {
+                    this.inventory[ingId] -= recipe.ingredients[ingId];
+                }
+                
+                this.cooking.push({
+                    recipeId: recipeId,
+                    timeLeft: recipe.cookTime,
+                    done: false
+                });
+                
+                this.showMessage(`Started cooking ${recipe.name}!`, 'info');
+                this.renderIngredients();
+                this.renderRecipes();
+            },
+            
+            renderCustomers() {
+                const container = document.getElementById('customer-queue');
+                container.innerHTML = '';
+                
+                if (this.customers.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #aaa;">Waiting for customers...</p>';
+                    return;
+                }
+                
+                this.customers.forEach((customer, index) => {
+                    const recipe = RECIPES[customer.order];
+                    const patiencePct = (customer.patience / customer.maxPatience) * 100;
+                    
+                    let barClass = '';
+                    if (patiencePct < 33) barClass = 'critical';
+                    else if (patiencePct < 66) barClass = 'low';
+                    
+                    const cookedItem = this.cooking.find(c => c.recipeId === customer.order && c.done);
+                    
+                    const div = document.createElement('div');
+                    div.className = 'customer';
+                    div.innerHTML = `
+                        <div class="customer-icon">${customer.icon}</div>
+                        <div class="customer-order">Wants: ${recipe.icon} ${recipe.name}</div>
+                        <div class="customer-patience">
+                            <div class="patience-bar ${barClass}" style="width: ${patiencePct}%"></div>
+                        </div>
+                        <button class="serve-btn" onclick="game.serveCustomer(${index}, '${customer.order}')" ${!cookedItem ? 'disabled' : ''}>
+                            ${cookedItem ? 'SERVE!' : 'Cooking...'}
+                        </button>
+                    `;
+                    container.appendChild(div);
+                });
+            },
+            
+            serveCustomer(customerIndex, recipeId) {
+                const customer = this.customers[customerIndex];
+                const recipe = RECIPES[recipeId];
+                const cookingIndex = this.cooking.findIndex(c => c.recipeId === recipeId && c.done);
+                
+                if (cookingIndex === -1) {
+                    this.showMessage('Dish not ready!', 'error');
+                    return;
+                }
+                
+                // Remove cooked item
+                this.cooking.splice(cookingIndex, 1);
+                
+                // Calculate tip based on patience
+                const patiencePct = customer.patience / customer.maxPatience;
+                const tip = patiencePct > 0.8 ? Math.floor(recipe.price * 0.5) : 0;
+                const total = recipe.price + tip;
+                
+                this.money += total;
+                this.reputation += recipe.reputation;
+                this.customersServed++;
+                
+                // Remove customer
+                this.customers.splice(customerIndex, 1);
+                
+                if (tip > 0) {
+                    this.showMessage(`Served! +$${total} (${tip} tip!)`, 'success');
+                } else {
+                    this.showMessage(`Served! +$${total}`, 'success');
+                }
+                
+                this.updateUI();
+                this.renderCustomers();
+                this.renderRecipes();
+            },
+            
+            renderIngredients() {
+                const container = document.getElementById('ingredients');
+                container.innerHTML = '';
+                
+                for (let id in INGREDIENTS) {
+                    const ing = INGREDIENTS[id];
+                    const amount = this.inventory[id] || 0;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'ingredient-item';
+                    div.innerHTML = `
+                        <div class="ingredient-icon">${ing.icon}</div>
+                        <div class="ingredient-name">${ing.name}</div>
+                        <div class="ingredient-amount">×${amount}</div>
+                    `;
+                    container.appendChild(div);
+                }
+            },
+            
+            renderShop() {
+                const container = document.getElementById('shop');
+                container.innerHTML = '';
+                
+                for (let id in INGREDIENTS) {
+                    const ing = INGREDIENTS[id];
+                    
+                    const div = document.createElement('div');
+                    div.className = 'shop-item';
+                    div.innerHTML = `
+                        <div class="shop-item-info">
+                            <div>${ing.icon} ${ing.name}</div>
+                            <div style="font-size: 12px; color: #666;">$${ing.cost} each</div>
+                        </div>
+                        <button onclick="game.buyIngredient('${id}', 5)">Buy 5 ($${ing.cost * 5})</button>
+                    `;
+                    container.appendChild(div);
+                }
+            },
+            
+            buyIngredient(ingId, amount) {
+                const ing = INGREDIENTS[ingId];
+                const cost = ing.cost * amount;
+                
+                if (this.money < cost) {
+                    this.showMessage('Not enough money!', 'error');
+                    return;
+                }
+                
+                this.money -= cost;
+                this.inventory[ingId] = (this.inventory[ingId] || 0) + amount;
+                
+                this.showMessage(`Bought ${amount}x ${ing.name}!`, 'success');
+                this.updateUI();
+                this.renderIngredients();
+            },
+            
+            nextDay() {
+                // End of day penalties
+                if (this.customers.length > 0) {
+                    const penalty = this.customers.length * 3;
+                    this.reputation = Math.max(0, this.reputation - penalty);
+                    this.showMessage(`Day ended with ${this.customers.length} waiting customers! -${penalty} reputation`, 'error');
+                }
+                
+                this.day++;
+                this.customers = [];
+                this.cooking = [];
+                
+                this.showMessage('New day!', 'info');
+                this.updateUI();
+                this.renderCustomers();
+                this.renderRecipes();
+            },
+            
+            showMessage(text, type) {
+                const container = document.getElementById('messages');
+                const msg = document.createElement('div');
+                msg.className = `message ${type}`;
+                msg.textContent = text;
+                container.appendChild(msg);
+                
+                setTimeout(() => {
+                    msg.style.opacity = '0';
+                    msg.style.transform = 'translateX(100%)';
+                    setTimeout(() => msg.remove(), 300);
+                }, 3000);
+            },
+            
+            saveGame() {
+                const data = {
+                    money: this.money,
+                    reputation: this.reputation,
+                    day: this.day,
+                    customersServed: this.customersServed,
+                    inventory: this.inventory,
+                    cooking: this.cooking,
+                    customers: this.customers
+                };
+                
+                localStorage.setItem('restaurantGame', JSON.stringify(data));
+                this.showMessage('Game saved!', 'success');
+            },
+            
+            loadGame() {
+                const saved = localStorage.getItem('restaurantGame');
+                if (!saved) {
+                    this.showMessage('No saved game!', 'error');
+                    return;
+                }
+                
+                const data = JSON.parse(saved);
+                this.money = data.money;
+                this.reputation = data.reputation;
+                this.day = data.day;
+                this.customersServed = data.customersServed;
+                this.inventory = data.inventory;
+                this.cooking = data.cooking || [];
+                this.customers = data.customers || [];
+                
+                this.updateUI();
+                this.renderRecipes();
+                this.renderIngredients();
+                this.renderCustomers();
+                this.showMessage('Game loaded!', 'success');
+            },
+            
+            resetGame() {
+                if (confirm('Start new game? All progress will be lost!')) {
+                    localStorage.removeItem('restaurantGame');
+                    location.reload();
+                }
+            }
+        };
+        
+        // Initialize game
+        game.init();
+    </script>
+</body>

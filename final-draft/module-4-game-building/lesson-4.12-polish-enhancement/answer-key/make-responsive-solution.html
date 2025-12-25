@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Answer Key: Responsive Design - Polish & Enhancement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: clamp(20px, 4vw, 36px);
+        }
+
+        .description {
+            text-align: center;
+            color: #ddd;
+            margin-bottom: 15px;
+            font-size: clamp(12px, 2.5vw, 16px);
+        }
+
+        .device-indicator {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: clamp(12px, 2vw, 14px);
+        }
+
+        /* ================================
+           MOBILE FIRST (Base Styles)
+           ================================ */
+
+        .poker-table {
+            background: radial-gradient(ellipse at center, #1a5d1a 0%, #0d4d0d 100%);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 
+                inset 0 0 50px rgba(0, 0, 0, 0.3),
+                0 5px 25px rgba(0, 0, 0, 0.5);
+            border: 5px solid #8b4513;
+            position: relative;
+            min-height: 300px;
+            margin: 10px auto;
+            width: 100%;
+        }
+
+        .player-seats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .player-seat {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+
+        .player-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: clamp(12px, 2.5vw, 16px);
+        }
+
+        .player-chips {
+            color: #ffd700;
+            font-size: clamp(11px, 2vw, 14px);
+        }
+
+        .player-cards {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .community-area {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .community-cards {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        /* Mobile card size */
+        .card {
+            width: 50px;
+            height: 75px;
+            background: white;
+            border-radius: 5px;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+
+        .pot-display {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            font-size: clamp(16px, 3vw, 24px);
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: inline-block;
+        }
+
+        /* Mobile action buttons - stacked */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            min-height: 48px;  /* Touch-friendly minimum */
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Only show hover on hover-capable devices */
+        @media (hover: hover) {
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .btn-fold {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #4CAF50, #388e3c);
+            color: white;
+        }
+
+        .btn-raise {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        /* Debug Log - smaller on mobile */
+        .debug {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #4ec9b0;
+            white-space: pre-wrap;
+            font-size: clamp(10px, 1.8vw, 14px);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* ================================
+           SMALL PHONES (480px and up)
+           ================================ */
+
+        @media (min-width: 480px) {
+            .poker-table {
+                border-radius: 30px;
+                padding: 20px;
+                min-height: 400px;
+                border-width: 8px;
+            }
+
+            .player-seats {
+                gap: 12px;
+            }
+
+            .card {
+                width: 60px;
+                height: 90px;
+                font-size: 18px;
+            }
+        }
+
+        /* ================================
+           TABLET (768px and up)
+           ================================ */
+
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .poker-table {
+                border-radius: 100px;
+                padding: 40px;
+                min-height: 550px;
+                border-width: 15px;
+            }
+
+            .player-seats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+
+            .player-seat {
+                padding: 15px;
+            }
+
+            /* Tablet card size */
+            .card {
+                width: 70px;
+                height: 105px;
+                font-size: 20px;
+                border-radius: 7px;
+            }
+
+            .community-cards {
+                gap: 12px;
+            }
+
+            .pot-display {
+                padding: 12px 25px;
+            }
+
+            /* Tablet buttons - horizontal */
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+                padding: 20px;
+            }
+
+            .btn {
+                min-width: 140px;
+            }
+
+            .debug {
+                max-height: 250px;
+                padding: 18px;
+            }
+        }
+
+        /* ================================
+           DESKTOP (1024px and up)
+           ================================ */
+
+        @media (min-width: 1024px) {
+            .poker-table {
+                border-radius: 150px;
+                padding: 60px;
+                min-height: 700px;
+                border-width: 20px;
+            }
+
+            .player-seats {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 25px;
+            }
+
+            .player-seat {
+                padding: 20px;
+            }
+
+            /* Desktop card size */
+            .card {
+                width: 80px;
+                height: 120px;
+                font-size: 24px;
+                border-radius: 8px;
+            }
+
+            .community-cards {
+                gap: 15px;
+            }
+
+            .pot-display {
+                padding: 15px 30px;
+            }
+
+            .btn {
+                min-width: 160px;
+                padding: 15px 25px;
+                font-size: 18px;
+            }
+
+            .debug {
+                max-height: 300px;
+                padding: 20px;
+            }
+        }
+
+        /* ================================
+           ORIENTATION HANDLING
+           ================================ */
+
+        body.portrait .poker-table {
+            border-radius: 30px;
+        }
+
+        body.landscape .poker-table {
+            border-radius: 100px;
+        }
+
+        /* ================================
+           LARGE DESKTOP (1440px and up)
+           ================================ */
+
+        @media (min-width: 1440px) {
+            .poker-table {
+                border-radius: 200px;
+                min-height: 800px;
+            }
+
+            .card {
+                width: 90px;
+                height: 135px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Answer Key: Responsive Design</h1>
+        <p class="description">Poker table that adapts to mobile, tablet, and desktop screens</p>
+
+        <div class="device-indicator" id="deviceIndicator">
+            Loading...
+        </div>
+
+        <div class="poker-table">
+            <div class="player-seats" id="playerSeats">
+                <!-- Players will be added here -->
+            </div>
+
+            <div class="community-area">
+                <div class="community-cards" id="communityCards">
+                    <!-- Community cards will be added here -->
+                </div>
+                
+                <div class="pot-display">
+                    Pot: $<span id="potAmount">450</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-fold" onclick="testAction('Fold')">Fold</button>
+                <button class="btn btn-call" onclick="testAction('Call $50')">Call $50</button>
+                <button class="btn btn-raise" onclick="testAction('Raise to $100')">Raise to $100</button>
+            </div>
+        </div>
+
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        console.log('Responsive Design Implementation loaded\n');
+
+        // =========================
+        // RESPONSIVE UTILITIES
+        // =========================
+
+        function getDeviceType() {
+            const width = window.innerWidth;
+            if (width < 768) return 'Mobile';
+            if (width < 1024) return 'Tablet';
+            if (width < 1440) return 'Desktop';
+            return 'Large Desktop';
+        }
+
+        function getOrientation() {
+            return window.innerHeight > window.innerWidth ? 'Portrait' : 'Landscape';
+        }
+
+        function updateDeviceIndicator() {
+            const device = getDeviceType();
+            const orientation = getOrientation();
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            const indicator = document.getElementById('deviceIndicator');
+            indicator.textContent = `${device} | ${orientation} | ${width}x${height}`;
+            
+            console.log(`Screen: ${device} (${orientation}) - ${width}x${height}`);
+        }
+
+        function handleOrientation() {
+            const isPortrait = window.innerHeight > window.innerWidth;
+            document.body.classList.toggle('portrait', isPortrait);
+            document.body.classList.toggle('landscape', !isPortrait);
+            
+            console.log(`Orientation changed: ${isPortrait ? 'Portrait' : 'Landscape'}`);
+        }
+
+        // =========================
+        // CARD FUNCTIONS
+        // =========================
+
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit];
+        }
+
+        function createCard(rank, suit) {
+            const card = document.createElement('div');
+            card.className = `card ${suit}`;
+            card.textContent = rank + getSuitSymbol(suit);
+            return card;
+        }
+
+        // =========================
+        // PLAYER SETUP
+        // =========================
+
+        function setupPlayers() {
+            const players = [
+                { name: 'You', chips: 2000, cards: ['A♠', 'K♠'] },
+                { name: 'Alice', chips: 1800, cards: ['Q♥', 'Q♦'] },
+                { name: 'Bob', chips: 1500, cards: ['J♣', '10♣'] },
+                { name: 'Carol', chips: 2200, cards: ['A♥', 'K♥'] }
+            ];
+
+            const container = document.getElementById('playerSeats');
+            
+            players.forEach(player => {
+                const seat = document.createElement('div');
+                seat.className = 'player-seat';
+                seat.innerHTML = `
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-chips">$${player.chips}</div>
+                    <div class="player-cards">${player.cards.join(' ')}</div>
+                `;
+                container.appendChild(seat);
+            });
+
+            console.log(`Setup ${players.length} players`);
+        }
+
+        // =========================
+        // COMMUNITY CARDS
+        // =========================
+
+        function setupCommunityCards() {
+            const cards = [
+                { rank: 'A', suit: 'diamonds' },
+                { rank: 'K', suit: 'spades' },
+                { rank: 'Q', suit: 'hearts' },
+                { rank: 'J', suit: 'clubs' },
+                { rank: '10', suit: 'diamonds' }
+            ];
+
+            const container = document.getElementById('communityCards');
+            
+            cards.forEach(cardData => {
+                const card = createCard(cardData.rank, cardData.suit);
+                container.appendChild(card);
+            });
+
+            console.log('Community cards dealt');
+        }
+
+        // =========================
+        // ACTION HANDLER
+        // =========================
+
+        function testAction(action) {
+            console.log(`\nAction: ${action}`);
+            console.log(`Device: ${getDeviceType()}`);
+            console.log(`Screen: ${window.innerWidth}x${window.innerHeight}`);
+        }
+
+        // =========================
+        // EVENT LISTENERS
+        // =========================
+
+        window.addEventListener('resize', () => {
+            updateDeviceIndicator();
+            handleOrientation();
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateDeviceIndicator();
+                handleOrientation();
+            }, 100);
+        });
+
+        // =========================
+        // INITIALIZATION
+        // =========================
+
+        window.addEventListener('load', () => {
+            console.log('=== RESPONSIVE DESIGN IMPLEMENTATION ===\n');
+            
+            updateDeviceIndicator();
+            handleOrientation();
+            setupPlayers();
+            setupCommunityCards();
+            
+            console.log('\nResponsive features:');
+            console.log('✓ Mobile-first design');
+            console.log('✓ Breakpoints: 768px (tablet), 1024px (desktop), 1440px (large)');
+            console.log('✓ Touch-friendly buttons (min 48px height)');
+            console.log('✓ Flexible card sizes');
+            console.log('✓ Orientation detection');
+            console.log('✓ Viewport meta tag configured');
+            console.log('\nResize window to see responsive changes!');
+        });
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        };
+    </script>
+</body>
+</html>

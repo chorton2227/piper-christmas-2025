@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Calculator Functions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #4facfe;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4facfe;
+        }
+        .section h2 {
+            color: #4facfe;
+            margin-top: 0;
+        }
+        .code-note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 Calculator Functions</h1>
+        <p class="subtitle">Building a complete calculator with functions</p>
+
+        <div class="section">
+            <h2>Basic Math Operations</h2>
+            <p>Addition, subtraction, multiplication, division.</p>
+        </div>
+
+        <div class="section">
+            <h2>Advanced Calculations</h2>
+            <p>Percentages, averages, and more complex operations.</p>
+        </div>
+
+        <div class="section">
+            <h2>Unit Conversions</h2>
+            <p>Convert between different units of measurement.</p>
+        </div>
+
+        <div class="section">
+            <h2>Real-World Applications</h2>
+            <p>Shopping, budgeting, and grade calculations.</p>
+        </div>
+
+        <p style="text-align: center; color: #666; margin-top: 30px;">
+            <strong>Open the console (F12) to see all calculations!</strong>
+        </p>
+    </div>
+
+    <script>
+        console.log('='.repeat(60));
+        console.log('🧮 CALCULATOR FUNCTIONS DEMONSTRATION');
+        console.log('='.repeat(60));
+
+        // ============================================
+        // PART 1: BASIC MATH OPERATIONS
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 1: BASIC MATH OPERATIONS');
+        console.log('='.repeat(60));
+
+        // Addition
+        function add(a, b) {
+            return a + b;
+        }
+
+        // Subtraction
+        function subtract(a, b) {
+            return a - b;
+        }
+
+        // Multiplication
+        function multiply(a, b) {
+            return a * b;
+        }
+
+        // Division
+        function divide(a, b) {
+            if (b === 0) {
+                return 'Error: Cannot divide by zero';
+            }
+            return a / b;
+        }
+
+        // Modulo (remainder)
+        function remainder(a, b) {
+            return a % b;
+        }
+
+        // Power (exponent)
+        function power(base, exponent) {
+            return Math.pow(base, exponent);
+        }
+
+        console.log('\n➕ Addition:');
+        console.log('5 + 3 =', add(5, 3));
+        console.log('10 + 25 =', add(10, 25));
+        console.log('100 + 50 =', add(100, 50));
+
+        console.log('\n➖ Subtraction:');
+        console.log('10 - 3 =', subtract(10, 3));
+        console.log('50 - 25 =', subtract(50, 25));
+        console.log('100 - 75 =', subtract(100, 75));
+
+        console.log('\n✖️ Multiplication:');
+        console.log('5 × 3 =', multiply(5, 3));
+        console.log('12 × 8 =', multiply(12, 8));
+        console.log('25 × 4 =', multiply(25, 4));
+
+        console.log('\n➗ Division:');
+        console.log('20 ÷ 4 =', divide(20, 4));
+        console.log('100 ÷ 5 =', divide(100, 5));
+        console.log('15 ÷ 2 =', divide(15, 2));
+        console.log('10 ÷ 0 =', divide(10, 0));
+
+        console.log('\n🔢 Remainder (modulo):');
+        console.log('10 % 3 =', remainder(10, 3));
+        console.log('17 % 5 =', remainder(17, 5));
+        console.log('100 % 7 =', remainder(100, 7));
+
+        console.log('\n⚡ Power (exponent):');
+        console.log('2³ =', power(2, 3));
+        console.log('5² =', power(5, 2));
+        console.log('10³ =', power(10, 3));
+
+        // ============================================
+        // PART 2: ADVANCED CALCULATIONS
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 2: ADVANCED CALCULATIONS');
+        console.log('='.repeat(60));
+
+        // Calculate percentage
+        function calculatePercentage(value, total) {
+            return (value / total) * 100;
+        }
+
+        // Calculate percentage of a number
+        function percentageOf(percent, number) {
+            return (percent / 100) * number;
+        }
+
+        // Calculate average of two numbers
+        function average2(a, b) {
+            return (a + b) / 2;
+        }
+
+        // Calculate average of three numbers
+        function average3(a, b, c) {
+            return (a + b + c) / 3;
+        }
+
+        // Calculate average of four numbers
+        function average4(a, b, c, d) {
+            return (a + b + c + d) / 4;
+        }
+
+        // Round to decimal places
+        function roundTo(number, decimalPlaces) {
+            let multiplier = Math.pow(10, decimalPlaces);
+            return Math.round(number * multiplier) / multiplier;
+        }
+
+        // Calculate square root
+        function squareRoot(number) {
+            return Math.sqrt(number);
+        }
+
+        // Calculate absolute value
+        function absolute(number) {
+            return Math.abs(number);
+        }
+
+        console.log('\n📊 Percentages:');
+        console.log('25 out of 100 =', calculatePercentage(25, 100) + '%');
+        console.log('75 out of 150 =', roundTo(calculatePercentage(75, 150), 2) + '%');
+        console.log('18 out of 20 =', calculatePercentage(18, 20) + '%');
+
+        console.log('\n💯 Percentage of a number:');
+        console.log('20% of 100 =', percentageOf(20, 100));
+        console.log('15% of 200 =', percentageOf(15, 200));
+        console.log('50% of 80 =', percentageOf(50, 80));
+
+        console.log('\n📈 Averages:');
+        console.log('Average of 10 and 20 =', average2(10, 20));
+        console.log('Average of 5, 10, and 15 =', average3(5, 10, 15));
+        console.log('Average of 10, 20, 30, 40 =', average4(10, 20, 30, 40));
+
+        console.log('\n🎯 Rounding:');
+        console.log('3.14159 rounded to 2 places =', roundTo(3.14159, 2));
+        console.log('7.89654 rounded to 3 places =', roundTo(7.89654, 3));
+        console.log('123.456789 rounded to 1 place =', roundTo(123.456789, 1));
+
+        console.log('\n✅ Other operations:');
+        console.log('Square root of 16 =', squareRoot(16));
+        console.log('Square root of 144 =', squareRoot(144));
+        console.log('Absolute value of -42 =', absolute(-42));
+        console.log('Absolute value of -100 =', absolute(-100));
+
+        // ============================================
+        // PART 3: UNIT CONVERSIONS
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 3: UNIT CONVERSIONS');
+        console.log('='.repeat(60));
+
+        // Temperature conversions
+        function celsiusToFahrenheit(celsius) {
+            return (celsius * 9 / 5) + 32;
+        }
+
+        function fahrenheitToCelsius(fahrenheit) {
+            return (fahrenheit - 32) * 5 / 9;
+        }
+
+        // Distance conversions
+        function milesToKilometers(miles) {
+            return miles * 1.60934;
+        }
+
+        function kilometersToMiles(km) {
+            return km / 1.60934;
+        }
+
+        function feetToMeters(feet) {
+            return feet * 0.3048;
+        }
+
+        function metersToFeet(meters) {
+            return meters / 0.3048;
+        }
+
+        // Weight conversions
+        function poundsToKilograms(pounds) {
+            return pounds * 0.453592;
+        }
+
+        function kilogramsToPounds(kg) {
+            return kg / 0.453592;
+        }
+
+        // Time conversions
+        function hoursToMinutes(hours) {
+            return hours * 60;
+        }
+
+        function minutesToHours(minutes) {
+            return minutes / 60;
+        }
+
+        function hoursToSeconds(hours) {
+            return hours * 3600;
+        }
+
+        console.log('\n🌡️  Temperature:');
+        console.log('0°C =', celsiusToFahrenheit(0) + '°F');
+        console.log('25°C =', celsiusToFahrenheit(25) + '°F');
+        console.log('100°C =', celsiusToFahrenheit(100) + '°F');
+        console.log('32°F =', fahrenheitToCelsius(32) + '°C');
+        console.log('98.6°F =', roundTo(fahrenheitToCelsius(98.6), 1) + '°C');
+
+        console.log('\n📏 Distance:');
+        console.log('1 mile =', roundTo(milesToKilometers(1), 2) + ' km');
+        console.log('5 miles =', roundTo(milesToKilometers(5), 2) + ' km');
+        console.log('10 km =', roundTo(kilometersToMiles(10), 2) + ' miles');
+        console.log('10 feet =', roundTo(feetToMeters(10), 2) + ' meters');
+        console.log('100 meters =', roundTo(metersToFeet(100), 2) + ' feet');
+
+        console.log('\n⚖️  Weight:');
+        console.log('1 pound =', roundTo(poundsToKilograms(1), 2) + ' kg');
+        console.log('150 pounds =', roundTo(poundsToKilograms(150), 2) + ' kg');
+        console.log('70 kg =', roundTo(kilogramsToPounds(70), 2) + ' pounds');
+
+        console.log('\n⏰ Time:');
+        console.log('2 hours =', hoursToMinutes(2) + ' minutes');
+        console.log('1.5 hours =', hoursToMinutes(1.5) + ' minutes');
+        console.log('90 minutes =', minutesToHours(90) + ' hours');
+        console.log('2 hours =', hoursToSeconds(2) + ' seconds');
+
+        // ============================================
+        // PART 4: REAL-WORLD APPLICATIONS
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 4: REAL-WORLD APPLICATIONS');
+        console.log('='.repeat(60));
+
+        // Shopping calculations
+        function calculateTax(price, taxRate) {
+            return price * taxRate;
+        }
+
+        function calculateTip(billAmount, tipPercent) {
+            return billAmount * (tipPercent / 100);
+        }
+
+        function calculateDiscount(price, discountPercent) {
+            return price * (discountPercent / 100);
+        }
+
+        function calculateFinalPrice(price, taxRate, tipPercent) {
+            let tax = calculateTax(price, taxRate);
+            let tip = calculateTip(price, tipPercent);
+            return price + tax + tip;
+        }
+
+        // Savings calculations
+        function calculateSimpleInterest(principal, rate, time) {
+            return principal * (rate / 100) * time;
+        }
+
+        function calculateFutureValue(principal, rate, time) {
+            let interest = calculateSimpleInterest(principal, rate, time);
+            return principal + interest;
+        }
+
+        // Grade calculations
+        function calculateGradeAverage(grade1, grade2, grade3, grade4, grade5) {
+            return (grade1 + grade2 + grade3 + grade4 + grade5) / 5;
+        }
+
+        function getLetterGrade(numericGrade) {
+            if (numericGrade >= 90) return 'A';
+            if (numericGrade >= 80) return 'B';
+            if (numericGrade >= 70) return 'C';
+            if (numericGrade >= 60) return 'D';
+            return 'F';
+        }
+
+        function isPassingGrade(grade) {
+            return grade >= 60;
+        }
+
+        console.log('\n🛒 Shopping Calculations:');
+        console.log('─'.repeat(40));
+        let itemPrice = 50.00;
+        let taxRate = 0.08;
+        let tipPercent = 15;
+
+        console.log('Item price: $' + itemPrice.toFixed(2));
+        console.log('Tax (8%): $' + calculateTax(itemPrice, taxRate).toFixed(2));
+        console.log('Tip (15%): $' + calculateTip(itemPrice, tipPercent).toFixed(2));
+        console.log('Total: $' + calculateFinalPrice(itemPrice, taxRate, tipPercent).toFixed(2));
+
+        console.log('\n💼 Discount Example:');
+        console.log('─'.repeat(40));
+        let originalPrice = 100.00;
+        let discountPercent = 20;
+        let discountAmount = calculateDiscount(originalPrice, discountPercent);
+        let salePrice = originalPrice - discountAmount;
+
+        console.log('Original price: $' + originalPrice.toFixed(2));
+        console.log('Discount (20%): -$' + discountAmount.toFixed(2));
+        console.log('Sale price: $' + salePrice.toFixed(2));
+        console.log('You save: $' + discountAmount.toFixed(2));
+
+        console.log('\n💰 Savings Account:');
+        console.log('─'.repeat(40));
+        let principal = 1000;
+        let interestRate = 5;
+        let years = 3;
+
+        let interest = calculateSimpleInterest(principal, interestRate, years);
+        let futureValue = calculateFutureValue(principal, interestRate, years);
+
+        console.log('Starting balance: $' + principal);
+        console.log('Interest rate: ' + interestRate + '%');
+        console.log('Time: ' + years + ' years');
+        console.log('Interest earned: $' + interest);
+        console.log('Final balance: $' + futureValue);
+
+        console.log('\n📚 Grade Calculator:');
+        console.log('─'.repeat(40));
+        let test1 = 85;
+        let test2 = 92;
+        let test3 = 78;
+        let test4 = 95;
+        let test5 = 88;
+
+        let gradeAverage = calculateGradeAverage(test1, test2, test3, test4, test5);
+        let letterGrade = getLetterGrade(gradeAverage);
+        let passing = isPassingGrade(gradeAverage);
+
+        console.log('Test scores:', test1, test2, test3, test4, test5);
+        console.log('Average: ' + roundTo(gradeAverage, 2));
+        console.log('Letter grade: ' + letterGrade);
+        console.log('Passing: ' + (passing ? 'Yes ✓' : 'No ✗'));
+
+        console.log('\n🏠 Budget Calculator:');
+        console.log('─'.repeat(40));
+        
+        function calculateMonthlyBudget(income, rent, food, utilities, savings) {
+            let totalExpenses = rent + food + utilities + savings;
+            let remaining = income - totalExpenses;
+            let savingsPercent = calculatePercentage(savings, income);
+            
+            console.log('Monthly income: $' + income);
+            console.log('\nExpenses:');
+            console.log('  Rent: $' + rent);
+            console.log('  Food: $' + food);
+            console.log('  Utilities: $' + utilities);
+            console.log('  Savings: $' + savings + ' (' + roundTo(savingsPercent, 1) + '%)');
+            console.log('  Total: $' + totalExpenses);
+            console.log('\nRemaining: $' + remaining);
+            
+            if (remaining < 0) {
+                console.log('⚠️  Budget deficit: $' + absolute(remaining));
+            } else {
+                console.log('✓ Budget surplus: $' + remaining);
+            }
+        }
+
+        calculateMonthlyBudget(3000, 1000, 400, 200, 300);
+
+        console.log('\n🎯 Recipe Scaler:');
+        console.log('─'.repeat(40));
+        
+        function scaleRecipe(originalAmount, originalServings, desiredServings) {
+            let scaleFactor = desiredServings / originalServings;
+            return originalAmount * scaleFactor;
+        }
+
+        console.log('Original recipe (serves 4):');
+        console.log('  2 cups flour');
+        console.log('  3 eggs');
+        console.log('  1 cup milk');
+        
+        console.log('\nScaled recipe (serves 8):');
+        console.log('  ' + scaleRecipe(2, 4, 8) + ' cups flour');
+        console.log('  ' + scaleRecipe(3, 4, 8) + ' eggs');
+        console.log('  ' + scaleRecipe(1, 4, 8) + ' cups milk');
+
+        console.log('\n' + '='.repeat(60));
+        console.log('✅ ALL CALCULATIONS COMPLETE!');
+        console.log('='.repeat(60));
+        console.log('Functions demonstrated:');
+        console.log('✓ Basic math operations (add, subtract, multiply, divide)');
+        console.log('✓ Advanced calculations (percentages, averages)');
+        console.log('✓ Unit conversions (temperature, distance, weight, time)');
+        console.log('✓ Real-world applications (shopping, budgeting, grades)');
+        console.log('='.repeat(60));
+    </script>
+</body>
+</html>

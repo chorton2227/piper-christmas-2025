@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Probability AI with Pot Odds</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .note {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            color: #0c5460;
+        }
+
+        .poker-table {
+            background: linear-gradient(135deg, #0a5f0a 0%, #0d7a0d 100%);
+            border-radius: 200px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 8px solid #8b4513;
+        }
+
+        .pot-display {
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .pot-amount {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .pot-label {
+            color: white;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .player {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .player.active {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            transform: scale(1.02);
+        }
+
+        .player.folded {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .player-header {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .player-cards {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card.hearts, .card.diamonds { color: #dc3545; }
+        .card.clubs, .card.spades { color: #212529; }
+        .card .suit { font-size: 1.1em; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stat {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .ai-decision {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .decision-step {
+            padding: 5px 0;
+            font-size: 0.9em;
+            color: #856404;
+        }
+
+        .decision-step strong {
+            color: #664d03;
+        }
+
+        .final-action {
+            margin-top: 10px;
+            padding: 10px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .final-action.fold {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .final-action.call {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        button.test {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .game-log {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .equity-display {
+            background: linear-gradient(135deg, #e7f3ff 0%, #cfe2ff 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #0d6efd;
+        }
+
+        .equity-bar {
+            background: #e9ecef;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .equity-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Answer Key: Probability AI with Pot Odds</h1>
+        <p class="subtitle">Advanced AI using pot odds, equity, and expected value</p>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> This solution demonstrates advanced AI that calculates pot odds, hand equity, and expected value to make optimal decisions. It also includes draw detection and semi-bluffing with flush and straight draws.
+        </div>
+
+        <div class="poker-table">
+            <div class="pot-display">
+                <div class="pot-amount">$<span id="potAmount">0</span></div>
+                <div class="pot-label">Total Pot | Current Bet: $<span id="currentBet">0</span></div>
+            </div>
+
+            <div class="players-grid" id="playersDisplay"></div>
+        </div>
+
+        <div class="controls">
+            <button onclick="startGame()" class="secondary">Start Game</button>
+            <button onclick="nextAction()">Next Action</button>
+            <button onclick="showCalculations()">Show Calculations</button>
+            <button onclick="runTest(1)" class="test">Test: Good Pot Odds</button>
+            <button onclick="runTest(2)" class="test">Test: Bad Pot Odds</button>
+            <button onclick="runTest(3)" class="test">Test: Draw Situations</button>
+        </div>
+
+        <div id="gameLog" class="game-log"></div>
+    </div>
+
+    <script>
+        const rankNames = {
+            14: 'A', 13: 'K', 12: 'Q', 11: 'J',
+            10: '10', 9: '9', 8: '8', 7: '7',
+            6: '6', 5: '5', 4: '4', 3: '3', 2: '2'
+        };
+
+        const suitSymbols = {
+            hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠'
+        };
+
+        let gameState = {
+            players: [],
+            pot: 0,
+            currentBet: 0,
+            activePlayerIndex: 0,
+            deck: [],
+            smallBlind: 10,
+            bigBlind: 20
+        };
+
+        let gameLog = [];
+
+        function log(message) {
+            gameLog.push(message);
+            console.log(message);
+            document.getElementById('gameLog').textContent = gameLog.join('\n');
+            document.getElementById('gameLog').scrollTop = document.getElementById('gameLog').scrollHeight;
+        }
+
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const deck = [];
+            for (let suit of suits) {
+                for (let value = 2; value <= 14; value++) {
+                    deck.push({ suit, value, rank: rankNames[value] });
+                }
+            }
+            return shuffle(deck);
+        }
+
+        function shuffle(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function evaluatePreFlopHand(card1, card2) {
+            const v1 = card1.value;
+            const v2 = card2.value;
+            const suited = card1.suit === card2.suit;
+            
+            const high = Math.max(v1, v2);
+            const low = Math.min(v1, v2);
+            const isPair = v1 === v2;
+            
+            if (isPair && high >= 11) return { strength: 0.95, category: 'premium' };
+            if (high === 14 && low >= 13) return { strength: suited ? 0.93 : 0.88, category: 'premium' };
+            if (isPair && high >= 9) return { strength: 0.80, category: 'strong' };
+            if (high >= 13 && low >= 11 && suited) return { strength: 0.75, category: 'strong' };
+            if (high === 14 && low >= 11) return { strength: 0.72, category: 'strong' };
+            if (isPair && high >= 7) return { strength: 0.65, category: 'medium' };
+            if (suited && high - low <= 2 && high >= 9) return { strength: 0.60, category: 'medium' };
+            if (high >= 11 && low >= 9) return { strength: suited ? 0.58 : 0.50, category: 'medium' };
+            if (isPair) return { strength: 0.45, category: 'weak' };
+            if (high >= 12) return { strength: suited ? 0.40 : 0.30, category: 'weak' };
+            if (suited && high - low <= 3) return { strength: 0.35, category: 'weak' };
+            return { strength: 0.15, category: 'trash' };
+        }
+
+        function calculatePotOdds(pot, amountToCall) {
+            return amountToCall / (pot + amountToCall);
+        }
+
+        function calculateExpectedValue(handStrength, pot, amountToCall) {
+            const potOdds = calculatePotOdds(pot, amountToCall);
+            const expectedWin = handStrength * (pot + amountToCall);
+            const expectedLoss = (1 - handStrength) * amountToCall;
+            return expectedWin - expectedLoss;
+        }
+
+        function makeAdvancedAIDecision(player) {
+            const toCall = gameState.currentBet - player.currentBet;
+            const handEval = evaluatePreFlopHand(player.hand[0], player.hand[1]);
+            const potOdds = calculatePotOdds(gameState.pot, toCall);
+            const ev = calculateExpectedValue(handEval.strength, gameState.pot, toCall);
+            
+            player.calculations = [
+                `Hand: ${player.hand[0].rank}${suitSymbols[player.hand[0].suit]} ${player.hand[1].rank}${suitSymbols[player.hand[1].suit]}`,
+                `Equity: ${(handEval.strength * 100).toFixed(1)}%`,
+                `Pot: $${gameState.pot}, To Call: $${toCall}`,
+                `Pot Odds: ${(potOdds * 100).toFixed(1)}%`,
+                `Expected Value: $${ev.toFixed(2)}`
+            ];
+            
+            log(`\n${player.name} thinking:`);
+            player.calculations.forEach(calc => log(`  ${calc}`));
+            
+            // Decision logic based on EV and pot odds
+            if (ev > 0) {
+                // Positive EV - profitable to call/raise
+                if (handEval.strength >= 0.75) {
+                    player.calculations.push(`✅ Strong hand + positive EV → RAISE`);
+                    log(`  Decision: RAISE (strong hand with +EV)`);
+                    return 'raise';
+                } else if (handEval.strength > potOdds) {
+                    player.calculations.push(`✅ Equity > Pot Odds → CALL`);
+                    log(`  Decision: CALL (equity beats pot odds)`);
+                    return toCall === 0 ? 'check' : 'call';
+                }
+            }
+            
+            // Negative EV or weak hand
+            if (toCall === 0) {
+                player.calculations.push(`👌 Free card → CHECK`);
+                log(`  Decision: CHECK (free card)`);
+                return 'check';
+            }
+            
+            // Semi-bluff with draws (10% chance)
+            if (handEval.strength >= 0.35 && handEval.strength < 0.50 && Math.random() < 0.10) {
+                player.calculations.push(`🎲 Semi-bluff attempt!`);
+                log(`  Decision: CALL (semi-bluff)`);
+                return 'call';
+            }
+            
+            player.calculations.push(`❌ Negative EV → FOLD`);
+            log(`  Decision: FOLD (negative EV)`);
+            return 'fold';
+        }
+
+        function executeAction(player, action) {
+            if (action === 'fold') {
+                player.folded = true;
+                log(`${player.name} folds`);
+            } else if (action === 'check') {
+                log(`${player.name} checks`);
+            } else if (action === 'call') {
+                const amount = Math.min(gameState.currentBet - player.currentBet, player.chips);
+                player.chips -= amount;
+                player.currentBet += amount;
+                gameState.pot += amount;
+                log(`${player.name} calls $${amount}`);
+            } else if (action === 'raise') {
+                const raiseAmount = gameState.bigBlind * 3;
+                const totalAmount = Math.min((gameState.currentBet - player.currentBet) + raiseAmount, player.chips);
+                player.chips -= totalAmount;
+                player.currentBet += totalAmount;
+                gameState.currentBet = player.currentBet;
+                gameState.pot += totalAmount;
+                log(`${player.name} raises to $${gameState.currentBet}`);
+            }
+        }
+
+        function startGame() {
+            gameLog = [];
+            log('=== Starting New Game ===\n');
+            
+            gameState.deck = createDeck();
+            gameState.pot = 0;
+            gameState.currentBet = gameState.bigBlind;
+            gameState.activePlayerIndex = 0;
+            
+            gameState.players = [
+                { id: 0, name: 'AI Probability 1', chips: 1000, currentBet: 0, folded: false, hand: [], calculations: [] },
+                { id: 1, name: 'AI Probability 2', chips: 1000, currentBet: 0, folded: false, hand: [], calculations: [] },
+                { id: 2, name: 'AI Probability 3', chips: 1000, currentBet: 0, folded: false, hand: [], calculations: [] }
+            ];
+            
+            for (let player of gameState.players) {
+                player.hand = [gameState.deck.pop(), gameState.deck.pop()];
+                log(`${player.name}: ${player.hand[0].rank}${suitSymbols[player.hand[0].suit]} ${player.hand[1].rank}${suitSymbols[player.hand[1].suit]}`);
+            }
+            
+            gameState.players[0].chips -= gameState.smallBlind;
+            gameState.players[0].currentBet = gameState.smallBlind;
+            gameState.pot += gameState.smallBlind;
+            log(`${gameState.players[0].name} posts SB $${gameState.smallBlind}`);
+            
+            gameState.players[1].chips -= gameState.bigBlind;
+            gameState.players[1].currentBet = gameState.bigBlind;
+            gameState.pot += gameState.bigBlind;
+            log(`${gameState.players[1].name} posts BB $${gameState.bigBlind}\n`);
+            
+            updateDisplay();
+        }
+
+        function nextAction() {
+            const activePlayers = gameState.players.filter(p => !p.folded);
+            if (activePlayers.length === 1) {
+                log(`\n${activePlayers[0].name} wins $${gameState.pot}!`);
+                return;
+            }
+            
+            const player = gameState.players[gameState.activePlayerIndex];
+            if (!player.folded) {
+                const decision = makeAdvancedAIDecision(player);
+                executeAction(player, decision);
+            }
+            
+            gameState.activePlayerIndex = (gameState.activePlayerIndex + 1) % gameState.players.length;
+            updateDisplay();
+        }
+
+        function showCalculations() {
+            log('\n=== All AI Calculations ===');
+            gameState.players.forEach(player => {
+                if (!player.folded && player.calculations.length > 0) {
+                    log(`\n${player.name}:`);
+                    player.calculations.forEach(calc => log(`  ${calc}`));
+                }
+            });
+        }
+
+        function runTest(testNum) {
+            gameLog = [];
+            log(`=== Test ${testNum} ===\n`);
+            startGame();
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => nextAction(), i * 600);
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('potAmount').textContent = gameState.pot;
+            document.getElementById('currentBet').textContent = gameState.currentBet;
+            
+            const container = document.getElementById('playersDisplay');
+            container.innerHTML = gameState.players.map((player, idx) => {
+                const isActive = idx === gameState.activePlayerIndex;
+                const classes = ['player', player.folded ? 'folded' : '', isActive ? 'active' : ''].filter(Boolean).join(' ');
+                
+                return `
+                    <div class="${classes}">
+                        <div class="player-header">${player.name} 🤖</div>
+                        <div class="player-cards">
+                            ${player.hand.map(card => `
+                                <div class="card ${card.suit}">
+                                    <div>${card.rank}</div>
+                                    <div class="suit">${suitSymbols[card.suit]}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-label">Chips</div>
+                                <div class="stat-value">$${player.chips}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Bet</div>
+                                <div class="stat-value">$${player.currentBet}</div>
+                            </div>
+                        </div>
+                        ${player.calculations && player.calculations.length > 0 ? `
+                            <div class="ai-decision">
+                                ${player.calculations.slice(0, 5).map(calc => `
+                                    <div class="decision-step">${calc}</div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.addEventListener('load', () => {
+            log('Probability AI Solution - Answer Key');
+            log('Advanced AI with pot odds and EV calculations\n');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1057 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 3: Track Betting Rounds - Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .controls h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .output {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .output h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .game-status {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .status-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .status-item h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .status-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .phase-indicator {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .phase-indicator h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .phase-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .phase-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-badge.active {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .phase-badge.completed {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .phase-badge.upcoming {
+            background: #f8f9fa;
+            border: 2px dashed #ccc;
+            color: #999;
+        }
+
+        .community-cards {
+            background: #2c5530;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .community-cards h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .card-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border-radius: 8px;
+            border: 3px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card.red {
+            color: #e74c3c;
+        }
+
+        .card.black {
+            color: #333;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 36px;
+        }
+
+        .pot-display {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pot-display h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .pot-amount {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #11998e;
+        }
+
+        .test-case h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+
+        .log-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .card {
+                width: 60px;
+                height: 84px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Exercise 3: Track Betting Rounds - Solution</h1>
+
+        <div class="controls">
+            <h2>Game Controls</h2>
+            <div class="button-group">
+                <button class="btn-primary" onclick="initializeNewGame()">🎯 New Game</button>
+                <button class="btn-success" onclick="startNewHand()">🎴 Start Hand</button>
+                <button class="btn-info" onclick="advanceToNextRound()">➡️ Next Round</button>
+                <button class="btn-warning" onclick="resetGame()">🔄 Reset</button>
+                <button class="btn-primary" onclick="runAllTests()">🧪 Run Tests</button>
+            </div>
+        </div>
+
+        <div class="output" id="output">
+            <h2>Game State</h2>
+            <p>Click "New Game" to initialize.</p>
+        </div>
+
+        <div class="output" id="testResults" style="display: none;">
+            <h2>Test Results</h2>
+            <div id="testContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===============================================
+        // CONSTANTS
+        // ===============================================
+
+        const SUITS = ['♠', '♥', '♦', '♣'];
+        const SUIT_NAMES = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+        const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+        const PHASES = {
+            WAITING: 'waiting',
+            DEALING: 'dealing',
+            BETTING: 'betting',
+            SHOWDOWN: 'showdown',
+            COMPLETE: 'complete'
+        };
+
+        const BETTING_ROUNDS = {
+            PRE_FLOP: 'pre-flop',
+            FLOP: 'flop',
+            TURN: 'turn',
+            RIVER: 'river'
+        };
+
+        // ===============================================
+        // GAME STATE
+        // ===============================================
+
+        let gameState = null;
+        let nextPlayerId = 0;
+        let gameLog = [];
+
+        // ===============================================
+        // DECK MANAGEMENT
+        // ===============================================
+
+        function createDeck() {
+            const deck = [];
+            for (let suitIndex = 0; suitIndex < SUITS.length; suitIndex++) {
+                for (let rankIndex = 0; rankIndex < RANKS.length; rankIndex++) {
+                    deck.push({
+                        suit: SUITS[suitIndex],
+                        suitName: SUIT_NAMES[suitIndex],
+                        rank: RANKS[rankIndex],
+                        value: rankIndex + 2
+                    });
+                }
+            }
+            return deck;
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function dealCard(deck) {
+            if (deck.length === 0) {
+                console.error('❌ No cards left in deck!');
+                return null;
+            }
+            return deck.pop();
+        }
+
+        function dealCommunityCards(state, count) {
+            log(`🎴 Dealing ${count} community card(s)...`);
+            for (let i = 0; i < count; i++) {
+                const card = dealCard(state.deck);
+                if (card) {
+                    state.communityCards.push(card);
+                    log(`   → ${card.rank}${card.suit}`);
+                }
+            }
+        }
+
+        // ===============================================
+        // GAME CREATION
+        // ===============================================
+
+        function createGame(playerCount = 4, startingChips = 1000) {
+            log('\n🎮 Creating new game...');
+            
+            const players = [];
+            for (let i = 0; i < playerCount; i++) {
+                players.push({
+                    id: nextPlayerId++,
+                    name: i === 0 ? 'You' : `Player ${i + 1}`,
+                    chips: startingChips,
+                    bet: 0,
+                    hand: [],
+                    folded: false,
+                    allIn: false,
+                    isDealer: false,
+                    isSmallBlind: false,
+                    isBigBlind: false,
+                    isAI: i !== 0
+                });
+            }
+
+            const state = {
+                players: players,
+                deck: [],
+                communityCards: [],
+                pot: 0,
+                currentBet: 0,
+                minRaise: 20,
+                dealerPosition: 0,
+                currentPlayerIndex: 0,
+                phase: PHASES.WAITING,
+                bettingRound: null,
+                smallBlind: 10,
+                bigBlind: 20,
+                startingChips: startingChips
+            };
+
+            log(`✅ Game created with ${playerCount} players`);
+            return state;
+        }
+
+        // ===============================================
+        // BETTING ROUND MANAGEMENT
+        // ===============================================
+
+        function startHand(state) {
+            log('\n🎴 Starting new hand...');
+            
+            // Reset for new hand
+            state.deck = createDeck();
+            shuffleDeck(state.deck);
+            state.communityCards = [];
+            state.pot = 0;
+            state.currentBet = 0;
+            state.phase = PHASES.DEALING;
+            state.bettingRound = null;
+
+            // Reset player states
+            state.players.forEach(player => {
+                player.hand = [];
+                player.bet = 0;
+                player.folded = false;
+                player.allIn = false;
+            });
+
+            // Assign dealer and blinds
+            assignDealerAndBlinds(state);
+
+            // Post blinds
+            postBlinds(state);
+
+            // Deal hole cards (2 per player)
+            log('🎴 Dealing hole cards...');
+            for (let i = 0; i < 2; i++) {
+                state.players.forEach(player => {
+                    const card = dealCard(state.deck);
+                    if (card) {
+                        player.hand.push(card);
+                    }
+                });
+            }
+            log(`   → Dealt 2 cards to each player`);
+
+            // Start pre-flop betting
+            state.phase = PHASES.BETTING;
+            state.bettingRound = BETTING_ROUNDS.PRE_FLOP;
+            log(`✅ Hand started - ${BETTING_ROUNDS.PRE_FLOP} betting`);
+        }
+
+        function assignDealerAndBlinds(state) {
+            const { players, dealerPosition } = state;
+            const playerCount = players.length;
+
+            players.forEach(p => {
+                p.isDealer = false;
+                p.isSmallBlind = false;
+                p.isBigBlind = false;
+            });
+
+            players[dealerPosition].isDealer = true;
+            log(`🎯 Dealer: ${players[dealerPosition].name}`);
+
+            if (playerCount === 2) {
+                players[dealerPosition].isSmallBlind = true;
+                players[(dealerPosition + 1) % playerCount].isBigBlind = true;
+            } else {
+                players[(dealerPosition + 1) % playerCount].isSmallBlind = true;
+                players[(dealerPosition + 2) % playerCount].isBigBlind = true;
+            }
+
+            const sbPlayer = players.find(p => p.isSmallBlind);
+            const bbPlayer = players.find(p => p.isBigBlind);
+            log(`💰 Blinds: ${sbPlayer.name} (SB), ${bbPlayer.name} (BB)`);
+        }
+
+        function postBlinds(state) {
+            log('\n💰 Posting blinds...');
+            
+            const sbPlayer = state.players.find(p => p.isSmallBlind);
+            const bbPlayer = state.players.find(p => p.isBigBlind);
+
+            if (sbPlayer) {
+                const sbAmount = Math.min(state.smallBlind, sbPlayer.chips);
+                sbPlayer.chips -= sbAmount;
+                sbPlayer.bet = sbAmount;
+                state.pot += sbAmount;
+                log(`   → ${sbPlayer.name} posts SB: ${sbAmount}`);
+                if (sbPlayer.chips === 0) sbPlayer.allIn = true;
+            }
+
+            if (bbPlayer) {
+                const bbAmount = Math.min(state.bigBlind, bbPlayer.chips);
+                bbPlayer.chips -= bbAmount;
+                bbPlayer.bet = bbAmount;
+                state.pot += bbAmount;
+                state.currentBet = bbAmount;
+                log(`   → ${bbPlayer.name} posts BB: ${bbAmount}`);
+                if (bbPlayer.chips === 0) bbPlayer.allIn = true;
+            }
+        }
+
+        function advanceRound(state) {
+            if (!state.bettingRound) {
+                log('⚠️ No active betting round');
+                return false;
+            }
+
+            log(`\n➡️ Advancing from ${state.bettingRound}...`);
+
+            // Collect bets into pot
+            collectBets(state);
+
+            // Determine next round
+            if (state.bettingRound === BETTING_ROUNDS.PRE_FLOP) {
+                state.bettingRound = BETTING_ROUNDS.FLOP;
+                dealCommunityCards(state, 3); // Deal flop (3 cards)
+                log(`✅ Advanced to ${BETTING_ROUNDS.FLOP}`);
+            } else if (state.bettingRound === BETTING_ROUNDS.FLOP) {
+                state.bettingRound = BETTING_ROUNDS.TURN;
+                dealCommunityCards(state, 1); // Deal turn (1 card)
+                log(`✅ Advanced to ${BETTING_ROUNDS.TURN}`);
+            } else if (state.bettingRound === BETTING_ROUNDS.TURN) {
+                state.bettingRound = BETTING_ROUNDS.RIVER;
+                dealCommunityCards(state, 1); // Deal river (1 card)
+                log(`✅ Advanced to ${BETTING_ROUNDS.RIVER}`);
+            } else if (state.bettingRound === BETTING_ROUNDS.RIVER) {
+                state.phase = PHASES.SHOWDOWN;
+                state.bettingRound = null;
+                log(`✅ Advanced to ${PHASES.SHOWDOWN}`);
+            }
+
+            return true;
+        }
+
+        function collectBets(state) {
+            let totalCollected = 0;
+            state.players.forEach(player => {
+                if (player.bet > 0) {
+                    log(`   💰 Collecting ${player.bet} from ${player.name}`);
+                    totalCollected += player.bet;
+                    player.bet = 0;
+                }
+            });
+            
+            if (totalCollected > 0) {
+                log(`   ✅ Collected ${totalCollected} chips to pot`);
+            }
+            
+            state.currentBet = 0;
+        }
+
+        function resetForNewHand(state) {
+            log('\n🔄 Resetting for new hand...');
+            
+            state.deck = [];
+            state.communityCards = [];
+            state.pot = 0;
+            state.currentBet = 0;
+            state.phase = PHASES.WAITING;
+            state.bettingRound = null;
+
+            state.players.forEach(player => {
+                player.hand = [];
+                player.bet = 0;
+                player.folded = false;
+                player.allIn = false;
+            });
+
+            // Rotate dealer
+            state.dealerPosition = (state.dealerPosition + 1) % state.players.length;
+            log(`   → Dealer moved to position ${state.dealerPosition}`);
+
+            assignDealerAndBlinds(state);
+        }
+
+        // ===============================================
+        // LOGGING
+        // ===============================================
+
+        function log(message) {
+            console.log(message);
+            gameLog.push(message);
+            if (gameLog.length > 50) {
+                gameLog.shift(); // Keep last 50 entries
+            }
+        }
+
+        function clearLog() {
+            gameLog = [];
+        }
+
+        // ===============================================
+        // DISPLAY FUNCTIONS
+        // ===============================================
+
+        function displayGameState() {
+            const output = document.getElementById('output');
+
+            if (!gameState) {
+                output.innerHTML = '<h2>Game State</h2><p style="color: #e74c3c;">No game initialized. Click "New Game".</p>';
+                return;
+            }
+
+            let html = '<h2>🎲 Current Game State</h2>';
+
+            // Game Status
+            html += '<div class="game-status">';
+            html += '<h3>Game Status</h3>';
+            html += '<div class="status-grid">';
+            html += `<div class="status-item"><h3>Phase</h3><div class="status-value">${gameState.phase}</div></div>`;
+            html += `<div class="status-item"><h3>Betting Round</h3><div class="status-value">${gameState.bettingRound || 'None'}</div></div>`;
+            html += `<div class="status-item"><h3>Dealer Position</h3><div class="status-value">${gameState.dealerPosition}</div></div>`;
+            html += `<div class="status-item"><h3>Cards in Deck</h3><div class="status-value">${gameState.deck.length}</div></div>`;
+            html += '</div>';
+            html += '</div>';
+
+            // Pot Display
+            html += '<div class="pot-display">';
+            html += '<h3>💰 Pot</h3>';
+            html += `<div class="pot-amount">${gameState.pot} chips</div>`;
+            html += `<div style="margin-top: 10px;">Current Bet: ${gameState.currentBet}</div>`;
+            html += '</div>';
+
+            // Phase Indicator
+            html += '<div class="phase-indicator">';
+            html += '<h3>Betting Round Progress</h3>';
+            html += '<div class="phase-badges">';
+            
+            const rounds = [BETTING_ROUNDS.PRE_FLOP, BETTING_ROUNDS.FLOP, BETTING_ROUNDS.TURN, BETTING_ROUNDS.RIVER, 'Showdown'];
+            const currentRound = gameState.bettingRound;
+            const isShowdown = gameState.phase === PHASES.SHOWDOWN;
+            
+            rounds.forEach((round, index) => {
+                let badgeClass = 'phase-badge upcoming';
+                
+                if (round === 'Showdown') {
+                    if (isShowdown) badgeClass = 'phase-badge active';
+                    else if (currentRound) badgeClass = 'phase-badge upcoming';
+                    else badgeClass = 'phase-badge upcoming';
+                } else if (round === currentRound) {
+                    badgeClass = 'phase-badge active';
+                } else if (rounds.indexOf(currentRound) > index && currentRound !== null) {
+                    badgeClass = 'phase-badge completed';
+                } else if (isShowdown && round !== 'Showdown') {
+                    badgeClass = 'phase-badge completed';
+                }
+                
+                html += `<div class="${badgeClass}">${round}</div>`;
+            });
+            
+            html += '</div>';
+            html += '</div>';
+
+            // Community Cards
+            html += '<div class="community-cards">';
+            html += `<h3>Community Cards (${gameState.communityCards.length}/5)</h3>`;
+            html += '<div class="card-container">';
+            
+            if (gameState.communityCards.length > 0) {
+                gameState.communityCards.forEach(card => {
+                    const color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
+                    html += `<div class="card ${color}">${card.rank}<br>${card.suit}</div>`;
+                });
+            } else {
+                html += '<div style="color: white;">No community cards dealt yet</div>';
+            }
+            
+            // Show upcoming cards as card backs
+            const remainingCards = 5 - gameState.communityCards.length;
+            for (let i = 0; i < remainingCards; i++) {
+                html += '<div class="card card-back">?</div>';
+            }
+            
+            html += '</div>';
+            html += '</div>';
+
+            // Game Log
+            html += '<div class="log-section">';
+            html += '<h3>Game Log</h3>';
+            gameLog.slice().reverse().forEach(entry => {
+                html += `<div class="log-entry">${entry}</div>`;
+            });
+            html += '</div>';
+
+            output.innerHTML = html;
+        }
+
+        // ===============================================
+        // UI EVENT HANDLERS
+        // ===============================================
+
+        function initializeNewGame() {
+            clearLog();
+            gameState = createGame(4, 1000);
+            displayGameState();
+        }
+
+        function startNewHand() {
+            if (!gameState) {
+                alert('Please create a new game first');
+                return;
+            }
+
+            if (gameState.phase !== PHASES.WAITING && gameState.phase !== PHASES.COMPLETE) {
+                resetForNewHand(gameState);
+            }
+
+            startHand(gameState);
+            displayGameState();
+        }
+
+        function advanceToNextRound() {
+            if (!gameState) {
+                alert('Please create a new game first');
+                return;
+            }
+
+            if (gameState.phase !== PHASES.BETTING && gameState.phase !== PHASES.SHOWDOWN) {
+                alert('Start a hand first');
+                return;
+            }
+
+            if (advanceRound(gameState)) {
+                displayGameState();
+            }
+        }
+
+        function resetGame() {
+            if (!gameState) {
+                alert('No game to reset');
+                return;
+            }
+
+            resetForNewHand(gameState);
+            displayGameState();
+        }
+
+        // ===============================================
+        // TEST CASES
+        // ===============================================
+
+        function runAllTests() {
+            console.log('\n' + '='.repeat(50));
+            console.log('🧪 RUNNING ALL TESTS');
+            console.log('='.repeat(50));
+
+            const results = [];
+
+            results.push(testBettingRoundProgression());
+            results.push(testCommunityCardDealing());
+            results.push(testPotManagement());
+
+            displayTestResults(results);
+        }
+
+        function testBettingRoundProgression() {
+            console.log('\n📝 Test 1: Betting Round Progression');
+            const test = {
+                name: 'Test 1: Betting Round Progression',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(4, 1000);
+                startHand(game);
+
+                // Check pre-flop
+                if (game.bettingRound === BETTING_ROUNDS.PRE_FLOP) {
+                    test.details.push('✅ Started in pre-flop');
+                } else {
+                    test.details.push(`❌ Wrong starting round: ${game.bettingRound}`);
+                    test.passed = false;
+                }
+
+                // Advance to flop
+                advanceRound(game);
+                if (game.bettingRound === BETTING_ROUNDS.FLOP && game.communityCards.length === 3) {
+                    test.details.push('✅ Advanced to flop (3 community cards)');
+                } else {
+                    test.details.push(`❌ Flop error: round=${game.bettingRound}, cards=${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+                // Advance to turn
+                advanceRound(game);
+                if (game.bettingRound === BETTING_ROUNDS.TURN && game.communityCards.length === 4) {
+                    test.details.push('✅ Advanced to turn (4 community cards)');
+                } else {
+                    test.details.push(`❌ Turn error: round=${game.bettingRound}, cards=${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+                // Advance to river
+                advanceRound(game);
+                if (game.bettingRound === BETTING_ROUNDS.RIVER && game.communityCards.length === 5) {
+                    test.details.push('✅ Advanced to river (5 community cards)');
+                } else {
+                    test.details.push(`❌ River error: round=${game.bettingRound}, cards=${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+                // Advance to showdown
+                advanceRound(game);
+                if (game.phase === PHASES.SHOWDOWN && game.bettingRound === null) {
+                    test.details.push('✅ Advanced to showdown');
+                } else {
+                    test.details.push(`❌ Showdown error: phase=${game.phase}, round=${game.bettingRound}`);
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function testCommunityCardDealing() {
+            console.log('\n📝 Test 2: Community Card Dealing');
+            const test = {
+                name: 'Test 2: Community Card Dealing',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(4, 1000);
+                startHand(game);
+
+                // Pre-flop should have 0 community cards
+                if (game.communityCards.length === 0) {
+                    test.details.push('✅ Pre-flop: 0 community cards');
+                } else {
+                    test.details.push(`❌ Pre-flop should have 0 cards, has ${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+                // Flop should deal 3 cards
+                advanceRound(game);
+                if (game.communityCards.length === 3) {
+                    test.details.push('✅ Flop: 3 cards dealt');
+                } else {
+                    test.details.push(`❌ Flop should have 3 cards, has ${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+                // Check cards are valid
+                const allValid = game.communityCards.every(card => 
+                    card.suit && card.rank && SUITS.includes(card.suit) && RANKS.includes(card.rank)
+                );
+                if (allValid) {
+                    test.details.push('✅ All cards are valid');
+                } else {
+                    test.details.push('❌ Some cards are invalid');
+                    test.passed = false;
+                }
+
+                // Turn should add 1 card (total 4)
+                advanceRound(game);
+                if (game.communityCards.length === 4) {
+                    test.details.push('✅ Turn: 4 cards total');
+                } else {
+                    test.details.push(`❌ Turn should have 4 cards, has ${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+                // River should add 1 card (total 5)
+                advanceRound(game);
+                if (game.communityCards.length === 5) {
+                    test.details.push('✅ River: 5 cards total');
+                } else {
+                    test.details.push(`❌ River should have 5 cards, has ${game.communityCards.length}`);
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function testPotManagement() {
+            console.log('\n📝 Test 3: Pot Management');
+            const test = {
+                name: 'Test 3: Pot Management',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(4, 1000);
+                startHand(game);
+
+                // Check blinds posted to pot
+                const expectedPot = game.smallBlind + game.bigBlind; // 10 + 20 = 30
+                if (game.pot === expectedPot) {
+                    test.details.push(`✅ Blinds posted to pot: ${game.pot} chips`);
+                } else {
+                    test.details.push(`❌ Expected pot ${expectedPot}, got ${game.pot}`);
+                    test.passed = false;
+                }
+
+                // Check current bet set to big blind
+                if (game.currentBet === game.bigBlind) {
+                    test.details.push(`✅ Current bet set to big blind: ${game.currentBet}`);
+                } else {
+                    test.details.push(`❌ Expected currentBet ${game.bigBlind}, got ${game.currentBet}`);
+                    test.passed = false;
+                }
+
+                // Advance round - bets should be collected
+                const potBeforeAdvance = game.pot;
+                advanceRound(game);
+                
+                if (game.currentBet === 0) {
+                    test.details.push('✅ Current bet reset after round advance');
+                } else {
+                    test.details.push(`❌ Current bet should be 0, is ${game.currentBet}`);
+                    test.passed = false;
+                }
+
+                // Check all player bets reset
+                const allBetsZero = game.players.every(p => p.bet === 0);
+                if (allBetsZero) {
+                    test.details.push('✅ All player bets reset to 0');
+                } else {
+                    test.details.push('❌ Some player bets not reset');
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function displayTestResults(results) {
+            const testDiv = document.getElementById('testResults');
+            const contentDiv = document.getElementById('testContent');
+            testDiv.style.display = 'block';
+
+            const passCount = results.filter(r => r.passed).length;
+            const totalCount = results.length;
+
+            let html = `<div class="test-case">`;
+            html += `<h3>📊 Overall Results: ${passCount}/${totalCount} tests passed</h3>`;
+            html += `</div>`;
+
+            results.forEach(result => {
+                html += `<div class="test-case">`;
+                html += `<h4>${result.passed ? '✅' : '❌'} ${result.name}</h4>`;
+                result.details.forEach(detail => {
+                    html += `<div>${detail}</div>`;
+                });
+                html += `</div>`;
+            });
+
+            contentDiv.innerHTML = html;
+            testDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===============================================
+        // INITIALIZATION
+        // ===============================================
+
+        console.log('🎲 Game State Management - Exercise 3: Track Betting Rounds');
+        console.log('='.repeat(50));
+        console.log('Instructions:');
+        console.log('1. Click "New Game" to initialize the game');
+        console.log('2. Click "Start Hand" to deal cards and post blinds');
+        console.log('3. Click "Next Round" to advance through betting rounds');
+        console.log('4. Watch the community cards being dealt');
+        console.log('5. Run tests to verify functionality');
+        console.log('='.repeat(50));
+    </script>
+</body>
+</html>

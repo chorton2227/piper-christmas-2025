@@ -1,0 +1,731 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Bug Hunt Challenge - Answer Key</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .game-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .code-display {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .code-line {
+            display: flex;
+            padding: 2px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .code-line:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .line-number {
+            color: #858585;
+            margin-right: 20px;
+            user-select: none;
+            min-width: 30px;
+            text-align: right;
+        }
+        
+        .code-content {
+            flex: 1;
+        }
+        
+        .bug {
+            background: rgba(244, 135, 113, 0.2);
+            border-left: 3px solid #f48771;
+        }
+        
+        .bug-marker {
+            background: #f48771;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-size: 12px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .score-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .timer {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .difficulty {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .difficulty button {
+            flex: 1;
+        }
+        
+        .difficulty button.active {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .hint-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .hint-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+        
+        .hint-text {
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+        }
+        
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .final-stats {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐛 Bug Hunt Challenge</h1>
+        <p class="subtitle">Click on lines with bugs to find them all!</p>
+        
+        <div class="game-area">
+            <div class="code-display" id="codeDisplay"></div>
+            
+            <div class="sidebar">
+                <div class="score-panel">
+                    <div>Bugs Found</div>
+                    <div class="score"><span id="bugsFound">0</span> / <span id="totalBugs">0</span></div>
+                    <div class="timer">⏱️ <span id="timer">00:00</span></div>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value" id="accuracy">100%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="hints">3</div>
+                            <div class="stat-label">Hints Left</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="streak">0</div>
+                            <div class="stat-label">Streak</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <h3 style="margin-bottom: 10px;">Difficulty</h3>
+                    <div class="difficulty">
+                        <button class="active" onclick="setDifficulty('easy')">Easy</button>
+                        <button onclick="setDifficulty('medium')">Medium</button>
+                        <button onclick="setDifficulty('hard')">Hard</button>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="startNewGame()">🎮 New Game</button>
+                    <button class="btn-secondary" onclick="showHint()">💡 Get Hint</button>
+                    <button class="btn-success" onclick="checkAllBugs()">✅ Check All</button>
+                </div>
+                
+                <div id="hintContainer"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <h2>🎉 Congratulations!</h2>
+            <p>You found all the bugs!</p>
+            <div class="final-stats" id="finalStats"></div>
+            <button class="btn-primary" onclick="closeModal()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let currentDifficulty = 'easy';
+        let bugsFound = new Set();
+        let totalClicks = 0;
+        let hintsUsed = 0;
+        let hintsRemaining = 3;
+        let currentStreak = 0;
+        let startTime;
+        let timerInterval;
+        let gameActive = false;
+        
+        // Bug definitions for different difficulties
+        const bugSets = {
+            easy: [
+                { line: 2, type: 'syntax', hint: 'Check the function keyword spelling', description: 'Typo: "functoin" should be "function"' },
+                { line: 3, type: 'syntax', hint: 'Missing opening parenthesis', description: 'Should be "function greet(name) {"' },
+                { line: 4, type: 'syntax', hint: 'Missing parentheses around string', description: 'Should be console.log("Hello")' },
+                { line: 5, type: 'syntax', hint: 'Missing closing quote', description: 'String is not properly closed' },
+                { line: 9, type: 'syntax', hint: 'Missing comma between properties', description: 'Objects need commas between properties' },
+                { line: 11, type: 'syntax', hint: 'Missing colon in object property', description: 'Should be city: "Boston"' },
+                { line: 15, type: 'logic', hint: 'Variable not initialized', description: 'sum should be initialized to 0' },
+                { line: 18, type: 'logic', hint: 'Loop starts at wrong value', description: 'Loop should start at i = 0, not i = 1' }
+            ],
+            medium: [
+                { line: 2, type: 'syntax', hint: 'Function keyword typo', description: 'Typo: "functoin"' },
+                { line: 4, type: 'syntax', hint: 'Missing parentheses', description: 'console.log needs parentheses' },
+                { line: 9, type: 'syntax', hint: 'Missing comma', description: 'Missing comma after age property' },
+                { line: 15, type: 'logic', hint: 'Uninitialized variable', description: 'sum not initialized' },
+                { line: 18, type: 'logic', hint: 'Loop starts at 1', description: 'Loop should start at 0' },
+                { line: 24, type: 'logic', hint: 'Using = instead of ===', description: 'Assignment instead of comparison' },
+                { line: 29, type: 'logic', hint: 'Missing variable update', description: 'count += 1 or count++' },
+                { line: 34, type: 'logic', hint: 'No null check', description: 'Check if user exists before accessing property' },
+                { line: 39, type: 'logic', hint: 'Missing return statement', description: 'Function should return result' },
+                { line: 44, type: 'runtime', hint: 'Variable not defined', description: 'nonExistentVariable is undefined' }
+            ],
+            hard: [
+                { line: 2, type: 'syntax', hint: 'Function keyword', description: 'Typo in function' },
+                { line: 4, type: 'syntax', hint: 'console.log', description: 'Missing parentheses' },
+                { line: 9, type: 'syntax', hint: 'Object syntax', description: 'Missing comma' },
+                { line: 15, type: 'logic', hint: 'Variable initialization', description: 'Uninitialized variable' },
+                { line: 18, type: 'logic', hint: 'Loop condition', description: 'Wrong starting value' },
+                { line: 24, type: 'logic', hint: 'Comparison operator', description: 'Assignment vs comparison' },
+                { line: 29, type: 'logic', hint: 'Variable update', description: 'Missing increment' },
+                { line: 34, type: 'logic', hint: 'Null safety', description: 'No null check' },
+                { line: 39, type: 'logic', hint: 'Return value', description: 'Missing return' },
+                { line: 44, type: 'runtime', hint: 'Undefined variable', description: 'Variable not declared' },
+                { line: 49, type: 'runtime', hint: 'Type error', description: 'Calling non-function' },
+                { line: 54, type: 'runtime', hint: 'Null access', description: 'Cannot read property of null' },
+                { line: 59, type: 'runtime', hint: 'Array bounds', description: 'Index out of range' }
+            ]
+        };
+        
+        // Code samples for each difficulty
+        const codeSamples = {
+            easy: `// Bug Hunt - Easy Mode
+// Find 8 bugs!
+functoin greet(name {
+    console.log"Hello, " + name);
+    return "Hi!;
+}
+
+let person = {
+    name: "Alice"
+    age: 25,
+    city "Boston"
+};
+
+function sumArray(numbers) {
+    let sum;
+    for (let i = 1; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum;
+}`,
+            medium: `// Bug Hunt - Medium Mode
+// Find 10 bugs!
+functoin greet(name {
+    console.log"Hello, " + name);
+    return "Hi!;
+}
+
+let person = {
+    name: "Alice"
+    age: 25,
+    city: "Boston"
+};
+
+function sumArray(numbers) {
+    let sum;
+    for (let i = 1; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum;
+}
+
+function isEven(num) {
+    if (num % 2 = 0) {
+        return true;
+    }
+    return false;
+}
+
+function countPositive(numbers) {
+    let count = 0;
+    for (let num of numbers) {
+        if (num > 0) {
+            count;
+        }
+    }
+    return count;
+}
+
+function getUserName(user) {
+    return user.name;
+}
+
+function multiply(a, b) {
+    let result = a * b;
+}
+
+function buggyCode() {
+    console.log(nonExistentVariable);
+}`,
+            hard: `// Bug Hunt - Hard Mode
+// Find all 13 bugs!
+functoin greet(name {
+    console.log"Hello, " + name);
+    return "Hi!;
+}
+
+let person = {
+    name: "Alice"
+    age: 25,
+    city: "Boston"
+};
+
+function sumArray(numbers) {
+    let sum;
+    for (let i = 1; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum;
+}
+
+function isEven(num) {
+    if (num % 2 = 0) {
+        return true;
+    }
+    return false;
+}
+
+function countPositive(numbers) {
+    let count = 0;
+    for (let num of numbers) {
+        if (num > 0) {
+            count;
+        }
+    }
+    return count;
+}
+
+function getUserName(user) {
+    return user.name;
+}
+
+function multiply(a, b) {
+    let result = a * b;
+}
+
+function buggyCode() {
+    console.log(nonExistentVariable);
+}
+
+function callNonFunction() {
+    let notAFunction = 42;
+    notAFunction();
+}
+
+function accessNull() {
+    let obj = null;
+    console.log(obj.property);
+}
+
+function arrayOutOfBounds() {
+    let arr = [1, 2, 3];
+    console.log(arr[10]);
+}`
+        };
+        
+        // Initialize game
+        function startNewGame() {
+            gameActive = true;
+            bugsFound.clear();
+            totalClicks = 0;
+            hintsUsed = 0;
+            hintsRemaining = 3;
+            currentStreak = 0;
+            
+            // Clear hint container
+            document.getElementById('hintContainer').innerHTML = '';
+            
+            // Display code
+            displayCode();
+            
+            // Start timer
+            startTime = Date.now();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Update UI
+            updateStats();
+        }
+        
+        function displayCode() {
+            const bugs = bugSets[currentDifficulty];
+            const code = codeSamples[currentDifficulty];
+            const lines = code.split('\n');
+            
+            let html = '';
+            lines.forEach((line, index) => {
+                const lineNum = index + 1;
+                const hasBug = bugs.some(bug => bug.line === lineNum);
+                const isFound = bugsFound.has(lineNum);
+                
+                let lineClass = 'code-line';
+                if (hasBug) lineClass += ' bug';
+                
+                let marker = '';
+                if (isFound) {
+                    marker = '<span class="bug-marker">✓ FOUND</span>';
+                }
+                
+                html += `<div class="${lineClass}" onclick="clickLine(${lineNum})">
+                    <span class="line-number">${lineNum}</span>
+                    <span class="code-content">${escapeHtml(line)}${marker}</span>
+                </div>`;
+            });
+            
+            document.getElementById('codeDisplay').innerHTML = html;
+            document.getElementById('totalBugs').textContent = bugs.length;
+        }
+        
+        function clickLine(lineNum) {
+            if (!gameActive) return;
+            
+            totalClicks++;
+            const bugs = bugSets[currentDifficulty];
+            const bug = bugs.find(b => b.line === lineNum);
+            
+            if (bug && !bugsFound.has(lineNum)) {
+                // Found a bug!
+                bugsFound.add(lineNum);
+                currentStreak++;
+                showFeedback(`✓ Bug found! ${bug.description}`, 'success');
+                displayCode();
+                updateStats();
+                
+                // Check if game won
+                if (bugsFound.size === bugs.length) {
+                    endGame();
+                }
+            } else if (!bug) {
+                // Clicked wrong line
+                currentStreak = 0;
+                showFeedback('✗ No bug on this line', 'error');
+                updateStats();
+            }
+        }
+        
+        function showHint() {
+            if (hintsRemaining <= 0) {
+                showFeedback('No hints remaining!', 'error');
+                return;
+            }
+            
+            const bugs = bugSets[currentDifficulty];
+            const unfoundBugs = bugs.filter(bug => !bugsFound.has(bug.line));
+            
+            if (unfoundBugs.length === 0) return;
+            
+            // Get random unfound bug
+            const bug = unfoundBugs[Math.floor(Math.random() * unfoundBugs.length)];
+            
+            hintsRemaining--;
+            hintsUsed++;
+            
+            const hintHtml = `
+                <div class="hint-box">
+                    <div class="hint-title">💡 Hint: Line ${bug.line}</div>
+                    <div class="hint-text">${bug.hint}</div>
+                </div>
+            `;
+            
+            document.getElementById('hintContainer').innerHTML = hintHtml;
+            updateStats();
+        }
+        
+        function checkAllBugs() {
+            const bugs = bugSets[currentDifficulty];
+            const unfoundBugs = bugs.filter(bug => !bugsFound.has(bug.line));
+            
+            if (unfoundBugs.length === 0) {
+                showFeedback('All bugs found!', 'success');
+                return;
+            }
+            
+            let message = `Missing ${unfoundBugs.length} bug(s) on line(s): `;
+            message += unfoundBugs.map(bug => bug.line).join(', ');
+            showFeedback(message, 'info');
+        }
+        
+        function setDifficulty(level) {
+            currentDifficulty = level;
+            
+            // Update button states
+            const buttons = document.querySelectorAll('.difficulty button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Reset game
+            if (gameActive) {
+                startNewGame();
+            } else {
+                displayCode();
+                updateStats();
+            }
+        }
+        
+        function updateStats() {
+            const bugs = bugSets[currentDifficulty];
+            document.getElementById('bugsFound').textContent = bugsFound.size;
+            document.getElementById('totalBugs').textContent = bugs.length;
+            document.getElementById('hints').textContent = hintsRemaining;
+            document.getElementById('streak').textContent = currentStreak;
+            
+            // Calculate accuracy
+            const accuracy = totalClicks === 0 ? 100 : Math.round((bugsFound.size / totalClicks) * 100);
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+        
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+        }
+        
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            const accuracy = Math.round((bugsFound.size / totalClicks) * 100);
+            
+            const stats = `
+                <p>Time: ${minutes}m ${seconds}s</p>
+                <p>Accuracy: ${accuracy}%</p>
+                <p>Hints Used: ${hintsUsed}</p>
+                <p>Max Streak: ${currentStreak}</p>
+            `;
+            
+            document.getElementById('finalStats').innerHTML = stats;
+            document.getElementById('winModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('winModal').classList.remove('active');
+            startNewGame();
+        }
+        
+        function showFeedback(message, type) {
+            // Could add a toast notification here
+            console.log(`[${type}] ${message}`);
+        }
+        
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/ /g, '&nbsp;');
+        }
+        
+        // Initialize on load
+        displayCode();
+        updateStats();
+    </script>
+</body>

@@ -1,0 +1,583 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Input Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            color: #f5576c;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .explanation {
+            background: #fff5f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f5576c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="range"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .output-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+
+        /* Live Preview */
+        .preview-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 15px;
+            min-height: 100px;
+            font-size: 1.5em;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Character Counter */
+        .character-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .char-count {
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .warning {
+            color: #ff9800;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        /* Color Picker */
+        .color-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        input[type="color"] {
+            width: 100px;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Range Slider */
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+            padding: 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #f5576c;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: #f5576c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* Dropdown */
+        select {
+            cursor: pointer;
+        }
+
+        .theme-display {
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        /* Email Validator */
+        .validation-status {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .valid {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .invalid {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        /* Search Filter */
+        .item-list {
+            margin-top: 15px;
+        }
+
+        .item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .item:hover {
+            background: #e0e0e0;
+        }
+
+        .item.hidden {
+            display: none;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⌨️ Example 2: Input Events</h1>
+        <p class="subtitle">Learn how to respond to typing, selections, and changes</p>
+
+        <!-- Example 1: Live Text Preview -->
+        <div class="section">
+            <h2>1. Live Text Preview (input event)</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> The <code>input</code> event fires every time the user types a character.
+                <br><br>
+                <strong>Use Cases:</strong> Live search, instant preview, character counting
+            </div>
+            <label for="liveInput">Type something:</label>
+            <input type="text" id="liveInput" placeholder="Start typing...">
+            <div class="preview-box" id="livePreview">Your text will appear here!</div>
+        </div>
+
+        <!-- Example 2: Character Counter -->
+        <div class="section">
+            <h2>2. Character Counter</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Count characters as the user types and show warnings when approaching limits.
+                <br><br>
+                <strong>Common in:</strong> Twitter posts, text messages, bio fields
+            </div>
+            <label for="bioInput">Write a short bio (max 100 characters):</label>
+            <textarea id="bioInput" rows="4" placeholder="Tell us about yourself..."></textarea>
+            <div class="character-info">
+                <span>Characters: <span id="charCount" class="char-count">0</span> / 100</span>
+                <span id="charStatus"></span>
+            </div>
+        </div>
+
+        <!-- Example 3: Color Picker -->
+        <div class="section">
+            <h2>3. Color Picker (change and input events)</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Respond to color picker changes and update the page.
+                <br><br>
+                <strong>Events:</strong> <code>input</code> for live updates, <code>change</code> for final selection
+            </div>
+            <label for="colorPicker">Pick a color:</label>
+            <input type="color" id="colorPicker" value="#f5576c">
+            <div id="colorPreview" class="color-preview" style="background: #f5576c;">
+                #f5576c
+            </div>
+        </div>
+
+        <!-- Example 4: Range Slider -->
+        <div class="section">
+            <h2>4. Range Slider</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Range inputs (sliders) emit <code>input</code> events as you drag.
+                <br><br>
+                <strong>Use Cases:</strong> Volume controls, zoom levels, brightness settings
+            </div>
+            <label for="fontSlider">Font Size:</label>
+            <div class="slider-container">
+                <input type="range" id="fontSlider" min="12" max="72" value="24">
+                <span class="slider-value" id="fontValue">24px</span>
+            </div>
+            <div id="fontPreview" style="font-size: 24px; margin-top: 15px; text-align: center;">
+                Adjust the slider to change my size!
+            </div>
+        </div>
+
+        <!-- Example 5: Dropdown Selection -->
+        <div class="section">
+            <h2>5. Dropdown Selection (change event)</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> The <code>change</code> event fires when a selection changes.
+                <br><br>
+                <strong>Works with:</strong> Dropdowns, checkboxes, radio buttons
+            </div>
+            <label for="themeSelect">Choose a theme:</label>
+            <select id="themeSelect">
+                <option value="light">☀️ Light Mode</option>
+                <option value="dark">🌙 Dark Mode</option>
+                <option value="ocean">🌊 Ocean</option>
+                <option value="forest">🌲 Forest</option>
+                <option value="sunset">🌅 Sunset</option>
+            </select>
+            <div id="themeDisplay" class="theme-display" style="background: #f0f0f0; color: #333;">
+                <h3>Light Mode</h3>
+                <p>Clean and bright interface for daytime use.</p>
+            </div>
+        </div>
+
+        <!-- Example 6: Email Validation -->
+        <div class="section">
+            <h2>6. Live Email Validation</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Check input validity as the user types and provide instant feedback.
+                <br><br>
+                <strong>Pattern:</strong> Check for <code>@</code> symbol and <code>.</code> domain
+            </div>
+            <label for="emailInput">Enter your email:</label>
+            <input type="email" id="emailInput" placeholder="your.name@example.com">
+            <div id="emailStatus" class="validation-status invalid">
+                Please enter a valid email address
+            </div>
+        </div>
+
+        <!-- Example 7: Search Filter -->
+        <div class="section">
+            <h2>7. Live Search Filter</h2>
+            <div class="explanation">
+                <strong>Concept:</strong> Filter a list of items as the user types in a search box.
+                <br><br>
+                <strong>Common in:</strong> Search features, contact lists, product catalogs
+            </div>
+            <label for="searchInput">Search fruits:</label>
+            <input type="text" id="searchInput" placeholder="Type to search...">
+            <div class="item-list" id="fruitList">
+                <div class="item">🍎 Apple</div>
+                <div class="item">🍌 Banana</div>
+                <div class="item">🍒 Cherry</div>
+                <div class="item">🍇 Grapes</div>
+                <div class="item">🥝 Kiwi</div>
+                <div class="item">🍋 Lemon</div>
+                <div class="item">🥭 Mango</div>
+                <div class="item">🍊 Orange</div>
+                <div class="item">🍑 Peach</div>
+                <div class="item">🍓 Strawberry</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXAMPLE 2: INPUT EVENTS ===\n');
+
+        // ===== Example 1: Live Text Preview =====
+        console.log('--- Example 1: Live Text Preview ---');
+        
+        let liveInput = document.getElementById('liveInput');
+        let livePreview = document.getElementById('livePreview');
+
+        if (liveInput && livePreview) {
+            liveInput.addEventListener('input', function() {
+                let text = liveInput.value;
+                if (text === '') {
+                    livePreview.textContent = 'Your text will appear here!';
+                } else {
+                    livePreview.textContent = text;
+                }
+                console.log('Live preview updated:', text);
+            });
+            console.log('✓ Live preview listener added');
+        }
+
+        // ===== Example 2: Character Counter =====
+        console.log('\n--- Example 2: Character Counter ---');
+        
+        let bioInput = document.getElementById('bioInput');
+        let charCount = document.getElementById('charCount');
+        let charStatus = document.getElementById('charStatus');
+
+        if (bioInput && charCount && charStatus) {
+            bioInput.addEventListener('input', function() {
+                let length = bioInput.value.length;
+                charCount.textContent = length;
+
+                // Update styling based on character count
+                if (length > 100) {
+                    charCount.classList.add('error');
+                    charCount.classList.remove('warning');
+                    charStatus.textContent = '❌ Too many characters!';
+                    charStatus.className = 'error';
+                } else if (length > 80) {
+                    charCount.classList.add('warning');
+                    charCount.classList.remove('error');
+                    charStatus.textContent = '⚠️ Getting close to limit';
+                    charStatus.className = 'warning';
+                } else {
+                    charCount.classList.remove('warning', 'error');
+                    charStatus.textContent = '✅ Looking good!';
+                    charStatus.className = '';
+                }
+
+                console.log('Character count:', length);
+            });
+            console.log('✓ Character counter listener added');
+        }
+
+        // ===== Example 3: Color Picker =====
+        console.log('\n--- Example 3: Color Picker ---');
+        
+        let colorPicker = document.getElementById('colorPicker');
+        let colorPreview = document.getElementById('colorPreview');
+
+        if (colorPicker && colorPreview) {
+            // Input event for live updates
+            colorPicker.addEventListener('input', function() {
+                let color = colorPicker.value;
+                colorPreview.style.backgroundColor = color;
+                colorPreview.textContent = color;
+                console.log('Color changed (live):', color);
+            });
+
+            // Change event for final selection
+            colorPicker.addEventListener('change', function() {
+                let color = colorPicker.value;
+                console.log('Color selected (final):', color);
+            });
+
+            console.log('✓ Color picker listeners added');
+        }
+
+        // ===== Example 4: Range Slider =====
+        console.log('\n--- Example 4: Range Slider ---');
+        
+        let fontSlider = document.getElementById('fontSlider');
+        let fontValue = document.getElementById('fontValue');
+        let fontPreview = document.getElementById('fontPreview');
+
+        if (fontSlider && fontValue && fontPreview) {
+            fontSlider.addEventListener('input', function() {
+                let size = fontSlider.value;
+                fontValue.textContent = size + 'px';
+                fontPreview.style.fontSize = size + 'px';
+                console.log('Font size changed:', size + 'px');
+            });
+            console.log('✓ Range slider listener added');
+        }
+
+        // ===== Example 5: Dropdown Selection =====
+        console.log('\n--- Example 5: Dropdown Selection ---');
+        
+        let themeSelect = document.getElementById('themeSelect');
+        let themeDisplay = document.getElementById('themeDisplay');
+
+        let themes = {
+            light: {
+                bg: '#f0f0f0',
+                color: '#333',
+                title: 'Light Mode',
+                desc: 'Clean and bright interface for daytime use.'
+            },
+            dark: {
+                bg: '#2c3e50',
+                color: '#ecf0f1',
+                title: 'Dark Mode',
+                desc: 'Easy on the eyes for nighttime browsing.'
+            },
+            ocean: {
+                bg: '#006994',
+                color: '#e6f7ff',
+                title: 'Ocean Theme',
+                desc: 'Cool and calming blue tones.'
+            },
+            forest: {
+                bg: '#2d5016',
+                color: '#e8f0e0',
+                title: 'Forest Theme',
+                desc: 'Natural greens inspired by nature.'
+            },
+            sunset: {
+                bg: '#ff6b6b',
+                color: '#fff',
+                title: 'Sunset Theme',
+                desc: 'Warm and vibrant sunset colors.'
+            }
+        };
+
+        if (themeSelect && themeDisplay) {
+            themeSelect.addEventListener('change', function() {
+                let selected = themeSelect.value;
+                let theme = themes[selected];
+
+                themeDisplay.style.background = theme.bg;
+                themeDisplay.style.color = theme.color;
+                themeDisplay.innerHTML = '<h3>' + theme.title + '</h3><p>' + theme.desc + '</p>';
+
+                console.log('Theme changed to:', selected);
+            });
+            console.log('✓ Dropdown listener added');
+        }
+
+        // ===== Example 6: Email Validation =====
+        console.log('\n--- Example 6: Email Validation ---');
+        
+        let emailInput = document.getElementById('emailInput');
+        let emailStatus = document.getElementById('emailStatus');
+
+        if (emailInput && emailStatus) {
+            emailInput.addEventListener('input', function() {
+                let email = emailInput.value;
+
+                if (email === '') {
+                    emailStatus.textContent = 'Please enter a valid email address';
+                    emailStatus.className = 'validation-status invalid';
+                } else if (!email.includes('@')) {
+                    emailStatus.textContent = '❌ Email must contain @ symbol';
+                    emailStatus.className = 'validation-status invalid';
+                } else if (!email.includes('.')) {
+                    emailStatus.textContent = '❌ Email must contain a domain (e.g., .com)';
+                    emailStatus.className = 'validation-status invalid';
+                } else {
+                    emailStatus.textContent = '✅ Email looks valid!';
+                    emailStatus.className = 'validation-status valid';
+                }
+
+                console.log('Email validation:', email);
+            });
+            console.log('✓ Email validation listener added');
+        }
+
+        // ===== Example 7: Search Filter =====
+        console.log('\n--- Example 7: Search Filter ---');
+        
+        let searchInput = document.getElementById('searchInput');
+        let fruitItems = document.querySelectorAll('.item');
+
+        if (searchInput && fruitItems.length > 0) {
+            searchInput.addEventListener('input', function() {
+                let searchTerm = searchInput.value.toLowerCase();
+                let visibleCount = 0;
+
+                fruitItems.forEach(function(item) {
+                    let text = item.textContent.toLowerCase();
+
+                    if (text.includes(searchTerm)) {
+                        item.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                console.log('Search:', searchTerm, '- Visible items:', visibleCount);
+            });
+            console.log('✓ Search filter listener added');
+        }
+
+        console.log('\n✓ All input event listeners loaded!');
+        console.log('Try typing in the inputs and watch the magic happen!');
+    </script>
+</body>
+</html>

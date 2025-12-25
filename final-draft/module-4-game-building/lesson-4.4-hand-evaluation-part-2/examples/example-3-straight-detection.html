@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Straight Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2c5530;
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; }
+        .card-display {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 24px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Straight Detection</h1>
+        <p>A Straight is <strong>5 cards in sequence</strong>. Aces can be high (A-K-Q-J-10) or low (5-4-3-2-A).</p>
+        
+        <div id="card-display" class="card-display"></div>
+        
+        <button onclick="testNormalStraight()">Test Normal Straight (9-8-7-6-5)</button>
+        <button onclick="testAceHigh()">Test Ace-High (A-K-Q-J-10)</button>
+        <button onclick="testAceLow()">Test Ace-Low (5-4-3-2-A)</button>
+        <button onclick="testNotStraight()">Test Not Straight</button>
+        
+        <div id="result" class="result"></div>
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        // Create a card object
+        function createCard(rank, suit) {
+            const valueMap = {
+                '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+                '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14
+            };
+            
+            return {
+                rank: rank,
+                suit: suit,
+                value: valueMap[rank]
+            };
+        }
+
+        // Detect straight (5 cards in sequence)
+        function hasStraight(cards) {
+            console.log('Checking for straight...');
+            
+            // Get unique values and sort them
+            const values = [...new Set(cards.map(c => c.value))].sort((a, b) => a - b);
+            console.log('Unique values (sorted):', values);
+            
+            // Check for regular straight
+            for (let i = 0; i <= values.length - 5; i++) {
+                let consecutive = true;
+                
+                for (let j = 0; j < 4; j++) {
+                    if (values[i + j + 1] !== values[i + j] + 1) {
+                        consecutive = false;
+                        break;
+                    }
+                }
+                
+                if (consecutive) {
+                    const high = values[i + 4];
+                    console.log(`✅ STRAIGHT DETECTED! High card: ${high}`);
+                    return {
+                        hasStraight: true,
+                        highCard: high,
+                        type: 'regular'
+                    };
+                }
+            }
+            
+            // Check for Ace-low straight (A-2-3-4-5)
+            // Ace is value 14, but can act as 1 for the wheel
+            if (values.includes(14) && values.includes(2) && values.includes(3) && 
+                values.includes(4) && values.includes(5)) {
+                console.log('✅ STRAIGHT DETECTED! Ace-low (wheel)');
+                return {
+                    hasStraight: true,
+                    highCard: 5,  // In ace-low, 5 is the high card
+                    type: 'ace-low'
+                };
+            }
+            
+            console.log('❌ No straight found');
+            return { hasStraight: false };
+        }
+
+        // Get suit symbol
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit];
+        }
+
+        // Display cards
+        function displayCards(cards) {
+            const container = document.getElementById('card-display');
+            container.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `card ${card.suit}`;
+                cardDiv.textContent = card.rank + getSuitSymbol(card.suit);
+                container.appendChild(cardDiv);
+            });
+        }
+
+        // Show result
+        function showResult(cards, result) {
+            const resultDiv = document.getElementById('result');
+            
+            if (result.hasStraight) {
+                const rankMap = {
+                    14: 'Ace', 13: 'King', 12: 'Queen', 11: 'Jack',
+                    10: '10', 9: '9', 8: '8', 7: '7', 6: '6',
+                    5: '5', 4: '4', 3: '3', 2: '2'
+                };
+                
+                resultDiv.innerHTML = `
+                    <h3>✅ STRAIGHT!</h3>
+                    <p>Type: <strong>${result.type === 'ace-low' ? 'Ace-Low (Wheel)' : 'Regular'}</strong></p>
+                    <p>High card: <strong>${rankMap[result.highCard]}</strong></p>
+                    ${result.type === 'ace-low' ? '<p>5-4-3-2-A is the lowest straight!</p>' : ''}
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <h3>❌ Not a Straight</h3>
+                    <p>Cards are not in sequence.</p>
+                `;
+            }
+        }
+
+        // Test cases
+        function testNormalStraight() {
+            console.log('\n=== Testing Normal Straight ===');
+            const cards = [
+                createCard('9', 'hearts'),
+                createCard('8', 'spades'),
+                createCard('7', 'diamonds'),
+                createCard('6', 'clubs'),
+                createCard('5', 'spades')
+            ];
+            
+            displayCards(cards);
+            const result = hasStraight(cards);
+            showResult(cards, result);
+        }
+
+        function testAceHigh() {
+            console.log('\n=== Testing Ace-High Straight (Broadway) ===');
+            const cards = [
+                createCard('A', 'hearts'),
+                createCard('K', 'spades'),
+                createCard('Q', 'diamonds'),
+                createCard('J', 'clubs'),
+                createCard('10', 'spades')
+            ];
+            
+            displayCards(cards);
+            const result = hasStraight(cards);
+            showResult(cards, result);
+        }
+
+        function testAceLow() {
+            console.log('\n=== Testing Ace-Low Straight (Wheel) ===');
+            const cards = [
+                createCard('5', 'hearts'),
+                createCard('4', 'spades'),
+                createCard('3', 'diamonds'),
+                createCard('2', 'clubs'),
+                createCard('A', 'spades')
+            ];
+            
+            displayCards(cards);
+            const result = hasStraight(cards);
+            showResult(cards, result);
+        }
+
+        function testNotStraight() {
+            console.log('\n=== Testing Not a Straight ===');
+            const cards = [
+                createCard('9', 'hearts'),
+                createCard('8', 'spades'),
+                createCard('7', 'diamonds'),
+                createCard('5', 'clubs'),
+                createCard('4', 'spades')
+            ];
+            
+            displayCards(cards);
+            const result = hasStraight(cards);
+            showResult(cards, result);
+        }
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Show initial example
+        testNormalStraight();
+    </script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator - RPG Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .character-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .character-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .character-card.selected {
+            border: 3px solid #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .character-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .character-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .character-class {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .character-level {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #764ba2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .stat-name {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .health-bar, .mana-bar {
+            margin-bottom: 15px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .bar-container {
+            background: #e0e0e0;
+            height: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            color: white;
+            font-weight: bold;
+        }
+
+        .health-fill {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .mana-fill {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .inventory {
+            margin-bottom: 15px;
+        }
+
+        .inventory-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .inventory-items {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 8px;
+            min-height: 40px;
+        }
+
+        .inventory-item {
+            display: inline-block;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            margin: 3px;
+            font-size: 0.85em;
+            border: 1px solid #e0e0e0;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .action-button {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
+        }
+
+        .action-button:active {
+            transform: scale(0.95);
+        }
+
+        .level-up-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .damage-btn {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+        }
+
+        .heal-btn {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            color: white;
+        }
+
+        .skill-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #e0e0e0;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        .message {
+            background: #764ba2;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .equipment {
+            margin-bottom: 15px;
+        }
+
+        .equipment-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .equipment-item {
+            background: #f8f8f8;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .xp-bar {
+            margin-bottom: 15px;
+        }
+
+        .xp-fill {
+            background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚔️ RPG Character Creator ⚔️</h1>
+
+        <div class="character-form">
+            <h2 style="margin-bottom: 20px; color: #667eea;">Create New Character</h2>
+            <div class="form-group">
+                <label for="charName">Character Name:</label>
+                <input type="text" id="charName" placeholder="Enter character name">
+            </div>
+            <div class="form-group">
+                <label for="charClass">Choose Class:</label>
+                <select id="charClass">
+                    <option value="Fighter">Fighter - High strength and health</option>
+                    <option value="Mage">Mage - High intelligence and mana</option>
+                    <option value="Rogue">Rogue - High agility and critical hits</option>
+                </select>
+            </div>
+            <button class="button" onclick="createCharacter()">Create Character</button>
+        </div>
+
+        <div class="character-list" id="characterList"></div>
+    </div>
+
+    <script>
+        // Factory function to create character objects
+        function createCharacterObject(name, charClass) {
+            // Base stats by class
+            let classStats = {
+                Fighter: { str: 15, int: 8, agi: 10, hp: 120, maxHp: 120, mana: 30, maxMana: 30 },
+                Mage: { str: 8, int: 15, agi: 10, hp: 80, maxHp: 80, mana: 120, maxMana: 120 },
+                Rogue: { str: 10, int: 10, agi: 15, hp: 100, maxHp: 100, mana: 60, maxMana: 60 }
+            };
+
+            let stats = classStats[charClass];
+
+            return {
+                id: Date.now(),
+                name: name,
+                class: charClass,
+                level: 1,
+                xp: 0,
+                xpToNextLevel: 100,
+                health: stats.hp,
+                maxHealth: stats.maxHp,
+                mana: stats.mana,
+                maxMana: stats.maxMana,
+                stats: {
+                    strength: stats.str,
+                    intelligence: stats.int,
+                    agility: stats.agi
+                },
+                equipment: {
+                    weapon: "Wooden Sword",
+                    armor: "Cloth Armor",
+                    accessory: "None"
+                },
+                inventory: ["Health Potion", "Mana Potion"],
+
+                // Method to level up
+                levelUp: function() {
+                    this.level++;
+                    this.xp = 0;
+                    this.xpToNextLevel = Math.floor(this.xpToNextLevel * 1.5);
+
+                    // Increase stats based on class
+                    if (this.class === "Fighter") {
+                        this.stats.strength += 3;
+                        this.stats.intelligence += 1;
+                        this.stats.agility += 2;
+                        this.maxHealth += 15;
+                    } else if (this.class === "Mage") {
+                        this.stats.strength += 1;
+                        this.stats.intelligence += 3;
+                        this.stats.agility += 2;
+                        this.maxMana += 20;
+                        this.maxHealth += 8;
+                    } else if (this.class === "Rogue") {
+                        this.stats.strength += 2;
+                        this.stats.intelligence += 2;
+                        this.stats.agility += 3;
+                        this.maxHealth += 12;
+                        this.maxMana += 10;
+                    }
+
+                    // Restore HP and mana on level up
+                    this.health = this.maxHealth;
+                    this.mana = this.maxMana;
+
+                    return "🎉 Level Up! Now level " + this.level + "!";
+                },
+
+                // Method to take damage
+                takeDamage: function(amount) {
+                    this.health -= amount;
+                    if (this.health < 0) this.health = 0;
+                    
+                    if (this.health === 0) {
+                        return "💀 " + this.name + " has been defeated!";
+                    }
+                    return "⚔️ Took " + amount + " damage!";
+                },
+
+                // Method to heal
+                heal: function(amount) {
+                    let healedAmount = Math.min(amount, this.maxHealth - this.health);
+                    this.health = Math.min(this.maxHealth, this.health + amount);
+                    return "💚 Healed " + healedAmount + " HP!";
+                },
+
+                // Method to use skill
+                useSkill: function(skillName) {
+                    let skills = {
+                        Fighter: { name: "Power Strike", cost: 20, damage: 50 },
+                        Mage: { name: "Fireball", cost: 30, damage: 60 },
+                        Rogue: { name: "Backstab", cost: 25, damage: 55 }
+                    };
+
+                    let skill = skills[this.class];
+                    
+                    if (this.mana < skill.cost) {
+                        return "❌ Not enough mana!";
+                    }
+
+                    this.mana -= skill.cost;
+                    return "✨ Used " + skill.name + "! Dealt " + skill.damage + " damage!";
+                },
+
+                // Method to add item to inventory
+                addItem: function(item) {
+                    this.inventory.push(item);
+                    return "📦 Added " + item + " to inventory!";
+                },
+
+                // Method to gain XP
+                gainXP: function(amount) {
+                    this.xp += amount;
+                    if (this.xp >= this.xpToNextLevel) {
+                        return this.levelUp();
+                    }
+                    return "⭐ Gained " + amount + " XP!";
+                },
+
+                // Method to equip item
+                equipItem: function(slot, item) {
+                    let oldItem = this.equipment[slot];
+                    this.equipment[slot] = item;
+                    return "⚔️ Equipped " + item + " (replaced " + oldItem + ")";
+                },
+
+                // Method to get full stats display
+                displayStats: function() {
+                    return `
+                        Name: ${this.name}
+                        Class: ${this.class}
+                        Level: ${this.level}
+                        HP: ${this.health}/${this.maxHealth}
+                        Mana: ${this.mana}/${this.maxMana}
+                        Strength: ${this.stats.strength}
+                        Intelligence: ${this.stats.intelligence}
+                        Agility: ${this.stats.agility}
+                    `;
+                }
+            };
+        }
+
+        // Array to store all characters
+        let characters = [];
+        let selectedCharacterId = null;
+
+        // Function to create new character
+        function createCharacter() {
+            let name = document.getElementById("charName").value.trim();
+            let charClass = document.getElementById("charClass").value;
+
+            if (name === "") {
+                alert("Please enter a character name!");
+                return;
+            }
+
+            let newCharacter = createCharacterObject(name, charClass);
+            characters.push(newCharacter);
+            
+            console.log("Created character:", newCharacter.displayStats());
+
+            // Clear form
+            document.getElementById("charName").value = "";
+            
+            // Select the new character
+            selectedCharacterId = newCharacter.id;
+            
+            displayCharacters();
+        }
+
+        // Function to display all characters
+        function displayCharacters() {
+            let listDiv = document.getElementById("characterList");
+            listDiv.innerHTML = "";
+
+            characters.forEach(char => {
+                let cardDiv = document.createElement("div");
+                cardDiv.className = "character-card";
+                if (char.id === selectedCharacterId) {
+                    cardDiv.className += " selected";
+                }
+
+                let healthPercent = (char.health / char.maxHealth) * 100;
+                let manaPercent = (char.mana / char.maxMana) * 100;
+                let xpPercent = (char.xp / char.xpToNextLevel) * 100;
+
+                let inventoryHTML = char.inventory.map(item => 
+                    `<span class="inventory-item">${item}</span>`
+                ).join("");
+
+                cardDiv.innerHTML = `
+                    <div class="character-header">
+                        <span class="character-name">${char.name}</span>
+                        <span class="character-class">${char.class}</span>
+                    </div>
+                    
+                    <div class="character-level">Level ${char.level}</div>
+
+                    <div class="xp-bar">
+                        <div class="bar-label">
+                            <span>XP</span>
+                            <span>${char.xp}/${char.xpToNextLevel}</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill xp-fill" style="width: ${xpPercent}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-bar">
+                        <div class="bar-label">
+                            <span>Health</span>
+                            <span>${char.health}/${char.maxHealth}</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill health-fill" style="width: ${healthPercent}%">
+                                ${Math.round(healthPercent)}%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mana-bar">
+                        <div class="bar-label">
+                            <span>Mana</span>
+                            <span>${char.mana}/${char.maxMana}</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill mana-fill" style="width: ${manaPercent}%">
+                                ${Math.round(manaPercent)}%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <div class="stat-name">💪 Strength</div>
+                            <div class="stat-value">${char.stats.strength}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-name">🧠 Intelligence</div>
+                            <div class="stat-value">${char.stats.intelligence}</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-name">⚡ Agility</div>
+                            <div class="stat-value">${char.stats.agility}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment">
+                        <div class="equipment-title">Equipment:</div>
+                        <div class="equipment-item">⚔️ Weapon: ${char.equipment.weapon}</div>
+                        <div class="equipment-item">🛡️ Armor: ${char.equipment.armor}</div>
+                        <div class="equipment-item">💍 Accessory: ${char.equipment.accessory}</div>
+                    </div>
+                    
+                    <div class="inventory">
+                        <div class="inventory-title">Inventory:</div>
+                        <div class="inventory-items">
+                            ${inventoryHTML || '<span style="color: #999;">Empty</span>'}
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-button level-up-btn" onclick="levelUpCharacter(${char.id})">
+                            Level Up
+                        </button>
+                        <button class="action-button damage-btn" onclick="damageCharacter(${char.id})">
+                            Take Damage
+                        </button>
+                        <button class="action-button heal-btn" onclick="healCharacter(${char.id})">
+                            Heal
+                        </button>
+                        <button class="action-button skill-btn" onclick="useCharacterSkill(${char.id})">
+                            Use Skill
+                        </button>
+                        <button class="action-button delete-btn" onclick="deleteCharacter(${char.id})">
+                            Delete Character
+                        </button>
+                    </div>
+                    
+                    <div class="message" id="message-${char.id}" style="display: none;"></div>
+                `;
+
+                cardDiv.addEventListener("click", function() {
+                    selectedCharacterId = char.id;
+                    displayCharacters();
+                });
+
+                listDiv.appendChild(cardDiv);
+            });
+        }
+
+        // Action functions
+        function levelUpCharacter(id) {
+            let char = characters.find(c => c.id === id);
+            let message = char.levelUp();
+            showMessage(id, message);
+            displayCharacters();
+            console.log(char.name + " leveled up to " + char.level);
+        }
+
+        function damageCharacter(id) {
+            let char = characters.find(c => c.id === id);
+            let damage = Math.floor(Math.random() * 30) + 10;
+            let message = char.takeDamage(damage);
+            showMessage(id, message);
+            displayCharacters();
+        }
+
+        function healCharacter(id) {
+            let char = characters.find(c => c.id === id);
+            let message = char.heal(30);
+            showMessage(id, message);
+            displayCharacters();
+        }
+
+        function useCharacterSkill(id) {
+            let char = characters.find(c => c.id === id);
+            let message = char.useSkill();
+            showMessage(id, message);
+            displayCharacters();
+        }
+
+        function deleteCharacter(id) {
+            if (confirm("Are you sure you want to delete this character?")) {
+                characters = characters.filter(c => c.id !== id);
+                if (selectedCharacterId === id) {
+                    selectedCharacterId = characters.length > 0 ? characters[0].id : null;
+                }
+                displayCharacters();
+            }
+        }
+
+        function showMessage(id, text) {
+            let messageDiv = document.getElementById("message-" + id);
+            messageDiv.textContent = text;
+            messageDiv.style.display = "block";
+            setTimeout(() => {
+                messageDiv.style.display = "none";
+            }, 3000);
+        }
+
+        // Create some example characters on load
+        window.onload = function() {
+            let hero = createCharacterObject("Hero", "Fighter");
+            hero.gainXP(50);
+            characters.push(hero);
+
+            let mage = createCharacterObject("Wizard", "Mage");
+            characters.push(mage);
+
+            selectedCharacterId = hero.id;
+            displayCharacters();
+
+            console.log("Character Creator loaded!");
+            console.log("Try the buttons to interact with characters!");
+        };
+    </script>
+</body>

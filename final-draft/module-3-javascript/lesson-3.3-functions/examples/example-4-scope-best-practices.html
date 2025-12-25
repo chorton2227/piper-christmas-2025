@@ -1,0 +1,563 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Scope and Best Practices</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #43e97b;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #43e97b;
+        }
+        .section h2 {
+            color: #43e97b;
+            margin-top: 0;
+        }
+        .good-example {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #28a745;
+        }
+        .bad-example {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Scope & Best Practices</h1>
+        <p class="subtitle">Understanding scope and writing clean functions</p>
+
+        <div class="section">
+            <h2>Part 1: Understanding Scope</h2>
+            <p>What variables can functions see and use?</p>
+        </div>
+
+        <div class="section">
+            <h2>Part 2: Function Naming</h2>
+            <p>How to name functions clearly and consistently.</p>
+        </div>
+
+        <div class="section">
+            <h2>Part 3: Function Organization</h2>
+            <p>Keeping functions focused and maintainable.</p>
+        </div>
+
+        <div class="section">
+            <h2>Part 4: Complete Clean Code Example</h2>
+            <p>Putting all best practices together!</p>
+        </div>
+
+        <p style="text-align: center; color: #666; margin-top: 30px;">
+            <strong>Open the console (F12) to see the examples!</strong>
+        </p>
+    </div>
+
+    <script>
+        console.log('='.repeat(60));
+        console.log('🎯 SCOPE & BEST PRACTICES');
+        console.log('='.repeat(60));
+
+        // ============================================
+        // PART 1: UNDERSTANDING SCOPE
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 1: UNDERSTANDING SCOPE');
+        console.log('='.repeat(60));
+
+        // Global variables - accessible everywhere
+        let gameTitle = 'Adventure Quest';
+        let playerScore = 0;
+        let playerLevel = 1;
+
+        console.log('\n📌 Global Variables:');
+        console.log('Game title:', gameTitle);
+        console.log('Player score:', playerScore);
+        console.log('Player level:', playerLevel);
+
+        // Functions can access global variables
+        function displayGameInfo() {
+            console.log('\n🎮 Game Info (using global variables):');
+            console.log('  Playing:', gameTitle);
+            console.log('  Score:', playerScore);
+            console.log('  Level:', playerLevel);
+        }
+
+        displayGameInfo();
+
+        // Functions can modify global variables
+        function addPoints(points) {
+            playerScore = playerScore + points;
+            console.log('\n⭐ Added ' + points + ' points!');
+            console.log('   New score:', playerScore);
+        }
+
+        addPoints(100);
+        addPoints(50);
+
+        console.log('\n📊 Final score:', playerScore);
+
+        // Local variables - only accessible inside function
+        function calculateDamage(attack, defense) {
+            let damage = attack - defense;  // Local variable
+            let message = 'Damage dealt';   // Local variable
+            
+            if (damage < 0) {
+                damage = 0;
+            }
+            
+            console.log('\n⚔️  ' + message + ':', damage);
+            return damage;
+        }
+
+        calculateDamage(30, 10);
+        // console.log(damage);  // ERROR! damage doesn't exist here
+        // console.log(message); // ERROR! message doesn't exist here
+
+        // Parameters are local to the function
+        function greet(name) {  // name is local
+            console.log('\n👋 Hello, ' + name + '!');
+        }
+
+        greet('Alex');
+        // console.log(name);  // ERROR! name doesn't exist here
+
+        // Scope demonstration
+        let globalMessage = 'I am global';
+
+        function showScope() {
+            let localMessage = 'I am local';
+            
+            console.log('\n🔍 Inside function:');
+            console.log('  Can see global:', globalMessage);
+            console.log('  Can see local:', localMessage);
+        }
+
+        showScope();
+        console.log('\n🔍 Outside function:');
+        console.log('  Can see global:', globalMessage);
+        // console.log('  Can see local:', localMessage); // ERROR!
+
+        // Shadowing - local variable hides global
+        let count = 100;  // Global
+
+        function incrementCount() {
+            let count = 0;  // Local - different variable!
+            count = count + 1;
+            console.log('\n📝 Local count inside function:', count);
+            return count;
+        }
+
+        let result = incrementCount();
+        console.log('📝 Return value:', result);
+        console.log('📝 Global count (unchanged):', count);
+
+        // ============================================
+        // PART 2: FUNCTION NAMING
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 2: FUNCTION NAMING BEST PRACTICES');
+        console.log('='.repeat(60));
+
+        console.log('\n✅ GOOD FUNCTION NAMES (descriptive, verb-based):');
+        
+        // Use verbs that describe actions
+        function calculateTotal(price, quantity) {
+            return price * quantity;
+        }
+
+        function displayMessage(text) {
+            console.log('  ' + text);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function getUserInput() {
+            return 'Sample input';
+        }
+
+        function isGameOver(health) {
+            return health <= 0;
+        }
+
+        function hasPermission(userLevel, requiredLevel) {
+            return userLevel >= requiredLevel;
+        }
+
+        displayMessage('calculateTotal() - clear what it does');
+        displayMessage('displayMessage() - obvious purpose');
+        displayMessage('validatePassword() - tells you it checks something');
+        displayMessage('getUserInput() - retrieves user input');
+        displayMessage('isGameOver() - returns true/false');
+        displayMessage('hasPermission() - checks a condition');
+
+        console.log('\n❌ BAD FUNCTION NAMES (vague, unclear):');
+        
+        function doStuff() {  // What stuff?
+            return 42;
+        }
+
+        function process(x) {  // Process what?
+            return x * 2;
+        }
+
+        function func1() {  // Meaningless name
+            console.log('  What does this do?');
+        }
+
+        func1();
+        displayMessage('doStuff() - too vague');
+        displayMessage('process() - doesn\'t tell us anything');
+        displayMessage('func1() - completely unclear');
+
+        console.log('\n💡 Naming Patterns:');
+        displayMessage('✓ calculate... - for math operations');
+        displayMessage('✓ get... - for retrieving data');
+        displayMessage('✓ set... / update... - for changing data');
+        displayMessage('✓ display... / show... - for output');
+        displayMessage('✓ validate... / check... - for verification');
+        displayMessage('✓ is... / has... / can... - for boolean checks');
+
+        // ============================================
+        // PART 3: FUNCTION ORGANIZATION
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 3: FUNCTION ORGANIZATION');
+        console.log('='.repeat(60));
+
+        console.log('\n✅ GOOD: One job per function (single responsibility)');
+
+        // Each function does ONE thing
+        function calculateSubtotal(items, prices) {
+            let total = 0;
+            for (let i = 0; i < items; i++) {
+                total = total + prices[i];
+            }
+            return total;
+        }
+
+        function calculateTax2(subtotal, rate) {
+            return subtotal * rate;
+        }
+
+        function calculateOrderTotal(subtotal, taxRate) {
+            let tax = calculateTax2(subtotal, taxRate);
+            return subtotal + tax;
+        }
+
+        console.log('  calculateSubtotal() - just adds prices');
+        console.log('  calculateTax() - just calculates tax');
+        console.log('  calculateOrderTotal() - combines the results');
+        console.log('  ✓ Each function has one clear purpose');
+
+        console.log('\n❌ BAD: Function doing too many things');
+
+        function processOrder(items, prices, taxRate, userName, userEmail) {
+            // Calculating totals
+            let total = 0;
+            for (let i = 0; i < items; i++) {
+                total = total + prices[i];
+            }
+            let tax = total * taxRate;
+            let finalTotal = total + tax;
+            
+            // Validating user
+            let validEmail = userEmail.includes('@');
+            
+            // Displaying results
+            console.log('  Order for:', userName);
+            console.log('  Total:', finalTotal);
+            
+            // Sending email (pretend)
+            // ... more code ...
+            
+            // Updating database (pretend)
+            // ... more code ...
+            
+            return finalTotal;
+        }
+
+        console.log('  processOrder() tries to do everything!');
+        console.log('  ✗ Calculating, validating, displaying, emailing, database');
+        console.log('  ✗ Too many responsibilities - hard to test and maintain');
+
+        console.log('\n💡 Keep functions focused:');
+        console.log('  ✓ Each function should do ONE thing well');
+        console.log('  ✓ If a function is long, break it into smaller functions');
+        console.log('  ✓ Functions should be easy to name (if hard to name, too complex)');
+
+        console.log('\n✅ GOOD: Clear parameters with good names');
+
+        function createCharacterCard(name, health, mana, level) {
+            return 'Character: ' + name + ' (Lv.' + level + ') HP:' + health + ' MP:' + mana;
+        }
+
+        console.log('  ' + createCharacterCard('Alex', 100, 50, 5));
+        console.log('  ✓ Parameters have descriptive names');
+        console.log('  ✓ Easy to understand what to pass in');
+
+        console.log('\n❌ BAD: Unclear parameters');
+
+        function createCard(n, h, m, l) {
+            return 'Character: ' + n + ' (Lv.' + l + ') HP:' + h + ' MP:' + m;
+        }
+
+        console.log('  ' + createCard('Alex', 100, 50, 5));
+        console.log('  ✗ What do n, h, m, l mean?');
+        console.log('  ✗ Have to look at function body to understand');
+
+        // ============================================
+        // PART 4: COMPLETE CLEAN CODE EXAMPLE
+        // ============================================
+
+        console.log('\n' + '='.repeat(60));
+        console.log('PART 4: COMPLETE CLEAN CODE EXAMPLE');
+        console.log('='.repeat(60));
+
+        console.log('\n🎮 Clean RPG Character System');
+        console.log('─'.repeat(60));
+
+        // === CONFIGURATION (Global Constants) ===
+        const MAX_HEALTH = 100;
+        const MAX_MANA = 50;
+        const BASE_DAMAGE = 20;
+        const LEVEL_UP_XP = 100;
+
+        // === STAT CALCULATION FUNCTIONS ===
+
+        // Calculate max health based on level
+        function getMaxHealthForLevel(level) {
+            return MAX_HEALTH + (level * 10);
+        }
+
+        // Calculate max mana based on level
+        function getMaxManaForLevel(level) {
+            return MAX_MANA + (level * 5);
+        }
+
+        // Calculate damage with level bonus
+        function getDamageForLevel(level) {
+            return BASE_DAMAGE + (level * 3);
+        }
+
+        // Calculate experience needed for next level
+        function getXPForNextLevel(currentLevel) {
+            return LEVEL_UP_XP * (currentLevel + 1);
+        }
+
+        // === STATUS CHECK FUNCTIONS ===
+
+        // Check if character is alive
+        function isCharacterAlive(health) {
+            return health > 0;
+        }
+
+        // Check if character can level up
+        function canLevelUp(currentXP, currentLevel) {
+            return currentXP >= getXPForNextLevel(currentLevel);
+        }
+
+        // Check if character has enough mana for spell
+        function hasEnoughMana(currentMana, spellCost) {
+            return currentMana >= spellCost;
+        }
+
+        // Get health status message
+        function getHealthStatusMessage(health, maxHealth) {
+            let percent = (health / maxHealth) * 100;
+            if (percent === 0) return 'Defeated';
+            if (percent < 25) return 'Critical';
+            if (percent < 50) return 'Injured';
+            if (percent < 75) return 'Healthy';
+            return 'Full Health';
+        }
+
+        // === ACTION FUNCTIONS ===
+
+        // Apply damage to character
+        function takeDamage(currentHealth, damageAmount) {
+            let newHealth = currentHealth - damageAmount;
+            if (newHealth < 0) {
+                newHealth = 0;
+            }
+            return newHealth;
+        }
+
+        // Heal character
+        function healCharacter2(currentHealth, healAmount, maxHealth) {
+            let newHealth = currentHealth + healAmount;
+            if (newHealth > maxHealth) {
+                newHealth = maxHealth;
+            }
+            return newHealth;
+        }
+
+        // Use mana for spell
+        function useMana(currentMana, manaCost) {
+            return currentMana - manaCost;
+        }
+
+        // Gain experience
+        function gainExperience(currentXP, xpAmount) {
+            return currentXP + xpAmount;
+        }
+
+        // Level up character
+        function levelUpCharacter(currentLevel) {
+            return currentLevel + 1;
+        }
+
+        // === DISPLAY FUNCTIONS ===
+
+        // Display character stats
+        function displayCharacterStats(name, level, health, maxHealth, mana, maxMana, xp) {
+            console.log('\n╔════════════════════════════╗');
+            console.log('║  ' + name.padEnd(24) + '  ║');
+            console.log('╠════════════════════════════╣');
+            console.log('║ Level: ' + level);
+            console.log('║ XP: ' + xp + ' / ' + getXPForNextLevel(level));
+            console.log('║ HP: ' + health + ' / ' + maxHealth + ' (' + getHealthStatusMessage(health, maxHealth) + ')');
+            console.log('║ MP: ' + mana + ' / ' + maxMana);
+            console.log('╚════════════════════════════╝');
+        }
+
+        // Display action result
+        function displayActionResult(message, value) {
+            console.log('   ' + message + ': ' + value);
+        }
+
+        // Display level up message
+        function displayLevelUpMessage(name, newLevel) {
+            console.log('\n⭐════════════════════════⭐');
+            console.log('   LEVEL UP!');
+            console.log('   ' + name + ' reached level ' + newLevel + '!');
+            console.log('⭐════════════════════════⭐');
+        }
+
+        // === DEMONSTRATION ===
+
+        console.log('\n✨ Creating character...');
+
+        // Initialize character
+        let charName = 'Aria the Brave';
+        let charLevel = 1;
+        let charXP = 0;
+        let charMaxHealth = getMaxHealthForLevel(charLevel);
+        let charHealth = charMaxHealth;
+        let charMaxMana = getMaxManaForLevel(charLevel);
+        let charMana = charMaxMana;
+
+        // Show initial stats
+        displayCharacterStats(charName, charLevel, charHealth, charMaxHealth, charMana, charMaxMana, charXP);
+
+        // Action 1: Take damage
+        console.log('\n⚔️  Aria enters battle and takes damage!');
+        let incomingDamage = 25;
+        charHealth = takeDamage(charHealth, incomingDamage);
+        displayActionResult('Damage taken', incomingDamage);
+        displayActionResult('Health now', charHealth + ' / ' + charMaxHealth);
+
+        // Action 2: Cast spell
+        console.log('\n✨ Aria casts Fireball!');
+        let spellCost = 15;
+        if (hasEnoughMana(charMana, spellCost)) {
+            charMana = useMana(charMana, spellCost);
+            let spellDamage = 30;
+            displayActionResult('Mana used', spellCost);
+            displayActionResult('Spell damage', spellDamage);
+            displayActionResult('Mana now', charMana + ' / ' + charMaxMana);
+        } else {
+            console.log('   Not enough mana!');
+        }
+
+        // Action 3: Heal
+        console.log('\n💚 Aria uses a healing potion!');
+        let healAmount = 20;
+        let oldHealth = charHealth;
+        charHealth = healCharacter2(charHealth, healAmount, charMaxHealth);
+        let actualHealing = charHealth - oldHealth;
+        displayActionResult('Healed', actualHealing);
+        displayActionResult('Health now', charHealth + ' / ' + charMaxHealth);
+
+        // Action 4: Gain XP
+        console.log('\n⭐ Victory! Aria gains experience!');
+        let xpGained = 120;
+        charXP = gainExperience(charXP, xpGained);
+        displayActionResult('XP gained', xpGained);
+        displayActionResult('Total XP', charXP);
+
+        // Check for level up
+        if (canLevelUp(charXP, charLevel)) {
+            charLevel = levelUpCharacter(charLevel);
+            displayLevelUpMessage(charName, charLevel);
+            
+            // Update stats for new level
+            let oldMaxHealth = charMaxHealth;
+            let oldMaxMana = charMaxMana;
+            charMaxHealth = getMaxHealthForLevel(charLevel);
+            charMaxMana = getMaxManaForLevel(charLevel);
+            charHealth = charMaxHealth;  // Full heal on level up
+            charMana = charMaxMana;
+            
+            displayActionResult('Max Health', oldMaxHealth + ' → ' + charMaxHealth);
+            displayActionResult('Max Mana', oldMaxMana + ' → ' + charMaxMana);
+            displayActionResult('Damage', getDamageForLevel(charLevel - 1) + ' → ' + getDamageForLevel(charLevel));
+        }
+
+        // Show final stats
+        console.log('\n📊 Final Stats:');
+        displayCharacterStats(charName, charLevel, charHealth, charMaxHealth, charMana, charMaxMana, charXP);
+
+        console.log('\n' + '='.repeat(60));
+        console.log('✅ CLEAN CODE DEMONSTRATION COMPLETE!');
+        console.log('='.repeat(60));
+        console.log('Best practices demonstrated:');
+        console.log('✓ Clear, descriptive function names');
+        console.log('✓ Each function has a single purpose');
+        console.log('✓ Functions are short and focused');
+        console.log('✓ Parameters have meaningful names');
+        console.log('✓ Global constants for configuration');
+        console.log('✓ Functions organized by category');
+        console.log('✓ Easy to read, understand, and maintain');
+        console.log('='.repeat(60));
+    </script>
+</body>
+</html>

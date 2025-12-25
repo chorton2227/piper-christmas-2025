@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution: Create Complete Settings Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .preview-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .preview-item {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .preview-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .settings-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .setting-row:hover {
+            background: #e9ecef;
+        }
+
+        .setting-row.error {
+            border: 2px solid #dc3545;
+            background: #f8d7da;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .setting-label .required {
+            color: #dc3545;
+            margin-left: 4px;
+        }
+
+        .setting-control {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            padding: 10px 14px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 180px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="number"].invalid {
+            border-color: #dc3545;
+        }
+
+        select {
+            padding: 10px 14px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 180px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="checkbox"] {
+            width: 50px;
+            height: 26px;
+            appearance: none;
+            background: #ddd;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="checkbox"]:checked {
+            background: #28a745;
+        }
+
+        input[type="checkbox"]::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        input[type="checkbox"]:checked::before {
+            left: 26px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            color: #28a745;
+            font-size: 20px;
+            display: none;
+        }
+
+        .success-icon.show {
+            display: inline-block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-apply {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-apply:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-apply:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-reset {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-save {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        .feedback-banner {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .feedback-banner.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback-banner.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: block;
+        }
+
+        .test-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .preset-selector {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .preset-btn {
+            padding: 12px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:hover {
+            border-color: #f5576c;
+            transform: scale(1.05);
+        }
+
+        .preset-btn.active {
+            background: #f5576c;
+            color: white;
+        }
+
+        .range-slider {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .range-value {
+            min-width: 60px;
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Complete Settings Panel Solution</h1>
+
+        <div id="feedbackBanner" class="feedback-banner"></div>
+
+        <div class="preview-panel">
+            <h2 style="margin-bottom: 20px; text-align: center;">📊 Live Preview</h2>
+            <div class="preview-grid" id="previewGrid"></div>
+        </div>
+
+        <div class="preset-selector">
+            <h3 style="color: white; margin-bottom: 10px;">Quick Presets</h3>
+            <div class="preset-buttons">
+                <button class="preset-btn" onclick="loadPreset('beginner')">🌱 Beginner</button>
+                <button class="preset-btn active" onclick="loadPreset('standard')">🎮 Standard</button>
+                <button class="preset-btn" onclick="loadPreset('tournament')">🏆 Tournament</button>
+                <button class="preset-btn" onclick="loadPreset('highstakes')">💎 High Stakes</button>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <div class="settings-section">
+                <h2 class="section-title">💰 Chip & Blind Settings</h2>
+                
+                <div class="setting-row" id="row-startingChips">
+                    <span class="setting-label">
+                        Starting Chips <span class="required">*</span>
+                        <div class="error-message" id="error-startingChips"></div>
+                    </span>
+                    <div class="setting-control">
+                        <input type="number" id="startingChips" value="1000" min="500" max="10000" step="100">
+                        <span class="success-icon" id="success-startingChips">✓</span>
+                    </div>
+                </div>
+
+                <div class="setting-row" id="row-smallBlind">
+                    <span class="setting-label">
+                        Small Blind <span class="required">*</span>
+                        <div class="error-message" id="error-smallBlind"></div>
+                    </span>
+                    <div class="setting-control">
+                        <input type="number" id="smallBlind" value="10" min="5" max="100" step="5">
+                        <span class="success-icon" id="success-smallBlind">✓</span>
+                    </div>
+                </div>
+
+                <div class="setting-row" id="row-bigBlind">
+                    <span class="setting-label">
+                        Big Blind <span class="required">*</span>
+                        <div class="error-message" id="error-bigBlind"></div>
+                    </span>
+                    <div class="setting-control">
+                        <input type="number" id="bigBlind" value="20" min="10" max="200" step="5">
+                        <span class="success-icon" id="success-bigBlind">✓</span>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <span class="setting-label">Ante</span>
+                    <div class="setting-control">
+                        <input type="number" id="ante" value="0" min="0" max="50" step="1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2 class="section-title">🎲 Game Settings</h2>
+                
+                <div class="setting-row">
+                    <span class="setting-label">Number of AI Players</span>
+                    <div class="setting-control">
+                        <select id="aiPlayers">
+                            <option value="1">1 Player</option>
+                            <option value="2">2 Players</option>
+                            <option value="3">3 Players</option>
+                            <option value="4">4 Players</option>
+                            <option value="5" selected>5 Players</option>
+                            <option value="6">6 Players</option>
+                            <option value="7">7 Players</option>
+                            <option value="8">8 Players</option>
+                            <option value="9">9 Players</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <span class="setting-label">Game Speed</span>
+                    <div class="setting-control">
+                        <div class="range-slider">
+                            <input type="range" id="gameSpeed" min="0.5" max="2" step="0.5" value="1">
+                        </div>
+                        <span class="range-value" id="speedValue">1.0x</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2 class="section-title">🎨 Feature Options</h2>
+                
+                <div class="setting-row">
+                    <span class="setting-label">Sound Effects</span>
+                    <div class="setting-control">
+                        <input type="checkbox" id="soundEffects" checked>
+                        <span id="soundLabel">On</span>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <span class="setting-label">Animations</span>
+                    <div class="setting-control">
+                        <input type="checkbox" id="animations" checked>
+                        <span id="animLabel">On</span>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <span class="setting-label">Auto-Muck Losing Hands</span>
+                    <div class="setting-control">
+                        <input type="checkbox" id="autoMuck">
+                        <span id="muckLabel">Off</span>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <span class="setting-label">Show Pot Odds</span>
+                    <div class="setting-control">
+                        <input type="checkbox" id="showOdds" checked>
+                        <span id="oddsLabel">On</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-apply" id="applyBtn" onclick="applySettings()">Apply Settings</button>
+                <button class="btn-reset" onclick="resetToDefaults()">Reset to Defaults</button>
+                <button class="btn-save" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+
+        <div class="test-panel">
+            <h2 style="color: #667eea; margin-bottom: 20px;">Test Cases</h2>
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const PRESETS = {
+            beginner: { startingChips: 2000, smallBlind: 10, bigBlind: 20, ante: 0, aiPlayers: 3, gameSpeed: 0.5 },
+            standard: { startingChips: 1000, smallBlind: 10, bigBlind: 20, ante: 0, aiPlayers: 5, gameSpeed: 1.0 },
+            tournament: { startingChips: 500, smallBlind: 25, bigBlind: 50, ante: 5, aiPlayers: 7, gameSpeed: 2.0 },
+            highstakes: { startingChips: 5000, smallBlind: 50, bigBlind: 100, ante: 10, aiPlayers: 5, gameSpeed: 2.0 }
+        };
+
+        let currentSettings = {...PRESETS.standard};
+        let validationErrors = {};
+
+        function updatePreview() {
+            const preview = document.getElementById('previewGrid');
+            preview.innerHTML = `
+                <div class="preview-item">
+                    <div class="preview-label">Starting Chips</div>
+                    <div class="preview-value">${document.getElementById('startingChips').value}</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-label">Small Blind</div>
+                    <div class="preview-value">${document.getElementById('smallBlind').value}</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-label">Big Blind</div>
+                    <div class="preview-value">${document.getElementById('bigBlind').value}</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-label">Ante</div>
+                    <div class="preview-value">${document.getElementById('ante').value}</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-label">AI Players</div>
+                    <div class="preview-value">${document.getElementById('aiPlayers').value}</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-label">Game Speed</div>
+                    <div class="preview-value">${document.getElementById('gameSpeed').value}x</div>
+                </div>
+            `;
+        }
+
+        function validateSettings() {
+            validationErrors = {};
+            let isValid = true;
+
+            const chips = parseInt(document.getElementById('startingChips').value);
+            const smallBlind = parseInt(document.getElementById('smallBlind').value);
+            const bigBlind = parseInt(document.getElementById('bigBlind').value);
+
+            // Validate starting chips
+            if (chips < 500 || chips > 10000) {
+                validationErrors.startingChips = 'Must be between 500 and 10000';
+                isValid = false;
+            }
+
+            // Validate small blind
+            if (smallBlind < 5 || smallBlind > 100) {
+                validationErrors.smallBlind = 'Must be between 5 and 100';
+                isValid = false;
+            }
+
+            // Validate big blind
+            if (bigBlind < 10 || bigBlind > 200) {
+                validationErrors.bigBlind = 'Must be between 10 and 200';
+                isValid = false;
+            }
+
+            // Validate blind relationship
+            if (smallBlind >= bigBlind) {
+                validationErrors.bigBlind = 'Big blind must be greater than small blind';
+                isValid = false;
+            }
+
+            displayValidationErrors();
+            return isValid;
+        }
+
+        function displayValidationErrors() {
+            ['startingChips', 'smallBlind', 'bigBlind'].forEach(field => {
+                const row = document.getElementById(`row-${field}`);
+                const errorMsg = document.getElementById(`error-${field}`);
+                const input = document.getElementById(field);
+                const success = document.getElementById(`success-${field}`);
+
+                if (validationErrors[field]) {
+                    row.classList.add('error');
+                    input.classList.add('invalid');
+                    errorMsg.textContent = validationErrors[field];
+                    errorMsg.classList.add('show');
+                    success.classList.remove('show');
+                } else {
+                    row.classList.remove('error');
+                    input.classList.remove('invalid');
+                    errorMsg.classList.remove('show');
+                    success.classList.add('show');
+                }
+            });
+
+            document.getElementById('applyBtn').disabled = Object.keys(validationErrors).length > 0;
+        }
+
+        function showFeedback(message, type) {
+            const banner = document.getElementById('feedbackBanner');
+            banner.textContent = message;
+            banner.className = `feedback-banner ${type}`;
+            setTimeout(() => {
+                banner.className = 'feedback-banner';
+            }, 3000);
+        }
+
+        function applySettings() {
+            if (!validateSettings()) {
+                showFeedback('❌ Please fix validation errors before applying', 'error');
+                return;
+            }
+
+            currentSettings = {
+                startingChips: parseInt(document.getElementById('startingChips').value),
+                smallBlind: parseInt(document.getElementById('smallBlind').value),
+                bigBlind: parseInt(document.getElementById('bigBlind').value),
+                ante: parseInt(document.getElementById('ante').value),
+                aiPlayers: parseInt(document.getElementById('aiPlayers').value),
+                gameSpeed: parseFloat(document.getElementById('gameSpeed').value),
+                soundEffects: document.getElementById('soundEffects').checked,
+                animations: document.getElementById('animations').checked,
+                autoMuck: document.getElementById('autoMuck').checked,
+                showOdds: document.getElementById('showOdds').checked
+            };
+
+            showFeedback('✅ Settings applied successfully!', 'success');
+            updatePreview();
+        }
+
+        function resetToDefaults() {
+            loadPreset('standard');
+            showFeedback('🔄 Settings reset to defaults', 'success');
+        }
+
+        function loadPreset(presetName) {
+            const preset = PRESETS[presetName];
+            if (!preset) return;
+
+            document.getElementById('startingChips').value = preset.startingChips;
+            document.getElementById('smallBlind').value = preset.smallBlind;
+            document.getElementById('bigBlind').value = preset.bigBlind;
+            document.getElementById('ante').value = preset.ante;
+            document.getElementById('aiPlayers').value = preset.aiPlayers;
+            document.getElementById('gameSpeed').value = preset.gameSpeed;
+
+            updateSpeedLabel();
+            updatePreview();
+            validateSettings();
+
+            // Update active button
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function saveSettings() {
+            if (!validateSettings()) {
+                showFeedback('❌ Cannot save invalid settings', 'error');
+                return;
+            }
+
+            try {
+                localStorage.setItem('pokerGameSettings', JSON.stringify(currentSettings));
+                showFeedback('💾 Settings saved to localStorage', 'success');
+            } catch (error) {
+                showFeedback('❌ Error saving settings: ' + error.message, 'error');
+            }
+        }
+
+        function updateCheckboxLabels() {
+            document.getElementById('soundLabel').textContent = document.getElementById('soundEffects').checked ? 'On' : 'Off';
+            document.getElementById('animLabel').textContent = document.getElementById('animations').checked ? 'On' : 'Off';
+            document.getElementById('muckLabel').textContent = document.getElementById('autoMuck').checked ? 'On' : 'Off';
+            document.getElementById('oddsLabel').textContent = document.getElementById('showOdds').checked ? 'On' : 'Off';
+        }
+
+        function updateSpeedLabel() {
+            document.getElementById('speedValue').textContent = document.getElementById('gameSpeed').value + 'x';
+        }
+
+        function runTests() {
+            const results = [];
+
+            // Test 1: Validation on out of range
+            document.getElementById('startingChips').value = 15000;
+            const test1Valid = !validateSettings();
+            results.push({
+                name: 'Validation - Out of Range',
+                passed: test1Valid,
+                details: 'Starting chips of 15000 correctly flagged as invalid'
+            });
+
+            // Test 2: Blind relationship validation
+            document.getElementById('startingChips').value = 1000;
+            document.getElementById('smallBlind').value = 50;
+            document.getElementById('bigBlind').value = 40;
+            const test2Valid = !validateSettings();
+            results.push({
+                name: 'Validation - Blind Relationship',
+                passed: test2Valid,
+                details: 'Small blind >= big blind correctly flagged as invalid'
+            });
+
+            // Test 3: Load preset
+            loadPreset('tournament');
+            results.push({
+                name: 'Load Preset',
+                passed: document.getElementById('startingChips').value === '500',
+                details: 'Tournament preset loaded correctly'
+            });
+
+            // Test 4: Valid configuration
+            loadPreset('standard');
+            const test4Valid = validateSettings();
+            results.push({
+                name: 'Valid Configuration',
+                passed: test4Valid,
+                details: 'Standard preset passes all validation'
+            });
+
+            // Test 5: Visual feedback
+            document.getElementById('startingChips').value = 200;
+            validateSettings();
+            const hasError = document.getElementById('row-startingChips').classList.contains('error');
+            results.push({
+                name: 'Visual Feedback',
+                passed: hasError,
+                details: 'Invalid inputs display visual error feedback'
+            });
+
+            // Reset to standard
+            loadPreset('standard');
+
+            displayTestResults(results);
+        }
+
+        function displayTestResults(results) {
+            const container = document.getElementById('testResults');
+            let html = '';
+
+            results.forEach((result, index) => {
+                const statusClass = result.passed ? 'status-pass' : 'status-fail';
+                const statusText = result.passed ? 'PASS' : 'FAIL';
+
+                html += `
+                    <div class="test-case">
+                        <h3>
+                            Test ${index + 1}: ${result.name}
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </h3>
+                        <p>${result.details}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Event listeners
+        document.getElementById('gameSpeed').addEventListener('input', updateSpeedLabel);
+        ['soundEffects', 'animations', 'autoMuck', 'showOdds'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updateCheckboxLabels);
+        });
+        ['startingChips', 'smallBlind', 'bigBlind', 'ante', 'aiPlayers', 'gameSpeed'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                updatePreview();
+                validateSettings();
+            });
+        });
+
+        // Initialize
+        window.onload = function() {
+            updatePreview();
+            updateCheckboxLabels();
+            updateSpeedLabel();
+            validateSettings();
+            runTests();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1065 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 2: Manage Players - Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .controls h2 {
+            color: #11998e;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+            padding-bottom: 10px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input[type="number"], input[type="text"], select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .output {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .output h2 {
+            color: #11998e;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .badge-dealer {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .badge-sb {
+            background: #4facfe;
+            color: white;
+        }
+
+        .badge-bb {
+            background: #eb3349;
+            color: white;
+        }
+
+        .badge-ai {
+            background: #764ba2;
+            color: white;
+        }
+
+        .badge-folded {
+            background: #999;
+            color: white;
+        }
+
+        .badge-allin {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-active {
+            color: #11998e;
+            font-weight: 600;
+        }
+
+        .status-folded {
+            color: #999;
+        }
+
+        .status-allin {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .chips-amount {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #11998e;
+        }
+
+        .test-case h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+
+        .game-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Exercise 2: Manage Players - Solution</h1>
+
+        <div class="controls">
+            <h2>Initialize Game</h2>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="playerCount">Number of Players:</label>
+                    <input type="number" id="playerCount" min="2" max="10" value="4">
+                </div>
+                <div class="input-group">
+                    <label for="startingChips">Starting Chips:</label>
+                    <input type="number" id="startingChips" min="100" max="10000" step="100" value="1000">
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="initializeGame()">🎯 Initialize Game</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h2>Player Management</h2>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="newPlayerName">New Player Name:</label>
+                    <input type="text" id="newPlayerName" placeholder="Enter player name">
+                </div>
+                <div class="input-group">
+                    <label for="newPlayerChips">Starting Chips:</label>
+                    <input type="number" id="newPlayerChips" min="100" step="100" value="1000">
+                </div>
+                <div class="input-group">
+                    <label for="removePlayerId">Player ID to Remove:</label>
+                    <select id="removePlayerId">
+                        <option value="">Select player...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-success" onclick="addNewPlayer()">➕ Add Player</button>
+                <button class="btn-danger" onclick="removePlayer()">➖ Remove Player</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h2>Player Operations</h2>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="updatePlayerId">Player ID:</label>
+                    <select id="updatePlayerId">
+                        <option value="">Select player...</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="chipsAmount">Chips Amount:</label>
+                    <input type="number" id="chipsAmount" min="0" step="10" value="100">
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-info" onclick="addChips()">💰 Add Chips</button>
+                <button class="btn-warning" onclick="removeChips()">💸 Remove Chips</button>
+                <button class="btn-danger" onclick="markFolded()">🃏 Mark Folded</button>
+                <button class="btn-danger" onclick="markAllIn()">🎲 Mark All-In</button>
+                <button class="btn-success" onclick="unfoldPlayer()">↩️ Unfold</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h2>Dealer & Blinds</h2>
+            <div class="button-group">
+                <button class="btn-primary" onclick="rotateDealer()">🔄 Rotate Dealer</button>
+                <button class="btn-info" onclick="assignBlinds()">💰 Assign Blinds</button>
+                <button class="btn-primary" onclick="runAllTests()">🧪 Run All Tests</button>
+            </div>
+        </div>
+
+        <div class="output" id="output">
+            <h2>Player List</h2>
+            <p>Click "Initialize Game" to create players.</p>
+        </div>
+
+        <div class="output" id="testResults" style="display: none;">
+            <h2>Test Results</h2>
+            <div id="testContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===============================================
+        // GAME STATE
+        // ===============================================
+
+        let gameState = null;
+        let nextPlayerId = 0;
+
+        // ===============================================
+        // GAME STATE CREATION
+        // ===============================================
+
+        function createGame(playerCount, startingChips = 1000) {
+            console.log(`\n🎮 Creating game with ${playerCount} players, ${startingChips} chips each`);
+
+            if (playerCount < 2 || playerCount > 10) {
+                console.error('❌ Player count must be between 2 and 10');
+                return null;
+            }
+
+            const players = [];
+            for (let i = 0; i < playerCount; i++) {
+                players.push(createPlayer(i === 0 ? 'You' : `Player ${i + 1}`, startingChips, i !== 0));
+            }
+
+            const state = {
+                players: players,
+                pot: 0,
+                currentBet: 0,
+                dealerPosition: 0,
+                smallBlind: 10,
+                bigBlind: 20,
+                startingChips: startingChips
+            };
+
+            assignDealerAndBlinds(state);
+            console.log('✅ Game created successfully');
+            return state;
+        }
+
+        function createPlayer(name, chips, isAI = false) {
+            const player = {
+                id: nextPlayerId++,
+                name: name,
+                chips: chips,
+                bet: 0,
+                hand: [],
+                folded: false,
+                allIn: false,
+                isDealer: false,
+                isSmallBlind: false,
+                isBigBlind: false,
+                isAI: isAI
+            };
+
+            console.log(`👤 Created player: ${name} (ID: ${player.id}, Chips: ${chips})`);
+            return player;
+        }
+
+        // ===============================================
+        // DEALER AND BLIND MANAGEMENT
+        // ===============================================
+
+        function assignDealerAndBlinds(state) {
+            const { players, dealerPosition } = state;
+            const playerCount = players.length;
+
+            console.log(`\n🎲 Assigning dealer at position ${dealerPosition}`);
+
+            // Reset all positions
+            players.forEach(p => {
+                p.isDealer = false;
+                p.isSmallBlind = false;
+                p.isBigBlind = false;
+            });
+
+            // Assign dealer
+            players[dealerPosition].isDealer = true;
+            console.log(`🎯 Dealer: ${players[dealerPosition].name}`);
+
+            // Assign blinds
+            if (playerCount === 2) {
+                // Heads-up: dealer is small blind
+                players[dealerPosition].isSmallBlind = true;
+                players[(dealerPosition + 1) % playerCount].isBigBlind = true;
+            } else {
+                // Normal game
+                players[(dealerPosition + 1) % playerCount].isSmallBlind = true;
+                players[(dealerPosition + 2) % playerCount].isBigBlind = true;
+            }
+
+            const sbPlayer = players.find(p => p.isSmallBlind);
+            const bbPlayer = players.find(p => p.isBigBlind);
+            console.log(`💰 Small Blind: ${sbPlayer.name}`);
+            console.log(`💰 Big Blind: ${bbPlayer.name}`);
+        }
+
+        function rotateDealerButton(state) {
+            if (!state || state.players.length === 0) {
+                console.error('❌ No players to rotate dealer');
+                return false;
+            }
+
+            state.dealerPosition = (state.dealerPosition + 1) % state.players.length;
+            console.log(`\n🔄 Dealer button rotated to position ${state.dealerPosition}`);
+            assignDealerAndBlinds(state);
+            return true;
+        }
+
+        // ===============================================
+        // PLAYER MANAGEMENT
+        // ===============================================
+
+        function addPlayerToGame(state, name, chips) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            if (state.players.length >= 10) {
+                console.error('❌ Maximum 10 players allowed');
+                return false;
+            }
+
+            const playerName = name || `Player ${state.players.length + 1}`;
+            const playerChips = chips || state.startingChips;
+            const newPlayer = createPlayer(playerName, playerChips, true);
+            
+            state.players.push(newPlayer);
+            console.log(`✅ Added ${newPlayer.name} to the game`);
+            
+            return true;
+        }
+
+        function removePlayerFromGame(state, playerId) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            if (state.players.length <= 2) {
+                console.error('❌ Must have at least 2 players');
+                return false;
+            }
+
+            const playerIndex = state.players.findIndex(p => p.id === playerId);
+            if (playerIndex === -1) {
+                console.error(`❌ Player with ID ${playerId} not found`);
+                return false;
+            }
+
+            // Don't remove players who have chips in play
+            const player = state.players[playerIndex];
+            if (player.bet > 0) {
+                console.error(`❌ Cannot remove ${player.name} - they have bets in play`);
+                return false;
+            }
+
+            const removed = state.players.splice(playerIndex, 1)[0];
+            console.log(`✅ Removed ${removed.name} from the game`);
+
+            // Adjust dealer position if needed
+            if (state.dealerPosition >= state.players.length) {
+                state.dealerPosition = 0;
+            }
+
+            assignDealerAndBlinds(state);
+            return true;
+        }
+
+        function updatePlayerChips(state, playerId, amount) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            const player = state.players.find(p => p.id === playerId);
+            if (!player) {
+                console.error(`❌ Player with ID ${playerId} not found`);
+                return false;
+            }
+
+            const oldChips = player.chips;
+            player.chips = Math.max(0, player.chips + amount);
+            
+            console.log(`💰 ${player.name}: ${oldChips} → ${player.chips} chips (${amount > 0 ? '+' : ''}${amount})`);
+            
+            // Update all-in status
+            if (player.chips === 0 && amount < 0) {
+                player.allIn = true;
+                console.log(`🎲 ${player.name} is now all-in`);
+            } else if (player.chips > 0) {
+                player.allIn = false;
+            }
+
+            return true;
+        }
+
+        function setPlayerFolded(state, playerId, folded = true) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            const player = state.players.find(p => p.id === playerId);
+            if (!player) {
+                console.error(`❌ Player with ID ${playerId} not found`);
+                return false;
+            }
+
+            player.folded = folded;
+            console.log(`${folded ? '🃏' : '↩️'} ${player.name} ${folded ? 'folded' : 'unfolded'}`);
+            return true;
+        }
+
+        function setPlayerAllIn(state, playerId) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            const player = state.players.find(p => p.id === playerId);
+            if (!player) {
+                console.error(`❌ Player with ID ${playerId} not found`);
+                return false;
+            }
+
+            player.allIn = true;
+            console.log(`🎲 ${player.name} is all-in`);
+            return true;
+        }
+
+        function getPlayerById(state, id) {
+            if (!state) return null;
+            return state.players.find(p => p.id === id);
+        }
+
+        function getActivePlayers(state) {
+            if (!state) return [];
+            return state.players.filter(p => !p.folded);
+        }
+
+        function getPlayersWhoCanAct(state) {
+            if (!state) return [];
+            return state.players.filter(p => !p.folded && !p.allIn);
+        }
+
+        // ===============================================
+        // DISPLAY FUNCTIONS
+        // ===============================================
+
+        function displayPlayers() {
+            const output = document.getElementById('output');
+
+            if (!gameState) {
+                output.innerHTML = '<h2>Player List</h2><p style="color: #e74c3c;">No game state exists. Click "Initialize Game" first.</p>';
+                return;
+            }
+
+            let html = '<h2>👥 Player List</h2>';
+
+            // Game info
+            html += '<div class="game-info">';
+            html += '<div class="info-grid">';
+            html += `<div class="info-item"><strong>Total Players:</strong> ${gameState.players.length}</div>`;
+            html += `<div class="info-item"><strong>Active Players:</strong> ${getActivePlayers(gameState).length}</div>`;
+            html += `<div class="info-item"><strong>Can Act:</strong> ${getPlayersWhoCanAct(gameState).length}</div>`;
+            html += `<div class="info-item"><strong>Dealer Position:</strong> ${gameState.dealerPosition}</div>`;
+            html += '</div>';
+            html += '</div>';
+
+            // Players table
+            html += '<table>';
+            html += '<thead>';
+            html += '<tr>';
+            html += '<th>ID</th>';
+            html += '<th>Name</th>';
+            html += '<th>Chips</th>';
+            html += '<th>Bet</th>';
+            html += '<th>Status</th>';
+            html += '<th>Positions</th>';
+            html += '</tr>';
+            html += '</thead>';
+            html += '<tbody>';
+
+            gameState.players.forEach(player => {
+                let statusClass = 'status-active';
+                let statusText = 'Active';
+                
+                if (player.folded) {
+                    statusClass = 'status-folded';
+                    statusText = 'Folded';
+                } else if (player.allIn) {
+                    statusClass = 'status-allin';
+                    statusText = 'All-In';
+                }
+
+                html += '<tr>';
+                html += `<td>${player.id}</td>`;
+                html += `<td><strong>${player.name}</strong>${player.isAI ? ' <span class="badge badge-ai">AI</span>' : ''}</td>`;
+                html += `<td><span class="chips-amount">${player.chips}</span></td>`;
+                html += `<td>${player.bet}</td>`;
+                html += `<td class="${statusClass}">${statusText}</td>`;
+                html += '<td>';
+                if (player.isDealer) html += '<span class="badge badge-dealer">Dealer</span>';
+                if (player.isSmallBlind) html += '<span class="badge badge-sb">SB</span>';
+                if (player.isBigBlind) html += '<span class="badge badge-bb">BB</span>';
+                if (player.folded) html += '<span class="badge badge-folded">Folded</span>';
+                if (player.allIn) html += '<span class="badge badge-allin">All-In</span>';
+                html += '</td>';
+                html += '</tr>';
+            });
+
+            html += '</tbody>';
+            html += '</table>';
+
+            output.innerHTML = html;
+        }
+
+        function updatePlayerSelects() {
+            const selects = ['removePlayerId', 'updatePlayerId'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (!select) return;
+
+                select.innerHTML = '<option value="">Select player...</option>';
+                
+                if (gameState && gameState.players) {
+                    gameState.players.forEach(player => {
+                        const option = document.createElement('option');
+                        option.value = player.id;
+                        option.textContent = `${player.name} (ID: ${player.id}, ${player.chips} chips)`;
+                        select.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        // ===============================================
+        // UI EVENT HANDLERS
+        // ===============================================
+
+        function initializeGame() {
+            const playerCount = parseInt(document.getElementById('playerCount').value);
+            const startingChips = parseInt(document.getElementById('startingChips').value);
+
+            gameState = createGame(playerCount, startingChips);
+            
+            if (gameState) {
+                displayPlayers();
+                updatePlayerSelects();
+            }
+        }
+
+        function addNewPlayer() {
+            const name = document.getElementById('newPlayerName').value.trim();
+            const chips = parseInt(document.getElementById('newPlayerChips').value);
+
+            if (addPlayerToGame(gameState, name, chips)) {
+                document.getElementById('newPlayerName').value = '';
+                displayPlayers();
+                updatePlayerSelects();
+            }
+        }
+
+        function removePlayer() {
+            const playerId = parseInt(document.getElementById('removePlayerId').value);
+            
+            if (isNaN(playerId)) {
+                alert('Please select a player to remove');
+                return;
+            }
+
+            if (removePlayerFromGame(gameState, playerId)) {
+                displayPlayers();
+                updatePlayerSelects();
+            }
+        }
+
+        function addChips() {
+            const playerId = parseInt(document.getElementById('updatePlayerId').value);
+            const amount = parseInt(document.getElementById('chipsAmount').value);
+
+            if (isNaN(playerId)) {
+                alert('Please select a player');
+                return;
+            }
+
+            if (updatePlayerChips(gameState, playerId, amount)) {
+                displayPlayers();
+                updatePlayerSelects();
+            }
+        }
+
+        function removeChips() {
+            const playerId = parseInt(document.getElementById('updatePlayerId').value);
+            const amount = parseInt(document.getElementById('chipsAmount').value);
+
+            if (isNaN(playerId)) {
+                alert('Please select a player');
+                return;
+            }
+
+            if (updatePlayerChips(gameState, playerId, -amount)) {
+                displayPlayers();
+                updatePlayerSelects();
+            }
+        }
+
+        function markFolded() {
+            const playerId = parseInt(document.getElementById('updatePlayerId').value);
+
+            if (isNaN(playerId)) {
+                alert('Please select a player');
+                return;
+            }
+
+            if (setPlayerFolded(gameState, playerId, true)) {
+                displayPlayers();
+            }
+        }
+
+        function unfoldPlayer() {
+            const playerId = parseInt(document.getElementById('updatePlayerId').value);
+
+            if (isNaN(playerId)) {
+                alert('Please select a player');
+                return;
+            }
+
+            if (setPlayerFolded(gameState, playerId, false)) {
+                displayPlayers();
+            }
+        }
+
+        function markAllIn() {
+            const playerId = parseInt(document.getElementById('updatePlayerId').value);
+
+            if (isNaN(playerId)) {
+                alert('Please select a player');
+                return;
+            }
+
+            if (setPlayerAllIn(gameState, playerId)) {
+                displayPlayers();
+            }
+        }
+
+        function rotateDealer() {
+            if (rotateDealerButton(gameState)) {
+                displayPlayers();
+            }
+        }
+
+        function assignBlinds() {
+            if (gameState) {
+                assignDealerAndBlinds(gameState);
+                displayPlayers();
+            }
+        }
+
+        // ===============================================
+        // TEST CASES
+        // ===============================================
+
+        function runAllTests() {
+            console.log('\n' + '='.repeat(50));
+            console.log('🧪 RUNNING ALL TESTS');
+            console.log('='.repeat(50));
+
+            const results = [];
+
+            results.push(testAddRemovePlayers());
+            results.push(testUpdatePlayerChips());
+            results.push(testDealerRotation());
+
+            displayTestResults(results);
+        }
+
+        function testAddRemovePlayers() {
+            console.log('\n📝 Test 1: Add and Remove Players');
+            const test = {
+                name: 'Test 1: Add and Remove Players',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(4, 1000);
+                test.details.push(`✅ Created game with ${game.players.length} players`);
+
+                // Add a player
+                const success = addPlayerToGame(game, 'NewPlayer', 500);
+                if (success && game.players.length === 5) {
+                    test.details.push('✅ Successfully added new player');
+                } else {
+                    test.details.push('❌ Failed to add player');
+                    test.passed = false;
+                }
+
+                // Try to add when at max
+                for (let i = 0; i < 6; i++) {
+                    addPlayerToGame(game, `Extra${i}`, 1000);
+                }
+                if (game.players.length === 10) {
+                    test.details.push('✅ Correctly limited to 10 players max');
+                } else {
+                    test.details.push(`❌ Wrong player count: ${game.players.length}`);
+                    test.passed = false;
+                }
+
+                // Remove a player
+                const playerId = game.players[game.players.length - 1].id;
+                const removed = removePlayerFromGame(game, playerId);
+                if (removed && game.players.length === 9) {
+                    test.details.push('✅ Successfully removed player');
+                } else {
+                    test.details.push('❌ Failed to remove player');
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function testUpdatePlayerChips() {
+            console.log('\n📝 Test 2: Update Player Chips');
+            const test = {
+                name: 'Test 2: Update Player Chips',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(4, 1000);
+                const player = game.players[0];
+                const playerId = player.id;
+
+                test.details.push(`Initial chips: ${player.chips}`);
+
+                // Add chips
+                updatePlayerChips(game, playerId, 500);
+                if (player.chips === 1500) {
+                    test.details.push('✅ Correctly added 500 chips (1000 → 1500)');
+                } else {
+                    test.details.push(`❌ Wrong chips after add: ${player.chips}`);
+                    test.passed = false;
+                }
+
+                // Remove chips
+                updatePlayerChips(game, playerId, -700);
+                if (player.chips === 800) {
+                    test.details.push('✅ Correctly removed 700 chips (1500 → 800)');
+                } else {
+                    test.details.push(`❌ Wrong chips after remove: ${player.chips}`);
+                    test.passed = false;
+                }
+
+                // Remove all chips (all-in)
+                updatePlayerChips(game, playerId, -800);
+                if (player.chips === 0 && player.allIn) {
+                    test.details.push('✅ Correctly set all-in when chips reach 0');
+                } else {
+                    test.details.push(`❌ All-in not set correctly: chips=${player.chips}, allIn=${player.allIn}`);
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function testDealerRotation() {
+            console.log('\n📝 Test 3: Dealer Rotation');
+            const test = {
+                name: 'Test 3: Dealer Rotation and Blind Assignment',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(6, 1000);
+                
+                test.details.push(`Initial dealer position: ${game.dealerPosition}`);
+
+                // Rotate dealer
+                rotateDealerButton(game);
+                if (game.dealerPosition === 1) {
+                    test.details.push('✅ Dealer rotated from 0 to 1');
+                } else {
+                    test.details.push(`❌ Dealer at wrong position: ${game.dealerPosition}`);
+                    test.passed = false;
+                }
+
+                // Check blinds follow dealer
+                const sbPos = game.players.findIndex(p => p.isSmallBlind);
+                const bbPos = game.players.findIndex(p => p.isBigBlind);
+                
+                if (sbPos === 2 && bbPos === 3) {
+                    test.details.push('✅ Blinds correctly positioned after rotation');
+                } else {
+                    test.details.push(`❌ Wrong blind positions: SB=${sbPos}, BB=${bbPos}`);
+                    test.passed = false;
+                }
+
+                // Rotate through all positions
+                for (let i = 0; i < 10; i++) {
+                    rotateDealerButton(game);
+                }
+                
+                const expectedPos = (1 + 10) % 6; // Should wrap around
+                if (game.dealerPosition === expectedPos) {
+                    test.details.push('✅ Dealer position wraps around correctly');
+                } else {
+                    test.details.push(`❌ Wrong position after rotation: ${game.dealerPosition}`);
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function displayTestResults(results) {
+            const testDiv = document.getElementById('testResults');
+            const contentDiv = document.getElementById('testContent');
+            testDiv.style.display = 'block';
+
+            const passCount = results.filter(r => r.passed).length;
+            const totalCount = results.length;
+
+            let html = `<div class="test-case">`;
+            html += `<h3>📊 Overall Results: ${passCount}/${totalCount} tests passed</h3>`;
+            html += `</div>`;
+
+            results.forEach(result => {
+                html += `<div class="test-case">`;
+                html += `<h4>${result.passed ? '✅' : '❌'} ${result.name}</h4>`;
+                result.details.forEach(detail => {
+                    html += `<div>${detail}</div>`;
+                });
+                html += `</div>`;
+            });
+
+            contentDiv.innerHTML = html;
+            testDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===============================================
+        // INITIALIZATION
+        // ===============================================
+
+        console.log('👥 Game State Management - Exercise 2: Manage Players');
+        console.log('='.repeat(50));
+        console.log('Instructions:');
+        console.log('1. Initialize the game');
+        console.log('2. Add/remove players');
+        console.log('3. Update player chips and status');
+        console.log('4. Rotate dealer and assign blinds');
+        console.log('5. Run tests to verify functionality');
+        console.log('='.repeat(50));
+    </script>
+</body>
+</html>

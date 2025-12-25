@@ -1,0 +1,569 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Methods - Examples</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .demo-title {
+            color: #f093fb;
+            border-bottom: 3px solid #f093fb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .array-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #f093fb;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            min-height: 40px;
+        }
+
+        .array-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            animation: appear 0.3s;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .output {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .method-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .method-name {
+            color: #f093fb;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .method-desc {
+            color: #666;
+            font-size: 14px;
+        }
+
+        code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛠️ Array Methods - Interactive Examples</h1>
+
+    <!-- Demo 1: push() and pop() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 1: push() and pop() - Add/Remove from End</h2>
+        
+        <div class="method-box">
+            <div class="method-name">push(item)</div>
+            <div class="method-desc">Adds one or more items to the END of an array. Returns new length.</div>
+        </div>
+        
+        <div class="method-box">
+            <div class="method-name">pop()</div>
+            <div class="method-desc">Removes the LAST item from an array. Returns the removed item.</div>
+        </div>
+        
+        <div class="controls">
+            <input type="text" id="demo1-input" placeholder="Enter item to add">
+            <button onclick="demo1Push()">push() - Add to End</button>
+            <button onclick="demo1Pop()">pop() - Remove from End</button>
+        </div>
+        
+        <div id="demo1-array" class="array-display"></div>
+        <div id="demo1-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 2: unshift() and shift() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 2: unshift() and shift() - Add/Remove from Beginning</h2>
+        
+        <div class="method-box">
+            <div class="method-name">unshift(item)</div>
+            <div class="method-desc">Adds one or more items to the BEGINNING of an array. Returns new length.</div>
+        </div>
+        
+        <div class="method-box">
+            <div class="method-name">shift()</div>
+            <div class="method-desc">Removes the FIRST item from an array. Returns the removed item.</div>
+        </div>
+        
+        <div class="controls">
+            <input type="text" id="demo2-input" placeholder="Enter item to add">
+            <button onclick="demo2Unshift()">unshift() - Add to Beginning</button>
+            <button onclick="demo2Shift()">shift() - Remove from Beginning</button>
+        </div>
+        
+        <div id="demo2-array" class="array-display"></div>
+        <div id="demo2-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 3: splice() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 3: splice() - Add/Remove at Any Position</h2>
+        
+        <div class="method-box">
+            <div class="method-name">splice(start, deleteCount, ...items)</div>
+            <div class="method-desc">Changes array by removing, replacing, or adding elements at any position.</div>
+        </div>
+        
+        <div class="info">
+            <strong>Current Array:</strong> <span id="demo3-current"></span>
+        </div>
+        
+        <div class="controls">
+            <input type="number" id="demo3-start" placeholder="Start index" min="0">
+            <input type="number" id="demo3-delete" placeholder="Delete count" min="0">
+            <input type="text" id="demo3-items" placeholder="Items to add (comma-separated)">
+            <button onclick="demo3Splice()">Apply splice()</button>
+            <button onclick="demo3Reset()">Reset</button>
+        </div>
+        
+        <div id="demo3-array" class="array-display"></div>
+        <div id="demo3-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 4: slice() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 4: slice() - Copy Part of Array</h2>
+        
+        <div class="method-box">
+            <div class="method-name">slice(start, end)</div>
+            <div class="method-desc">Returns a shallow copy of a portion of an array. Does NOT modify original.</div>
+        </div>
+        
+        <div class="info">
+            <strong>Original Array:</strong> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        </div>
+        
+        <div class="controls">
+            <input type="number" id="demo4-start" placeholder="Start index">
+            <input type="number" id="demo4-end" placeholder="End index (optional)">
+            <button onclick="demo4Slice()">Get slice()</button>
+        </div>
+        
+        <div id="demo4-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 5: join() and split() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 5: join() - Array to String</h2>
+        
+        <div class="method-box">
+            <div class="method-name">join(separator)</div>
+            <div class="method-desc">Joins all array elements into a string, separated by a specified separator.</div>
+        </div>
+        
+        <div class="info">
+            <strong>Array:</strong> ['Hello', 'World', 'From', 'JavaScript']
+        </div>
+        
+        <div class="controls">
+            <input type="text" id="demo5-sep" placeholder="Separator (space, comma, etc.)" value=" ">
+            <button onclick="demo5Join()">Join Array</button>
+        </div>
+        
+        <div id="demo5-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 6: concat() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 6: concat() - Combine Arrays</h2>
+        
+        <div class="method-box">
+            <div class="method-name">concat(array1, array2, ...)</div>
+            <div class="method-desc">Merges two or more arrays into a new array. Does not modify originals.</div>
+        </div>
+        
+        <button onclick="demo6Concat()">Combine Arrays</button>
+        
+        <div id="demo6-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 7: reverse() and sort() -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 7: reverse() and sort() - Reorder Elements</h2>
+        
+        <div class="method-box">
+            <div class="method-name">reverse()</div>
+            <div class="method-desc">Reverses the order of elements in an array. Modifies the original array.</div>
+        </div>
+        
+        <div class="method-box">
+            <div class="method-name">sort()</div>
+            <div class="method-desc">Sorts elements in an array. Modifies the original array.</div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="demo7Reverse()">Reverse Array</button>
+            <button onclick="demo7Sort()">Sort Array (A-Z)</button>
+            <button onclick="demo7Reset()">Reset</button>
+        </div>
+        
+        <div id="demo7-array" class="array-display"></div>
+    </div>
+
+    <script>
+        console.log('=== Array Methods Examples Loaded ===');
+
+        // Demo 1: push() and pop()
+        let demo1Array = ['First', 'Second', 'Third'];
+        updateDemo1Display();
+
+        function demo1Push() {
+            const input = document.getElementById('demo1-input');
+            const value = input.value.trim();
+            
+            if (value === '') {
+                alert('Please enter an item to add!');
+                return;
+            }
+            
+            const newLength = demo1Array.push(value);
+            console.log('push("' + value + '"):', demo1Array, '| New length:', newLength);
+            
+            document.getElementById('demo1-output').style.display = 'block';
+            document.getElementById('demo1-output').innerHTML = `
+                ✅ <strong>push("${value}")</strong> added to end<br>
+                <strong>Returned:</strong> ${newLength} (new array length)
+            `;
+            
+            input.value = '';
+            updateDemo1Display();
+        }
+
+        function demo1Pop() {
+            if (demo1Array.length === 0) {
+                alert('Array is empty!');
+                return;
+            }
+            
+            const removed = demo1Array.pop();
+            console.log('pop():', 'Removed "' + removed + '"', '| Array:', demo1Array);
+            
+            document.getElementById('demo1-output').style.display = 'block';
+            document.getElementById('demo1-output').innerHTML = `
+                ✅ <strong>pop()</strong> removed from end<br>
+                <strong>Returned:</strong> "${removed}"<br>
+                <strong>New length:</strong> ${demo1Array.length}
+            `;
+            
+            updateDemo1Display();
+        }
+
+        function updateDemo1Display() {
+            displayArray(demo1Array, 'demo1-array');
+        }
+
+        // Demo 2: unshift() and shift()
+        let demo2Array = ['Middle'];
+        updateDemo2Display();
+
+        function demo2Unshift() {
+            const input = document.getElementById('demo2-input');
+            const value = input.value.trim();
+            
+            if (value === '') {
+                alert('Please enter an item to add!');
+                return;
+            }
+            
+            const newLength = demo2Array.unshift(value);
+            console.log('unshift("' + value + '"):', demo2Array, '| New length:', newLength);
+            
+            document.getElementById('demo2-output').style.display = 'block';
+            document.getElementById('demo2-output').innerHTML = `
+                ✅ <strong>unshift("${value}")</strong> added to beginning<br>
+                <strong>Returned:</strong> ${newLength} (new array length)
+            `;
+            
+            input.value = '';
+            updateDemo2Display();
+        }
+
+        function demo2Shift() {
+            if (demo2Array.length === 0) {
+                alert('Array is empty!');
+                return;
+            }
+            
+            const removed = demo2Array.shift();
+            console.log('shift():', 'Removed "' + removed + '"', '| Array:', demo2Array);
+            
+            document.getElementById('demo2-output').style.display = 'block';
+            document.getElementById('demo2-output').innerHTML = `
+                ✅ <strong>shift()</strong> removed from beginning<br>
+                <strong>Returned:</strong> "${removed}"<br>
+                <strong>New length:</strong> ${demo2Array.length}
+            `;
+            
+            updateDemo2Display();
+        }
+
+        function updateDemo2Display() {
+            displayArray(demo2Array, 'demo2-array');
+        }
+
+        // Demo 3: splice()
+        let demo3Array = ['A', 'B', 'C', 'D', 'E'];
+        updateDemo3Display();
+
+        function demo3Splice() {
+            const start = parseInt(document.getElementById('demo3-start').value);
+            const deleteCount = parseInt(document.getElementById('demo3-delete').value) || 0;
+            const itemsInput = document.getElementById('demo3-items').value.trim();
+            
+            if (isNaN(start)) {
+                alert('Please enter a start index!');
+                return;
+            }
+            
+            const beforeArray = [...demo3Array];  // Copy for display
+            let removed;
+            
+            if (itemsInput === '') {
+                removed = demo3Array.splice(start, deleteCount);
+            } else {
+                const items = itemsInput.split(',').map(s => s.trim());
+                removed = demo3Array.splice(start, deleteCount, ...items);
+            }
+            
+            console.log('splice(' + start + ', ' + deleteCount + '):', 'Removed:', removed, '| New array:', demo3Array);
+            
+            document.getElementById('demo3-output').style.display = 'block';
+            document.getElementById('demo3-output').innerHTML = `
+                <strong>Before:</strong> [${beforeArray.join(', ')}]<br>
+                <strong>After:</strong> [${demo3Array.join(', ')}]<br>
+                <strong>Removed:</strong> [${removed.join(', ')}]<br>
+                <strong>New length:</strong> ${demo3Array.length}
+            `;
+            
+            updateDemo3Display();
+        }
+
+        function demo3Reset() {
+            demo3Array = ['A', 'B', 'C', 'D', 'E'];
+            document.getElementById('demo3-output').style.display = 'none';
+            updateDemo3Display();
+        }
+
+        function updateDemo3Display() {
+            displayArray(demo3Array, 'demo3-array');
+            document.getElementById('demo3-current').textContent = '[' + demo3Array.join(', ') + ']';
+        }
+
+        // Demo 4: slice()
+        const demo4Array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        function demo4Slice() {
+            const start = parseInt(document.getElementById('demo4-start').value);
+            const endInput = document.getElementById('demo4-end').value;
+            
+            if (isNaN(start)) {
+                alert('Please enter a start index!');
+                return;
+            }
+            
+            let sliced;
+            if (endInput === '') {
+                sliced = demo4Array.slice(start);
+            } else {
+                const end = parseInt(endInput);
+                sliced = demo4Array.slice(start, end);
+            }
+            
+            console.log('slice(' + start + (endInput ? ', ' + endInput : '') + '):', sliced);
+            
+            document.getElementById('demo4-output').style.display = 'block';
+            document.getElementById('demo4-output').innerHTML = `
+                <strong>Original:</strong> [${demo4Array.join(', ')}] (unchanged)<br>
+                <strong>Sliced:</strong> [${sliced.join(', ')}]<br>
+                <strong>Length:</strong> ${sliced.length}<br>
+                <em>slice() does NOT modify the original array</em>
+            `;
+        }
+
+        // Demo 5: join()
+        const demo5Array = ['Hello', 'World', 'From', 'JavaScript'];
+
+        function demo5Join() {
+            const separator = document.getElementById('demo5-sep').value;
+            const result = demo5Array.join(separator);
+            
+            console.log('join("' + separator + '"):', result);
+            
+            document.getElementById('demo5-output').style.display = 'block';
+            document.getElementById('demo5-output').innerHTML = `
+                <strong>Array:</strong> [${demo5Array.join(', ')}]<br>
+                <strong>Separator:</strong> "${separator}"<br>
+                <strong>Result:</strong> "${result}"<br>
+                <em>join() converts array to string</em>
+            `;
+        }
+
+        // Demo 6: concat()
+        function demo6Concat() {
+            const array1 = [1, 2, 3];
+            const array2 = [4, 5, 6];
+            const array3 = [7, 8, 9];
+            
+            const combined = array1.concat(array2, array3);
+            
+            console.log('concat():', 'Combined:', combined);
+            
+            document.getElementById('demo6-output').style.display = 'block';
+            document.getElementById('demo6-output').innerHTML = `
+                <strong>Array 1:</strong> [${array1.join(', ')}]<br>
+                <strong>Array 2:</strong> [${array2.join(', ')}]<br>
+                <strong>Array 3:</strong> [${array3.join(', ')}]<br>
+                <strong>Combined:</strong> [${combined.join(', ')}]<br>
+                <em>concat() creates a new array without modifying originals</em>
+            `;
+        }
+
+        // Demo 7: reverse() and sort()
+        let demo7Array = ['Banana', 'Apple', 'Date', 'Cherry'];
+        updateDemo7Display();
+
+        function demo7Reverse() {
+            demo7Array.reverse();
+            console.log('reverse():', demo7Array);
+            updateDemo7Display();
+        }
+
+        function demo7Sort() {
+            demo7Array.sort();
+            console.log('sort():', demo7Array);
+            updateDemo7Display();
+        }
+
+        function demo7Reset() {
+            demo7Array = ['Banana', 'Apple', 'Date', 'Cherry'];
+            console.log('Reset array');
+            updateDemo7Display();
+        }
+
+        function updateDemo7Display() {
+            displayArray(demo7Array, 'demo7-array');
+        }
+
+        // Helper function
+        function displayArray(arr, elementId) {
+            const container = document.getElementById(elementId);
+            
+            if (arr.length === 0) {
+                container.innerHTML = '<em>Empty array</em>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < arr.length; i++) {
+                html += `<span class="array-item">${arr[i]}</span>`;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        console.log('All demos ready!');
+    </script>
+</body>
+</html>

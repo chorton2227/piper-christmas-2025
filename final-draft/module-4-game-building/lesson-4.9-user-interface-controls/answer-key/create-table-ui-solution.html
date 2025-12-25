@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Create Complete Poker Table UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-right: 320px; /* Space for action log */
+        }
+        
+        @media (max-width: 1600px) {
+            .container {
+                padding-right: 20px;
+            }
+            .action-log {
+                position: relative;
+                margin: 20px auto;
+                top: auto;
+                right: auto;
+            }
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            max-width: 800px;
+            color: #333;
+        }
+        
+        /* Poker Table */
+        .poker-table {
+            background: radial-gradient(ellipse at center, #1a5d1a 0%, #0d4d0d 100%);
+            border-radius: 50%;
+            padding: 80px 60px;
+            box-shadow: 
+                inset 0 0 100px rgba(0, 0, 0, 0.3),
+                0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 20px solid #8b4513;
+            position: relative;
+            aspect-ratio: 16/9;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        
+        /* Felt texture overlay */
+        .poker-table::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    rgba(255, 255, 255, 0.02) 4px
+                );
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        
+        /* Player Seats */
+        .player-seat {
+            position: absolute;
+            width: 200px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 12px;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .player-seat.active {
+            border-color: #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(76, 175, 80, 0.9);
+            }
+        }
+        
+        .player-seat.folded {
+            opacity: 0.4;
+        }
+        
+        /* Player seat positions (6-max) */
+        .seat-0 { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .seat-1 { bottom: 120px; left: 40px; }
+        .seat-2 { top: 30%; left: 10px; transform: translateY(-50%); }
+        .seat-3 { top: 10px; left: 50%; transform: translateX(-50%); }
+        .seat-4 { top: 30%; right: 10px; transform: translateY(-50%); }
+        .seat-5 { bottom: 120px; right: 40px; }
+        
+        .player-info {
+            margin-bottom: 10px;
+        }
+        
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .player-chips {
+            font-size: 16px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .player-hand {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin: 8px 0;
+            min-height: 70px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .player-bet {
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 5px 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #ffd700;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        
+        .player-status {
+            margin-top: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        .player-status.folded { color: #ff4444; }
+        .player-status.all-in { color: #ff9800; }
+        .player-status.thinking { color: #2196f3; }
+        
+        .dealer-button {
+            width: 35px;
+            height: 35px;
+            background: white;
+            border: 3px solid #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Community Cards Area */
+        .community-area {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .round-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+            text-transform: uppercase;
+        }
+        
+        .community-cards {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            min-width: 450px;
+            min-height: 120px;
+            align-items: center;
+        }
+        
+        .pot-display {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: inline-block;
+        }
+        
+        .pot-amount {
+            color: #d32f2f;
+        }
+        
+        /* Card Styles */
+        .card {
+            width: 55px;
+            height: 75px;
+            background: white;
+            border-radius: 6px;
+            border: 2px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        
+        .card.back {
+            background: repeating-linear-gradient(
+                45deg,
+                #2196F3,
+                #2196F3 10px,
+                #1976D2 10px,
+                #1976D2 20px
+            );
+            color: white;
+        }
+        
+        /* Action Log */
+        .action-log {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            width: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .action-log-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ffd700;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 5px;
+        }
+        
+        .action-log-content {
+            font-size: 13px;
+            color: #fff;
+        }
+        
+        .action-entry {
+            margin: 8px 0;
+            padding: 5px;
+            border-left: 3px solid #4CAF50;
+            padding-left: 8px;
+        }
+        
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Answer Key: Create Complete Poker Table UI</h1>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> This solution demonstrates a complete poker table with 6 player seats, community cards area, pot display, and action log. All components are positioned using absolute positioning for a realistic poker table layout.
+        </div>
+        
+        <!-- Poker Table -->
+        <div class="poker-table">
+            <!-- Community Cards Area (Center) -->
+            <div class="community-area">
+                <div class="round-label" id="round-label">Pre-Flop</div>
+                <div id="community-cards" class="community-cards">
+                    <!-- Cards will be added here -->
+                </div>
+                <div class="pot-display">
+                    Pot: $<span id="pot-amount" class="pot-amount">0</span>
+                </div>
+            </div>
+            
+            <!-- Player Seats -->
+            <div class="player-seat seat-0" data-seat="0">
+                <div class="dealer-button" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">You</div>
+                    <div class="player-chips">$<span class="chip-amount">1000</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-1" data-seat="1">
+                <div class="dealer-button" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Alice</div>
+                    <div class="player-chips">$<span class="chip-amount">850</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-2" data-seat="2">
+                <div class="dealer-button" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Bob</div>
+                    <div class="player-chips">$<span class="chip-amount">1250</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-3" data-seat="3">
+                <div class="dealer-button" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Charlie</div>
+                    <div class="player-chips">$<span class="chip-amount">920</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-4" data-seat="4">
+                <div class="dealer-button" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Diana</div>
+                    <div class="player-chips">$<span class="chip-amount">1100</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-5" data-seat="5">
+                <div class="dealer-button" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Eve</div>
+                    <div class="player-chips">$<span class="chip-amount">780</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <!-- Action Log -->
+            <div class="action-log">
+                <div class="action-log-title">Action Log</div>
+                <div id="action-log-content" class="action-log-content"></div>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button onclick="test1()">Test 1: Setup Table</button>
+            <button onclick="test2()">Test 2: Deal Community Cards</button>
+            <button onclick="test3()">Test 3: Betting Round</button>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        /*
+         * ANSWER KEY SOLUTION
+         * User Interface & Controls - Create Complete Table UI
+         * 
+         * This implementation shows a complete poker table with:
+         * - 6 player seats positioned around the table
+         * - Community cards area in the center
+         * - Pot display
+         * - Action log
+         * - Dealer button
+         * - Player status indicators
+         */
+        
+        console.log('✅ Answer Key: Create Complete Poker Table UI');
+        console.log('================================================\n');
+        
+        // Helper function to create a card element
+        function createCard(rank, suit, faceDown = false) {
+            const card = document.createElement('div');
+            card.className = `card ${suit}`;
+            
+            if (faceDown) {
+                card.className = 'card back';
+                card.textContent = '🂠';
+            } else {
+                const symbols = {
+                    hearts: '♥',
+                    diamonds: '♦',
+                    clubs: '♣',
+                    spades: '♠'
+                };
+                card.textContent = rank + symbols[suit];
+            }
+            
+            return card;
+        }
+        
+        // Add action to log
+        function logAction(message) {
+            const logContent = document.getElementById('action-log-content');
+            const entry = document.createElement('div');
+            entry.className = 'action-entry';
+            entry.textContent = message;
+            logContent.appendChild(entry);
+            
+            // Auto-scroll to bottom
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        // Update pot display
+        function updatePot(amount) {
+            document.getElementById('pot-amount').textContent = amount;
+            logAction(`Pot: $${amount}`);
+        }
+        
+        // Set dealer button position
+        function setDealer(seatIndex) {
+            document.querySelectorAll('.dealer-button').forEach(btn => {
+                btn.style.display = 'none';
+            });
+            
+            const dealerSeat = document.querySelector(`.seat-${seatIndex}`);
+            dealerSeat.querySelector('.dealer-button').style.display = 'flex';
+            logAction(`Dealer: ${dealerSeat.querySelector('.player-name').textContent}`);
+        }
+        
+        // Highlight active player
+        function setActivePlayer(seatIndex) {
+            document.querySelectorAll('.player-seat').forEach(seat => {
+                seat.classList.remove('active');
+            });
+            
+            const activeSeat = document.querySelector(`.seat-${seatIndex}`);
+            activeSeat.classList.add('active');
+        }
+        
+        // Update player bet
+        function updatePlayerBet(seatIndex, amount) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const betAmount = seat.querySelector('.bet-amount');
+            betAmount.textContent = amount;
+            
+            const playerName = seat.querySelector('.player-name').textContent;
+            logAction(`${playerName} bets $${amount}`);
+        }
+        
+        // Update player status
+        function updatePlayerStatus(seatIndex, status) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const statusElement = seat.querySelector('.player-status');
+            statusElement.textContent = status;
+            statusElement.className = `player-status ${status.toLowerCase().replace(' ', '-')}`;
+        }
+        
+        // Deal hole cards to player
+        function dealHoleCards(seatIndex, cards, faceDown = true) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const hand = seat.querySelector('.player-hand');
+            hand.innerHTML = '';
+            
+            cards.forEach(cardData => {
+                const card = createCard(cardData.rank, cardData.suit, faceDown);
+                hand.appendChild(card);
+            });
+        }
+        
+        // Deal community cards
+        function dealCommunityCards(cards) {
+            const container = document.getElementById('community-cards');
+            container.innerHTML = '';
+            
+            cards.forEach(cardData => {
+                const card = createCard(cardData.rank, cardData.suit, false);
+                container.appendChild(card);
+            });
+        }
+        
+        // Test Case 1: Setup Table
+        function test1() {
+            console.log('\n=== Test Case 1: Setup Table ===');
+            
+            // Clear action log
+            document.getElementById('action-log-content').innerHTML = '';
+            logAction('New hand starting...');
+            
+            // Set dealer at seat 2
+            setDealer(2);
+            console.log('✓ Dealer button set at seat 2');
+            
+            // Deal hole cards to all players (face down for AI)
+            const sampleCards = [
+                { rank: 'A', suit: 'spades' },
+                { rank: 'K', suit: 'hearts' }
+            ];
+            
+            for (let i = 0; i < 6; i++) {
+                dealHoleCards(i, sampleCards, i !== 0); // Face up for player 0
+            }
+            console.log('✓ Hole cards dealt to all players');
+            
+            // Post blinds
+            updatePlayerBet(3, 10); // Small blind
+            updatePlayerBet(4, 20); // Big blind
+            updatePot(30);
+            console.log('✓ Blinds posted');
+            
+            // Set round label
+            document.getElementById('round-label').textContent = 'Pre-Flop';
+            console.log('✓ Table setup complete');
+            
+            console.log('\n✅ Test 1 Complete: Table is ready for play!');
+        }
+        
+        // Test Case 2: Deal Community Cards
+        function test2() {
+            console.log('\n=== Test Case 2: Deal Community Cards ===');
+            
+            // Deal the flop
+            const flop = [
+                { rank: 'K', suit: 'diamonds' },
+                { rank: 'Q', suit: 'clubs' },
+                { rank: 'J', suit: 'hearts' }
+            ];
+            
+            dealCommunityCards(flop);
+            document.getElementById('round-label').textContent = 'Flop';
+            logAction('Flop dealt: K♦ Q♣ J♥');
+            console.log('✓ Flop dealt');
+            
+            updatePot(150);
+            console.log('✓ Pot updated to $150');
+            
+            setTimeout(() => {
+                // Deal the turn
+                const turn = [
+                    { rank: 'K', suit: 'diamonds' },
+                    { rank: 'Q', suit: 'clubs' },
+                    { rank: 'J', suit: 'hearts' },
+                    { rank: '10', suit: 'spades' }
+                ];
+                
+                dealCommunityCards(turn);
+                document.getElementById('round-label').textContent = 'Turn';
+                logAction('Turn dealt: 10♠');
+                console.log('✓ Turn dealt');
+                
+                updatePot(300);
+                console.log('✓ Pot updated to $300');
+            }, 2000);
+            
+            setTimeout(() => {
+                // Deal the river
+                const river = [
+                    { rank: 'K', suit: 'diamonds' },
+                    { rank: 'Q', suit: 'clubs' },
+                    { rank: 'J', suit: 'hearts' },
+                    { rank: '10', suit: 'spades' },
+                    { rank: 'A', suit: 'hearts' }
+                ];
+                
+                dealCommunityCards(river);
+                document.getElementById('round-label').textContent = 'River';
+                logAction('River dealt: A♥');
+                console.log('✓ River dealt');
+                
+                updatePot(500);
+                console.log('✓ Pot updated to $500');
+                
+                console.log('\n✅ Test 2 Complete: Royal Flush on the board!');
+            }, 4000);
+        }
+        
+        // Test Case 3: Betting Round
+        function test3() {
+            console.log('\n=== Test Case 3: Betting Round ===');
+            
+            // Clear previous bets and folded states
+            document.querySelectorAll('.bet-amount').forEach(el => el.textContent = '0');
+            document.querySelectorAll('.player-seat').forEach(seat => {
+                seat.style.opacity = '1';
+                seat.classList.remove('folded');
+            });
+            
+            // Simulate betting actions
+            setTimeout(() => {
+                setActivePlayer(5);
+                updatePlayerBet(5, 40);
+                updatePlayerStatus(5, 'Raised');
+                console.log('✓ Player 5 raises to $40');
+            }, 500);
+            
+            setTimeout(() => {
+                setActivePlayer(0);
+                updatePlayerBet(0, 40);
+                updatePlayerStatus(0, 'Called');
+                console.log('✓ Player 0 calls $40');
+            }, 1500);
+            
+            setTimeout(() => {
+                setActivePlayer(1);
+                updatePlayerStatus(1, 'Folded');
+                const seat1 = document.querySelector('.seat-1');
+                seat1.classList.add('folded');
+                logAction('Alice folds');
+                console.log('✓ Player 1 folds');
+            }, 2500);
+            
+            setTimeout(() => {
+                setActivePlayer(2);
+                updatePlayerBet(2, 40);
+                updatePlayerStatus(2, 'Called');
+                console.log('✓ Player 2 calls $40');
+            }, 3500);
+            
+            setTimeout(() => {
+                setActivePlayer(3);
+                updatePlayerBet(3, 40);
+                updatePlayerStatus(3, 'Called');
+                console.log('✓ Player 3 calls $40');
+            }, 4500);
+            
+            setTimeout(() => {
+                setActivePlayer(4);
+                updatePlayerBet(4, 200);
+                updatePlayerStatus(4, 'All-In');
+                console.log('✓ Player 4 goes all-in for $200');
+                
+                updatePot(390);
+                
+                console.log('\n✅ Test 3 Complete: Exciting betting round!');
+            }, 5500);
+        }
+        
+        // Capture console output to debug div
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+        
+        // Initialize
+        console.log('Poker Table UI Solution initialized');
+        console.log('✓ 6 player seats positioned around table');
+        console.log('✓ Community cards area centered');
+        console.log('✓ Pot display visible');
+        console.log('✓ Action log ready');
+        console.log('✓ Dealer button component created');
+        console.log('\n💡 Run tests to see the table in action!');
+    </script>
+</body>
+</html>

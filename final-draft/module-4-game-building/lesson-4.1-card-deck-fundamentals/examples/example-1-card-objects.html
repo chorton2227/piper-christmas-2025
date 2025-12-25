@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Creating Card Objects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🃏 Example 1: Card Objects</h1>
+        
+        <div class="info">
+            <h2>What This Example Shows:</h2>
+            <ul>
+                <li>How to create card objects with properties</li>
+                <li>Different ways to represent suits and ranks</li>
+                <li>Accessing object properties with dot notation</li>
+                <li>Displaying card information</li>
+            </ul>
+            <p><strong>Open your browser console (F12) to see the output!</strong></p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== 🃏 CREATING CARD OBJECTS ===\n');
+        
+        // Creating a single card object
+        console.log('--- Creating a Single Card ---');
+        const aceOfSpades = {
+            suit: 'spades',
+            rank: 'A',
+            value: 14
+        };
+        
+        console.log('Ace of Spades:');
+        console.log(aceOfSpades);
+        console.log('Suit:', aceOfSpades.suit);
+        console.log('Rank:', aceOfSpades.rank);
+        console.log('Value:', aceOfSpades.value);
+        console.log('');
+        
+        // Creating several cards
+        console.log('--- Creating Multiple Cards ---');
+        const sevenOfHearts = {
+            suit: 'hearts',
+            rank: '7',
+            value: 7
+        };
+        
+        const kingOfDiamonds = {
+            suit: 'diamonds',
+            rank: 'K',
+            value: 13
+        };
+        
+        const twoOfClubs = {
+            suit: 'clubs',
+            rank: '2',
+            value: 2
+        };
+        
+        console.log('Seven of Hearts:', sevenOfHearts);
+        console.log('King of Diamonds:', kingOfDiamonds);
+        console.log('Two of Clubs:', twoOfClubs);
+        console.log('');
+        
+        // Face cards (Jack, Queen, King) have special values
+        console.log('--- Face Card Values ---');
+        const jack = { suit: 'hearts', rank: 'J', value: 11 };
+        const queen = { suit: 'hearts', rank: 'Q', value: 12 };
+        const king = { suit: 'hearts', rank: 'K', value: 13 };
+        const ace = { suit: 'hearts', rank: 'A', value: 14 };
+        
+        console.log('Jack value:', jack.value);
+        console.log('Queen value:', queen.value);
+        console.log('King value:', king.value);
+        console.log('Ace value:', ace.value, '(highest!)');
+        console.log('');
+        
+        // Using Unicode symbols for suits
+        console.log('--- Unicode Card Symbols ---');
+        const suitSymbols = {
+            'spades': '♠',
+            'hearts': '♥',
+            'diamonds': '♦',
+            'clubs': '♣'
+        };
+        
+        function displayCard(card) {
+            const symbol = suitSymbols[card.suit];
+            return `${card.rank}${symbol}`;
+        }
+        
+        console.log('Ace of Spades:', displayCard(aceOfSpades));
+        console.log('Seven of Hearts:', displayCard(sevenOfHearts));
+        console.log('King of Diamonds:', displayCard(kingOfDiamonds));
+        console.log('Two of Clubs:', displayCard(twoOfClubs));
+        console.log('');
+        
+        // Storing cards in an array
+        console.log('--- Storing Cards in an Array ---');
+        const hand = [aceOfSpades, sevenOfHearts, kingOfDiamonds, twoOfClubs, jack];
+        
+        console.log('Player hand has', hand.length, 'cards:');
+        hand.forEach((card, index) => {
+            console.log(`  Card ${index + 1}: ${displayCard(card)} (value: ${card.value})`);
+        });
+        console.log('');
+        
+        // Comparing card values
+        console.log('--- Comparing Card Values ---');
+        const card1 = { suit: 'hearts', rank: '10', value: 10 };
+        const card2 = { suit: 'spades', rank: 'K', value: 13 };
+        
+        console.log(`${displayCard(card1)} vs ${displayCard(card2)}`);
+        
+        if (card1.value > card2.value) {
+            console.log(`${displayCard(card1)} wins! (${card1.value} > ${card2.value})`);
+        } else if (card2.value > card1.value) {
+            console.log(`${displayCard(card2)} wins! (${card2.value} > ${card1.value})`);
+        } else {
+            console.log('Tie! Same value.');
+        }
+        console.log('');
+        
+        // Finding the highest card in a hand
+        console.log('--- Finding Highest Card ---');
+        let highestCard = hand[0];
+        
+        for (let card of hand) {
+            if (card.value > highestCard.value) {
+                highestCard = card;
+            }
+        }
+        
+        console.log('Highest card in hand:', displayCard(highestCard));
+        console.log('Value:', highestCard.value);
+        console.log('');
+        
+        // Creating a card with a function
+        console.log('--- Card Factory Function ---');
+        function createCard(suit, rank, value) {
+            return {
+                suit: suit,
+                rank: rank,
+                value: value,
+                display: function() {
+                    const symbols = {
+                        'spades': '♠',
+                        'hearts': '♥',
+                        'diamonds': '♦',
+                        'clubs': '♣'
+                    };
+                    return `${this.rank}${symbols[this.suit]}`;
+                }
+            };
+        }
+        
+        const newCard = createCard('diamonds', 'Q', 12);
+        console.log('Created card:', newCard);
+        console.log('Display:', newCard.display());
+        console.log('');
+        
+        // All 4 suits
+        console.log('--- All Four Suits ---');
+        const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+        const symbols = ['♠', '♥', '♦', '♣'];
+        
+        suits.forEach((suit, index) => {
+            const card = { suit: suit, rank: 'A', value: 14 };
+            console.log(`Ace of ${suit.charAt(0).toUpperCase() + suit.slice(1)}: ${card.rank}${symbols[index]}`);
+        });
+        console.log('');
+        
+        console.log('✨ Great job! You now know how to create and work with card objects! ✨');
+    </script>
+</body>
+</html>

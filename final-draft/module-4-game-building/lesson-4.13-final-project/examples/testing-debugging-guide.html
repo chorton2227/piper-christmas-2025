@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Testing & Debugging Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .test-category {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .test-case {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .test-case input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.3);
+        }
+        
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        
+        code {
+            color: #ffd700;
+        }
+        
+        .console-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .tip {
+            background: rgba(33, 150, 243, 0.2);
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #f44336;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Game Testing & Debugging Guide</h1>
+    
+    <div class="section">
+        <h2>Complete Testing Checklist</h2>
+        <p>Use this checklist to ensure your poker game is fully functional:</p>
+        
+        <div class="test-category">
+            <h3>✓ Core Functionality (40 points)</h3>
+            <div class="test-case">
+                <input type="checkbox" id="test1"> <label for="test1">Deck shuffles randomly each hand</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test2"> <label for="test2">Cards are dealt correctly to all players</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test3"> <label for="test3">Community cards (flop, turn, river) dealt correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test4"> <label for="test4">Blinds are posted correctly each hand</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test5"> <label for="test5">All poker hands detected correctly (pair to royal flush)</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test6"> <label for="test6">Winner determined correctly in showdown</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test7"> <label for="test7">Pot calculated correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test8"> <label for="test8">Dealer button rotates correctly</label>
+            </div>
+        </div>
+        
+        <div class="test-category">
+            <h3>✓ Betting System (30 points)</h3>
+            <div class="test-case">
+                <input type="checkbox" id="test9"> <label for="test9">Check works when allowed</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test10"> <label for="test10">Call works correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test11"> <label for="test11">Raise validates minimum amount</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test12"> <label for="test12">Fold removes player from hand</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test13"> <label for="test13">All-in handled correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test14"> <label for="test14">Side pots calculated correctly with multiple all-ins</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test15"> <label for="test15">Betting round ends when all match</label>
+            </div>
+        </div>
+        
+        <div class="test-category">
+            <h3>✓ AI Behavior (20 points)</h3>
+            <div class="test-case">
+                <input type="checkbox" id="test16"> <label for="test16">AI makes reasonable decisions</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test17"> <label for="test17">AI difficulty levels work differently</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test18"> <label for="test18">AI doesn't always fold with weak hands</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test19"> <label for="test19">AI raises occasionally</label>
+            </div>
+        </div>
+        
+        <div class="test-category">
+            <h3>✓ Edge Cases (30 points)</h3>
+            <div class="test-case">
+                <input type="checkbox" id="test20"> <label for="test20">All players fold except one - hand ends correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test21"> <label for="test21">Players running out of chips removed from game</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test22"> <label for="test22">Exact tie (split pot) divides evenly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test23"> <label for="test23">2-player (heads-up) works correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test24"> <label for="test24">Invalid bet amounts rejected</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test25"> <label for="test25">Game ends when only 1 player has chips</label>
+            </div>
+        </div>
+        
+        <div class="test-category">
+            <h3>✓ UI/UX (20 points)</h3>
+            <div class="test-case">
+                <input type="checkbox" id="test26"> <label for="test26">All buttons work</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test27"> <label for="test27">Animations are smooth</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test28"> <label for="test28">Winner announcement appears</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test29"> <label for="test29">Action log updates correctly</label>
+            </div>
+            <div class="test-case">
+                <input type="checkbox" id="test30"> <label for="test30">Responsive on mobile devices</label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Debugging Techniques</h2>
+        
+        <div class="tip">
+            <h3>💡 Tip 1: Use Console Logging</h3>
+            <p>Add comprehensive logging to track game state:</p>
+            <pre><code>function dealCards() {
+    console.log('=== Dealing Cards ===');
+    console.log('Deck size before dealing:', deck.length);
+    
+    players.forEach(player => {
+        const card = deck.pop();
+        player.cards.push(card);
+        console.log(`${player.name} receives:`, card);
+    });
+    
+    console.log('Deck size after dealing:', deck.length);
+    console.log('=====================');
+}</code></pre>
+        </div>
+        
+        <div class="tip">
+            <h3>💡 Tip 2: Inspect Game State</h3>
+            <p>Create a function to dump the entire game state:</p>
+            <pre><code>function debugGameState() {
+    console.log('=== GAME STATE DEBUG ===');
+    console.log('Phase:', gameState.phase);
+    console.log('Pot:', gameState.pot);
+    console.log('Current Bet:', gameState.currentBet);
+    console.log('Community Cards:', gameState.communityCards);
+    
+    gameState.players.forEach((player, i) => {
+        console.log(`Player ${i}:`, {
+            name: player.name,
+            chips: player.chips,
+            cards: player.cards,
+            currentBet: player.currentBet,
+            folded: player.folded
+        });
+    });
+    console.log('=======================');
+}
+
+// Call it whenever you need
+debugGameState();</code></pre>
+        </div>
+        
+        <div class="tip">
+            <h3>💡 Tip 3: Test Specific Hands</h3>
+            <p>Force specific cards for testing hand evaluation:</p>
+            <pre><code>function testRoyalFlush() {
+    const testHand = [
+        { suit: 'hearts', rank: 'A', value: 14 },
+        { suit: 'hearts', rank: 'K', value: 13 },
+        { suit: 'hearts', rank: 'Q', value: 12 },
+        { suit: 'hearts', rank: 'J', value: 11 },
+        { suit: 'hearts', rank: '10', value: 10 }
+    ];
+    
+    const result = evaluateHand(testHand);
+    console.log('Royal Flush Test:', result);
+    console.assert(result.name === 'Royal Flush', 'Should detect Royal Flush');
+}</code></pre>
+        </div>
+        
+        <div class="tip">
+            <h3>💡 Tip 4: Browser DevTools</h3>
+            <p>Use Chrome DevTools features:</p>
+            <ul>
+                <li><strong>Breakpoints:</strong> Pause execution at specific lines</li>
+                <li><strong>Step Through:</strong> Execute code line by line</li>
+                <li><strong>Watch Expressions:</strong> Monitor variables</li>
+                <li><strong>Call Stack:</strong> See function execution order</li>
+                <li><strong>Console:</strong> Test code snippets live</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <h3>⚠️ Common Bugs to Watch For</h3>
+            <ul>
+                <li><strong>Off-by-one errors:</strong> Array indices, player counts</li>
+                <li><strong>Mutating state:</strong> Always create new objects/arrays</li>
+                <li><strong>Async timing:</strong> Animations completing before logic</li>
+                <li><strong>Floating point:</strong> Chip calculations with decimals</li>
+                <li><strong>Reference vs value:</strong> Copying objects vs. references</li>
+                <li><strong>Event listeners:</strong> Multiple listeners on same element</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Live Testing Console</h2>
+        <p>Run automated tests to verify game logic:</p>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button onclick="runAllTests()">Run All Tests</button>
+            <button onclick="testDeckFunctions()">Test Deck Functions</button>
+            <button onclick="testHandEvaluation()">Test Hand Evaluation</button>
+            <button onclick="testBettingLogic()">Test Betting Logic</button>
+            <button onclick="clearConsole()">Clear Console</button>
+        </div>
+        
+        <div class="console-output" id="console-output">
+            Ready to run tests...<br>
+        </div>
+    </div>
+
+    <script>
+        // Test utilities
+        function log(message, type = 'info') {
+            const output = document.getElementById('console-output');
+            const color = type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#00ff00';
+            output.innerHTML += `<span style="color: ${color}">${message}</span><br>`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = '';
+        }
+        
+        // Deck functions (simplified for testing)
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+            const deck = [];
+            
+            for (let suit of suits) {
+                for (let rank of ranks) {
+                    deck.push({ suit, rank, value: ranks.indexOf(rank) + 2 });
+                }
+            }
+            return deck;
+        }
+        
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+        
+        function evaluateHand(cards) {
+            if (cards.length < 5) return { rank: 0, name: 'Incomplete' };
+            
+            const sorted = [...cards].sort((a, b) => b.value - a.value);
+            const isFlush = cards.every(c => c.suit === cards[0].suit);
+            
+            const values = sorted.map(c => c.value);
+            let isStraight = true;
+            for (let i = 0; i < values.length - 1; i++) {
+                if (values[i] - values[i + 1] !== 1) {
+                    isStraight = false;
+                    break;
+                }
+            }
+            
+            if (isFlush && isStraight && values[0] === 14) {
+                return { rank: 10, name: 'Royal Flush' };
+            }
+            if (isFlush && isStraight) {
+                return { rank: 9, name: 'Straight Flush' };
+            }
+            if (isFlush) {
+                return { rank: 6, name: 'Flush' };
+            }
+            if (isStraight) {
+                return { rank: 5, name: 'Straight' };
+            }
+            
+            const rankCounts = {};
+            for (let card of cards) {
+                rankCounts[card.value] = (rankCounts[card.value] || 0) + 1;
+            }
+            
+            const counts = Object.values(rankCounts).sort((a, b) => b - a);
+            
+            if (counts[0] === 4) return { rank: 8, name: 'Four of a Kind' };
+            if (counts[0] === 3 && counts[1] === 2) return { rank: 7, name: 'Full House' };
+            if (counts[0] === 3) return { rank: 4, name: 'Three of a Kind' };
+            if (counts[0] === 2 && counts[1] === 2) return { rank: 3, name: 'Two Pair' };
+            if (counts[0] === 2) return { rank: 2, name: 'One Pair' };
+            
+            return { rank: 1, name: 'High Card' };
+        }
+        
+        // Test functions
+        function testDeckFunctions() {
+            log('=== Testing Deck Functions ===', 'info');
+            
+            // Test 1: Deck creation
+            const deck = createDeck();
+            if (deck.length === 52) {
+                log('✓ Test 1 PASSED: Deck has 52 cards', 'success');
+            } else {
+                log(`✗ Test 1 FAILED: Deck has ${deck.length} cards (expected 52)`, 'error');
+            }
+            
+            // Test 2: All suits present
+            const suits = new Set(deck.map(c => c.suit));
+            if (suits.size === 4) {
+                log('✓ Test 2 PASSED: All 4 suits present', 'success');
+            } else {
+                log(`✗ Test 2 FAILED: Found ${suits.size} suits (expected 4)`, 'error');
+            }
+            
+            // Test 3: All ranks present
+            const ranks = new Set(deck.map(c => c.rank));
+            if (ranks.size === 13) {
+                log('✓ Test 3 PASSED: All 13 ranks present', 'success');
+            } else {
+                log(`✗ Test 3 FAILED: Found ${ranks.size} ranks (expected 13)`, 'error');
+            }
+            
+            // Test 4: Shuffling changes order
+            const originalFirst = deck[0];
+            shuffleDeck(deck);
+            if (deck[0] !== originalFirst) {
+                log('✓ Test 4 PASSED: Shuffle changed card order', 'success');
+            } else {
+                log('⚠ Test 4 WARNING: First card unchanged (may be random)', 'info');
+            }
+            
+            log('');
+        }
+        
+        function testHandEvaluation() {
+            log('=== Testing Hand Evaluation ===', 'info');
+            
+            // Test Royal Flush
+            const royalFlush = [
+                { suit: 'hearts', rank: 'A', value: 14 },
+                { suit: 'hearts', rank: 'K', value: 13 },
+                { suit: 'hearts', rank: 'Q', value: 12 },
+                { suit: 'hearts', rank: 'J', value: 11 },
+                { suit: 'hearts', rank: '10', value: 10 }
+            ];
+            const result1 = evaluateHand(royalFlush);
+            if (result1.name === 'Royal Flush') {
+                log('✓ Test 1 PASSED: Royal Flush detected', 'success');
+            } else {
+                log(`✗ Test 1 FAILED: Got ${result1.name} instead of Royal Flush`, 'error');
+            }
+            
+            // Test Straight Flush
+            const straightFlush = [
+                { suit: 'clubs', rank: '9', value: 9 },
+                { suit: 'clubs', rank: '8', value: 8 },
+                { suit: 'clubs', rank: '7', value: 7 },
+                { suit: 'clubs', rank: '6', value: 6 },
+                { suit: 'clubs', rank: '5', value: 5 }
+            ];
+            const result2 = evaluateHand(straightFlush);
+            if (result2.name === 'Straight Flush') {
+                log('✓ Test 2 PASSED: Straight Flush detected', 'success');
+            } else {
+                log(`✗ Test 2 FAILED: Got ${result2.name}`, 'error');
+            }
+            
+            // Test Flush
+            const flush = [
+                { suit: 'diamonds', rank: 'K', value: 13 },
+                { suit: 'diamonds', rank: '10', value: 10 },
+                { suit: 'diamonds', rank: '7', value: 7 },
+                { suit: 'diamonds', rank: '4', value: 4 },
+                { suit: 'diamonds', rank: '2', value: 2 }
+            ];
+            const result3 = evaluateHand(flush);
+            if (result3.name === 'Flush') {
+                log('✓ Test 3 PASSED: Flush detected', 'success');
+            } else {
+                log(`✗ Test 3 FAILED: Got ${result3.name}`, 'error');
+            }
+            
+            // Test Straight
+            const straight = [
+                { suit: 'hearts', rank: '10', value: 10 },
+                { suit: 'clubs', rank: '9', value: 9 },
+                { suit: 'diamonds', rank: '8', value: 8 },
+                { suit: 'spades', rank: '7', value: 7 },
+                { suit: 'hearts', rank: '6', value: 6 }
+            ];
+            const result4 = evaluateHand(straight);
+            if (result4.name === 'Straight') {
+                log('✓ Test 4 PASSED: Straight detected', 'success');
+            } else {
+                log(`✗ Test 4 FAILED: Got ${result4.name}`, 'error');
+            }
+            
+            log('');
+        }
+        
+        function testBettingLogic() {
+            log('=== Testing Betting Logic ===', 'info');
+            
+            // Test pot calculation
+            let pot = 0;
+            pot += 10; // Small blind
+            pot += 20; // Big blind
+            pot += 20; // Call
+            pot += 40; // Raise
+            
+            if (pot === 90) {
+                log('✓ Test 1 PASSED: Pot calculation correct', 'success');
+            } else {
+                log(`✗ Test 1 FAILED: Pot is ${pot} (expected 90)`, 'error');
+            }
+            
+            // Test chip validation
+            const playerChips = 500;
+            const betAmount = 100;
+            
+            if (betAmount <= playerChips) {
+                log('✓ Test 2 PASSED: Bet validation works', 'success');
+            } else {
+                log('✗ Test 2 FAILED: Bet validation incorrect', 'error');
+            }
+            
+            // Test all-in detection
+            const remainingChips = playerChips - betAmount;
+            if (remainingChips >= 0) {
+                log('✓ Test 3 PASSED: Chip subtraction correct', 'success');
+            } else {
+                log('✗ Test 3 FAILED: Negative chips!', 'error');
+            }
+            
+            log('');
+        }
+        
+        function runAllTests() {
+            clearConsole();
+            log('🧪 Running Complete Test Suite...\n', 'info');
+            
+            testDeckFunctions();
+            testHandEvaluation();
+            testBettingLogic();
+            
+            log('=== All Tests Complete! ===', 'success');
+            log('Check results above for any failures.', 'info');
+        }
+        
+        // Auto-log on page load
+        console.log('🧪 Game Testing & Debugging Guide Loaded');
+        console.log('This page demonstrates:');
+        console.log('1. Comprehensive testing checklist');
+        console.log('2. Debugging techniques');
+        console.log('3. Automated test functions');
+        console.log('4. Common bugs to avoid');
+        console.log('');
+        console.log('Click "Run All Tests" to test game logic!');
+    </script>
+</body>
+</html>

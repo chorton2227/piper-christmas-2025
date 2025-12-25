@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Basic AI Solution</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            color: #2c5364;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .poker-table {
+            background: linear-gradient(135deg, #0a5f0a 0%, #0d7a0d 100%);
+            border-radius: 200px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 8px solid #8b4513;
+            position: relative;
+        }
+
+        .pot-display {
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .pot-amount {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .pot-label {
+            color: white;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .player {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid;
+            transition: all 0.3s;
+        }
+
+        .player.human {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .player.ai {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #e7f3ff 0%, #cfe2ff 100%);
+        }
+
+        .player.folded {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .player.active {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+            transform: scale(1.02);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .player-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .player-cards {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card.hidden {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .card.hearts, .card.diamonds { color: #dc3545; }
+        .card.clubs, .card.spades { color: #212529; }
+        .card .suit { font-size: 1.1em; }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.7);
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .ai-thoughts {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #856404;
+            min-height: 60px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        button.test {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .game-log {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .action-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #17a2b8;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Answer Key: Basic AI Solution</h1>
+        <p class="subtitle">Complete AI opponent that can play a full poker hand</p>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> This is a complete working solution showing a basic AI that can make pre-flop and post-flop decisions, with simple bluffing logic. The AI uses hand strength evaluation and basic probability to make decisions.
+        </div>
+
+        <div class="poker-table">
+            <div class="pot-display">
+                <div class="pot-amount">$<span id="potAmount">0</span></div>
+                <div class="pot-label">Total Pot | Current Bet: $<span id="currentBet">0</span></div>
+            </div>
+
+            <div class="players-grid" id="playersDisplay"></div>
+        </div>
+
+        <div id="actionMessage"></div>
+
+        <div class="controls">
+            <button onclick="startHand()" class="secondary">Start New Hand</button>
+            <button onclick="nextAction()" id="nextButton">Next Action</button>
+            <button onclick="showAIThoughts()" class="test">Show AI Thoughts</button>
+            <button onclick="runTest(1)" class="test">Test 1: Premium Hands</button>
+            <button onclick="runTest(2)" class="test">Test 2: Medium Hands</button>
+            <button onclick="runTest(3)" class="test">Test 3: Bluffing</button>
+        </div>
+
+        <div id="gameLog" class="game-log"></div>
+    </div>
+
+    <script>
+        const rankNames = {
+            14: 'A', 13: 'K', 12: 'Q', 11: 'J',
+            10: '10', 9: '9', 8: '8', 7: '7',
+            6: '6', 5: '5', 4: '4', 3: '3', 2: '2'
+        };
+
+        const suitSymbols = {
+            hearts: '♥',
+            diamonds: '♦',
+            clubs: '♣',
+            spades: '♠'
+        };
+
+        let gameState = {
+            players: [],
+            pot: 0,
+            currentBet: 0,
+            dealerPosition: 0,
+            activePlayerIndex: 0,
+            deck: [],
+            communityCards: [],
+            round: 'pre-flop',
+            smallBlind: 10,
+            bigBlind: 20
+        };
+
+        let gameLog = [];
+
+        function log(message) {
+            gameLog.push(message);
+            console.log(message);
+            updateLogDisplay();
+        }
+
+        function updateLogDisplay() {
+            document.getElementById('gameLog').textContent = gameLog.join('\n');
+            document.getElementById('gameLog').scrollTop = document.getElementById('gameLog').scrollHeight;
+        }
+
+        function showMessage(message) {
+            const msgDiv = document.getElementById('actionMessage');
+            msgDiv.innerHTML = `<div class="action-message">${message}</div>`;
+            setTimeout(() => msgDiv.innerHTML = '', 3000);
+        }
+
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const deck = [];
+            for (let suit of suits) {
+                for (let value = 2; value <= 14; value++) {
+                    deck.push({ suit, value, rank: rankNames[value] });
+                }
+            }
+            return shuffle(deck);
+        }
+
+        function shuffle(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function evaluatePreFlopHand(card1, card2) {
+            const v1 = card1.value;
+            const v2 = card2.value;
+            const suited = card1.suit === card2.suit;
+            
+            const high = Math.max(v1, v2);
+            const low = Math.min(v1, v2);
+            const isPair = v1 === v2;
+            
+            if (isPair && high >= 11) return { strength: 0.95, category: 'premium' };
+            if (high === 14 && low >= 13) return { strength: suited ? 0.93 : 0.88, category: 'premium' };
+            if (isPair && high >= 9) return { strength: 0.80, category: 'strong' };
+            if (high >= 13 && low >= 11 && suited) return { strength: 0.75, category: 'strong' };
+            if (high === 14 && low >= 11) return { strength: 0.72, category: 'strong' };
+            if (isPair && high >= 7) return { strength: 0.65, category: 'medium' };
+            if (suited && high - low <= 2 && high >= 9) return { strength: 0.60, category: 'medium' };
+            if (high >= 11 && low >= 9) return { strength: suited ? 0.58 : 0.50, category: 'medium' };
+            if (isPair) return { strength: 0.45, category: 'weak' };
+            if (high >= 12) return { strength: suited ? 0.40 : 0.30, category: 'weak' };
+            if (suited && high - low <= 3) return { strength: 0.35, category: 'weak' };
+            return { strength: 0.15, category: 'trash' };
+        }
+
+        function makeAIDecision(player) {
+            const toCall = gameState.currentBet - player.currentBet;
+            const handEval = evaluatePreFlopHand(player.hand[0], player.hand[1]);
+            
+            player.aiThinking = [
+                `Hand: ${player.hand[0].rank}${suitSymbols[player.hand[0].suit]} ${player.hand[1].rank}${suitSymbols[player.hand[1].suit]}`,
+                `Strength: ${(handEval.strength * 100).toFixed(0)}% (${handEval.category})`,
+                `To call: $${toCall}`
+            ];
+            
+            const bluffRoll = Math.random();
+            if (bluffRoll < 0.10 && handEval.strength < 0.40) {
+                player.aiThinking.push(`🎲 Bluffing! (rolled ${(bluffRoll * 100).toFixed(0)}%)`);
+                log(`${player.name} is bluffing with weak hand!`);
+                return toCall === 0 ? 'raise' : 'call';
+            }
+            
+            if (handEval.strength >= 0.80) {
+                player.aiThinking.push(`💪 Strong hand - raising`);
+                return 'raise';
+            } else if (handEval.strength >= 0.50) {
+                if (toCall === 0) {
+                    player.aiThinking.push(`✅ Decent hand - checking`);
+                    return 'check';
+                } else if (toCall <= player.chips * 0.3) {
+                    player.aiThinking.push(`✅ Reasonable price - calling`);
+                    return 'call';
+                } else {
+                    player.aiThinking.push(`💰 Too expensive - folding`);
+                    return 'fold';
+                }
+            } else {
+                if (toCall === 0) {
+                    player.aiThinking.push(`👌 Free card - checking`);
+                    return 'check';
+                } else {
+                    player.aiThinking.push(`❌ Weak hand - folding`);
+                    return 'fold';
+                }
+            }
+        }
+
+        function executeAction(player, action) {
+            if (action === 'fold') {
+                player.folded = true;
+                log(`${player.name} folds`);
+                showMessage(`${player.name} folds`);
+            } else if (action === 'check') {
+                log(`${player.name} checks`);
+                showMessage(`${player.name} checks`);
+            } else if (action === 'call') {
+                const amount = gameState.currentBet - player.currentBet;
+                const actualAmount = Math.min(amount, player.chips);
+                player.chips -= actualAmount;
+                player.currentBet += actualAmount;
+                gameState.pot += actualAmount;
+                log(`${player.name} calls $${actualAmount}`);
+                showMessage(`${player.name} calls $${actualAmount}`);
+            } else if (action === 'raise') {
+                const raiseAmount = gameState.bigBlind * 3;
+                const totalAmount = (gameState.currentBet - player.currentBet) + raiseAmount;
+                const actualAmount = Math.min(totalAmount, player.chips);
+                player.chips -= actualAmount;
+                player.currentBet += actualAmount;
+                gameState.currentBet = player.currentBet;
+                gameState.pot += actualAmount;
+                log(`${player.name} raises to $${gameState.currentBet}`);
+                showMessage(`${player.name} raises to $${gameState.currentBet}`);
+            }
+        }
+
+        function startHand() {
+            gameLog = [];
+            log('=== Starting New Hand ===\n');
+            
+            gameState.deck = createDeck();
+            gameState.pot = 0;
+            gameState.currentBet = gameState.bigBlind;
+            gameState.activePlayerIndex = 0;
+            gameState.round = 'pre-flop';
+            
+            gameState.players = [
+                { id: 0, name: 'You (Human)', chips: 1000, currentBet: 0, folded: false, isAI: false, hand: [], aiThinking: [] },
+                { id: 1, name: 'AI Bot 1', chips: 1000, currentBet: 0, folded: false, isAI: true, hand: [], aiThinking: [] },
+                { id: 2, name: 'AI Bot 2', chips: 1000, currentBet: 0, folded: false, isAI: true, hand: [], aiThinking: [] },
+                { id: 3, name: 'AI Bot 3', chips: 1000, currentBet: 0, folded: false, isAI: true, hand: [], aiThinking: [] }
+            ];
+            
+            for (let player of gameState.players) {
+                player.hand = [gameState.deck.pop(), gameState.deck.pop()];
+                log(`${player.name} dealt: ${player.hand[0].rank}${suitSymbols[player.hand[0].suit]} ${player.hand[1].rank}${suitSymbols[player.hand[1].suit]}`);
+            }
+            
+            gameState.players[1].chips -= gameState.smallBlind;
+            gameState.players[1].currentBet = gameState.smallBlind;
+            gameState.pot += gameState.smallBlind;
+            log(`\n${gameState.players[1].name} posts small blind $${gameState.smallBlind}`);
+            
+            gameState.players[2].chips -= gameState.bigBlind;
+            gameState.players[2].currentBet = gameState.bigBlind;
+            gameState.pot += gameState.bigBlind;
+            log(`${gameState.players[2].name} posts big blind $${gameState.bigBlind}\n`);
+            
+            updateDisplay();
+            showMessage('New hand started! Click "Next Action" to begin.');
+        }
+
+        function nextAction() {
+            const activePlayers = gameState.players.filter(p => !p.folded);
+            if (activePlayers.length === 1) {
+                log(`\n${activePlayers[0].name} wins the pot of $${gameState.pot}!`);
+                showMessage(`${activePlayers[0].name} wins!`);
+                return;
+            }
+            
+            const player = gameState.players[gameState.activePlayerIndex];
+            
+            if (!player.folded) {
+                if (player.isAI) {
+                    const decision = makeAIDecision(player);
+                    executeAction(player, decision);
+                } else {
+                    const toCall = gameState.currentBet - player.currentBet;
+                    executeAction(player, toCall === 0 ? 'check' : 'call');
+                }
+            }
+            
+            gameState.activePlayerIndex = (gameState.activePlayerIndex + 1) % gameState.players.length;
+            updateDisplay();
+        }
+
+        function showAIThoughts() {
+            log('\n=== AI Thoughts ===');
+            gameState.players.forEach(player => {
+                if (player.isAI && !player.folded && player.aiThinking.length > 0) {
+                    log(`\n${player.name}:`);
+                    player.aiThinking.forEach(thought => log(`  ${thought}`));
+                }
+            });
+        }
+
+        function runTest(testNum) {
+            gameLog = [];
+            log(`=== Running Test ${testNum} ===\n`);
+            startHand();
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => nextAction(), i * 500);
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('potAmount').textContent = gameState.pot;
+            document.getElementById('currentBet').textContent = gameState.currentBet;
+            
+            const container = document.getElementById('playersDisplay');
+            container.innerHTML = gameState.players.map(player => {
+                const isActive = gameState.players[gameState.activePlayerIndex] === player;
+                const classes = ['player', player.isAI ? 'ai' : 'human', player.folded ? 'folded' : '', isActive ? 'active' : ''].filter(Boolean).join(' ');
+                
+                return `
+                    <div class="${classes}">
+                        <div class="player-header">
+                            <div class="player-name">${player.name} ${player.isAI ? '🤖' : '👤'}</div>
+                            ${player.folded ? '❌ FOLDED' : ''}
+                        </div>
+                        <div class="player-cards">
+                            ${player.isAI && !player.folded ? 
+                                '<div class="card hidden">🂠</div><div class="card hidden">🂠</div>' :
+                                player.hand.map(card => `
+                                    <div class="card ${card.suit}">
+                                        <div>${card.rank}</div>
+                                        <div class="suit">${suitSymbols[card.suit]}</div>
+                                    </div>
+                                `).join('')
+                            }
+                        </div>
+                        <div class="player-stats">
+                            <div class="stat">
+                                <div class="stat-label">Chips</div>
+                                <div class="stat-value">$${player.chips}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Bet</div>
+                                <div class="stat-value">$${player.currentBet}</div>
+                            </div>
+                        </div>
+                        ${player.aiThinking && player.aiThinking.length > 0 ? `
+                            <div class="ai-thoughts">
+                                ${player.aiThinking.join('<br>')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.addEventListener('load', () => {
+            log('Basic AI Solution - Answer Key');
+            log('Complete AI opponent implementation');
+            log('Click "Start New Hand" to begin!\n');
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>

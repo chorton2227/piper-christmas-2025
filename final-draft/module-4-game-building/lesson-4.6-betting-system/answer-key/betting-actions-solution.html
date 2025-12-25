@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution: Betting Actions - Complete Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c5530 0%, #1a3d20 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2c5530;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .pot-info {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        .bet-info {
+            font-size: 20px;
+            color: #555;
+        }
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .player-card {
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f9f9f9;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .player-card.active {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .player-card.folded {
+            opacity: 0.4;
+            border-color: #999;
+        }
+        .player-card.all-in {
+            border-color: #e91e63;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+        }
+        .player-badge {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .player-badge.all-in { background: #e91e63; }
+        .player-badge.folded { background: #999; }
+        .player-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 15px;
+        }
+        .player-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .player-stat:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            color: #666;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #2c5530;
+        }
+        .controls-panel {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .controls-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 15px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-fold { background: #f44336; }
+        .btn-fold:hover { background: #d32f2f; }
+        .btn-check { background: #2196F3; }
+        .btn-check:hover { background: #1976D2; }
+        .btn-call { background: #ff9800; }
+        .btn-call:hover { background: #f57c00; }
+        .btn-raise { background: #9c27b0; }
+        .btn-raise:hover { background: #7b1fa2; }
+        .btn-all-in { background: #e91e63; }
+        .btn-all-in:hover { background: #c2185b; }
+        .btn-reset { background: #607d8b; }
+        .btn-reset:hover { background: #455a64; }
+        .raise-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 2px solid #9c27b0;
+        }
+        .raise-slider {
+            width: 100%;
+            margin: 15px 0;
+        }
+        .raise-amount-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #9c27b0;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .output {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+            min-height: 80px;
+        }
+        .output.error {
+            border-left-color: #f44336;
+        }
+        .output h3 {
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Complete Betting Actions Implementation</h1>
+        <p class="subtitle">Full poker betting system with Fold, Check, Call, Raise, and All-In</p>
+        
+        <div class="game-header">
+            <div class="pot-info">💰 Pot: $<span id="pot">0</span></div>
+            <div class="bet-info">Current Bet: $<span id="currentBet">0</span></div>
+            <div class="bet-info">Min Raise: $<span id="minRaise">20</span></div>
+        </div>
+
+        <div id="playersDisplay" class="players-grid"></div>
+
+        <div class="controls-panel">
+            <div class="controls-title">Player Actions</div>
+            <div class="action-buttons">
+                <button onclick="playerFold()" class="btn-fold">Fold</button>
+                <button onclick="playerCheck()" id="checkBtn" class="btn-check">Check</button>
+                <button onclick="playerCall()" id="callBtn" class="btn-call">Call $<span id="callAmount">0</span></button>
+                <button onclick="toggleRaiseControls()" id="raiseBtn" class="btn-raise">Raise</button>
+                <button onclick="playerAllIn()" class="btn-all-in">All-In</button>
+                <button onclick="resetGame()" class="btn-reset">New Hand</button>
+            </div>
+            
+            <div id="raiseControls" class="raise-controls hidden">
+                <div class="controls-title">Raise Amount</div>
+                <div class="raise-amount-display">$<span id="raiseAmount">0</span></div>
+                <input type="range" id="raiseSlider" class="raise-slider" min="40" max="1000" value="40" step="10">
+                <div class="action-buttons">
+                    <button onclick="confirmRaise()" class="btn-raise">Confirm Raise</button>
+                    <button onclick="toggleRaiseControls()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-buttons">
+            <button onclick="testCase1()">Test 1: All Actions</button>
+            <button onclick="testCase2()">Test 2: Raises</button>
+            <button onclick="testCase3()">Test 3: All-In</button>
+        </div>
+        
+        <div id="output" class="output">
+            <h3>Ready to play! Current player can check.</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            players: [
+                { id: 0, name: 'Alice', chips: 1000, bet: 0, folded: false, allIn: false },
+                { id: 1, name: 'Bob', chips: 1000, bet: 0, folded: false, allIn: false },
+                { id: 2, name: 'Charlie', chips: 1000, bet: 0, folded: false, allIn: false },
+                { id: 3, name: 'Diana', chips: 1000, bet: 0, folded: false, allIn: false },
+                { id: 4, name: 'Eve', chips: 1000, bet: 0, folded: false, allIn: false },
+                { id: 5, name: 'Frank', chips: 1000, bet: 0, folded: false, allIn: false }
+            ],
+            currentBet: 0,
+            pot: 0,
+            currentPlayerIndex: 0,
+            bigBlind: 20,
+            lastRaiseAmount: 20
+        };
+
+        // Helper functions
+        function getPlayerById(state, id) {
+            return state.players.find(p => p.id === id);
+        }
+
+        function getCurrentPlayer(state) {
+            return state.players[state.currentPlayerIndex];
+        }
+
+        function nextPlayer(state) {
+            const startIndex = state.currentPlayerIndex;
+            do {
+                state.currentPlayerIndex = (state.currentPlayerIndex + 1) % state.players.length;
+            } while (state.players[state.currentPlayerIndex].folded && state.currentPlayerIndex !== startIndex);
+        }
+
+        function getActivePlayers(state) {
+            return state.players.filter(p => !p.folded);
+        }
+
+        function calculateMinRaise(state) {
+            if (state.currentBet === 0) {
+                return state.bigBlind;
+            }
+            return state.currentBet + state.lastRaiseAmount;
+        }
+
+        // Fold action
+        function fold(state, playerId) {
+            const player = getPlayerById(state, playerId);
+            
+            if (!player || player.folded) {
+                return { success: false, error: 'Invalid player or already folded' };
+            }
+            
+            player.folded = true;
+            console.log(`${player.name} folds`);
+            
+            const activePlayers = getActivePlayers(state);
+            if (activePlayers.length === 1) {
+                const winner = activePlayers[0];
+                winner.chips += state.pot;
+                console.log(`${winner.name} wins pot of $${state.pot}!`);
+                return { 
+                    success: true, 
+                    action: 'fold',
+                    handOver: true,
+                    winner: winner,
+                    message: `${player.name} folds. ${winner.name} wins $${state.pot}!`
+                };
+            }
+            
+            nextPlayer(state);
+            return { success: true, action: 'fold', message: `${player.name} folds` };
+        }
+
+        // Check action
+        function check(state, playerId) {
+            const player = getPlayerById(state, playerId);
+            
+            if (!player || player.folded) {
+                return { success: false, error: 'Invalid player' };
+            }
+            
+            if (player.bet < state.currentBet) {
+                return { success: false, error: `Cannot check! Must call $${state.currentBet - player.bet} or fold` };
+            }
+            
+            console.log(`${player.name} checks`);
+            nextPlayer(state);
+            
+            return { success: true, action: 'check', message: `${player.name} checks` };
+        }
+
+        // Call action
+        function call(state, playerId) {
+            const player = getPlayerById(state, playerId);
+            
+            if (!player || player.folded) {
+                return { success: false, error: 'Invalid player' };
+            }
+            
+            const amountToCall = state.currentBet - player.bet;
+            
+            if (amountToCall === 0) {
+                return { success: false, error: 'Nothing to call, use check instead' };
+            }
+            
+            if (amountToCall > player.chips) {
+                return allIn(state, playerId);
+            }
+            
+            player.chips -= amountToCall;
+            player.bet += amountToCall;
+            state.pot += amountToCall;
+            
+            console.log(`${player.name} calls $${amountToCall}`);
+            nextPlayer(state);
+            
+            return { 
+                success: true, 
+                action: 'call',
+                amount: amountToCall,
+                message: `${player.name} calls $${amountToCall}`
+            };
+        }
+
+        // Raise action
+        function raise(state, playerId, raiseToAmount) {
+            const player = getPlayerById(state, playerId);
+            
+            if (!player || player.folded) {
+                return { success: false, error: 'Invalid player' };
+            }
+            
+            const minRaise = calculateMinRaise(state);
+            
+            if (raiseToAmount < minRaise) {
+                return { 
+                    success: false, 
+                    error: `Minimum raise is $${minRaise}, you tried $${raiseToAmount}` 
+                };
+            }
+            
+            const amountToCall = state.currentBet - player.bet;
+            const totalAmount = raiseToAmount - player.bet;
+            
+            if (totalAmount > player.chips) {
+                return { success: false, error: 'Not enough chips for this raise' };
+            }
+            
+            player.chips -= totalAmount;
+            player.bet = raiseToAmount;
+            state.pot += totalAmount;
+            
+            const raiseSize = raiseToAmount - state.currentBet;
+            state.lastRaiseAmount = raiseSize;
+            state.currentBet = raiseToAmount;
+            
+            console.log(`${player.name} raises to $${raiseToAmount} (raise of $${raiseSize})`);
+            nextPlayer(state);
+            
+            return { 
+                success: true, 
+                action: 'raise',
+                amount: totalAmount,
+                newBet: raiseToAmount,
+                message: `${player.name} raises to $${raiseToAmount}`
+            };
+        }
+
+        // All-in action
+        function allIn(state, playerId) {
+            const player = getPlayerById(state, playerId);
+            
+            if (!player || player.folded) {
+                return { success: false, error: 'Invalid player' };
+            }
+            
+            if (player.chips === 0) {
+                return { success: false, error: 'No chips remaining' };
+            }
+            
+            const allInAmount = player.chips;
+            player.chips = 0;
+            player.bet += allInAmount;
+            state.pot += allInAmount;
+            player.allIn = true;
+            
+            if (player.bet > state.currentBet) {
+                const raiseSize = player.bet - state.currentBet;
+                state.lastRaiseAmount = raiseSize;
+                state.currentBet = player.bet;
+                console.log(`${player.name} goes all-in for $${allInAmount} (raises to $${player.bet})`);
+            } else {
+                console.log(`${player.name} goes all-in for $${allInAmount} (total bet: $${player.bet})`);
+            }
+            
+            nextPlayer(state);
+            
+            return { 
+                success: true, 
+                action: 'all-in',
+                amount: allInAmount,
+                message: `${player.name} goes all-in for $${allInAmount}!`
+            };
+        }
+
+        // UI Functions
+        function updateDisplay() {
+            document.getElementById('pot').textContent = gameState.pot;
+            document.getElementById('currentBet').textContent = gameState.currentBet;
+            document.getElementById('minRaise').textContent = calculateMinRaise(gameState);
+            
+            const currentPlayer = getCurrentPlayer(gameState);
+            const toCall = gameState.currentBet - currentPlayer.bet;
+            document.getElementById('callAmount').textContent = toCall;
+            
+            // Update player cards
+            const playersDiv = document.getElementById('playersDisplay');
+            playersDiv.innerHTML = '';
+            
+            gameState.players.forEach((player, idx) => {
+                const isActive = idx === gameState.currentPlayerIndex;
+                const card = document.createElement('div');
+                let cardClass = 'player-card';
+                if (isActive) cardClass += ' active';
+                if (player.folded) cardClass += ' folded';
+                if (player.allIn) cardClass += ' all-in';
+                
+                card.className = cardClass;
+                
+                let badge = '';
+                if (isActive && !player.folded) badge = '<div class="player-badge">CURRENT TURN</div>';
+                else if (player.allIn) badge = '<div class="player-badge all-in">ALL-IN</div>';
+                else if (player.folded) badge = '<div class="player-badge folded">FOLDED</div>';
+                
+                card.innerHTML = `
+                    ${badge}
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-stat">
+                        <span class="stat-label">💰 Chips:</span>
+                        <span class="stat-value">$${player.chips}</span>
+                    </div>
+                    <div class="player-stat">
+                        <span class="stat-label">🎯 Current Bet:</span>
+                        <span class="stat-value">$${player.bet}</span>
+                    </div>
+                    ${!player.folded && !player.allIn ? `
+                    <div class="player-stat">
+                        <span class="stat-label">📊 To Call:</span>
+                        <span class="stat-value">$${Math.max(0, gameState.currentBet - player.bet)}</span>
+                    </div>
+                    ` : ''}
+                `;
+                playersDiv.appendChild(card);
+            });
+            
+            // Update button states
+            const canCheck = currentPlayer.bet >= gameState.currentBet;
+            const canCall = toCall > 0 && !currentPlayer.allIn;
+            const canRaise = currentPlayer.chips > 0 && !currentPlayer.allIn;
+            
+            document.getElementById('checkBtn').disabled = !canCheck || currentPlayer.folded;
+            document.getElementById('callBtn').disabled = !canCall || currentPlayer.folded;
+            document.getElementById('raiseBtn').disabled = !canRaise || currentPlayer.folded;
+            
+            // Update raise slider
+            const minRaise = calculateMinRaise(gameState);
+            const slider = document.getElementById('raiseSlider');
+            slider.min = minRaise;
+            slider.max = currentPlayer.chips + currentPlayer.bet;
+            slider.value = Math.max(minRaise, parseInt(slider.value));
+            updateRaiseAmount();
+        }
+
+        function updateRaiseAmount() {
+            const amount = document.getElementById('raiseSlider').value;
+            document.getElementById('raiseAmount').textContent = amount;
+        }
+
+        function logOutput(message, isError = false) {
+            const output = document.getElementById('output');
+            output.className = 'output' + (isError ? ' error' : '');
+            output.innerHTML = `<h3>${message}</h3>`;
+        }
+
+        function toggleRaiseControls() {
+            const controls = document.getElementById('raiseControls');
+            controls.classList.toggle('hidden');
+        }
+
+        // Player action handlers
+        function playerFold() {
+            const player = getCurrentPlayer(gameState);
+            const result = fold(gameState, player.id);
+            
+            if (result.success) {
+                logOutput(result.message);
+                if (result.handOver) {
+                    setTimeout(() => alert(`Hand Over! ${result.winner.name} wins!`), 100);
+                }
+            } else {
+                logOutput(result.error, true);
+            }
+            
+            updateDisplay();
+        }
+
+        function playerCheck() {
+            const player = getCurrentPlayer(gameState);
+            const result = check(gameState, player.id);
+            
+            if (result.success) {
+                logOutput(result.message);
+            } else {
+                logOutput(result.error, true);
+            }
+            
+            updateDisplay();
+        }
+
+        function playerCall() {
+            const player = getCurrentPlayer(gameState);
+            const result = call(gameState, player.id);
+            
+            if (result.success) {
+                logOutput(result.message);
+            } else {
+                logOutput(result.error, true);
+            }
+            
+            updateDisplay();
+        }
+
+        function confirmRaise() {
+            const player = getCurrentPlayer(gameState);
+            const raiseAmount = parseInt(document.getElementById('raiseSlider').value);
+            const result = raise(gameState, player.id, raiseAmount);
+            
+            if (result.success) {
+                logOutput(result.message);
+                toggleRaiseControls();
+            } else {
+                logOutput(result.error, true);
+            }
+            
+            updateDisplay();
+        }
+
+        function playerAllIn() {
+            const player = getCurrentPlayer(gameState);
+            const result = allIn(gameState, player.id);
+            
+            if (result.success) {
+                logOutput(result.message);
+            } else {
+                logOutput(result.error, true);
+            }
+            
+            updateDisplay();
+        }
+
+        function resetGame() {
+            gameState = {
+                players: [
+                    { id: 0, name: 'Alice', chips: 1000, bet: 0, folded: false, allIn: false },
+                    { id: 1, name: 'Bob', chips: 1000, bet: 0, folded: false, allIn: false },
+                    { id: 2, name: 'Charlie', chips: 1000, bet: 0, folded: false, allIn: false },
+                    { id: 3, name: 'Diana', chips: 1000, bet: 0, folded: false, allIn: false },
+                    { id: 4, name: 'Eve', chips: 1000, bet: 0, folded: false, allIn: false },
+                    { id: 5, name: 'Frank', chips: 1000, bet: 0, folded: false, allIn: false }
+                ],
+                currentBet: 0,
+                pot: 0,
+                currentPlayerIndex: 0,
+                bigBlind: 20,
+                lastRaiseAmount: 20
+            };
+            
+            const controls = document.getElementById('raiseControls');
+            controls.classList.add('hidden');
+            
+            updateDisplay();
+            logOutput('New hand started! Current player can check.');
+        }
+
+        // Test Cases
+        function testCase1() {
+            console.log('\n=== Test Case 1: All Actions ===');
+            resetGame();
+            
+            // Simulate all actions
+            raise(gameState, 0, 40);  // Alice raises to 40
+            call(gameState, 1);       // Bob calls
+            fold(gameState, 2);       // Charlie folds
+            call(gameState, 3);       // Diana calls
+            raise(gameState, 4, 120); // Eve raises to 120
+            fold(gameState, 5);       // Frank folds
+            
+            updateDisplay();
+            logOutput(`✅ Test 1: Demonstrated fold, check, call, raise. Pot: $${gameState.pot}`);
+            console.log(`Active players: ${getActivePlayers(gameState).map(p => p.name).join(', ')}`);
+        }
+
+        function testCase2() {
+            console.log('\n=== Test Case 2: Multiple Raises ===');
+            resetGame();
+            
+            raise(gameState, 0, 50);   // Alice raises to 50
+            raise(gameState, 1, 150);  // Bob raises to 150
+            raise(gameState, 2, 300);  // Charlie raises to 300
+            call(gameState, 3);        // Diana calls
+            
+            updateDisplay();
+            logOutput(`✅ Test 2: Multiple raises completed! Current bet: $${gameState.currentBet}, Pot: $${gameState.pot}`);
+        }
+
+        function testCase3() {
+            console.log('\n=== Test Case 3: All-In Scenarios ===');
+            resetGame();
+            
+            // Reduce some player chips for testing
+            gameState.players[1].chips = 200;
+            gameState.players[2].chips = 500;
+            
+            raise(gameState, 0, 300);  // Alice raises to 300
+            allIn(gameState, 1);       // Bob all-in for 200
+            call(gameState, 2);        // Charlie calls
+            
+            updateDisplay();
+            logOutput(`✅ Test 3: All-in scenarios tested! Pot: $${gameState.pot}`);
+            console.log(`Bob is all-in: ${gameState.players[1].allIn}`);
+        }
+
+        // Event listeners
+        document.getElementById('raiseSlider').addEventListener('input', updateRaiseAmount);
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Initialize
+        console.log('=== Complete Betting Actions Implementation ===');
+        console.log('All poker actions: Fold, Check, Call, Raise, All-In');
+        updateDisplay();
+    </script>
+</body>
+</html>

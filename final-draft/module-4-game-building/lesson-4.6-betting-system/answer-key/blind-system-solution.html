@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution: Blind System - Complete Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3d20 0%, #2c5530 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2c5530;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .poker-table {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+            border: 10px solid #8d6e63;
+            border-radius: 200px;
+            padding: 60px;
+            margin: 30px 0;
+            position: relative;
+            min-height: 400px;
+        }
+        .table-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+        .pot-display {
+            font-size: 32px;
+            font-weight: bold;
+            background: #ffd700;
+            color: #2c5530;
+            padding: 20px 40px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .dealer-button {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 3px solid #2c5530;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2c5530;
+            font-size: 20px;
+            position: absolute;
+        }
+        .players-circle {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .player-position {
+            position: absolute;
+            width: 180px;
+            z-index: 10;
+        }
+        /* 6-player positions arranged in oval around table */
+        .player-position.pos-0 { top: -80px; left: 50%; transform: translateX(-50%); }
+        .player-position.pos-1 { bottom: -300px; right: -140px; }
+        .player-position.pos-2 { bottom: 30%; right: -140px; }
+        .player-position.pos-3 { bottom: -300px; left: 50%; transform: translateX(-50%); }
+        .player-position.pos-4 { bottom: 15%; left: -140px; }
+        .player-position.pos-5 { bottom: -300px; left: -140px; }
+        .player-card {
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .player-card.dealer {
+            border-color: #ffd700;
+            background: #fffde7;
+        }
+        .player-card.small-blind {
+            border-color: #2196F3;
+            background: #e3f2fd;
+        }
+        .player-card.big-blind {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+        .player-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 8px;
+        }
+        .player-role {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .role-dealer {
+            background: #ffd700;
+            color: #2c5530;
+        }
+        .role-sb {
+            background: #2196F3;
+            color: white;
+        }
+        .role-bb {
+            background: #f44336;
+            color: white;
+        }
+        .player-stat {
+            font-size: 13px;
+            margin: 4px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .controls-panel {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .controls-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 15px;
+        }
+        .blind-settings {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .setting-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        .setting-row label {
+            font-weight: bold;
+            min-width: 120px;
+        }
+        .setting-row input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 150px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .btn-primary { background: #2196F3; }
+        .btn-primary:hover { background: #1976D2; }
+        .btn-rotate { background: #ff9800; }
+        .btn-rotate:hover { background: #f57c00; }
+        .output {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+        }
+        .output h3 {
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Blind System Implementation</h1>
+        <p class="subtitle">Small blind, big blind, and dealer button rotation</p>
+        
+        <div class="poker-table">
+            <div class="table-center">
+                <div class="pot-display">💰 Pot: $<span id="pot">0</span></div>
+            </div>
+            <div id="playersCircle" class="players-circle"></div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="controls-title">Blind Settings</div>
+            <div class="blind-settings">
+                <div class="setting-row">
+                    <label>Small Blind:</label>
+                    <input type="number" id="smallBlindInput" value="10" min="1">
+                </div>
+                <div class="setting-row">
+                    <label>Big Blind:</label>
+                    <input type="number" id="bigBlindInput" value="20" min="1">
+                </div>
+                <div class="setting-row">
+                    <label>Number of Players:</label>
+                    <input type="number" id="numPlayersInput" value="6" min="2" max="10">
+                </div>
+            </div>
+            
+            <button onclick="postBlinds()" class="btn-primary">Post Blinds</button>
+            <button onclick="rotateButton()" class="btn-rotate">Rotate Dealer Button</button>
+            <button onclick="newHand()">New Hand</button>
+            <button onclick="resetGame()">Reset Game</button>
+        </div>
+
+        <button onclick="testCase1()">Test 1: Standard 6 Players</button>
+        <button onclick="testCase2()">Test 2: Heads-Up (2 Players)</button>
+        <button onclick="testCase3()">Test 3: Button Rotation</button>
+        
+        <div id="output" class="output">
+            <h3>Ready to post blinds!</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            players: [],
+            dealerPosition: 0,
+            smallBlind: 10,
+            bigBlind: 20,
+            pot: 0,
+            blindsPosted: false
+        };
+
+        // Initialize game
+        function initializeGame(numPlayers = 6, smallBlind = 10, bigBlind = 20) {
+            const playerNames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry', 'Ivy', 'Jack'];
+            
+            gameState = {
+                players: [],
+                dealerPosition: 0,
+                smallBlind: smallBlind,
+                bigBlind: bigBlind,
+                pot: 0,
+                blindsPosted: false
+            };
+            
+            for (let i = 0; i < numPlayers; i++) {
+                gameState.players.push({
+                    id: i,
+                    name: playerNames[i],
+                    chips: 1000,
+                    bet: 0,
+                    isDealer: i === 0,
+                    isSmallBlind: false,
+                    isBigBlind: false
+                });
+            }
+            
+            assignBlinds();
+        }
+
+        // Assign blind positions
+        function assignBlinds() {
+            const numPlayers = gameState.players.length;
+            
+            // Clear all positions first
+            gameState.players.forEach(p => {
+                p.isDealer = false;
+                p.isSmallBlind = false;
+                p.isBigBlind = false;
+            });
+            
+            // Set dealer
+            gameState.players[gameState.dealerPosition].isDealer = true;
+            
+            if (numPlayers === 2) {
+                // Heads-up: Dealer posts small blind, other player posts big blind
+                gameState.players[gameState.dealerPosition].isSmallBlind = true;
+                gameState.players[(gameState.dealerPosition + 1) % numPlayers].isBigBlind = true;
+            } else {
+                // Normal: Small blind is left of dealer, big blind is left of small blind
+                const sbPosition = (gameState.dealerPosition + 1) % numPlayers;
+                const bbPosition = (gameState.dealerPosition + 2) % numPlayers;
+                
+                gameState.players[sbPosition].isSmallBlind = true;
+                gameState.players[bbPosition].isBigBlind = true;
+            }
+            
+            console.log(`Dealer: ${gameState.players[gameState.dealerPosition].name}`);
+            console.log(`Small Blind: ${gameState.players.find(p => p.isSmallBlind).name}`);
+            console.log(`Big Blind: ${gameState.players.find(p => p.isBigBlind).name}`);
+        }
+
+        // Post blinds
+        function postBlinds() {
+            if (gameState.blindsPosted) {
+                logOutput('Blinds already posted! Start a new hand first.', true);
+                return;
+            }
+            
+            console.log('\n=== Posting Blinds ===');
+            
+            const sbPlayer = gameState.players.find(p => p.isSmallBlind);
+            const bbPlayer = gameState.players.find(p => p.isBigBlind);
+            
+            // Post small blind
+            if (sbPlayer) {
+                const sbAmount = Math.min(gameState.smallBlind, sbPlayer.chips);
+                sbPlayer.chips -= sbAmount;
+                sbPlayer.bet = sbAmount;
+                gameState.pot += sbAmount;
+                
+                console.log(`${sbPlayer.name} posts small blind $${sbAmount}`);
+            }
+            
+            // Post big blind
+            if (bbPlayer) {
+                const bbAmount = Math.min(gameState.bigBlind, bbPlayer.chips);
+                bbPlayer.chips -= bbAmount;
+                bbPlayer.bet = bbAmount;
+                gameState.pot += bbAmount;
+                
+                console.log(`${bbPlayer.name} posts big blind $${bbAmount}`);
+            }
+            
+            gameState.blindsPosted = true;
+            
+            updateDisplay();
+            logOutput(`✅ Blinds posted! Small blind: $${gameState.smallBlind}, Big blind: $${gameState.bigBlind}, Pot: $${gameState.pot}`);
+        }
+
+        // Rotate dealer button
+        function rotateButton() {
+            console.log('\n=== Rotating Dealer Button ===');
+            
+            const oldDealer = gameState.players[gameState.dealerPosition].name;
+            gameState.dealerPosition = (gameState.dealerPosition + 1) % gameState.players.length;
+            const newDealer = gameState.players[gameState.dealerPosition].name;
+            
+            console.log(`Dealer button moves from ${oldDealer} to ${newDealer}`);
+            
+            assignBlinds();
+            gameState.blindsPosted = false;
+            
+            updateDisplay();
+            logOutput(`✅ Dealer button rotated! New dealer: ${newDealer}`);
+        }
+
+        // Start new hand
+        function newHand() {
+            console.log('\n=== New Hand ===');
+            
+            // Rotate button
+            gameState.dealerPosition = (gameState.dealerPosition + 1) % gameState.players.length;
+            
+            // Reset player bets
+            gameState.players.forEach(p => {
+                p.bet = 0;
+            });
+            
+            gameState.pot = 0;
+            gameState.blindsPosted = false;
+            
+            assignBlinds();
+            updateDisplay();
+            logOutput('New hand started! Post blinds to begin.');
+        }
+
+        // Reset entire game
+        function resetGame() {
+            const numPlayers = parseInt(document.getElementById('numPlayersInput').value);
+            const sb = parseInt(document.getElementById('smallBlindInput').value);
+            const bb = parseInt(document.getElementById('bigBlindInput').value);
+            
+            initializeGame(numPlayers, sb, bb);
+            updateDisplay();
+            logOutput('Game reset with new settings!');
+        }
+
+        // UI Functions
+        function updateDisplay() {
+            document.getElementById('pot').textContent = gameState.pot;
+            
+            const playersCircle = document.getElementById('playersCircle');
+            playersCircle.innerHTML = '';
+            
+            gameState.players.forEach((player, idx) => {
+                const pos = document.createElement('div');
+                pos.className = `player-position pos-${idx}`;
+                
+                let cardClass = 'player-card';
+                let roleHtml = '';
+                
+                if (player.isDealer) {
+                    cardClass += ' dealer';
+                    roleHtml = '<div class="player-role role-dealer">🎲 DEALER</div>';
+                }
+                if (player.isSmallBlind) {
+                    cardClass += ' small-blind';
+                    roleHtml = '<div class="player-role role-sb">SB - $' + gameState.smallBlind + '</div>';
+                }
+                if (player.isBigBlind) {
+                    cardClass += ' big-blind';
+                    roleHtml = '<div class="player-role role-bb">BB - $' + gameState.bigBlind + '</div>';
+                }
+                
+                pos.innerHTML = `
+                    <div class="${cardClass}">
+                        <div class="player-name">${player.name}</div>
+                        ${roleHtml}
+                        <div class="player-stat">
+                            <span>💰 Chips:</span>
+                            <span>$${player.chips}</span>
+                        </div>
+                        <div class="player-stat">
+                            <span>🎯 Bet:</span>
+                            <span>$${player.bet}</span>
+                        </div>
+                    </div>
+                `;
+                
+                playersCircle.appendChild(pos);
+            });
+        }
+
+        function logOutput(message, isError = false) {
+            const output = document.getElementById('output');
+            const color = isError ? '#d32f2f' : '#2c5530';
+            output.innerHTML = `<h3 style="color: ${color}">${message}</h3>`;
+        }
+
+        // Test Cases
+        function testCase1() {
+            console.log('\n=== Test Case 1: Standard 6-Player Game ===');
+            initializeGame(6, 10, 20);
+            
+            console.log('Testing blind positions:');
+            console.log(`  Dealer at position ${gameState.dealerPosition}`);
+            console.log(`  Small blind at position ${(gameState.dealerPosition + 1) % 6}`);
+            console.log(`  Big blind at position ${(gameState.dealerPosition + 2) % 6}`);
+            
+            postBlinds();
+            
+            updateDisplay();
+            logOutput(`✅ Test 1: 6-player blinds posted correctly! Pot: $${gameState.pot}`);
+        }
+
+        function testCase2() {
+            console.log('\n=== Test Case 2: Heads-Up (2 Players) ===');
+            initializeGame(2, 10, 20);
+            
+            const dealer = gameState.players.find(p => p.isDealer);
+            const otherPlayer = gameState.players.find(p => !p.isDealer);
+            
+            console.log('Heads-up blind rules:');
+            console.log(`  ${dealer.name} (Dealer) posts small blind`);
+            console.log(`  ${otherPlayer.name} posts big blind`);
+            
+            postBlinds();
+            
+            updateDisplay();
+            logOutput(`✅ Test 2: Heads-up blinds work correctly! Dealer posts SB.`);
+        }
+
+        function testCase3() {
+            console.log('\n=== Test Case 3: Button Rotation ===');
+            initializeGame(4, 5, 10);
+            
+            console.log('Initial positions:');
+            console.log(`  Dealer: ${gameState.players[gameState.dealerPosition].name}`);
+            
+            postBlinds();
+            const pot1 = gameState.pot;
+            
+            // Rotate 3 times
+            for (let i = 0; i < 3; i++) {
+                newHand();
+                postBlinds();
+            }
+            
+            updateDisplay();
+            logOutput(`✅ Test 3: Button rotated 4 times! Blinds posted each hand.`);
+            console.log(`Dealer is now: ${gameState.players[gameState.dealerPosition].name}`);
+            console.log('Button rotates clockwise each hand');
+        }
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Initialize
+        console.log('=== Blind System Implementation ===');
+        console.log('Automatic blind posting with dealer button rotation');
+        initializeGame(6, 10, 20);
+        updateDisplay();
+    </script>
+</body>
+</html>

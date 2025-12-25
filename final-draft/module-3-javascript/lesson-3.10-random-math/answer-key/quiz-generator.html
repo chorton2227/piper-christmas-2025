@@ -1,0 +1,515 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quiz Generator - Complete</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .quiz-header {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .progress {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .question-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #a8edea;
+        }
+        
+        .question-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .answers {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .answer-btn {
+            background: white;
+            border: 3px solid #a8edea;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .answer-btn:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .answer-btn.correct {
+            background: #51cf66;
+            border-color: #51cf66;
+            color: white;
+        }
+        
+        .answer-btn.incorrect {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            color: white;
+        }
+        
+        .answer-btn:disabled {
+            cursor: not-allowed;
+        }
+        
+        .feedback {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .feedback-correct {
+            background: #51cf66;
+            color: white;
+        }
+        
+        .feedback-incorrect {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .score-display {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .results-screen {
+            text-align: center;
+        }
+        
+        .final-score {
+            font-size: 48px;
+            color: #a8edea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .grade {
+            font-size: 72px;
+            margin: 20px 0;
+        }
+        
+        .missed-questions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .missed-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .powerup {
+            background: #ffd43b;
+            border: none;
+            color: #333;
+        }
+        
+        .powerup:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 Random Quiz Generator</h1>
+    
+    <div class="container">
+        <!-- Quiz Screen -->
+        <div id="quiz-screen">
+            <div class="quiz-header">
+                <div class="progress" id="progress">Question 1 of 5</div>
+                <div class="score-display" id="score">Score: 0/0</div>
+            </div>
+            
+            <div class="question-box">
+                <div class="question-text" id="question-text">Loading question...</div>
+                <div class="answers" id="answers"></div>
+            </div>
+            
+            <div id="feedback"></div>
+            
+            <div style="text-align: center;">
+                <button class="powerup" id="fifty-fifty-btn" onclick="useFiftyFifty()">
+                    ⚡ 50/50 (Remove 2 wrong answers)
+                </button>
+                <button id="next-btn" onclick="nextQuestion()" class="hidden">Next Question →</button>
+            </div>
+        </div>
+        
+        <!-- Results Screen -->
+        <div id="results-screen" class="results-screen hidden">
+            <div class="grade" id="grade-emoji">🎉</div>
+            <div class="final-score" id="final-score">5/5</div>
+            <h2 id="grade-text">Perfect Score!</h2>
+            
+            <div id="missed-questions-container"></div>
+            
+            <button onclick="startQuiz()">🔄 Take Quiz Again</button>
+        </div>
+    </div>
+    
+    <script>
+        // Question bank
+        const questionBank = [
+            {
+                question: "What is 7 × 8?",
+                correct: "56",
+                wrong: ["42", "54", "63"]
+            },
+            {
+                question: "What is the capital of France?",
+                correct: "Paris",
+                wrong: ["London", "Berlin", "Madrid"]
+            },
+            {
+                question: "How many planets are in our solar system?",
+                correct: "8",
+                wrong: ["7", "9", "10"]
+            },
+            {
+                question: "What is 144 ÷ 12?",
+                correct: "12",
+                wrong: ["11", "13", "14"]
+            },
+            {
+                question: "Which ocean is the largest?",
+                correct: "Pacific",
+                wrong: ["Atlantic", "Indian", "Arctic"]
+            },
+            {
+                question: "What is the freezing point of water in Celsius?",
+                correct: "0°C",
+                wrong: ["32°C", "100°C", "-10°C"]
+            },
+            {
+                question: "How many continents are there?",
+                correct: "7",
+                wrong: ["5", "6", "8"]
+            },
+            {
+                question: "What is 15% of 200?",
+                correct: "30",
+                wrong: ["20", "35", "40"]
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                correct: "Mars",
+                wrong: ["Venus", "Jupiter", "Mercury"]
+            },
+            {
+                question: "How many sides does a hexagon have?",
+                correct: "6",
+                wrong: ["5", "7", "8"]
+            },
+            {
+                question: "What is the square root of 64?",
+                correct: "8",
+                wrong: ["6", "7", "9"]
+            },
+            {
+                question: "How many hours are in a day?",
+                correct: "24",
+                wrong: ["12", "48", "36"]
+            }
+        ];
+        
+        // Quiz state
+        let currentQuiz = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let correctAnswer = "";
+        let missedQuestions = [];
+        let fiftyFiftyUsed = false;
+        
+        function startQuiz() {
+            // Select 5 random questions
+            let availableQuestions = [...questionBank];
+            currentQuiz = [];
+            
+            for (let i = 0; i < 5 && availableQuestions.length > 0; i++) {
+                let randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                currentQuiz.push(availableQuestions[randomIndex]);
+                availableQuestions.splice(randomIndex, 1);
+            }
+            
+            // Reset state
+            currentQuestionIndex = 0;
+            score = 0;
+            missedQuestions = [];
+            fiftyFiftyUsed = false;
+            
+            // Show quiz screen
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            
+            // Load first question
+            loadQuestion();
+            
+            console.log('Quiz started with', currentQuiz.length, 'questions');
+        }
+        
+        function loadQuestion() {
+            if (currentQuestionIndex >= currentQuiz.length) {
+                showResults();
+                return;
+            }
+            
+            answered = false;
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('feedback').innerHTML = '';
+            document.getElementById('fifty-fifty-btn').disabled = fiftyFiftyUsed;
+            
+            let q = currentQuiz[currentQuestionIndex];
+            correctAnswer = q.correct;
+            
+            // Create shuffled answers
+            let allAnswers = [q.correct, ...q.wrong];
+            shuffleArray(allAnswers);
+            
+            // Display question
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('progress').textContent = 'Question ' + (currentQuestionIndex + 1) + ' of ' + currentQuiz.length;
+            document.getElementById('score').textContent = 'Score: ' + score + '/' + currentQuestionIndex;
+            
+            // Display answers
+            let answersDiv = document.getElementById('answers');
+            answersDiv.innerHTML = '';
+            
+            allAnswers.forEach(function(answer, index) {
+                let btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.textContent = String.fromCharCode(65 + index) + ') ' + answer;
+                btn.onclick = function() { checkAnswer(answer, btn); };
+                answersDiv.appendChild(btn);
+            });
+            
+            console.log('Loaded question', currentQuestionIndex + 1 + ':', q.question);
+        }
+        
+        function checkAnswer(selectedAnswer, buttonElement) {
+            if (answered) return;
+            
+            answered = true;
+            let isCorrect = selectedAnswer === correctAnswer;
+            
+            // Disable all buttons
+            let buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            // Highlight correct and incorrect answers
+            buttons.forEach(function(btn) {
+                let answerText = btn.textContent.substring(3);
+                if (answerText === correctAnswer) {
+                    btn.classList.add('correct');
+                } else if (btn === buttonElement && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            // Show feedback
+            let feedback = document.getElementById('feedback');
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = '<div class="feedback feedback-correct">✅ Correct! Great job!</div>';
+                console.log('Correct answer!');
+            } else {
+                feedback.innerHTML = '<div class="feedback feedback-incorrect">❌ Wrong! The correct answer is: ' + correctAnswer + '</div>';
+                missedQuestions.push({
+                    question: currentQuiz[currentQuestionIndex].question,
+                    yourAnswer: selectedAnswer,
+                    correctAnswer: correctAnswer
+                });
+                console.log('Wrong answer. Correct was:', correctAnswer);
+            }
+            
+            // Update score display
+            document.getElementById('score').textContent = 'Score: ' + score + '/' + (currentQuestionIndex + 1);
+            
+            // Show next button
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+        
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+        
+        function useFiftyFifty() {
+            if (answered || fiftyFiftyUsed) return;
+            
+            fiftyFiftyUsed = true;
+            document.getElementById('fifty-fifty-btn').disabled = true;
+            
+            let buttons = document.querySelectorAll('.answer-btn');
+            let wrongButtons = [];
+            
+            buttons.forEach(function(btn) {
+                let answerText = btn.textContent.substring(3);
+                if (answerText !== correctAnswer) {
+                    wrongButtons.push(btn);
+                }
+            });
+            
+            // Remove 2 wrong answers
+            shuffleArray(wrongButtons);
+            for (let i = 0; i < 2 && i < wrongButtons.length; i++) {
+                wrongButtons[i].style.opacity = '0.3';
+                wrongButtons[i].disabled = true;
+            }
+            
+            console.log('50/50 used! Removed 2 wrong answers');
+        }
+        
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+            
+            let percentage = (score / currentQuiz.length) * 100;
+            document.getElementById('final-score').textContent = score + '/' + currentQuiz.length;
+            
+            // Determine grade
+            let grade, gradeText, emoji;
+            if (percentage === 100) {
+                grade = 'A+';
+                gradeText = 'Perfect Score!';
+                emoji = '🏆';
+            } else if (percentage >= 90) {
+                grade = 'A';
+                gradeText = 'Excellent!';
+                emoji = '🎉';
+            } else if (percentage >= 80) {
+                grade = 'B';
+                gradeText = 'Great Job!';
+                emoji = '😊';
+            } else if (percentage >= 70) {
+                grade = 'C';
+                gradeText = 'Good Effort!';
+                emoji = '👍';
+            } else if (percentage >= 60) {
+                grade = 'D';
+                gradeText = 'Keep Practicing!';
+                emoji = '📚';
+            } else {
+                grade = 'F';
+                gradeText = 'Study More!';
+                emoji = '💪';
+            }
+            
+            document.getElementById('grade-emoji').textContent = emoji;
+            document.getElementById('grade-text').textContent = gradeText + ' (' + grade + ')';
+            
+            // Show missed questions
+            let missedContainer = document.getElementById('missed-questions-container');
+            if (missedQuestions.length > 0) {
+                missedContainer.innerHTML = '<h3>Questions You Missed:</h3><div class="missed-questions"></div>';
+                let missedDiv = missedContainer.querySelector('.missed-questions');
+                
+                missedQuestions.forEach(function(missed) {
+                    let item = document.createElement('div');
+                    item.className = 'missed-item';
+                    item.innerHTML = '<strong>❌ ' + missed.question + '</strong><br>' +
+                                   'Your answer: ' + missed.yourAnswer + '<br>' +
+                                   'Correct answer: <span style="color: #51cf66; font-weight: bold;">' + missed.correctAnswer + '</span>';
+                    missedDiv.appendChild(item);
+                });
+            } else {
+                missedContainer.innerHTML = '<h3>🎉 Perfect! You didn\'t miss any questions!</h3>';
+            }
+            
+            console.log('Quiz complete! Score:', score + '/' + currentQuiz.length, '(' + percentage + '%)');
+        }
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                let temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+        
+        // Start quiz on load
+        startQuiz();
+        
+        console.log('🧠 Random Quiz Generator loaded!');
+        console.log('Question bank has', questionBank.length, 'questions');
+    </script>
+</body>
+</html>

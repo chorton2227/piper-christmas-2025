@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Add Sound Effects - Polish & Enhancement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .description {
+            text-align: center;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        /* Poker Table */
+        .poker-table {
+            background: radial-gradient(ellipse at center, #1a5d1a 0%, #0d4d0d 100%);
+            border-radius: 50%;
+            padding: 60px;
+            box-shadow: 
+                inset 0 0 100px rgba(0, 0, 0, 0.3),
+                0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 20px solid #8b4513;
+            position: relative;
+            aspect-ratio: 16/9;
+            max-width: 1000px;
+            margin: 20px auto;
+            min-height: 600px;
+        }
+
+        /* Community Cards */
+        .community-area {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .community-cards {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .card {
+            width: 70px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+
+        .pot-display {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            margin: 20px 0;
+        }
+
+        /* Sound Controls */
+        .sound-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .volume-slider {
+            width: 120px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Action Buttons */
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-shuffle {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+            color: white;
+        }
+
+        .btn-deal {
+            background: linear-gradient(135deg, #4CAF50, #388e3c);
+            color: white;
+        }
+
+        .btn-bet {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .btn-winner {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+        }
+
+        /* Debug Log */
+        .debug {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #4ec9b0;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .status-indicator.on {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .status-indicator.off {
+            background: #666;
+        }
+        
+        /* Sound Visual Feedback */
+        .sound-flash {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: flashFade 0.5s ease;
+            pointer-events: none;
+        }
+        
+        @keyframes flashFade {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔊 Answer Key: Sound Effects Implementation</h1>
+        <p class="description">Complete poker game with sound effects for shuffle, deal, betting, and winning</p>
+
+        <!-- Sound Controls -->
+        <div class="sound-controls">
+            <button id="toggle-sound" class="btn-icon">🔊</button>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="50">
+            <span id="volume-display">50%</span>
+            <span class="status-indicator on" id="sound-status"></span>
+        </div>
+
+        <div class="poker-table">
+            <div class="community-area">
+                <div class="community-cards" id="communityCards">
+                    <!-- Cards will be added here -->
+                </div>
+                
+                <div class="pot-display">
+                    Pot: $<span id="potAmount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h3>Test Sound Effects</h3>
+            <button class="action-btn btn-shuffle" onclick="testShuffle()">🔀 Shuffle Deck</button>
+            <button class="action-btn btn-deal" onclick="testDealCards()">🎴 Deal Cards</button>
+            <button class="action-btn btn-bet" onclick="testBetting()">💰 Place Bet</button>
+            <button class="action-btn btn-winner" onclick="testWinner()">🏆 Announce Winner</button>
+        </div>
+
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        console.log('Sound Effects Implementation loaded\n');
+
+        // =========================
+        // SOUND MANAGER CLASS
+        // =========================
+        
+        class SoundManager {
+            constructor() {
+                this.sounds = {};
+                this.enabled = true;
+                this.volume = 0.5;
+                this.audioContext = null;
+                console.log('SoundManager initialized');
+                
+                // Initialize Web Audio API
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    console.log('Web Audio API initialized');
+                } catch (e) {
+                    console.warn('Web Audio API not available');
+                }
+            }
+
+            load(name, url) {
+                // In a real implementation, this would load actual audio files
+                // For this demo, we'll simulate the sounds
+                this.sounds[name] = {
+                    url: url,
+                    audio: null,  // Would be: new Audio(url)
+                    loaded: true
+                };
+                console.log(`Loaded sound: ${name} from ${url}`);
+            }
+
+            play(name) {
+                if (!this.enabled) {
+                    console.log(`Sound disabled, skipping: ${name}`);
+                    return;
+                }
+
+                if (!this.sounds[name]) {
+                    console.error(`Sound not found: ${name}`);
+                    return;
+                }
+
+                // Play actual beep sound using Web Audio API
+                this.playBeep(name);
+                
+                // Show visual feedback
+                this.showSoundFeedback(name);
+
+                console.log(`🔊 Playing sound: ${name} at ${Math.round(this.volume * 100)}% volume`);
+            }
+            
+            showSoundFeedback(soundName) {
+                const flash = document.createElement('div');
+                flash.className = 'sound-flash';
+                flash.textContent = `🔊 ${soundName}`;
+                document.body.appendChild(flash);
+                
+                setTimeout(() => flash.remove(), 500);
+            }
+            
+            playBeep(soundType) {
+                if (!this.audioContext) return;
+                
+                const ctx = this.audioContext;
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                
+                // Different frequencies for different sound types
+                const frequencies = {
+                    'shuffle': 200,
+                    'deal': 400,
+                    'chipBet': 600,
+                    'chipCollect': 800,
+                    'click': 300,
+                    'winner': 1000
+                };
+                
+                oscillator.frequency.value = frequencies[soundType] || 440;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(this.volume * 0.1, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.1);
+            }
+
+            setVolume(volume) {
+                this.volume = Math.max(0, Math.min(1, volume));
+                console.log(`Volume set to: ${Math.round(this.volume * 100)}%`);
+            }
+
+            toggle() {
+                this.enabled = !this.enabled;
+                console.log(`Sounds ${this.enabled ? 'enabled' : 'disabled'}`);
+                return this.enabled;
+            }
+
+            mute() {
+                this.enabled = false;
+                console.log('Sounds muted');
+            }
+
+            unmute() {
+                this.enabled = true;
+                console.log('Sounds unmuted');
+            }
+        }
+
+        // =========================
+        // GAME STATE
+        // =========================
+
+        const soundManager = new SoundManager();
+        let pot = 0;
+
+        // =========================
+        // SOUND LOADING
+        // =========================
+
+        function loadSounds() {
+            console.log('\n=== Loading Sound Files ===');
+            soundManager.load('shuffle', 'sounds/card-shuffle.mp3');
+            soundManager.load('deal', 'sounds/card-deal.mp3');
+            soundManager.load('chipBet', 'sounds/chip-bet.mp3');
+            soundManager.load('chipCollect', 'sounds/chip-collect.mp3');
+            soundManager.load('click', 'sounds/button-click.mp3');
+            soundManager.load('winner', 'sounds/winner.mp3');
+            console.log('✓ All sounds loaded\n');
+        }
+
+        // =========================
+        // CARD FUNCTIONS
+        // =========================
+
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit];
+        }
+
+        function createCard(rank, suit) {
+            const card = document.createElement('div');
+            card.className = `card ${suit}`;
+            card.textContent = rank + getSuitSymbol(suit);
+            return card;
+        }
+
+        function clearCards() {
+            document.getElementById('communityCards').innerHTML = '';
+        }
+
+        // =========================
+        // TEST FUNCTIONS
+        // =========================
+
+        function testShuffle() {
+            console.log('\n=== Test 1: Shuffle Sound ===');
+            soundManager.play('shuffle');
+            clearCards();
+            console.log('✓ Deck shuffled');
+        }
+
+        function testDealCards() {
+            console.log('\n=== Test 2: Deal Sound ===');
+            clearCards();
+
+            const cards = [
+                { rank: 'A', suit: 'spades' },
+                { rank: 'K', suit: 'hearts' },
+                { rank: 'Q', suit: 'diamonds' },
+                { rank: 'J', suit: 'clubs' },
+                { rank: '10', suit: 'hearts' }
+            ];
+
+            const container = document.getElementById('communityCards');
+            
+            cards.forEach((cardData, index) => {
+                setTimeout(() => {
+                    soundManager.play('deal');
+                    const card = createCard(cardData.rank, cardData.suit);
+                    container.appendChild(card);
+                    console.log(`Dealt: ${cardData.rank}${getSuitSymbol(cardData.suit)}`);
+                }, index * 400);
+            });
+
+            console.log('✓ Dealing cards with sound');
+        }
+
+        function testBetting() {
+            console.log('\n=== Test 3: Betting Sound ===');
+            
+            const bets = [25, 50, 100];
+            
+            bets.forEach((amount, index) => {
+                setTimeout(() => {
+                    soundManager.play('chipBet');
+                    pot += amount;
+                    document.getElementById('potAmount').textContent = pot;
+                    console.log(`Placed bet: $${amount} (Pot: $${pot})`);
+                }, index * 600);
+            });
+
+            console.log('✓ Placing bets with sound');
+        }
+
+        function testWinner() {
+            console.log('\n=== Test 4: Winner Sound ===');
+            soundManager.play('winner');
+            
+            setTimeout(() => {
+                soundManager.play('chipCollect');
+                console.log(`Winner collects pot: $${pot}`);
+                pot = 0;
+                document.getElementById('potAmount').textContent = pot;
+            }, 1000);
+
+            console.log('✓ Winner announced with celebration sound');
+        }
+
+        // =========================
+        // UI CONTROLS
+        // =========================
+
+        document.getElementById('toggle-sound').addEventListener('click', () => {
+            const enabled = soundManager.toggle();
+            const btn = document.getElementById('toggle-sound');
+            const status = document.getElementById('sound-status');
+            
+            btn.textContent = enabled ? '🔊' : '🔇';
+            status.className = `status-indicator ${enabled ? 'on' : 'off'}`;
+            
+            soundManager.play('click');
+        });
+
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            soundManager.setVolume(volume);
+            document.getElementById('volume-display').textContent = e.target.value + '%';
+        });
+
+        // =========================
+        // INITIALIZATION
+        // =========================
+
+        window.addEventListener('load', () => {
+            loadSounds();
+            console.log('Sound system ready!');
+            console.log('• Click buttons to test sounds');
+            console.log('• Use volume slider to adjust volume');
+            console.log('• Toggle sound on/off with speaker icon\n');
+        });
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        };
+
+        console.log('=== SOUND EFFECTS IMPLEMENTATION ===\n');
+    </script>
+</body>
+</html>

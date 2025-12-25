@@ -1,0 +1,470 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Game Configuration Object</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .config-display {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .config-section {
+            margin-bottom: 20px;
+        }
+
+        .config-section h2 {
+            color: #2a5298;
+            border-bottom: 2px solid #2a5298;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+
+        .config-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .config-value {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .control-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-modify {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-modify:hover {
+            background: #218838;
+        }
+
+        .btn-reset {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0a800;
+        }
+
+        .test-results {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .test-results h2 {
+            color: #2a5298;
+            margin-bottom: 15px;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+
+        .test-case.failed {
+            border-left-color: #dc3545;
+        }
+
+        .test-case h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .test-case p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Game Configuration Object</h1>
+
+        <div class="config-display" id="configDisplay">
+            <!-- Config will be displayed here -->
+        </div>
+
+        <div class="controls">
+            <h2 style="color: #2a5298; margin-bottom: 20px;">Modify Settings</h2>
+            <div class="control-group">
+                <label>Starting Chips:</label>
+                <input type="number" id="chipsInput" value="1000" min="500" max="10000">
+            </div>
+            <div class="control-group">
+                <label>Small Blind:</label>
+                <input type="number" id="smallBlindInput" value="10" min="5" max="100">
+            </div>
+            <div class="control-group">
+                <label>Big Blind:</label>
+                <input type="number" id="bigBlindInput" value="20" min="10" max="200">
+            </div>
+            <div class="control-group">
+                <label>Number of AI Players:</label>
+                <input type="number" id="aiPlayersInput" value="5" min="1" max="9">
+            </div>
+            <div class="button-group">
+                <button class="btn-modify" onclick="modifyConfig()">Apply Changes</button>
+                <button class="btn-reset" onclick="resetConfig()">Reset to Default</button>
+            </div>
+        </div>
+
+        <div class="test-results" id="testResults">
+            <h2>Test Cases</h2>
+            <!-- Test results will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // Default game configuration object
+        const DEFAULT_CONFIG = {
+            // Chip settings
+            startingChips: 1000,
+            
+            // Blind settings
+            smallBlind: 10,
+            bigBlind: 20,
+            ante: 0,
+            
+            // Game settings
+            numberOfAIPlayers: 5,
+            gameSpeed: 1.0, // 1.0 = normal, 0.5 = slow, 2.0 = fast
+            
+            // Feature toggles
+            soundEffects: true,
+            animations: true,
+            autoMuckLosingHands: false,
+            showPotOdds: true,
+            
+            // Display settings
+            theme: 'default'
+        };
+
+        // Current game configuration (deep copy of default)
+        let gameConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+
+        /**
+         * Display the current configuration
+         */
+        function displayConfig() {
+            const display = document.getElementById('configDisplay');
+            
+            display.innerHTML = `
+                <div class="config-section">
+                    <h2>💰 Chip & Blind Settings</h2>
+                    <div class="config-item">
+                        <span class="config-label">Starting Chips:</span>
+                        <span class="config-value">${gameConfig.startingChips}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Small Blind:</span>
+                        <span class="config-value">${gameConfig.smallBlind}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Big Blind:</span>
+                        <span class="config-value">${gameConfig.bigBlind}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Ante:</span>
+                        <span class="config-value">${gameConfig.ante}</span>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h2>🎲 Game Settings</h2>
+                    <div class="config-item">
+                        <span class="config-label">Number of AI Players:</span>
+                        <span class="config-value">${gameConfig.numberOfAIPlayers}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Game Speed:</span>
+                        <span class="config-value">${gameConfig.gameSpeed}x</span>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h2>⚙️ Feature Settings</h2>
+                    <div class="config-item">
+                        <span class="config-label">Sound Effects:</span>
+                        <span class="config-value">${gameConfig.soundEffects ? 'On' : 'Off'}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Animations:</span>
+                        <span class="config-value">${gameConfig.animations ? 'On' : 'Off'}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Auto-Muck Losing Hands:</span>
+                        <span class="config-value">${gameConfig.autoMuckLosingHands ? 'On' : 'Off'}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Show Pot Odds:</span>
+                        <span class="config-value">${gameConfig.showPotOdds ? 'On' : 'Off'}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Modify the configuration with new values
+         */
+        function modifyConfig() {
+            const chips = parseInt(document.getElementById('chipsInput').value);
+            const smallBlind = parseInt(document.getElementById('smallBlindInput').value);
+            const bigBlind = parseInt(document.getElementById('bigBlindInput').value);
+            const aiPlayers = parseInt(document.getElementById('aiPlayersInput').value);
+
+            // Update config
+            gameConfig.startingChips = chips;
+            gameConfig.smallBlind = smallBlind;
+            gameConfig.bigBlind = bigBlind;
+            gameConfig.numberOfAIPlayers = aiPlayers;
+
+            // Refresh display
+            displayConfig();
+
+            // Show feedback
+            alert('Configuration updated successfully!');
+        }
+
+        /**
+         * Reset configuration to default values
+         */
+        function resetConfig() {
+            gameConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            
+            // Update form inputs
+            document.getElementById('chipsInput').value = DEFAULT_CONFIG.startingChips;
+            document.getElementById('smallBlindInput').value = DEFAULT_CONFIG.smallBlind;
+            document.getElementById('bigBlindInput').value = DEFAULT_CONFIG.bigBlind;
+            document.getElementById('aiPlayersInput').value = DEFAULT_CONFIG.numberOfAIPlayers;
+
+            // Refresh display
+            displayConfig();
+
+            // Show feedback
+            alert('Configuration reset to defaults!');
+        }
+
+        /**
+         * Get a specific configuration value
+         */
+        function getConfigValue(key) {
+            return gameConfig[key];
+        }
+
+        /**
+         * Set a specific configuration value
+         */
+        function setConfigValue(key, value) {
+            if (gameConfig.hasOwnProperty(key)) {
+                gameConfig[key] = value;
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Get the entire configuration object
+         */
+        function getConfig() {
+            return JSON.parse(JSON.stringify(gameConfig));
+        }
+
+        /**
+         * Run test cases
+         */
+        function runTests() {
+            const results = [];
+
+            // Test 1: Default configuration
+            results.push({
+                name: 'Default Configuration',
+                passed: gameConfig.startingChips === 1000 && 
+                        gameConfig.smallBlind === 10 && 
+                        gameConfig.bigBlind === 20,
+                details: `Starting chips: ${gameConfig.startingChips}, Small blind: ${gameConfig.smallBlind}, Big blind: ${gameConfig.bigBlind}`
+            });
+
+            // Test 2: Modify settings
+            const oldChips = gameConfig.startingChips;
+            setConfigValue('startingChips', 2000);
+            results.push({
+                name: 'Modify Settings',
+                passed: gameConfig.startingChips === 2000,
+                details: `Changed starting chips from ${oldChips} to ${gameConfig.startingChips}`
+            });
+
+            // Test 3: Validate changes persist
+            const currentChips = gameConfig.startingChips;
+            results.push({
+                name: 'Validate Changes Persist',
+                passed: currentChips === 2000,
+                details: `Starting chips is still ${currentChips} after modification`
+            });
+
+            // Test 4: Access all config values
+            const config = getConfig();
+            results.push({
+                name: 'Access All Config Values',
+                passed: config.hasOwnProperty('startingChips') && 
+                        config.hasOwnProperty('smallBlind') &&
+                        config.hasOwnProperty('soundEffects'),
+                details: `Config object has ${Object.keys(config).length} properties`
+            });
+
+            // Test 5: Invalid key handling
+            const invalidSet = setConfigValue('invalidKey', 100);
+            results.push({
+                name: 'Invalid Key Handling',
+                passed: !invalidSet,
+                details: `Setting invalid key returns ${invalidSet} (should be false)`
+            });
+
+            // Reset after tests
+            resetConfig();
+
+            // Display results
+            displayTestResults(results);
+        }
+
+        /**
+         * Display test results
+         */
+        function displayTestResults(results) {
+            const container = document.getElementById('testResults');
+            let html = '<h2>Test Cases</h2>';
+
+            results.forEach((result, index) => {
+                const statusClass = result.passed ? 'pass' : 'fail';
+                const statusText = result.passed ? 'PASS' : 'FAIL';
+                const testClass = result.passed ? '' : 'failed';
+
+                html += `
+                    <div class="test-case ${testClass}">
+                        <h3>
+                            Test ${index + 1}: ${result.name}
+                            <span class="status ${statusClass}">${statusText}</span>
+                        </h3>
+                        <p>${result.details}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            displayConfig();
+            runTests();
+        };
+    </script>
+</body>
+</html>

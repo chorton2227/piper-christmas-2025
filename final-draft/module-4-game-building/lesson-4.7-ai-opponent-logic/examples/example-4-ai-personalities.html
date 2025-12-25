@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: AI Personalities</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .description {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .description h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .hand-display {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .hand-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+
+        .hand-cards {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .card {
+            width: 90px;
+            height: 126px;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .card.hearts, .card.diamonds {
+            color: #dc3545;
+        }
+
+        .card.clubs, .card.spades {
+            color: #212529;
+        }
+
+        .card .suit {
+            font-size: 1.3em;
+        }
+
+        .personalities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .personality {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 3px solid;
+            transition: all 0.3s;
+        }
+
+        .personality:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .personality.tight-passive {
+            border-color: #28a745;
+        }
+
+        .personality.loose-aggressive {
+            border-color: #dc3545;
+        }
+
+        .personality.balanced {
+            border-color: #ffc107;
+        }
+
+        .personality-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .personality-icon {
+            font-size: 3em;
+        }
+
+        .personality-title {
+            flex: 1;
+        }
+
+        .personality-name {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .personality-type {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .traits {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .trait {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .trait:last-child {
+            border-bottom: none;
+        }
+
+        .trait-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .trait-value {
+            color: #6c757d;
+        }
+
+        .decision-process {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .process-step {
+            padding: 8px 0;
+            font-size: 0.95em;
+            color: #495057;
+        }
+
+        .process-step strong {
+            color: #667eea;
+        }
+
+        .final-action {
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-align: center;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .final-action.fold {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .final-action.call {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .final-action.raise {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .final-action.check {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        }
+
+        .comparison-note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 4px solid #ffc107;
+            text-align: center;
+            font-size: 1.1em;
+            color: #856404;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-bottom: 30px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .scenarios-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .scenarios-selector button {
+            flex: 1;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 AI Personalities</h1>
+        <p class="subtitle">Same hand, three different playstyles</p>
+
+        <div class="description">
+            <h3>Why Personalities Matter</h3>
+            <p>Different AI personalities make the game more interesting and realistic. Some opponents play tight and cautious, others play loose and aggressive. Each personality has different thresholds for playing hands, raising, and bluffing.</p>
+        </div>
+
+        <div class="scenarios-selector">
+            <button onclick="showScenario(0)">Scenario 1: Premium Hand</button>
+            <button onclick="showScenario(1)">Scenario 2: Medium Hand</button>
+            <button onclick="showScenario(2)">Scenario 3: Weak Hand</button>
+        </div>
+
+        <div id="scenarioDisplay"></div>
+    </div>
+
+    <script>
+        const rankNames = {
+            14: 'A', 13: 'K', 12: 'Q', 11: 'J',
+            10: '10', 9: '9', 8: '8', 7: '7',
+            6: '6', 5: '5', 4: '4', 3: '3', 2: '2'
+        };
+
+        const suitSymbols = {
+            hearts: '♥',
+            diamonds: '♦',
+            clubs: '♣',
+            spades: '♠'
+        };
+
+        // AI Personality definitions
+        const PERSONALITIES = {
+            TIGHT_PASSIVE: {
+                name: 'The Rock',
+                type: 'Tight-Passive',
+                icon: '🛡️',
+                description: 'Plays very few hands, rarely raises',
+                playHandThreshold: 0.70,
+                raiseThreshold: 0.90,
+                bluffFrequency: 0.03,
+                aggression: 0.20,
+                className: 'tight-passive'
+            },
+            LOOSE_AGGRESSIVE: {
+                name: 'The Maniac',
+                type: 'Loose-Aggressive',
+                icon: '🔥',
+                description: 'Plays many hands, raises often',
+                playHandThreshold: 0.35,
+                raiseThreshold: 0.50,
+                bluffFrequency: 0.30,
+                aggression: 0.85,
+                className: 'loose-aggressive'
+            },
+            BALANCED: {
+                name: 'The Shark',
+                type: 'Tight-Aggressive (Balanced)',
+                icon: '🦈',
+                description: 'Selective but aggressive',
+                playHandThreshold: 0.55,
+                raiseThreshold: 0.70,
+                bluffFrequency: 0.15,
+                aggression: 0.65,
+                className: 'balanced'
+            }
+        };
+
+        function evaluatePreFlopHand(card1, card2) {
+            const v1 = card1.value;
+            const v2 = card2.value;
+            const suited = card1.suit === card2.suit;
+            
+            const high = Math.max(v1, v2);
+            const low = Math.min(v1, v2);
+            const isPair = v1 === v2;
+            
+            if (isPair && high >= 11) return { strength: 0.95, category: 'premium' };
+            if (high === 14 && low >= 13) return { strength: suited ? 0.93 : 0.88, category: 'premium' };
+            if (isPair && high >= 9) return { strength: 0.80, category: 'strong' };
+            if (high >= 13 && low >= 11 && suited) return { strength: 0.75, category: 'strong' };
+            if (high === 14 && low >= 11) return { strength: 0.72, category: 'strong' };
+            if (isPair && high >= 7) return { strength: 0.65, category: 'medium' };
+            if (suited && high - low <= 2 && high >= 9) return { strength: 0.60, category: 'medium' };
+            if (high >= 11 && low >= 9) return { strength: suited ? 0.58 : 0.50, category: 'medium' };
+            if (isPair) return { strength: 0.45, category: 'weak' };
+            if (high >= 12) return { strength: suited ? 0.40 : 0.30, category: 'weak' };
+            if (suited && high - low <= 3) return { strength: 0.35, category: 'weak' };
+            return { strength: 0.15, category: 'trash' };
+        }
+
+        function makePersonalityDecision(personality, handStrength, currentBet) {
+            console.log(`\n${personality.name} (${personality.type}) thinking...`);
+            console.log(`  Hand Strength: ${(handStrength * 100).toFixed(0)}%`);
+            console.log(`  Play Threshold: ${(personality.playHandThreshold * 100).toFixed(0)}%`);
+            console.log(`  Raise Threshold: ${(personality.raiseThreshold * 100).toFixed(0)}%`);
+            
+            // Check if hand meets minimum playing threshold
+            if (handStrength < personality.playHandThreshold) {
+                // Check for bluff
+                const bluffRoll = Math.random();
+                if (bluffRoll < personality.bluffFrequency) {
+                    console.log(`  Bluffing! (${(bluffRoll * 100).toFixed(0)}% < ${(personality.bluffFrequency * 100).toFixed(0)}%)`);
+                    return currentBet === 0 ? 'raise' : 'call';
+                }
+                console.log(`  Hand too weak, folding`);
+                return currentBet === 0 ? 'check' : 'fold';
+            }
+            
+            // Hand is playable
+            if (handStrength >= personality.raiseThreshold) {
+                console.log(`  Hand exceeds raise threshold - raising!`);
+                return 'raise';
+            }
+            
+            // Medium strength - decide based on aggression
+            const aggressionRoll = Math.random();
+            if (aggressionRoll < personality.aggression) {
+                console.log(`  Aggression check passed (${(aggressionRoll * 100).toFixed(0)}% < ${(personality.aggression * 100).toFixed(0)}%) - raising`);
+                return 'raise';
+            }
+            
+            console.log(`  Playing it safe - ${currentBet === 0 ? 'checking' : 'calling'}`);
+            return currentBet === 0 ? 'check' : 'call';
+        }
+
+        function createCardHTML(card) {
+            return `
+                <div class="card ${card.suit}">
+                    <div>${card.rank}</div>
+                    <div class="suit">${suitSymbols[card.suit]}</div>
+                </div>
+            `;
+        }
+
+        function createPersonalityHTML(personality, handStrength, currentBet, decision, reasoning) {
+            return `
+                <div class="personality ${personality.className}">
+                    <div class="personality-header">
+                        <div class="personality-icon">${personality.icon}</div>
+                        <div class="personality-title">
+                            <div class="personality-name">${personality.name}</div>
+                            <div class="personality-type">${personality.type}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="traits">
+                        <div class="trait">
+                            <span class="trait-label">Plays Hands</span>
+                            <span class="trait-value">${(personality.playHandThreshold * 100).toFixed(0)}%+ strength</span>
+                        </div>
+                        <div class="trait">
+                            <span class="trait-label">Raises At</span>
+                            <span class="trait-value">${(personality.raiseThreshold * 100).toFixed(0)}%+ strength</span>
+                        </div>
+                        <div class="trait">
+                            <span class="trait-label">Bluff Rate</span>
+                            <span class="trait-value">${(personality.bluffFrequency * 100).toFixed(0)}%</span>
+                        </div>
+                        <div class="trait">
+                            <span class="trait-label">Aggression</span>
+                            <span class="trait-value">${(personality.aggression * 100).toFixed(0)}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="decision-process">
+                        ${reasoning.map(step => `<div class="process-step">${step}</div>`).join('')}
+                    </div>
+                    
+                    <div class="final-action ${decision}">
+                        ${decision.toUpperCase()}
+                    </div>
+                </div>
+            `;
+        }
+
+        const scenarios = [
+            {
+                title: 'Premium Hand - Pocket Kings',
+                cards: [
+                    { value: 13, suit: 'spades', rank: 'K' },
+                    { value: 13, suit: 'hearts', rank: 'K' }
+                ],
+                currentBet: 0,
+                note: 'With a premium hand, even tight players will raise. Notice how the Maniac raises more aggressively.'
+            },
+            {
+                title: 'Medium Hand - Jack-Ten Suited',
+                cards: [
+                    { value: 11, suit: 'diamonds', rank: 'J' },
+                    { value: 10, suit: 'diamonds', rank: '10' }
+                ],
+                currentBet: 50,
+                note: 'Medium hands show personality differences: Rock folds, Maniac calls/raises, Shark plays strategically.'
+            },
+            {
+                title: 'Weak Hand - Nine-Four Offsuit',
+                cards: [
+                    { value: 9, suit: 'clubs', rank: '9' },
+                    { value: 4, suit: 'hearts', rank: '4' }
+                ],
+                currentBet: 100,
+                note: 'Weak hands separate the players: tight players fold, aggressive players might bluff.'
+            }
+        ];
+
+        function showScenario(index) {
+            console.log(`\n${'='.repeat(60)}`);
+            console.log(`Scenario ${index + 1}: ${scenarios[index].title}`);
+            console.log('='.repeat(60));
+            
+            const scenario = scenarios[index];
+            const handEval = evaluatePreFlopHand(scenario.cards[0], scenario.cards[1]);
+            
+            let html = `
+                <div class="hand-display">
+                    <div class="hand-title">${scenario.title}</div>
+                    <div class="hand-cards">
+                        ${createCardHTML(scenario.cards[0])}
+                        ${createCardHTML(scenario.cards[1])}
+                    </div>
+                    <div style="font-size: 1.2em; color: #495057; margin-top: 15px;">
+                        Hand Strength: <strong>${(handEval.strength * 100).toFixed(0)}%</strong> (${handEval.category})
+                        | Current Bet: <strong>$${scenario.currentBet}</strong>
+                    </div>
+                </div>
+                
+                <div class="personalities-grid">
+            `;
+            
+            // Generate decision for each personality
+            Object.values(PERSONALITIES).forEach(personality => {
+                const decision = makePersonalityDecision(personality, handEval.strength, scenario.currentBet);
+                
+                const reasoning = [
+                    `<strong>Hand Strength:</strong> ${(handEval.strength * 100).toFixed(0)}%`,
+                    `<strong>Play Threshold:</strong> ${(personality.playHandThreshold * 100).toFixed(0)}%`,
+                ];
+                
+                if (handEval.strength < personality.playHandThreshold) {
+                    reasoning.push(`❌ Hand below threshold`);
+                    if (decision !== 'fold' && decision !== 'check') {
+                        reasoning.push(`🎲 Bluffing! (${(personality.bluffFrequency * 100).toFixed(0)}% bluff rate)`);
+                    }
+                } else {
+                    reasoning.push(`✅ Hand meets threshold`);
+                    if (handEval.strength >= personality.raiseThreshold) {
+                        reasoning.push(`💪 Exceeds raise threshold (${(personality.raiseThreshold * 100).toFixed(0)}%)`);
+                    } else if (decision === 'raise') {
+                        reasoning.push(`🔥 Aggression triggered (${(personality.aggression * 100).toFixed(0)}% rate)`);
+                    }
+                }
+                
+                html += createPersonalityHTML(personality, handEval.strength, scenario.currentBet, decision, reasoning);
+            });
+            
+            html += `
+                </div>
+                <div class="comparison-note">
+                    💡 ${scenario.note}
+                </div>
+            `;
+            
+            document.getElementById('scenarioDisplay').innerHTML = html;
+        }
+
+        // Show first scenario on load
+        window.addEventListener('load', () => {
+            console.log('AI Personalities - Example 4');
+            console.log('Comparing three different AI playstyles');
+            showScenario(0);
+        });
+    </script>
+</body>
+</html>

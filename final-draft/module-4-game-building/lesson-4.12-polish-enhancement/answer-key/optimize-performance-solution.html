@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Performance Optimization - Polish & Enhancement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .description {
+            text-align: center;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        /* Performance Metrics Display */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-label {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .metric-value.warning {
+            color: #ff9800;
+        }
+
+        .metric-value.error {
+            color: #f44336;
+        }
+
+        /* Poker Table */
+        .poker-table {
+            background: radial-gradient(ellipse at center, #1a5d1a 0%, #0d4d0d 100%);
+            border-radius: 50%;
+            padding: 60px;
+            box-shadow: 
+                inset 0 0 100px rgba(0, 0, 0, 0.3),
+                0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 20px solid #8b4513;
+            position: relative;
+            aspect-ratio: 16/9;
+            max-width: 1000px;
+            margin: 20px auto;
+            min-height: 600px;
+            /* GPU acceleration */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .community-area {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .community-cards {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .card {
+            width: 70px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            /* GPU acceleration */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+
+        /* Optimized animations */
+        .card.dealing {
+            animation: dealCard 0.3s ease-out;
+        }
+
+        @keyframes dealCard {
+            from {
+                transform: translateY(-100px) translateZ(0);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) translateZ(0);
+                opacity: 1;
+            }
+        }
+
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            /* GPU acceleration */
+            transform: translateZ(0);
+        }
+
+        .btn-deal {
+            background: linear-gradient(135deg, #4CAF50, #388e3c);
+            color: white;
+        }
+
+        .btn-stress {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .btn-measure {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+        }
+
+        /* Debug Log */
+        .debug {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #4ec9b0;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Loading Indicator */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Answer Key: Performance Optimization</h1>
+        <p class="description">Optimized poker game with performance monitoring and best practices</p>
+
+        <!-- Performance Metrics -->
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-label">Frame Rate</div>
+                <div class="metric-value" id="fps">0 FPS</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Operations/sec</div>
+                <div class="metric-value" id="ops">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">DOM Nodes</div>
+                <div class="metric-value" id="nodes">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Memory (MB)</div>
+                <div class="metric-value" id="memory">0</div>
+            </div>
+        </div>
+
+        <div class="poker-table">
+            <div class="community-area">
+                <div class="community-cards" id="communityCards">
+                    <!-- Cards will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h3>Performance Tests</h3>
+            <button class="action-btn btn-deal" onclick="testOptimizedDeal()">Deal Cards (Optimized)</button>
+            <button class="action-btn btn-stress" onclick="testStressTest()">Stress Test (1000 ops)</button>
+            <button class="action-btn btn-measure" onclick="measurePerformance()">Measure Performance</button>
+        </div>
+
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div>
+            <div class="spinner"></div>
+            <div class="loading-message">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Performance Optimization Implementation loaded\n');
+
+        // =========================
+        // PERFORMANCE UTILITIES
+        // =========================
+
+        class PerformanceMonitor {
+            constructor() {
+                this.frameCount = 0;
+                this.lastTime = performance.now();
+                this.fps = 0;
+                this.operations = 0;
+                
+                console.log('PerformanceMonitor initialized');
+            }
+
+            startFrame() {
+                const now = performance.now();
+                this.frameCount++;
+                
+                if (now >= this.lastTime + 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / (now - this.lastTime));
+                    this.frameCount = 0;
+                    this.lastTime = now;
+                    this.updateMetrics();
+                }
+                
+                requestAnimationFrame(() => this.startFrame());
+            }
+
+            recordOperation() {
+                this.operations++;
+            }
+
+            updateMetrics() {
+                // FPS
+                const fpsEl = document.getElementById('fps');
+                fpsEl.textContent = `${this.fps} FPS`;
+                fpsEl.className = 'metric-value';
+                if (this.fps < 30) fpsEl.classList.add('error');
+                else if (this.fps < 50) fpsEl.classList.add('warning');
+
+                // Operations
+                document.getElementById('ops').textContent = this.operations;
+                this.operations = 0;
+
+                // DOM Nodes
+                const nodes = document.getElementsByTagName('*').length;
+                document.getElementById('nodes').textContent = nodes;
+
+                // Memory (if available)
+                if (performance.memory) {
+                    const mb = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+                    document.getElementById('memory').textContent = mb;
+                }
+            }
+        }
+
+        const perfMonitor = new PerformanceMonitor();
+
+        // =========================
+        // OPTIMIZED CARD POOL
+        // =========================
+
+        class CardPool {
+            constructor(size = 52) {
+                this.pool = [];
+                this.available = [];
+                this.initialize(size);
+                console.log(`CardPool initialized with ${size} cards`);
+            }
+
+            initialize(size) {
+                // Pre-create card elements
+                for (let i = 0; i < size; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    this.pool.push(card);
+                    this.available.push(card);
+                }
+            }
+
+            acquire(rank, suit) {
+                let card = this.available.pop();
+                
+                if (!card) {
+                    // Fallback: create new card
+                    card = document.createElement('div');
+                    console.warn('Card pool exhausted, creating new card');
+                }
+                
+                card.className = `card ${suit}`;
+                card.textContent = rank + getSuitSymbol(suit);
+                
+                return card;
+            }
+
+            release(card) {
+                // Reset card
+                card.className = 'card';
+                card.textContent = '';
+                card.remove();
+                
+                // Return to pool
+                this.available.push(card);
+            }
+
+            releaseAll() {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => this.release(card));
+            }
+        }
+
+        const cardPool = new CardPool();
+
+        // =========================
+        // BATCHED DOM UPDATES
+        // =========================
+
+        class DOMBatcher {
+            constructor() {
+                this.pendingUpdates = [];
+                this.scheduled = false;
+            }
+
+            schedule(updateFn) {
+                this.pendingUpdates.push(updateFn);
+                
+                if (!this.scheduled) {
+                    this.scheduled = true;
+                    requestAnimationFrame(() => this.flush());
+                }
+            }
+
+            flush() {
+                // Execute all updates in single frame
+                this.pendingUpdates.forEach(fn => fn());
+                this.pendingUpdates = [];
+                this.scheduled = false;
+            }
+        }
+
+        const domBatcher = new DOMBatcher();
+
+        // =========================
+        // DEBOUNCE/THROTTLE
+        // =========================
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
+
+        // =========================
+        // OPTIMIZED FUNCTIONS
+        // =========================
+
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit];
+        }
+
+        function testOptimizedDeal() {
+            console.log('\n=== Test 1: Optimized Card Dealing ===');
+            const startTime = performance.now();
+            
+            // Clear existing cards
+            cardPool.releaseAll();
+            
+            const cards = [
+                { rank: 'A', suit: 'spades' },
+                { rank: 'K', suit: 'hearts' },
+                { rank: 'Q', suit: 'diamonds' },
+                { rank: 'J', suit: 'clubs' },
+                { rank: '10', suit: 'hearts' }
+            ];
+
+            const container = document.getElementById('communityCards');
+            
+            // Batch DOM updates
+            domBatcher.schedule(() => {
+                const fragment = document.createDocumentFragment();
+                
+                cards.forEach(cardData => {
+                    const card = cardPool.acquire(cardData.rank, cardData.suit);
+                    card.classList.add('dealing');
+                    fragment.appendChild(card);
+                    perfMonitor.recordOperation();
+                });
+                
+                container.appendChild(fragment);
+            });
+
+            const duration = (performance.now() - startTime).toFixed(2);
+            console.log(`✓ Dealt 5 cards in ${duration}ms`);
+            console.log('Optimizations used:');
+            console.log('  • Object pooling');
+            console.log('  • Batched DOM updates');
+            console.log('  • DocumentFragment');
+            console.log('  • GPU acceleration');
+        }
+
+        function testStressTest() {
+            console.log('\n=== Test 2: Stress Test (1000 operations) ===');
+            const startTime = performance.now();
+            
+            for (let i = 0; i < 1000; i++) {
+                perfMonitor.recordOperation();
+                
+                // Simulate lightweight operations
+                const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                const ranks = ['A', 'K', 'Q', 'J', '10'];
+                const suit = suits[i % 4];
+                const rank = ranks[i % 5];
+                getSuitSymbol(suit);
+            }
+
+            const duration = (performance.now() - startTime).toFixed(2);
+            const opsPerMs = (1000 / duration).toFixed(2);
+            
+            console.log(`✓ Completed 1000 operations in ${duration}ms`);
+            console.log(`Performance: ${opsPerMs} ops/ms`);
+        }
+
+        function measurePerformance() {
+            console.log('\n=== Test 3: Performance Measurement ===');
+            
+            const measurements = {
+                fps: perfMonitor.fps,
+                domNodes: document.getElementsByTagName('*').length,
+                memory: performance.memory 
+                    ? (performance.memory.usedJSHeapSize / 1048576).toFixed(2) + ' MB'
+                    : 'Not available'
+            };
+
+            console.log('Current metrics:');
+            console.log(`  • FPS: ${measurements.fps}`);
+            console.log(`  • DOM Nodes: ${measurements.domNodes}`);
+            console.log(`  • Memory: ${measurements.memory}`);
+            
+            // Measure card dealing performance
+            console.log('\nMeasuring card deal performance...');
+            const iterations = 100;
+            const start = performance.now();
+            
+            for (let i = 0; i < iterations; i++) {
+                const card = cardPool.acquire('A', 'spades');
+                cardPool.release(card);
+            }
+            
+            const duration = (performance.now() - start).toFixed(2);
+            console.log(`${iterations} card create/release: ${duration}ms`);
+            console.log(`Average: ${(duration / iterations).toFixed(3)}ms per operation`);
+            
+            console.log('\n✓ Performance measurement complete');
+        }
+
+        // =========================
+        // ERROR HANDLING
+        // =========================
+
+        function showError(message) {
+            console.error(`Error: ${message}`);
+            // In a real app, show user-friendly error message
+        }
+
+        function safeExecute(fn, context = 'Operation') {
+            try {
+                return fn();
+            } catch (error) {
+                showError(`${context} failed: ${error.message}`);
+                return null;
+            }
+        }
+
+        // =========================
+        // INITIALIZATION
+        // =========================
+
+        window.addEventListener('load', () => {
+            console.log('=== PERFORMANCE OPTIMIZATION IMPLEMENTATION ===\n');
+            
+            // Start performance monitoring
+            perfMonitor.startFrame();
+            
+            console.log('Performance features enabled:');
+            console.log('✓ Object pooling for cards');
+            console.log('✓ Batched DOM updates');
+            console.log('✓ GPU-accelerated animations');
+            console.log('✓ RequestAnimationFrame timing');
+            console.log('✓ Debounce/throttle utilities');
+            console.log('✓ Memory monitoring');
+            console.log('✓ Error boundaries');
+            console.log('\nClick buttons to test optimizations!\n');
+        });
+
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        };
+    </script>
+</body>
+</html>

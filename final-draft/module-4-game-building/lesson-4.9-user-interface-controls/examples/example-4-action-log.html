@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Action Log - User Interface & Controls</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { 
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .description {
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        /* Action Log Container */
+        .log-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+        
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ffd700;
+        }
+        
+        .log-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .clear-log-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .clear-log-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+        
+        /* Action Log */
+        .action-log {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            border: 2px solid #333;
+        }
+        
+        /* Scrollbar Styling */
+        .action-log::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .action-log::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+        
+        .action-log::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 5px;
+        }
+        
+        .action-log::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+        
+        /* Action Entry */
+        .action-entry {
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            background: rgba(255, 255, 255, 0.05);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .action-entry.fold {
+            border-left-color: #f44336;
+        }
+        
+        .action-entry.check {
+            border-left-color: #2196f3;
+        }
+        
+        .action-entry.call {
+            border-left-color: #4caf50;
+        }
+        
+        .action-entry.raise {
+            border-left-color: #ff9800;
+        }
+        
+        .action-entry.all-in {
+            border-left-color: #9c27b0;
+        }
+        
+        .action-entry.deal {
+            border-left-color: #ffd700;
+        }
+        
+        .action-timestamp {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .action-player {
+            font-weight: bold;
+            color: #fff;
+            margin-right: 8px;
+        }
+        
+        .action-text {
+            color: #ccc;
+        }
+        
+        .action-amount {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .action-text.fold { color: #ff8a80; }
+        .action-text.check { color: #82b1ff; }
+        .action-text.call { color: #69f0ae; }
+        .action-text.raise { color: #ffab40; }
+        .action-text.all-in { color: #ea80fc; }
+        .action-text.deal { color: #ffd740; }
+        
+        /* Test Controls */
+        .test-controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .test-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Debug Output */
+        .debug {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #4ec9b0;
+            white-space: pre-wrap;
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Example 4: Action Log</h1>
+        <p class="description">Scrolling action log showing game events with color-coded actions</p>
+        
+        <div class="log-container">
+            <div class="log-header">
+                <div class="log-title">🎮 Game Actions</div>
+                <button class="clear-log-btn" onclick="clearLog()">Clear Log</button>
+            </div>
+            
+            <div id="action-log" class="action-log">
+                <!-- Actions will appear here -->
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="test-controls">
+            <button class="test-btn" onclick="test1()">Test 1: Single Actions</button>
+            <button class="test-btn" onclick="test2()">Test 2: Betting Round</button>
+            <button class="test-btn" onclick="test3()">Test 3: Full Hand</button>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        console.log('Example 4: Action Log loaded\n');
+        
+        // Get current timestamp
+        function getTimestamp() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+        }
+        
+        // Add action to log
+        function logAction(player, action, amount = null) {
+            const logDiv = document.getElementById('action-log');
+            const entry = document.createElement('div');
+            entry.className = `action-entry ${action.toLowerCase().replace(' ', '-')}`;
+            
+            let actionText = '';
+            let actionClass = action.toLowerCase().replace(' ', '-');
+            
+            if (action === 'fold') {
+                actionText = 'folded';
+            } else if (action === 'check') {
+                actionText = 'checked';
+            } else if (action === 'call') {
+                actionText = `called <span class="action-amount">$${amount}</span>`;
+            } else if (action === 'raise') {
+                actionText = `raised to <span class="action-amount">$${amount}</span>`;
+            } else if (action === 'all-in') {
+                actionText = `went all-in for <span class="action-amount">$${amount}</span>`;
+            } else if (action === 'deal') {
+                actionText = amount; // amount is message for deal actions
+                actionClass = 'deal';
+            } else {
+                actionText = amount || action;
+            }
+            
+            entry.innerHTML = `
+                <div class="action-timestamp">${getTimestamp()}</div>
+                <span class="action-player">${player}</span>
+                <span class="action-text ${actionClass}">${actionText}</span>
+            `;
+            
+            logDiv.appendChild(entry);
+            
+            // Auto-scroll to bottom
+            logDiv.scrollTop = logDiv.scrollHeight;
+            
+            console.log(`[${getTimestamp()}] ${player} ${action}${amount && action !== 'deal' ? ' $' + amount : ''}`);
+        }
+        
+        // Clear log
+        function clearLog() {
+            document.getElementById('action-log').innerHTML = '';
+            console.log('Action log cleared\n');
+        }
+        
+        // Test Case 1: Single Actions
+        function test1() {
+            console.log('=== Test Case 1: Single Actions ===');
+            clearLog();
+            
+            setTimeout(() => logAction('Alice', 'check'), 200);
+            setTimeout(() => logAction('Bob', 'raise', 50), 600);
+            setTimeout(() => logAction('Charlie', 'call', 50), 1000);
+            setTimeout(() => logAction('Diana', 'fold'), 1400);
+            setTimeout(() => logAction('Eve', 'all-in', 200), 1800);
+            
+            console.log('Adding individual actions with delays...\n');
+        }
+        
+        // Test Case 2: Betting Round
+        function test2() {
+            console.log('=== Test Case 2: Complete Betting Round ===');
+            clearLog();
+            
+            let delay = 0;
+            
+            // Pre-flop actions
+            setTimeout(() => logAction('Dealer', 'deal', 'Hole cards dealt'), delay += 300);
+            setTimeout(() => logAction('Alice', 'fold'), delay += 400);
+            setTimeout(() => logAction('Bob', 'call', 20), delay += 400);
+            setTimeout(() => logAction('Charlie', 'raise', 60), delay += 400);
+            setTimeout(() => logAction('Diana', 'fold'), delay += 400);
+            setTimeout(() => logAction('Eve', 'call', 60), delay += 400);
+            setTimeout(() => logAction('Bob', 'call', 40), delay += 400);
+            
+            console.log('Simulating complete betting round...\n');
+        }
+        
+        // Test Case 3: Full Hand
+        function test3() {
+            console.log('=== Test Case 3: Full Hand Sequence ===');
+            clearLog();
+            
+            let delay = 0;
+            
+            // Start of hand
+            setTimeout(() => logAction('Dealer', 'deal', 'New hand starting'), delay += 200);
+            setTimeout(() => logAction('Alice', 'deal', 'posts small blind $10'), delay += 300);
+            setTimeout(() => logAction('Bob', 'deal', 'posts big blind $20'), delay += 300);
+            
+            // Pre-flop
+            setTimeout(() => logAction('Dealer', 'deal', 'Hole cards dealt'), delay += 500);
+            setTimeout(() => logAction('Charlie', 'raise', 60), delay += 400);
+            setTimeout(() => logAction('Diana', 'fold'), delay += 400);
+            setTimeout(() => logAction('Eve', 'call', 60), delay += 400);
+            setTimeout(() => logAction('Alice', 'fold'), delay += 400);
+            setTimeout(() => logAction('Bob', 'call', 40), delay += 400);
+            
+            // Flop
+            setTimeout(() => logAction('Dealer', 'deal', 'Flop: K♥ Q♠ J♦'), delay += 600);
+            setTimeout(() => logAction('Bob', 'check'), delay += 400);
+            setTimeout(() => logAction('Charlie', 'raise', 100), delay += 400);
+            setTimeout(() => logAction('Eve', 'call', 100), delay += 400);
+            setTimeout(() => logAction('Bob', 'fold'), delay += 400);
+            
+            // Turn
+            setTimeout(() => logAction('Dealer', 'deal', 'Turn: 10♣'), delay += 600);
+            setTimeout(() => logAction('Charlie', 'raise', 200), delay += 400);
+            setTimeout(() => logAction('Eve', 'all-in', 340), delay += 400);
+            setTimeout(() => logAction('Charlie', 'call', 140), delay += 400);
+            
+            // River
+            setTimeout(() => logAction('Dealer', 'deal', 'River: A♠'), delay += 600);
+            setTimeout(() => logAction('Dealer', 'deal', 'Showdown!'), delay += 400);
+            setTimeout(() => logAction('Eve', 'deal', 'wins $900 with Royal Flush!'), delay += 600);
+            
+            console.log('Simulating complete hand from start to finish...\n');
+        }
+        
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        };
+        
+        // Initialize with welcome message
+        logAction('System', 'deal', 'Game initialized - Ready to play!');
+        console.log('Action log ready!');
+        console.log('Try the test cases to see different action sequences\n');
+    </script>
+</body>
+</html>

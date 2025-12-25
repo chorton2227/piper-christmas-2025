@@ -1,0 +1,558 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Adventure Game - Answer Key</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .story {
+            background: linear-gradient(to right, #fff, #f8f9fa);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
+        
+        .story h2 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .inventory {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .inventory h3 {
+            margin-bottom: 10px;
+            color: #764ba2;
+        }
+        
+        .inventory-item {
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .controls button {
+            flex: 1;
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+        
+        .message {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>⚔️ Basic Adventure Game ⚔️</h1>
+        
+        <!-- Player Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div>❤️ Health</div>
+                <div class="stat-value" id="health">100</div>
+            </div>
+            <div class="stat">
+                <div>💰 Gold</div>
+                <div class="stat-value" id="gold">50</div>
+            </div>
+            <div class="stat">
+                <div>⚔️ Attack</div>
+                <div class="stat-value" id="attack">10</div>
+            </div>
+        </div>
+        
+        <!-- Story Area -->
+        <div class="story" id="story">
+            <h2 id="location-name">Town Square</h2>
+            <p id="location-description">You are in the town square. What would you like to do?</p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="actions" id="actions"></div>
+        
+        <!-- Inventory -->
+        <div class="inventory">
+            <h3>🎒 Inventory</h3>
+            <div id="inventory"></div>
+        </div>
+        
+        <!-- Game Controls -->
+        <div class="controls">
+            <button onclick="saveGame()">💾 Save Game</button>
+            <button onclick="loadGame()">📂 Load Game</button>
+            <button onclick="resetGame()">🔄 Reset Game</button>
+        </div>
+    </div>
+
+    <script>
+        // ======================================
+        // PLAYER OBJECT
+        // ======================================
+        const player = {
+            health: 100,
+            maxHealth: 100,
+            gold: 50,
+            attack: 10,
+            inventory: ["Health Potion"]
+        };
+        
+        // ======================================
+        // LOCATIONS DATA
+        // ======================================
+        const locations = {
+            town: {
+                name: "Town Square",
+                description: "You are in the town square. Villagers bustle about their daily business.",
+                actions: [
+                    { text: "Go to Forest", action: "forest" },
+                    { text: "Visit Shop", action: "shop" },
+                    { text: "Rest at Inn", action: "inn" }
+                ]
+            },
+            forest: {
+                name: "Dark Forest",
+                description: "Tall trees surround you. You hear strange noises in the distance.",
+                actions: [
+                    { text: "Fight Goblin", action: "fightGoblin" },
+                    { text: "Search for Treasure", action: "treasure" },
+                    { text: "Return to Town", action: "town" }
+                ]
+            },
+            shop: {
+                name: "Item Shop",
+                description: "A friendly merchant greets you with a smile.",
+                actions: [
+                    { text: "Buy Health Potion (20g)", action: "buyPotion" },
+                    { text: "Buy Sword Upgrade (50g)", action: "buySword" },
+                    { text: "Leave Shop", action: "town" }
+                ]
+            },
+            inn: {
+                name: "Cozy Inn",
+                description: "A warm fireplace crackles in the corner.",
+                actions: [
+                    { text: "Rest (Restore Health - 10g)", action: "rest" },
+                    { text: "Leave Inn", action: "town" }
+                ]
+            }
+        };
+        
+        // ======================================
+        // MONSTERS DATA
+        // ======================================
+        const monsters = {
+            goblin: {
+                name: "Goblin",
+                health: 30,
+                attack: 5,
+                gold: 25,
+                xp: 10
+            }
+        };
+        
+        // ======================================
+        // CURRENT STATE
+        // ======================================
+        let currentLocation = "town";
+        let inCombat = false;
+        let currentEnemy = null;
+        
+        // ======================================
+        // STEP 1: UPDATE DISPLAY
+        // ======================================
+        function updateDisplay() {
+            // Update stats
+            document.getElementById('health').textContent = player.health;
+            document.getElementById('gold').textContent = player.gold;
+            document.getElementById('attack').textContent = player.attack;
+            
+            // Update location
+            const location = locations[currentLocation];
+            document.getElementById('location-name').textContent = location.name;
+            document.getElementById('location-description').textContent = location.description;
+            
+            // Update action buttons
+            const actionsDiv = document.getElementById('actions');
+            actionsDiv.innerHTML = '';
+            
+            location.actions.forEach(action => {
+                const button = document.createElement('button');
+                button.textContent = action.text;
+                button.onclick = () => handleAction(action.action);
+                actionsDiv.appendChild(button);
+            });
+            
+            // Update inventory
+            const inventoryDiv = document.getElementById('inventory');
+            inventoryDiv.innerHTML = '';
+            
+            if (player.inventory.length === 0) {
+                inventoryDiv.innerHTML = '<p>Empty</p>';
+            } else {
+                player.inventory.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'inventory-item';
+                    itemDiv.textContent = item;
+                    itemDiv.style.cursor = 'pointer';
+                    itemDiv.onclick = () => useItem(index);
+                    inventoryDiv.appendChild(itemDiv);
+                });
+            }
+        }
+        
+        // ======================================
+        // STEP 2: NAVIGATION
+        // ======================================
+        function goToLocation(locationId) {
+            currentLocation = locationId;
+            updateDisplay();
+        }
+        
+        function handleAction(action) {
+            // Check if action is a location
+            if (locations[action]) {
+                goToLocation(action);
+            }
+            // Handle special actions
+            else if (action === "fightGoblin") {
+                startCombat("goblin");
+            }
+            else if (action === "treasure") {
+                findTreasure();
+            }
+            else if (action === "buyPotion") {
+                buyItem("Health Potion", 20);
+            }
+            else if (action === "buySword") {
+                buyItem("Sword Upgrade", 50);
+            }
+            else if (action === "rest") {
+                restAtInn();
+            }
+        }
+        
+        // ======================================
+        // STEP 3: COMBAT SYSTEM
+        // ======================================
+        function startCombat(monsterType) {
+            // Create a copy of the monster
+            currentEnemy = { ...monsters[monsterType] };
+            inCombat = true;
+            
+            showMessage(`A ${currentEnemy.name} appears! Combat begins!`, "error");
+            
+            // Update location display for combat
+            const location = locations[currentLocation];
+            document.getElementById('location-description').textContent = 
+                `You are fighting a ${currentEnemy.name}! (HP: ${currentEnemy.health})`;
+            
+            // Change action buttons to combat actions
+            const actionsDiv = document.getElementById('actions');
+            actionsDiv.innerHTML = '';
+            
+            const attackBtn = document.createElement('button');
+            attackBtn.textContent = '⚔️ Attack';
+            attackBtn.onclick = playerAttack;
+            
+            const fleeBtn = document.createElement('button');
+            fleeBtn.textContent = '🏃 Flee';
+            fleeBtn.onclick = flee;
+            
+            actionsDiv.appendChild(attackBtn);
+            actionsDiv.appendChild(fleeBtn);
+        }
+        
+        function playerAttack() {
+            if (!inCombat) return;
+            
+            // Calculate damage
+            const damage = Math.floor(Math.random() * player.attack) + 5;
+            currentEnemy.health -= damage;
+            
+            showMessage(`You attack for ${damage} damage!`, "success");
+            
+            // Check if enemy is defeated
+            if (currentEnemy.health <= 0) {
+                victory();
+            } else {
+                // Update enemy health
+                document.getElementById('location-description').textContent = 
+                    `You are fighting a ${currentEnemy.name}! (HP: ${currentEnemy.health})`;
+                
+                // Enemy attacks back
+                setTimeout(enemyAttack, 1000);
+            }
+        }
+        
+        function enemyAttack() {
+            if (!inCombat) return;
+            
+            // Calculate damage
+            const damage = Math.floor(Math.random() * currentEnemy.attack) + 2;
+            player.health -= damage;
+            
+            showMessage(`The ${currentEnemy.name} attacks for ${damage} damage!`, "error");
+            
+            // Check if player is defeated
+            if (player.health <= 0) {
+                defeat();
+            } else {
+                updateDisplay();
+            }
+        }
+        
+        function victory() {
+            inCombat = false;
+            
+            player.gold += currentEnemy.gold;
+            
+            showMessage(`Victory! You earned ${currentEnemy.gold} gold!`, "success");
+            
+            currentEnemy = null;
+            goToLocation(currentLocation); // Refresh location
+        }
+        
+        function defeat() {
+            inCombat = false;
+            
+            showMessage("You were defeated! Returning to town...", "error");
+            
+            // Lose some gold
+            player.gold = Math.floor(player.gold * 0.8);
+            player.health = player.maxHealth;
+            
+            currentEnemy = null;
+            goToLocation("town");
+        }
+        
+        function flee() {
+            // 50% chance to flee
+            if (Math.random() < 0.5) {
+                showMessage("You fled successfully!", "success");
+                inCombat = false;
+                currentEnemy = null;
+                goToLocation(currentLocation);
+            } else {
+                showMessage("You couldn't escape!", "error");
+                setTimeout(enemyAttack, 1000);
+            }
+        }
+        
+        // ======================================
+        // STEP 4: SHOP SYSTEM
+        // ======================================
+        function buyItem(itemName, cost) {
+            if (player.gold >= cost) {
+                player.gold -= cost;
+                
+                if (itemName === "Sword Upgrade") {
+                    player.attack += 5;
+                    showMessage(`Bought ${itemName}! Attack increased!`, "success");
+                } else {
+                    player.inventory.push(itemName);
+                    showMessage(`Bought ${itemName}!`, "success");
+                }
+                
+                updateDisplay();
+            } else {
+                showMessage("Not enough gold!", "error");
+            }
+        }
+        
+        // ======================================
+        // OTHER ACTIONS
+        // ======================================
+        function findTreasure() {
+            const goldFound = Math.floor(Math.random() * 20) + 5;
+            player.gold += goldFound;
+            showMessage(`You found ${goldFound} gold!`, "success");
+            updateDisplay();
+        }
+        
+        function restAtInn() {
+            if (player.gold >= 10) {
+                player.gold -= 10;
+                player.health = player.maxHealth;
+                showMessage("You rest and restore your health!", "success");
+                updateDisplay();
+            } else {
+                showMessage("Not enough gold to rest!", "error");
+            }
+        }
+        
+        function useItem(index) {
+            const item = player.inventory[index];
+            
+            if (item === "Health Potion") {
+                player.health = Math.min(player.health + 30, player.maxHealth);
+                player.inventory.splice(index, 1);
+                showMessage("Used Health Potion! Restored 30 HP", "success");
+                updateDisplay();
+            }
+        }
+        
+        // ======================================
+        // UI HELPERS
+        // ======================================
+        function showMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            
+            const storyDiv = document.getElementById('story');
+            storyDiv.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+        
+        // ======================================
+        // SAVE/LOAD SYSTEM
+        // ======================================
+        function saveGame() {
+            const saveData = {
+                player: player,
+                currentLocation: currentLocation
+            };
+            
+            localStorage.setItem('adventureGame', JSON.stringify(saveData));
+            showMessage("Game saved!", "success");
+        }
+        
+        function loadGame() {
+            const savedData = localStorage.getItem('adventureGame');
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Restore player data
+                Object.assign(player, data.player);
+                currentLocation = data.currentLocation;
+                
+                updateDisplay();
+                showMessage("Game loaded!", "success");
+            } else {
+                showMessage("No saved game found!", "error");
+            }
+        }
+        
+        function resetGame() {
+            if (confirm("Are you sure you want to reset? All progress will be lost!")) {
+                localStorage.removeItem('adventureGame');
+                location.reload();
+            }
+        }
+        
+        // ======================================
+        // INITIALIZE GAME
+        // ======================================
+        updateDisplay();
+        
+        // Check for saved game on load
+        if (localStorage.getItem('adventureGame')) {
+            showMessage("Found saved game! Click Load to continue.", "success");
+        }
+    </script>
+</body>

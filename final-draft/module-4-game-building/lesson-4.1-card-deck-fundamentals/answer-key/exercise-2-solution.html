@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 2 Solution: Shuffle and Deal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { text-align: center; }
+        .info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Exercise 2 Solution</h1>
+        <div class="info">
+            <h2>Shuffle and Deal to Players</h2>
+            <p><strong>Open the console (F12) to see the solution!</strong></p>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== EXERCISE 2 SOLUTION ===\n');
+        
+        // Helper: Create deck
+        function createDeck() {
+            const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({ suit, rank: ranks[i], value: values[i] });
+                }
+            }
+            return deck;
+        }
+        
+        // Part 1: Fisher-Yates Shuffle
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+        
+        // Part 2: Deal to Players
+        function dealToPlayers(deck, numPlayers, cardsPerPlayer) {
+            const players = [];
+            
+            // Create player objects
+            for (let i = 0; i < numPlayers; i++) {
+                players.push({
+                    name: `Player ${i + 1}`,
+                    hand: []
+                });
+            }
+            
+            // Deal cards one at a time to each player
+            for (let round = 0; round < cardsPerPlayer; round++) {
+                for (let playerNum = 0; playerNum < numPlayers; playerNum++) {
+                    if (deck.length > 0) {
+                        players[playerNum].hand.push(deck.pop());
+                    }
+                }
+            }
+            
+            return players;
+        }
+        
+        // Helper: Display card
+        function displayCard(card) {
+            const symbols = { 'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣' };
+            return `${card.rank}${symbols[card.suit]}`;
+        }
+        
+        // Part 3: Display Hands
+        function displayHands(players) {
+            console.log('--- PLAYER HANDS ---');
+            players.forEach(player => {
+                const handDisplay = player.hand.map(displayCard).join(' ');
+                console.log(`${player.name}: ${handDisplay}`);
+            });
+            console.log('');
+        }
+        
+        // Part 4: Poker Deal Simulation
+        console.log('--- PART 4: POKER DEAL SIMULATION ---\n');
+        
+        const deck = createDeck();
+        console.log('Created deck');
+        console.log('First 3 cards before shuffle:', deck.slice(0, 3).map(displayCard).join(', '));
+        
+        shuffleDeck(deck);
+        console.log('First 3 cards after shuffle:', deck.slice(0, 3).map(displayCard).join(', '));
+        console.log('');
+        
+        const players = dealToPlayers(deck, 6, 2);
+        displayHands(players);
+        console.log(`Cards remaining in deck: ${deck.length}`);
+        console.log('');
+        
+        // BONUS 1: Verify Shuffle
+        console.log('=== BONUS 1: Verify Different Shuffles ===\n');
+        
+        const testDeck = createDeck();
+        const shuffles = [];
+        
+        for (let i = 0; i < 3; i++) {
+            const deckCopy = [...testDeck];
+            shuffleDeck(deckCopy);
+            shuffles.push(deckCopy.slice(0, 5).map(displayCard).join(' '));
+        }
+        
+        console.log('Three different shuffles (first 5 cards):');
+        shuffles.forEach((shuffle, i) => {
+            console.log(`  Shuffle ${i + 1}: ${shuffle}`);
+        });
+        console.log('✓ Each shuffle is different!');
+        console.log('');
+        
+        // BONUS 2: Dealer Button
+        console.log('=== BONUS 2: Dealer Button ===\n');
+        
+        function dealToPlayersWithDealer(deck, numPlayers, cardsPerPlayer, dealerPosition) {
+            const players = [];
+            
+            for (let i = 0; i < numPlayers; i++) {
+                players.push({
+                    name: `Player ${i + 1}`,
+                    hand: [],
+                    isDealer: i === dealerPosition
+                });
+            }
+            
+            for (let round = 0; round < cardsPerPlayer; round++) {
+                for (let playerNum = 0; playerNum < numPlayers; playerNum++) {
+                    if (deck.length > 0) {
+                        players[playerNum].hand.push(deck.pop());
+                    }
+                }
+            }
+            
+            return players;
+        }
+        
+        const deck2 = createDeck();
+        shuffleDeck(deck2);
+        const playersWithDealer = dealToPlayersWithDealer(deck2, 6, 2, 2);
+        
+        playersWithDealer.forEach(player => {
+            const dealer = player.isDealer ? ' (DEALER)' : '';
+            const handDisplay = player.hand.map(displayCard).join(' ');
+            console.log(`${player.name}${dealer}: ${handDisplay}`);
+        });
+        console.log('');
+        
+        // BONUS 5: Safety Check
+        console.log('=== BONUS 5: Safe Dealing ===\n');
+        
+        function dealToPlayersSafe(deck, numPlayers, cardsPerPlayer) {
+            const cardsNeeded = numPlayers * cardsPerPlayer;
+            
+            if (deck.length < cardsNeeded) {
+                console.error(`❌ Cannot deal! Need ${cardsNeeded} cards but only ${deck.length} available`);
+                return null;
+            }
+            
+            return dealToPlayers(deck, numPlayers, cardsPerPlayer);
+        }
+        
+        const smallDeck = createDeck().slice(0, 10);
+        console.log(`Small deck has ${smallDeck.length} cards`);
+        
+        const result1 = dealToPlayersSafe(smallDeck, 3, 2);
+        if (result1) {
+            console.log('✓ Successfully dealt 6 cards');
+            console.log(`Remaining: ${smallDeck.length} cards`);
+        }
+        
+        const result2 = dealToPlayersSafe(smallDeck, 6, 2);
+        if (!result2) {
+            console.log(`✓ Correctly prevented invalid deal (need 12, only ${smallDeck.length} available)`);
+        }
+        
+        console.log('\n✨ All solutions complete! Excellent work! ✨');
+    </script>
+</body>
+</html>

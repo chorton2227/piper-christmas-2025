@@ -1,0 +1,782 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Organize Your Life</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .add-task-form {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #f5576c;
+            font-size: 0.9em;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .filter-section {
+            margin-bottom: 15px;
+        }
+
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            color: #f5576c;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            border-color: #f5576c;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-color: #f5576c;
+        }
+
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .task-list {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .task-list-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .task-item {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 15px;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .task-category {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .category-work {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .category-personal {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .category-school {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .category-shopping {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .task-priority {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .priority-medium {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .priority-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .task-due {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .task-due.overdue {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .delete-btn {
+            background: #ffebee;
+            color: #c62828;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #ef5350;
+            color: white;
+        }
+
+        .no-tasks {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .sort-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .sort-btn {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .sort-btn:hover {
+            border-color: #f5576c;
+        }
+
+        .sort-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-color: #f5576c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Task Manager</h1>
+
+        <!-- Add Task Form -->
+        <div class="add-task-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="taskTitle">Task Title:</label>
+                    <input type="text" id="taskTitle" placeholder="Enter task description">
+                </div>
+                <div class="form-group">
+                    <label for="taskCategory">Category:</label>
+                    <select id="taskCategory">
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="School">School</option>
+                        <option value="Shopping">Shopping</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskPriority">Priority:</label>
+                    <select id="taskPriority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskDueDate">Due Date:</label>
+                    <input type="date" id="taskDueDate">
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button class="button" onclick="addTask()">Add Task</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats" id="stats"></div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-section">
+                <span class="filter-label">Category:</span>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByCategory('All')">All</button>
+                    <button class="filter-btn" onclick="filterByCategory('Work')">Work</button>
+                    <button class="filter-btn" onclick="filterByCategory('Personal')">Personal</button>
+                    <button class="filter-btn" onclick="filterByCategory('School')">School</button>
+                    <button class="filter-btn" onclick="filterByCategory('Shopping')">Shopping</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <span class="filter-label">Priority:</span>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByPriority('All')">All</button>
+                    <button class="filter-btn" onclick="filterByPriority('High')">High</button>
+                    <button class="filter-btn" onclick="filterByPriority('Medium')">Medium</button>
+                    <button class="filter-btn" onclick="filterByPriority('Low')">Low</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <span class="filter-label">Status:</span>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByStatus('All')">All</button>
+                    <button class="filter-btn" onclick="filterByStatus('Pending')">Pending</button>
+                    <button class="filter-btn" onclick="filterByStatus('Completed')">Completed</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <span class="filter-label">Sort:</span>
+                <div class="sort-buttons">
+                    <button class="sort-btn" onclick="sortTasks('dueDate')">By Due Date</button>
+                    <button class="sort-btn" onclick="sortTasks('priority')">By Priority</button>
+                    <button class="sort-btn" onclick="sortTasks('created')">By Created Date</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="task-list">
+            <div class="task-list-header">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" 
+                           placeholder="🔍 Search tasks..." onkeyup="searchTasks()">
+                </div>
+                <h2 style="color: #f5576c;">Your Tasks</h2>
+            </div>
+            <div id="taskList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Task Manager Object
+        let taskManager = {
+            tasks: [],
+            categories: ["Work", "Personal", "School", "Shopping"],
+            nextId: 1,
+            currentFilter: { category: "All", priority: "All", status: "All" },
+            searchQuery: "",
+
+            // Add a new task
+            addTask: function(title, category, priority, dueDate) {
+                let task = {
+                    id: this.nextId++,
+                    title: title,
+                    category: category,
+                    priority: priority,
+                    dueDate: dueDate,
+                    completed: false,
+                    createdAt: new Date()
+                };
+                this.tasks.push(task);
+                console.log("Added task:", task);
+                return task;
+            },
+
+            // Delete a task
+            deleteTask: function(id) {
+                this.tasks = this.tasks.filter(task => task.id !== id);
+                console.log("Deleted task with id:", id);
+            },
+
+            // Toggle task completion
+            toggleComplete: function(id) {
+                let task = this.tasks.find(task => task.id === id);
+                if (task) {
+                    task.completed = !task.completed;
+                    console.log("Toggled task:", task.title, "- Completed:", task.completed);
+                }
+            },
+
+            // Get tasks by category
+            getTasksByCategory: function(category) {
+                if (category === "All") return this.tasks;
+                return this.tasks.filter(task => task.category === category);
+            },
+
+            // Get tasks by priority
+            getTasksByPriority: function(priority) {
+                if (priority === "All") return this.tasks;
+                return this.tasks.filter(task => task.priority === priority);
+            },
+
+            // Get completed tasks
+            getCompletedTasks: function() {
+                return this.tasks.filter(task => task.completed);
+            },
+
+            // Get pending tasks
+            getPendingTasks: function() {
+                return this.tasks.filter(task => !task.completed);
+            },
+
+            // Get filtered tasks
+            getFilteredTasks: function() {
+                let filtered = this.tasks;
+
+                // Apply category filter
+                if (this.currentFilter.category !== "All") {
+                    filtered = filtered.filter(task => task.category === this.currentFilter.category);
+                }
+
+                // Apply priority filter
+                if (this.currentFilter.priority !== "All") {
+                    filtered = filtered.filter(task => task.priority === this.currentFilter.priority);
+                }
+
+                // Apply status filter
+                if (this.currentFilter.status === "Pending") {
+                    filtered = filtered.filter(task => !task.completed);
+                } else if (this.currentFilter.status === "Completed") {
+                    filtered = filtered.filter(task => task.completed);
+                }
+
+                // Apply search
+                if (this.searchQuery) {
+                    filtered = filtered.filter(task => 
+                        task.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                    );
+                }
+
+                return filtered;
+            },
+
+            // Sort tasks by due date
+            sortByDueDate: function() {
+                return [...this.tasks].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            },
+
+            // Sort by priority
+            sortByPriority: function() {
+                let priorityOrder = { High: 1, Medium: 2, Low: 3 };
+                return [...this.tasks].sort((a, b) => 
+                    priorityOrder[a.priority] - priorityOrder[b.priority]
+                );
+            },
+
+            // Sort by created date
+            sortByCreated: function() {
+                return [...this.tasks].sort((a, b) => b.createdAt - a.createdAt);
+            },
+
+            // Get statistics
+            getStats: function() {
+                let total = this.tasks.length;
+                let completed = this.getCompletedTasks().length;
+                let pending = this.getPendingTasks().length;
+                let highPriority = this.tasks.filter(t => t.priority === "High").length;
+                let completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                return { total, completed, pending, highPriority, completionRate };
+            }
+        };
+
+        // Add task from form
+        function addTask() {
+            let title = document.getElementById("taskTitle").value.trim();
+            let category = document.getElementById("taskCategory").value;
+            let priority = document.getElementById("taskPriority").value;
+            let dueDate = document.getElementById("taskDueDate").value;
+
+            if (!title) {
+                alert("Please enter a task title!");
+                return;
+            }
+
+            if (!dueDate) {
+                alert("Please select a due date!");
+                return;
+            }
+
+            taskManager.addTask(title, category, priority, dueDate);
+
+            // Clear form
+            document.getElementById("taskTitle").value = "";
+            document.getElementById("taskDueDate").value = "";
+
+            updateDisplay();
+        }
+
+        // Display all tasks
+        function displayTasks() {
+            let listDiv = document.getElementById("taskList");
+            let tasks = taskManager.getFilteredTasks();
+
+            if (tasks.length === 0) {
+                listDiv.innerHTML = '<div class="no-tasks">No tasks found. Add one above!</div>';
+                return;
+            }
+
+            listDiv.innerHTML = "";
+
+            tasks.forEach(task => {
+                let taskDiv = document.createElement("div");
+                taskDiv.className = "task-item" + (task.completed ? " completed" : "");
+
+                let dueDate = new Date(task.dueDate);
+                let today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let isOverdue = !task.completed && dueDate < today;
+
+                let dueDateStr = dueDate.toLocaleDateString('en-US', { 
+                    month: 'short', day: 'numeric', year: 'numeric' 
+                });
+
+                taskDiv.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" 
+                           ${task.completed ? "checked" : ""} 
+                           onchange="toggleTask(${task.id})">
+                    <div class="task-content">
+                        <div class="task-title ${task.completed ? 'completed' : ''}">
+                            ${task.title}
+                        </div>
+                        <div class="task-meta">
+                            <span class="task-category category-${task.category.toLowerCase()}">
+                                ${task.category}
+                            </span>
+                            <span class="task-priority priority-${task.priority.toLowerCase()}">
+                                ${task.priority}
+                            </span>
+                            <span class="task-due ${isOverdue ? 'overdue' : ''}">
+                                📅 ${isOverdue ? '⚠️ OVERDUE: ' : ''}${dueDateStr}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                    </div>
+                `;
+
+                listDiv.appendChild(taskDiv);
+            });
+        }
+
+        // Display statistics
+        function displayStats() {
+            let stats = taskManager.getStats();
+            let statsDiv = document.getElementById("stats");
+
+            statsDiv.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.total}</div>
+                        <div class="stat-label">Total Tasks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.completed}</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.pending}</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.highPriority}</div>
+                        <div class="stat-label">High Priority</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.completionRate}%</div>
+                        <div class="stat-label">Completion Rate</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle task completion
+        function toggleTask(id) {
+            taskManager.toggleComplete(id);
+            updateDisplay();
+        }
+
+        // Delete task
+        function deleteTask(id) {
+            if (confirm("Delete this task?")) {
+                taskManager.deleteTask(id);
+                updateDisplay();
+            }
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            taskManager.currentFilter.category = category;
+            setActiveButton(event.target, '.filters .filter-buttons:first-child .filter-btn');
+            updateDisplay();
+        }
+
+        // Filter by priority
+        function filterByPriority(priority) {
+            taskManager.currentFilter.priority = priority;
+            setActiveButton(event.target, '.filters .filter-section:nth-child(2) .filter-btn');
+            updateDisplay();
+        }
+
+        // Filter by status
+        function filterByStatus(status) {
+            taskManager.currentFilter.status = status;
+            setActiveButton(event.target, '.filters .filter-section:nth-child(3) .filter-btn');
+            updateDisplay();
+        }
+
+        // Search tasks
+        function searchTasks() {
+            taskManager.searchQuery = document.getElementById("searchInput").value;
+            displayTasks();
+        }
+
+        // Sort tasks
+        function sortTasks(sortBy) {
+            let sorted;
+            if (sortBy === "dueDate") {
+                sorted = taskManager.sortByDueDate();
+            } else if (sortBy === "priority") {
+                sorted = taskManager.sortByPriority();
+            } else if (sortBy === "created") {
+                sorted = taskManager.sortByCreated();
+            }
+
+            taskManager.tasks = sorted;
+            setActiveButton(event.target, '.sort-btn');
+            updateDisplay();
+        }
+
+        // Set active button styling
+        function setActiveButton(button, selector) {
+            document.querySelectorAll(selector).forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+        }
+
+        // Update display
+        function updateDisplay() {
+            displayTasks();
+            displayStats();
+        }
+
+        // Initialize with sample tasks
+        window.onload = function() {
+            // Add sample tasks
+            taskManager.addTask("Buy groceries", "Shopping", "High", "2025-11-25");
+            taskManager.addTask("Finish homework", "School", "High", "2025-11-26");
+            taskManager.addTask("Call dentist", "Personal", "Medium", "2025-11-30");
+            taskManager.addTask("Team meeting", "Work", "High", "2025-11-27");
+            taskManager.addTask("Read book", "Personal", "Low", "2025-12-01");
+            taskManager.addTask("Update resume", "Work", "Medium", "2025-11-28");
+
+            // Mark one as completed
+            taskManager.toggleComplete(2);
+
+            updateDisplay();
+
+            console.log("Task Manager loaded with sample tasks!");
+            console.log("Try adding, completing, and filtering tasks!");
+        };
+    </script>
+</body>

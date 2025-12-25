@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Save & Load Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .settings-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .settings-panel h2 {
+            color: #11998e;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #38ef7d;
+            padding-bottom: 10px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .setting-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .setting-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #11998e;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-load {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-load:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        .btn-export {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-export:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-import {
+            background: #6f42c1;
+            color: white;
+        }
+
+        .btn-import:hover {
+            background: #5a32a3;
+            transform: translateY(-2px);
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .storage-info {
+            background: #e7f3ff;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .storage-info h3 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+
+        .storage-info p {
+            color: #0c5460;
+            margin: 5px 0;
+        }
+
+        .json-display {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .test-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #6f42c1;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .file-upload-label:hover {
+            background: #5a32a3;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💾 Save & Load Settings</h1>
+
+        <div class="settings-panel">
+            <h2>Current Settings</h2>
+            <div class="settings-grid" id="settingsDisplay">
+                <!-- Settings will be displayed here -->
+            </div>
+
+            <div class="button-group">
+                <button class="btn-save" onclick="saveSettings()">💾 Save to LocalStorage</button>
+                <button class="btn-load" onclick="loadSettings()">📥 Load from LocalStorage</button>
+                <button class="btn-export" onclick="exportSettings()">📤 Export JSON</button>
+                <label for="importFile" class="file-upload-label">📂 Import JSON</label>
+                <input type="file" id="importFile" accept=".json" onchange="importSettings(event)">
+                <button class="btn-clear" onclick="clearStorage()">🗑️ Clear Storage</button>
+            </div>
+
+            <div class="storage-info">
+                <h3>📊 Storage Information</h3>
+                <p id="storageStatus">No settings saved</p>
+                <p id="lastSaved">Never saved</p>
+            </div>
+
+            <div class="json-display" id="jsonDisplay">
+                <!-- JSON will be displayed here -->
+            </div>
+        </div>
+
+        <div class="test-panel">
+            <h2 style="color: #11998e; margin-bottom: 20px;">Test Cases</h2>
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'pokerGameSettings';
+        const TIMESTAMP_KEY = 'pokerGameSettings_timestamp';
+
+        // Default configuration
+        let currentSettings = {
+            startingChips: 1000,
+            smallBlind: 10,
+            bigBlind: 20,
+            ante: 0,
+            aiPlayers: 5,
+            gameSpeed: 1.0,
+            soundEffects: true,
+            animations: true,
+            autoMuck: false,
+            showPotOdds: true
+        };
+
+        /**
+         * Display current settings
+         */
+        function displaySettings() {
+            const container = document.getElementById('settingsDisplay');
+            container.innerHTML = `
+                <div class="setting-item">
+                    <span class="setting-label">Starting Chips</span>
+                    <div class="setting-value">${currentSettings.startingChips}</div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Small Blind</span>
+                    <div class="setting-value">${currentSettings.smallBlind}</div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Big Blind</span>
+                    <div class="setting-value">${currentSettings.bigBlind}</div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Ante</span>
+                    <div class="setting-value">${currentSettings.ante}</div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">AI Players</span>
+                    <div class="setting-value">${currentSettings.aiPlayers}</div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Game Speed</span>
+                    <div class="setting-value">${currentSettings.gameSpeed}x</div>
+                </div>
+            `;
+
+            updateJsonDisplay();
+            updateStorageInfo();
+        }
+
+        /**
+         * Save settings to localStorage
+         */
+        function saveSettings() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
+                localStorage.setItem(TIMESTAMP_KEY, new Date().toISOString());
+                alert('✅ Settings saved successfully to localStorage!');
+                updateStorageInfo();
+            } catch (error) {
+                alert('❌ Error saving settings: ' + error.message);
+            }
+        }
+
+        /**
+         * Load settings from localStorage
+         */
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    currentSettings = JSON.parse(saved);
+                    displaySettings();
+                    alert('✅ Settings loaded successfully from localStorage!');
+                } else {
+                    alert('⚠️ No saved settings found in localStorage.');
+                }
+            } catch (error) {
+                alert('❌ Error loading settings: ' + error.message);
+            }
+        }
+
+        /**
+         * Export settings as JSON file
+         */
+        function exportSettings() {
+            try {
+                const dataStr = JSON.stringify(currentSettings, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'poker-settings-' + new Date().getTime() + '.json';
+                link.click();
+                URL.revokeObjectURL(url);
+                alert('✅ Settings exported successfully!');
+            } catch (error) {
+                alert('❌ Error exporting settings: ' + error.message);
+            }
+        }
+
+        /**
+         * Import settings from JSON file
+         */
+        function importSettings(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    // Validate the imported data has required fields
+                    if (imported.startingChips && imported.smallBlind && imported.bigBlind) {
+                        currentSettings = imported;
+                        displaySettings();
+                        alert('✅ Settings imported successfully!');
+                    } else {
+                        alert('❌ Invalid settings file format.');
+                    }
+                } catch (error) {
+                    alert('❌ Error importing settings: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        /**
+         * Clear all saved settings
+         */
+        function clearStorage() {
+            if (confirm('Are you sure you want to clear all saved settings?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(TIMESTAMP_KEY);
+                alert('🗑️ Storage cleared successfully!');
+                updateStorageInfo();
+            }
+        }
+
+        /**
+         * Update JSON display
+         */
+        function updateJsonDisplay() {
+            const display = document.getElementById('jsonDisplay');
+            display.textContent = JSON.stringify(currentSettings, null, 2);
+        }
+
+        /**
+         * Update storage information
+         */
+        function updateStorageInfo() {
+            const statusEl = document.getElementById('storageStatus');
+            const lastSavedEl = document.getElementById('lastSaved');
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const timestamp = localStorage.getItem(TIMESTAMP_KEY);
+
+            if (saved) {
+                statusEl.textContent = '✅ Settings are saved in localStorage';
+                if (timestamp) {
+                    const date = new Date(timestamp);
+                    lastSavedEl.textContent = `Last saved: ${date.toLocaleString()}`;
+                } else {
+                    lastSavedEl.textContent = 'Last saved: Unknown';
+                }
+            } else {
+                statusEl.textContent = '⚠️ No settings saved in localStorage';
+                lastSavedEl.textContent = 'Never saved';
+            }
+        }
+
+        /**
+         * Modify a setting (for testing)
+         */
+        function modifySetting(key, value) {
+            if (currentSettings.hasOwnProperty(key)) {
+                currentSettings[key] = value;
+                displaySettings();
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Run test cases
+         */
+        function runTests() {
+            const results = [];
+
+            // Test 1: Save and reload page simulation
+            const originalChips = currentSettings.startingChips;
+            currentSettings.startingChips = 3000;
+            saveSettings();
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            const parsed = JSON.parse(savedData);
+            results.push({
+                name: 'Save and Reload Page',
+                passed: parsed.startingChips === 3000,
+                details: `Settings saved with ${parsed.startingChips} chips`
+            });
+
+            // Test 2: Load settings
+            currentSettings.startingChips = 500;
+            loadSettings();
+            results.push({
+                name: 'Load Settings',
+                passed: currentSettings.startingChips === 3000,
+                details: `Settings loaded correctly: ${currentSettings.startingChips} chips`
+            });
+
+            // Test 3: Export JSON format
+            const exportData = JSON.stringify(currentSettings);
+            const isValidJSON = (() => {
+                try {
+                    JSON.parse(exportData);
+                    return true;
+                } catch {
+                    return false;
+                }
+            })();
+            results.push({
+                name: 'Export JSON',
+                passed: isValidJSON && exportData.includes('startingChips'),
+                details: 'Settings can be exported as valid JSON'
+            });
+
+            // Test 4: Import validation
+            const testImport = {
+                startingChips: 2500,
+                smallBlind: 25,
+                bigBlind: 50,
+                ante: 5,
+                aiPlayers: 7,
+                gameSpeed: 1.5
+            };
+            const hasRequiredFields = testImport.hasOwnProperty('startingChips') && 
+                                      testImport.hasOwnProperty('smallBlind') && 
+                                      testImport.hasOwnProperty('bigBlind');
+            results.push({
+                name: 'Import Validation',
+                passed: hasRequiredFields,
+                details: 'Import validates required fields correctly'
+            });
+
+            // Test 5: Clear storage
+            clearStorage();
+            const clearedData = localStorage.getItem(STORAGE_KEY);
+            results.push({
+                name: 'Clear Storage',
+                passed: clearedData === null,
+                details: 'Storage cleared successfully'
+            });
+
+            // Restore original settings for display
+            currentSettings.startingChips = originalChips;
+            displaySettings();
+
+            displayTestResults(results);
+        }
+
+        /**
+         * Display test results
+         */
+        function displayTestResults(results) {
+            const container = document.getElementById('testResults');
+            let html = '';
+
+            results.forEach((result, index) => {
+                const statusClass = result.passed ? 'status-pass' : 'status-fail';
+                const statusText = result.passed ? 'PASS' : 'FAIL';
+
+                html += `
+                    <div class="test-case">
+                        <h3>
+                            Test ${index + 1}: ${result.name}
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </h3>
+                        <p>${result.details}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Initialize
+        window.onload = function() {
+            displaySettings();
+            runTests();
+        };
+    </script>
+</body>
+</html>

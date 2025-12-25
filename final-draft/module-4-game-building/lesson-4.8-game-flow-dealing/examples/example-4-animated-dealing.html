@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Animated Dealing - Game Flow & Dealing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2c5530;
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; margin-top: 0; }
+        .game-table {
+            background: #0a5f0a;
+            border-radius: 20px;
+            padding: 60px;
+            margin: 20px 0;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+        .deck-position {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 140px;
+            border: 3px dashed rgba(255,255,255,0.5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        .players-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .player-hand {
+            position: absolute;
+            display: flex;
+            gap: 10px;
+        }
+        .player-hand.player-0 { left: 50%; top: 0; transform: translateX(-50%); }
+        .player-hand.player-1 { right: 10%; top: 40%; }
+        .player-hand.player-2 { left: 50%; bottom: 0; transform: translateX(-50%); }
+        .player-hand.player-3 { left: 10%; top: 40%; }
+        .community-cards {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 10px;
+            margin-top: 80px;
+        }
+        .card {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 70px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: absolute;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card.placed {
+            position: relative;
+        }
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        .card.face-down {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        @keyframes deal {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .card.dealing {
+            animation: deal 0.3s ease-out;
+        }
+        .controls {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Example 4: Animated Card Dealing</h1>
+        <p>This example demonstrates <strong>animated card dealing with CSS transitions and setTimeout</strong>.</p>
+        <p><strong>Key Concept:</strong> Cards animate from the deck to each player with realistic timing!</p>
+        
+        <div class="game-table" id="gameTable">
+            <div class="status">
+                Status: <span id="status">Ready</span>
+            </div>
+            <div class="deck-position">DECK</div>
+            <div class="players-container" id="playersContainer">
+                <div class="player-hand player-0" id="player0Hand"></div>
+                <div class="player-hand player-1" id="player1Hand"></div>
+                <div class="player-hand player-2" id="player2Hand"></div>
+                <div class="player-hand player-3" id="player3Hand"></div>
+                <div class="community-cards" id="communityCards"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="animatedDealHoleCards()" id="dealBtn">Animated Deal Hole Cards</button>
+            <button onclick="animatedDealFlop()" id="flopBtn">Animated Deal Flop</button>
+            <button onclick="resetGame()">Reset</button>
+        </div>
+
+        <button onclick="testCase1()">Test Case 1: Slow Deal</button>
+        <button onclick="testCase2()">Test Case 2: Fast Deal</button>
+        <button onclick="testCase3()">Test Case 3: Full Board</button>
+        
+        <div id="output" class="output">
+            <h3>Click buttons to see animated dealing!</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        function createDeck() {
+            const suits = ["hearts", "diamonds", "clubs", "spades"];
+            const ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            const deck = [];
+            for (const suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({ suit, rank: ranks[i], value: values[i] });
+                }
+            }
+            return deck;
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function getSuitSymbol(suit) {
+            const symbols = { hearts: "", diamonds: "", clubs: "", spades: "" };
+            return symbols[suit];
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        let gameState = {
+            deck: createDeck(),
+            players: [
+                { id: 0, name: "Alice", hand: [] },
+                { id: 1, name: "Bob", hand: [] },
+                { id: 2, name: "Charlie", hand: [] },
+                { id: 3, name: "Diana", hand: [] }
+            ],
+            communityCards: [],
+            dealDelay: 300
+        };
+        shuffleDeck(gameState.deck);
+
+        function setStatus(text) {
+            document.getElementById("status").textContent = text;
+        }
+
+        function createCardElement(card, faceDown = false) {
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "card " + (faceDown ? "face-down" : card.suit);
+            cardDiv.textContent = faceDown ? "" : card.rank + getSuitSymbol(card.suit);
+            return cardDiv;
+        }
+
+        async function animatedDealHoleCards() {
+            console.log("\n=== Animated Hole Card Deal ===");
+            setStatus("Dealing...");
+            document.getElementById("dealBtn").disabled = true;
+
+            const activePlayers = gameState.players;
+            
+            for (let round = 0; round < 2; round++) {
+                console.log("Round " + (round + 1) + ":");
+                for (let i = 0; i < activePlayers.length; i++) {
+                    const player = activePlayers[i];
+                    const card = gameState.deck.pop();
+                    player.hand.push(card);
+                    
+                    const handDiv = document.getElementById("player" + player.id + "Hand");
+                    const cardElement = createCardElement(card, true);
+                    cardElement.classList.add("dealing");
+                    cardElement.style.left = "50%";
+                    cardElement.style.top = "50%";
+                    
+                    handDiv.appendChild(cardElement);
+                    
+                    await delay(50);
+                    cardElement.classList.add("placed");
+                    cardElement.style.left = "0";
+                    cardElement.style.top = "0";
+                    
+                    console.log("  " + player.name + ": " + card.rank + getSuitSymbol(card.suit));
+                    await delay(gameState.dealDelay);
+                }
+            }
+
+            setStatus("Hole cards dealt");
+            document.getElementById("dealBtn").disabled = false;
+            logOutput(" Dealt 2 cards to each player with animation!");
+        }
+
+        async function animatedDealFlop() {
+            console.log("\n=== Animated Flop Deal ===");
+            setStatus("Burning...");
+            
+            const burnedCard = gameState.deck.pop();
+            console.log(" Burned: " + burnedCard.rank + getSuitSymbol(burnedCard.suit));
+            await delay(400);
+
+            setStatus("Dealing flop...");
+            for (let i = 0; i < 3; i++) {
+                const card = gameState.deck.pop();
+                gameState.communityCards.push(card);
+                
+                const commDiv = document.getElementById("communityCards");
+                const cardElement = createCardElement(card);
+                cardElement.classList.add("dealing");
+                cardElement.style.left = "50%";
+                cardElement.style.top = "-200px";
+                
+                commDiv.appendChild(cardElement);
+                
+                await delay(50);
+                cardElement.classList.add("placed");
+                cardElement.style.left = "0";
+                cardElement.style.top = "0";
+                
+                console.log("  Flop " + (i + 1) + ": " + card.rank + getSuitSymbol(card.suit));
+                await delay(gameState.dealDelay);
+            }
+
+            setStatus("Flop complete");
+            logOutput(" Flop dealt with animation!");
+        }
+
+        function resetGame() {
+            gameState.deck = createDeck();
+            shuffleDeck(gameState.deck);
+            gameState.players.forEach(p => p.hand = []);
+            gameState.communityCards = [];
+            
+            document.getElementById("player0Hand").innerHTML = "";
+            document.getElementById("player1Hand").innerHTML = "";
+            document.getElementById("player2Hand").innerHTML = "";
+            document.getElementById("player3Hand").innerHTML = "";
+            document.getElementById("communityCards").innerHTML = "";
+            
+            setStatus("Ready");
+            document.getElementById("dealBtn").disabled = false;
+            logOutput(" Game reset!");
+            console.log("\n=== Game Reset ===");
+        }
+
+        function logOutput(message) {
+            document.getElementById("output").innerHTML = "<h3>" + message + "</h3>";
+        }
+
+        async function testCase1() {
+            console.log("\n========== TEST CASE 1: Slow Deal ==========");
+            resetGame();
+            gameState.dealDelay = 500;
+            await animatedDealHoleCards();
+            console.log("Animation delay: 500ms - watch the slow dealing!");
+        }
+
+        async function testCase2() {
+            console.log("\n========== TEST CASE 2: Fast Deal ==========");
+            resetGame();
+            gameState.dealDelay = 100;
+            await animatedDealHoleCards();
+            console.log("Animation delay: 100ms - fast dealing!");
+        }
+
+        async function testCase3() {
+            console.log("\n========== TEST CASE 3: Full Board ==========");
+            resetGame();
+            gameState.dealDelay = 250;
+            await animatedDealHoleCards();
+            await delay(1000);
+            await animatedDealFlop();
+            console.log("Complete dealing sequence with animation!");
+        }
+
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById("debug");
+            debugDiv.textContent += args.join(" ") + "\n";
+        };
+
+        console.log("Example 4: Animated Dealing loaded");
+        console.log("Watch cards animate from deck to players!");
+    </script>
+</body>
+</html>

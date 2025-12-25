@@ -1,0 +1,951 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1: Create Game State - Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        input[type="number"], input[type="text"] {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 200px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            min-width: 150px;
+        }
+
+        .output {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .output h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .state-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-top: 20px;
+        }
+
+        .state-section {
+            margin-bottom: 20px;
+        }
+
+        .state-section h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .player-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .player-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .player-chips {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .player-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .badge-dealer {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .badge-sb {
+            background: #4facfe;
+            color: white;
+        }
+
+        .badge-bb {
+            background: #eb3349;
+            color: white;
+        }
+
+        .badge-ai {
+            background: #764ba2;
+            color: white;
+        }
+
+        .deck-info {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .card-display {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .card {
+            width: 40px;
+            height: 56px;
+            border: 2px solid #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            background: white;
+        }
+
+        .card.red {
+            color: #e74c3c;
+        }
+
+        .card.black {
+            color: #333;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #11998e;
+        }
+
+        .test-case h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: #11998e;
+            font-weight: 600;
+        }
+
+        .error {
+            color: #eb3349;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            input[type="number"], input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Exercise 1: Create Game State - Solution</h1>
+
+        <div class="controls">
+            <h2>Game Configuration</h2>
+            
+            <div class="input-group">
+                <label for="playerCount">Number of Players:</label>
+                <input type="number" id="playerCount" min="2" max="10" value="4">
+            </div>
+
+            <div class="input-group">
+                <label for="startingChips">Starting Chips:</label>
+                <input type="number" id="startingChips" min="100" max="10000" step="100" value="1000">
+            </div>
+
+            <div class="input-group">
+                <label for="playerName">Player Name to Add:</label>
+                <input type="text" id="playerName" placeholder="Enter player name">
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="initializeGame()">🎯 Initialize Game</button>
+                <button class="btn-success" onclick="addPlayer()">➕ Add Player</button>
+                <button class="btn-danger" onclick="removeLastPlayer()">➖ Remove Last Player</button>
+                <button class="btn-info" onclick="displayGameState()">📊 Display State</button>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="runAllTests()">🧪 Run All Tests</button>
+            </div>
+        </div>
+
+        <div class="output" id="output">
+            <h2>Game State</h2>
+            <p>Click "Initialize Game" to create a new game state.</p>
+        </div>
+
+        <div class="output" id="testResults" style="display: none;">
+            <h2>Test Results</h2>
+            <div id="testContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===============================================
+        // GAME STATE STRUCTURE
+        // ===============================================
+
+        let gameState = null;
+        let nextPlayerId = 0;
+
+        // Card suits and ranks
+        const SUITS = ['♠', '♥', '♦', '♣'];
+        const SUIT_NAMES = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+        const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+        // ===============================================
+        // DECK CREATION AND SHUFFLING
+        // ===============================================
+
+        /**
+         * Creates a standard 52-card deck
+         * @returns {Array} Array of card objects
+         */
+        function createDeck() {
+            const deck = [];
+            for (let suitIndex = 0; suitIndex < SUITS.length; suitIndex++) {
+                for (let rankIndex = 0; rankIndex < RANKS.length; rankIndex++) {
+                    deck.push({
+                        suit: SUITS[suitIndex],
+                        suitName: SUIT_NAMES[suitIndex],
+                        rank: RANKS[rankIndex],
+                        value: rankIndex + 2 // 2-14 for easy comparison
+                    });
+                }
+            }
+            console.log(`✅ Created deck with ${deck.length} cards`);
+            return deck;
+        }
+
+        /**
+         * Shuffles a deck using Fisher-Yates algorithm
+         * @param {Array} deck - The deck to shuffle
+         */
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            console.log('🔀 Deck shuffled');
+        }
+
+        // ===============================================
+        // GAME STATE CREATION
+        // ===============================================
+
+        /**
+         * Creates the initial game state
+         * @param {number} playerCount - Number of players (2-10)
+         * @param {number} startingChips - Starting chips per player
+         * @returns {Object} Game state object
+         */
+        function createGame(playerCount, startingChips = 1000) {
+            console.log(`\n🎮 Creating new game: ${playerCount} players, ${startingChips} chips each`);
+
+            // Validate inputs
+            if (playerCount < 2 || playerCount > 10) {
+                console.error('❌ Player count must be between 2 and 10');
+                return null;
+            }
+
+            if (startingChips < 100) {
+                console.error('❌ Starting chips must be at least 100');
+                return null;
+            }
+
+            // Create players array
+            const players = [];
+            for (let i = 0; i < playerCount; i++) {
+                players.push(createPlayer(i === 0 ? 'You' : `Player ${i + 1}`, startingChips, i !== 0));
+            }
+
+            // Create game state object
+            const state = {
+                players: players,
+                deck: [],
+                communityCards: [],
+                pot: 0,
+                currentBet: 0,
+                minRaise: 20,
+                dealerPosition: 0,
+                currentPlayerIndex: 0,
+                phase: 'waiting',
+                bettingRound: null,
+                smallBlind: 10,
+                bigBlind: 20,
+                startingChips: startingChips
+            };
+
+            // Create and shuffle deck
+            state.deck = createDeck();
+            shuffleDeck(state.deck);
+
+            // Assign dealer and blinds
+            assignDealerAndBlinds(state);
+
+            console.log('✅ Game state created successfully');
+            return state;
+        }
+
+        /**
+         * Creates a player object
+         * @param {string} name - Player name
+         * @param {number} chips - Starting chips
+         * @param {boolean} isAI - Whether player is AI-controlled
+         * @returns {Object} Player object
+         */
+        function createPlayer(name, chips, isAI = false) {
+            const player = {
+                id: nextPlayerId++,
+                name: name,
+                chips: chips,
+                bet: 0,
+                hand: [],
+                folded: false,
+                allIn: false,
+                isDealer: false,
+                isSmallBlind: false,
+                isBigBlind: false,
+                isAI: isAI
+            };
+
+            console.log(`👤 Created player: ${name} (${chips} chips, AI: ${isAI})`);
+            return player;
+        }
+
+        // ===============================================
+        // DEALER AND BLIND ASSIGNMENT
+        // ===============================================
+
+        /**
+         * Assigns dealer button and blind positions
+         * @param {Object} state - Game state
+         */
+        function assignDealerAndBlinds(state) {
+            const { players, dealerPosition } = state;
+            const playerCount = players.length;
+
+            console.log(`\n🎲 Assigning dealer and blinds (dealer at position ${dealerPosition})`);
+
+            // Reset all positions
+            players.forEach(p => {
+                p.isDealer = false;
+                p.isSmallBlind = false;
+                p.isBigBlind = false;
+            });
+
+            // Assign dealer button
+            players[dealerPosition].isDealer = true;
+            console.log(`🎯 Dealer: ${players[dealerPosition].name}`);
+
+            // Assign blinds
+            if (playerCount === 2) {
+                // Heads-up: dealer is small blind
+                players[dealerPosition].isSmallBlind = true;
+                players[(dealerPosition + 1) % playerCount].isBigBlind = true;
+                console.log(`💰 Small Blind: ${players[dealerPosition].name} (heads-up)`);
+                console.log(`💰 Big Blind: ${players[(dealerPosition + 1) % playerCount].name}`);
+            } else {
+                // Normal: small blind left of dealer
+                const sbPos = (dealerPosition + 1) % playerCount;
+                const bbPos = (dealerPosition + 2) % playerCount;
+                players[sbPos].isSmallBlind = true;
+                players[bbPos].isBigBlind = true;
+                console.log(`💰 Small Blind: ${players[sbPos].name}`);
+                console.log(`💰 Big Blind: ${players[bbPos].name}`);
+            }
+        }
+
+        // ===============================================
+        // PLAYER MANAGEMENT
+        // ===============================================
+
+        /**
+         * Adds a new player to the game
+         * @param {string} name - Player name
+         */
+        function addPlayerToGame(state, name) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            if (state.players.length >= 10) {
+                console.error('❌ Maximum 10 players allowed');
+                return false;
+            }
+
+            const newPlayer = createPlayer(name || `Player ${state.players.length + 1}`, state.startingChips, true);
+            state.players.push(newPlayer);
+            console.log(`✅ Added ${newPlayer.name} to the game`);
+            return true;
+        }
+
+        /**
+         * Removes the last player from the game
+         */
+        function removePlayerFromGame(state) {
+            if (!state) {
+                console.error('❌ No game state exists');
+                return false;
+            }
+
+            if (state.players.length <= 2) {
+                console.error('❌ Must have at least 2 players');
+                return false;
+            }
+
+            const removed = state.players.pop();
+            console.log(`✅ Removed ${removed.name} from the game`);
+            
+            // Reassign dealer and blinds if needed
+            if (state.dealerPosition >= state.players.length) {
+                state.dealerPosition = 0;
+            }
+            assignDealerAndBlinds(state);
+            
+            return true;
+        }
+
+        // ===============================================
+        // DISPLAY FUNCTIONS
+        // ===============================================
+
+        /**
+         * Displays the current game state in HTML
+         */
+        function displayGameState() {
+            const output = document.getElementById('output');
+            
+            if (!gameState) {
+                output.innerHTML = '<h2>Game State</h2><p class="error">No game state exists. Click "Initialize Game" first.</p>';
+                return;
+            }
+
+            let html = '<h2>🎮 Current Game State</h2>';
+
+            // Game Configuration
+            html += '<div class="state-section">';
+            html += '<h3>⚙️ Game Configuration</h3>';
+            html += '<div class="deck-info">';
+            html += `<div class="info-item"><strong>Phase:</strong> <code>${gameState.phase}</code></div>`;
+            html += `<div class="info-item"><strong>Betting Round:</strong> <code>${gameState.bettingRound || 'None'}</code></div>`;
+            html += `<div class="info-item"><strong>Small Blind:</strong> <span class="player-chips">${gameState.smallBlind}</span></div>`;
+            html += `<div class="info-item"><strong>Big Blind:</strong> <span class="player-chips">${gameState.bigBlind}</span></div>`;
+            html += `<div class="info-item"><strong>Starting Chips:</strong> <span class="player-chips">${gameState.startingChips}</span></div>`;
+            html += '</div>';
+            html += '</div>';
+
+            // Pot and Betting
+            html += '<div class="state-section">';
+            html += '<h3>💰 Pot & Betting</h3>';
+            html += '<div class="deck-info">';
+            html += `<div class="info-item"><strong>Pot:</strong> <span class="player-chips">${gameState.pot}</span></div>`;
+            html += `<div class="info-item"><strong>Current Bet:</strong> <span class="player-chips">${gameState.currentBet}</span></div>`;
+            html += `<div class="info-item"><strong>Min Raise:</strong> <span class="player-chips">${gameState.minRaise}</span></div>`;
+            html += '</div>';
+            html += '</div>';
+
+            // Deck Information
+            html += '<div class="state-section">';
+            html += '<h3>🎴 Deck Information</h3>';
+            html += '<div class="deck-info">';
+            html += `<div class="info-item"><strong>Cards in Deck:</strong> ${gameState.deck.length}</div>`;
+            html += `<div class="info-item"><strong>Community Cards:</strong> ${gameState.communityCards.length}</div>`;
+            if (gameState.communityCards.length > 0) {
+                html += '<div class="card-display">';
+                gameState.communityCards.forEach(card => {
+                    const color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
+                    html += `<div class="card ${color}">${card.rank}${card.suit}</div>`;
+                });
+                html += '</div>';
+            }
+            html += '</div>';
+            html += '</div>';
+
+            // Players
+            html += '<div class="state-section">';
+            html += `<h3>👥 Players (${gameState.players.length})</h3>`;
+            gameState.players.forEach((player, index) => {
+                html += '<div class="player-card">';
+                html += '<div class="player-header">';
+                html += `<div class="player-name">`;
+                html += `${player.name}`;
+                if (player.isDealer) html += '<span class="badge badge-dealer">D</span>';
+                if (player.isSmallBlind) html += '<span class="badge badge-sb">SB</span>';
+                if (player.isBigBlind) html += '<span class="badge badge-bb">BB</span>';
+                if (player.isAI) html += '<span class="badge badge-ai">AI</span>';
+                html += '</div>';
+                html += `<div class="player-chips">${player.chips} chips</div>`;
+                html += '</div>';
+                html += '<div class="player-info">';
+                html += `<div class="info-item"><strong>ID:</strong> ${player.id}</div>`;
+                html += `<div class="info-item"><strong>Bet:</strong> ${player.bet}</div>`;
+                html += `<div class="info-item"><strong>Hand:</strong> ${player.hand.length} cards</div>`;
+                html += `<div class="info-item"><strong>Folded:</strong> ${player.folded ? '✅' : '❌'}</div>`;
+                html += `<div class="info-item"><strong>All-In:</strong> ${player.allIn ? '✅' : '❌'}</div>`;
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+
+            output.innerHTML = html;
+        }
+
+        // ===============================================
+        // UI EVENT HANDLERS
+        // ===============================================
+
+        function initializeGame() {
+            const playerCount = parseInt(document.getElementById('playerCount').value);
+            const startingChips = parseInt(document.getElementById('startingChips').value);
+
+            gameState = createGame(playerCount, startingChips);
+            
+            if (gameState) {
+                displayGameState();
+            } else {
+                const output = document.getElementById('output');
+                output.innerHTML = '<h2>Error</h2><p class="error">Failed to create game state. Check console for details.</p>';
+            }
+        }
+
+        function addPlayer() {
+            const playerName = document.getElementById('playerName').value.trim();
+            const name = playerName || null;
+            
+            if (addPlayerToGame(gameState, name)) {
+                document.getElementById('playerName').value = '';
+                displayGameState();
+            }
+        }
+
+        function removeLastPlayer() {
+            if (removePlayerFromGame(gameState)) {
+                displayGameState();
+            }
+        }
+
+        // ===============================================
+        // TEST CASES
+        // ===============================================
+
+        /**
+         * Runs all test cases
+         */
+        function runAllTests() {
+            console.log('\n' + '='.repeat(50));
+            console.log('🧪 RUNNING ALL TESTS');
+            console.log('='.repeat(50));
+
+            const results = [];
+
+            // Test 1: Basic game creation
+            results.push(testBasicGameCreation());
+
+            // Test 2: Different player counts
+            results.push(testDifferentPlayerCounts());
+
+            // Test 3: Dealer and blind assignment
+            results.push(testDealerAndBlindAssignment());
+
+            // Display results
+            displayTestResults(results);
+        }
+
+        function testBasicGameCreation() {
+            console.log('\n📝 Test 1: Basic Game Creation');
+            const test = {
+                name: 'Test 1: Basic Game Creation (4 players, 1000 chips)',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(4, 1000);
+
+                // Check player count
+                if (game.players.length === 4) {
+                    test.details.push('✅ Correct number of players created');
+                } else {
+                    test.details.push(`❌ Expected 4 players, got ${game.players.length}`);
+                    test.passed = false;
+                }
+
+                // Check starting chips
+                const allHaveCorrectChips = game.players.every(p => p.chips === 1000);
+                if (allHaveCorrectChips) {
+                    test.details.push('✅ All players have correct starting chips');
+                } else {
+                    test.details.push('❌ Some players have incorrect starting chips');
+                    test.passed = false;
+                }
+
+                // Check deck creation
+                if (game.deck.length === 52) {
+                    test.details.push('✅ Deck created with 52 cards');
+                } else {
+                    test.details.push(`❌ Expected 52 cards, got ${game.deck.length}`);
+                    test.passed = false;
+                }
+
+                // Check dealer assigned
+                const dealerCount = game.players.filter(p => p.isDealer).length;
+                if (dealerCount === 1) {
+                    test.details.push('✅ Exactly one dealer assigned');
+                } else {
+                    test.details.push(`❌ Expected 1 dealer, got ${dealerCount}`);
+                    test.passed = false;
+                }
+
+                // Check blinds assigned
+                const sbCount = game.players.filter(p => p.isSmallBlind).length;
+                const bbCount = game.players.filter(p => p.isBigBlind).length;
+                if (sbCount === 1 && bbCount === 1) {
+                    test.details.push('✅ Blinds assigned correctly');
+                } else {
+                    test.details.push(`❌ Expected 1 SB and 1 BB, got ${sbCount} SB and ${bbCount} BB`);
+                    test.passed = false;
+                }
+
+                test.details.push(`\n📊 Game created with:`);
+                test.details.push(`   - ${game.players.length} players`);
+                test.details.push(`   - ${game.deck.length} cards in deck`);
+                test.details.push(`   - Pot: ${game.pot}`);
+                test.details.push(`   - Dealer at position ${game.dealerPosition}`);
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function testDifferentPlayerCounts() {
+            console.log('\n📝 Test 2: Different Player Counts');
+            const test = {
+                name: 'Test 2: Different Player Counts (2 and 10 players)',
+                passed: true,
+                details: []
+            };
+
+            try {
+                // Test 2 players (heads-up)
+                const game2 = createGame(2, 1000);
+                if (game2.players.length === 2) {
+                    test.details.push('✅ 2-player game created successfully');
+                    
+                    // In heads-up, dealer should also be small blind
+                    const dealer = game2.players.find(p => p.isDealer);
+                    if (dealer.isSmallBlind) {
+                        test.details.push('✅ Heads-up: Dealer is also small blind (correct)');
+                    } else {
+                        test.details.push('❌ Heads-up: Dealer should be small blind');
+                        test.passed = false;
+                    }
+                } else {
+                    test.details.push('❌ Failed to create 2-player game');
+                    test.passed = false;
+                }
+
+                // Test 10 players (maximum)
+                const game10 = createGame(10, 500);
+                if (game10.players.length === 10) {
+                    test.details.push('✅ 10-player game created successfully');
+                } else {
+                    test.details.push('❌ Failed to create 10-player game');
+                    test.passed = false;
+                }
+
+                // Test invalid player count
+                const gameInvalid = createGame(15, 1000);
+                if (gameInvalid === null) {
+                    test.details.push('✅ Correctly rejected 15 players (max is 10)');
+                } else {
+                    test.details.push('❌ Should reject player count > 10');
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function testDealerAndBlindAssignment() {
+            console.log('\n📝 Test 3: Dealer and Blind Assignment');
+            const test = {
+                name: 'Test 3: Dealer and Blind Assignment',
+                passed: true,
+                details: []
+            };
+
+            try {
+                const game = createGame(6, 1000);
+
+                // Find positions
+                const dealerPos = game.players.findIndex(p => p.isDealer);
+                const sbPos = game.players.findIndex(p => p.isSmallBlind);
+                const bbPos = game.players.findIndex(p => p.isBigBlind);
+
+                test.details.push(`📍 Positions: Dealer=${dealerPos}, SB=${sbPos}, BB=${bbPos}`);
+
+                // Check SB is next to dealer
+                const expectedSB = (dealerPos + 1) % 6;
+                if (sbPos === expectedSB) {
+                    test.details.push('✅ Small blind correctly positioned (left of dealer)');
+                } else {
+                    test.details.push(`❌ Small blind at wrong position (expected ${expectedSB}, got ${sbPos})`);
+                    test.passed = false;
+                }
+
+                // Check BB is next to SB
+                const expectedBB = (dealerPos + 2) % 6;
+                if (bbPos === expectedBB) {
+                    test.details.push('✅ Big blind correctly positioned (left of small blind)');
+                } else {
+                    test.details.push(`❌ Big blind at wrong position (expected ${expectedBB}, got ${bbPos})`);
+                    test.passed = false;
+                }
+
+                // Check only one of each
+                const dealerCount = game.players.filter(p => p.isDealer).length;
+                const sbCount = game.players.filter(p => p.isSmallBlind).length;
+                const bbCount = game.players.filter(p => p.isBigBlind).length;
+
+                if (dealerCount === 1 && sbCount === 1 && bbCount === 1) {
+                    test.details.push('✅ Exactly one dealer, one SB, and one BB');
+                } else {
+                    test.details.push(`❌ Position counts wrong: D=${dealerCount}, SB=${sbCount}, BB=${bbCount}`);
+                    test.passed = false;
+                }
+
+            } catch (error) {
+                test.passed = false;
+                test.details.push(`❌ Error: ${error.message}`);
+            }
+
+            return test;
+        }
+
+        function displayTestResults(results) {
+            const testDiv = document.getElementById('testResults');
+            const contentDiv = document.getElementById('testContent');
+            testDiv.style.display = 'block';
+
+            const passCount = results.filter(r => r.passed).length;
+            const totalCount = results.length;
+
+            let html = `<div class="test-case">`;
+            html += `<h3>📊 Overall Results: ${passCount}/${totalCount} tests passed</h3>`;
+            html += `</div>`;
+
+            results.forEach(result => {
+                html += `<div class="test-case">`;
+                html += `<h4>${result.passed ? '✅' : '❌'} ${result.name}</h4>`;
+                result.details.forEach(detail => {
+                    html += `<div>${detail}</div>`;
+                });
+                html += `</div>`;
+            });
+
+            contentDiv.innerHTML = html;
+
+            // Scroll to results
+            testDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===============================================
+        // INITIALIZATION
+        // ===============================================
+
+        // Log instructions on page load
+        console.log('🎮 Game State Management - Exercise 1: Create Game State');
+        console.log('='.repeat(50));
+        console.log('Instructions:');
+        console.log('1. Click "Initialize Game" to create a new game');
+        console.log('2. Use "Add Player" and "Remove Player" to modify the game');
+        console.log('3. Click "Display State" to view the current game state');
+        console.log('4. Click "Run All Tests" to verify functionality');
+        console.log('='.repeat(50));
+    </script>
+</body>
+</html>

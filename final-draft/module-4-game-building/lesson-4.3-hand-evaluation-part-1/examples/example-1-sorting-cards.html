@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Sorting Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .hand-display {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-rank {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .card-suit {
+            font-size: 28px;
+            margin-top: 2px;
+        }
+
+        .card-value {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .hearts .card-rank,
+        .hearts .card-suit,
+        .diamonds .card-rank,
+        .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank,
+        .spades .card-suit,
+        .clubs .card-rank,
+        .clubs .card-suit {
+            color: #333;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎴 Sorting Cards by Value</h1>
+
+    <div class="container">
+        <div class="section">
+            <h2>Why Sort Cards?</h2>
+            <p>Sorting cards makes it easier to:</p>
+            <ul>
+                <li>Find sequences (like straights)</li>
+                <li>Group cards of the same rank together</li>
+                <li>Compare hands to determine winners</li>
+                <li>Display hands in a logical order</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>The Sorting Algorithm</h2>
+            <div class="code-block">
+<span class="keyword">function</span> <span class="function">sortCards</span>(cards) {
+    <span class="comment">// Sort descending (highest to lowest)</span>
+    <span class="keyword">return</span> cards.sort((a, b) => b.value - a.value);
+}
+            </div>
+            <p><strong>How it works:</strong> The sort function compares card values. Subtracting <code>a.value - b.value</code> would sort ascending (lowest to highest). Using <code>b.value - a.value</code> sorts descending (highest to lowest).</p>
+        </div>
+
+        <div class="section">
+            <h2>Unsorted Hand</h2>
+            <div class="hand-display" id="unsortedHand"></div>
+            <button onclick="showUnsorted()">Show Unsorted</button>
+        </div>
+
+        <div class="section">
+            <h2>Sorted Hand (Descending)</h2>
+            <div class="hand-display" id="sortedHand"></div>
+            <button onclick="showSorted()">Sort Cards</button>
+        </div>
+
+        <div class="section">
+            <h2>Try Different Hands</h2>
+            <button onclick="randomHand()">Generate Random Hand</button>
+            <button onclick="sortCurrent()">Sort Current Hand</button>
+        </div>
+    </div>
+
+    <script>
+        // Card creation function
+        function createCard(suit, rank, value) {
+            return { suit, rank, value };
+        }
+
+        // Create a full deck
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const suitSymbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push(createCard(suit, ranks[i], values[i]));
+                }
+            }
+            return deck;
+        }
+
+        // Shuffle array
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Display cards
+        function displayCards(cards, elementId) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            const suitSymbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+            
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${card.suit}`;
+                cardEl.innerHTML = `
+                    <div class="card-rank">${card.rank}</div>
+                    <div class="card-suit">${suitSymbols[card.suit]}</div>
+                    <div class="card-value">Val: ${card.value}</div>
+                `;
+                container.appendChild(cardEl);
+            });
+        }
+
+        // Sort cards descending by value
+        function sortCards(cards) {
+            return cards.sort((a, b) => b.value - a.value);
+        }
+
+        // Current hand
+        let currentHand = [];
+
+        // Show unsorted hand
+        function showUnsorted() {
+            currentHand = [
+                createCard('hearts', '7', 7),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', '3', 3),
+                createCard('clubs', 'K', 13),
+                createCard('clubs', '7', 7)
+            ];
+            displayCards(currentHand, 'unsortedHand');
+            document.getElementById('sortedHand').innerHTML = '';
+        }
+
+        // Show sorted hand
+        function showSorted() {
+            if (currentHand.length === 0) {
+                showUnsorted();
+            }
+            const sorted = sortCards([...currentHand]);
+            displayCards(sorted, 'sortedHand');
+        }
+
+        // Generate random hand
+        function randomHand() {
+            const deck = createDeck();
+            const shuffled = shuffle(deck);
+            currentHand = shuffled.slice(0, 5);
+            displayCards(currentHand, 'unsortedHand');
+            document.getElementById('sortedHand').innerHTML = '';
+        }
+
+        // Sort current hand
+        function sortCurrent() {
+            if (currentHand.length === 0) {
+                randomHand();
+            }
+            const sorted = sortCards([...currentHand]);
+            displayCards(sorted, 'sortedHand');
+        }
+
+        // Initialize
+        window.addEventListener('load', showUnsorted);
+    </script>
+</body>
+</html>

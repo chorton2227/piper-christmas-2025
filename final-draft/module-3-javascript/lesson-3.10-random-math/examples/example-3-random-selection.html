@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Selection Examples</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .demo-section h2 {
+            color: #764ba2;
+            margin-top: 0;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+            min-height: 60px;
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border-left: 4px solid #764ba2;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .item-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .item-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .item-box.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #764ba2;
+            transform: scale(1.1);
+        }
+        
+        .color-display {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .shuffle-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+        
+        .shuffle-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 80px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        
+        .shuffle-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #764ba2;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Random Selection & Shuffling</h1>
+    
+    <!-- Demo 1: Pick from Array -->
+    <div class="demo-section">
+        <h2>Demo 1: Pick Random Item from Array</h2>
+        <p>Select a random item from a list!</p>
+        <button onclick="demo1('fruits')">Pick Fruit</button>
+        <button onclick="demo1('names')">Pick Name</button>
+        <button onclick="demo1('emojis')">Pick Emoji</button>
+        <div id="demo1-result" class="result-box">Click a button!</div>
+        <div id="demo1-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 2: Random Color Generator -->
+    <div class="demo-section">
+        <h2>Demo 2: Random Color Generator</h2>
+        <p>Generate random colors in different formats!</p>
+        <button onclick="demo2('hex')">Random Hex</button>
+        <button onclick="demo2('rgb')">Random RGB</button>
+        <button onclick="demo2('named')">Named Color</button>
+        <div id="demo2-display" class="color-display" style="background-color: #667eea;">
+            #667eea
+        </div>
+        <div id="demo2-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 3: Pick Multiple Items -->
+    <div class="demo-section">
+        <h2>Demo 3: Pick Multiple Random Items</h2>
+        <p>Select multiple random items (no duplicates)</p>
+        <div class="item-list" id="demo3-items"></div>
+        <button onclick="demo3(1)">Pick 1</button>
+        <button onclick="demo3(3)">Pick 3</button>
+        <button onclick="demo3(5)">Pick 5</button>
+        <button onclick="demo3Reset()">Reset</button>
+        <div id="demo3-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 4: Shuffle Array -->
+    <div class="demo-section">
+        <h2>Demo 4: Shuffle an Array</h2>
+        <p>Shuffle items into random order!</p>
+        <button onclick="demo4()">Shuffle Cards</button>
+        <button onclick="demo4Reset()">Reset</button>
+        <div class="shuffle-container" id="demo4-cards"></div>
+        <div id="demo4-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 5: Random Name Generator -->
+    <div class="demo-section">
+        <h2>Demo 5: Random Name Generator</h2>
+        <p>Create random names by combining parts!</p>
+        <button onclick="demo5('fantasy')">Fantasy Name</button>
+        <button onclick="demo5('username')">Username</button>
+        <button onclick="demo5('pet')">Pet Name</button>
+        <div id="demo5-result" class="result-box">Click a button!</div>
+        <div id="demo5-output" class="output"></div>
+    </div>
+    
+    <!-- Demo 6: Custom List Picker -->
+    <div class="demo-section">
+        <h2>Demo 6: Your Own Random Picker</h2>
+        <p>Enter your own list of items (one per line):</p>
+        <textarea id="custom-list" rows="5" placeholder="apple&#10;banana&#10;cherry&#10;durian">apple
+banana
+cherry
+durian
+elderberry
+fig
+grape</textarea>
+        <button onclick="demo6()">Pick Random Item</button>
+        <div id="demo6-result" class="result-box">Enter items above!</div>
+        <div id="demo6-output" class="output"></div>
+    </div>
+    
+    <script>
+        // Demo 1: Pick from predefined arrays
+        const fruits = ['🍎 Apple', '🍌 Banana', '🍊 Orange', '🍇 Grapes', '🍓 Strawberry', '🍉 Watermelon'];
+        const names = ['Alex', 'Bailey', 'Charlie', 'Drew', 'Emerson', 'Finley', 'Gray', 'Harper'];
+        const emojis = ['😀', '🎉', '🚀', '⭐', '🎨', '🎮', '🎵', '🌈', '⚡', '🔥'];
+        
+        function demo1(type) {
+            let array;
+            let arrayName;
+            
+            if (type === 'fruits') {
+                array = fruits;
+                arrayName = 'fruits';
+            } else if (type === 'names') {
+                array = names;
+                arrayName = 'names';
+            } else {
+                array = emojis;
+                arrayName = 'emojis';
+            }
+            
+            let randomIndex = Math.floor(Math.random() * array.length);
+            let picked = array[randomIndex];
+            
+            document.getElementById('demo1-result').textContent = picked;
+            
+            let output = document.getElementById('demo1-output');
+            output.innerHTML = '<div>Array: ' + arrayName + ' (length: ' + array.length + ')</div>';
+            output.innerHTML += '<div>Random index: ' + randomIndex + '</div>';
+            output.innerHTML += '<div>Picked: ' + picked + '</div>';
+            output.innerHTML += '<div style="margin-top: 10px;">Formula:</div>';
+            output.innerHTML += '<div>Math.floor(Math.random() * array.length)</div>';
+            
+            console.log('Picked from', arrayName + ':', picked, 'at index', randomIndex);
+        }
+        
+        // Demo 2: Random colors
+        const namedColors = ['red', 'blue', 'green', 'purple', 'orange', 'pink', 'teal', 'coral', 'indigo', 'violet'];
+        
+        function demo2(type) {
+            let color;
+            let colorText;
+            
+            if (type === 'hex') {
+                let hex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                color = hex;
+                colorText = hex;
+            } else if (type === 'rgb') {
+                let r = Math.floor(Math.random() * 256);
+                let g = Math.floor(Math.random() * 256);
+                let b = Math.floor(Math.random() * 256);
+                color = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+                colorText = color;
+            } else {
+                let randomIndex = Math.floor(Math.random() * namedColors.length);
+                color = namedColors[randomIndex];
+                colorText = color;
+            }
+            
+            let display = document.getElementById('demo2-display');
+            display.style.backgroundColor = color;
+            display.textContent = colorText;
+            
+            // Determine if we need dark or light text
+            if (type === 'rgb') {
+                display.style.color = 'white';
+            } else if (type === 'hex') {
+                display.style.color = 'white';
+            } else {
+                display.style.color = 'white';
+            }
+            
+            let output = document.getElementById('demo2-output');
+            output.innerHTML = '<div>Generated: ' + colorText + '</div>';
+            
+            if (type === 'hex') {
+                output.innerHTML += '<div>Random number: 0 to 16,777,215 (0xFFFFFF)</div>';
+                output.innerHTML += '<div>Converted to hexadecimal (base 16)</div>';
+            } else if (type === 'rgb') {
+                output.innerHTML += '<div>R: 0-255, G: 0-255, B: 0-255</div>';
+            } else {
+                output.innerHTML += '<div>Picked from array of ' + namedColors.length + ' colors</div>';
+            }
+            
+            console.log('Random color:', colorText);
+        }
+        
+        // Demo 3: Pick multiple items
+        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        
+        function demo3Reset() {
+            let container = document.getElementById('demo3-items');
+            container.innerHTML = '';
+            numbers.forEach(function(num) {
+                let box = document.createElement('div');
+                box.className = 'item-box';
+                box.textContent = num;
+                box.id = 'num-' + num;
+                container.appendChild(box);
+            });
+            document.getElementById('demo3-output').innerHTML = '<div>Ready to pick!</div>';
+            console.log('Demo 3 reset');
+        }
+        
+        function demo3(count) {
+            // Reset all selections
+            for (let i = 1; i <= 12; i++) {
+                let box = document.getElementById('num-' + i);
+                if (box) box.className = 'item-box';
+            }
+            
+            // Pick random items
+            let available = [...numbers];
+            let picked = [];
+            
+            for (let i = 0; i < count && available.length > 0; i++) {
+                let randomIndex = Math.floor(Math.random() * available.length);
+                let number = available[randomIndex];
+                picked.push(number);
+                available.splice(randomIndex, 1);
+                
+                let box = document.getElementById('num-' + number);
+                if (box) box.className = 'item-box selected';
+            }
+            
+            let output = document.getElementById('demo3-output');
+            output.innerHTML = '<div>Picked ' + picked.length + ' items: ' + picked.join(', ') + '</div>';
+            output.innerHTML += '<div style="margin-top: 10px;">How it works:</div>';
+            output.innerHTML += '<div>1. Copy the array</div>';
+            output.innerHTML += '<div>2. Pick random index</div>';
+            output.innerHTML += '<div>3. Remove picked item from available list</div>';
+            output.innerHTML += '<div>4. Repeat (no duplicates!)</div>';
+            
+            console.log('Picked', count, 'items:', picked);
+        }
+        
+        // Initialize Demo 3
+        demo3Reset();
+        
+        // Demo 4: Shuffle array
+        let originalDeck = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+        let shuffledDeck = [...originalDeck];
+        
+        function demo4Reset() {
+            shuffledDeck = [...originalDeck];
+            displayCards();
+            document.getElementById('demo4-output').innerHTML = '<div>Cards in original order</div>';
+            console.log('Cards reset');
+        }
+        
+        function demo4() {
+            // Fisher-Yates shuffle algorithm
+            for (let i = shuffledDeck.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                // Swap elements
+                let temp = shuffledDeck[i];
+                shuffledDeck[i] = shuffledDeck[j];
+                shuffledDeck[j] = temp;
+            }
+            
+            displayCards();
+            
+            let output = document.getElementById('demo4-output');
+            output.innerHTML = '<div>Shuffled! Order: ' + shuffledDeck.join(', ') + '</div>';
+            output.innerHTML += '<div style="margin-top: 10px;">Fisher-Yates Shuffle:</div>';
+            output.innerHTML += '<div>Goes through array backwards</div>';
+            output.innerHTML += '<div>Swaps each item with random earlier item</div>';
+            output.innerHTML += '<div>Creates perfectly random shuffle!</div>';
+            
+            console.log('Shuffled deck:', shuffledDeck);
+        }
+        
+        function displayCards() {
+            let container = document.getElementById('demo4-cards');
+            container.innerHTML = '';
+            shuffledDeck.forEach(function(card) {
+                let cardDiv = document.createElement('div');
+                cardDiv.className = 'shuffle-card';
+                cardDiv.textContent = card;
+                container.appendChild(cardDiv);
+            });
+        }
+        
+        // Initialize Demo 4
+        displayCards();
+        
+        // Demo 5: Random name generator
+        const fantasyPrefixes = ['Ara', 'Eld', 'Mor', 'Zar', 'Kal', 'Dor', 'Thal'];
+        const fantasySuffixes = ['ion', 'wen', 'dor', 'eth', 'wyn', 'las', 'mir'];
+        
+        const adjectives = ['Super', 'Mega', 'Cool', 'Epic', 'Swift', 'Dark', 'Bright'];
+        const nouns = ['Dragon', 'Tiger', 'Phoenix', 'Wolf', 'Bear', 'Eagle', 'Lion'];
+        
+        const petAdjectives = ['Fluffy', 'Whiskers', 'Mr.', 'Princess', 'Captain', 'Doctor'];
+        const petNouns = ['Paws', 'Snuggles', 'Buttons', 'Nibbles', 'Pickles', 'Wiggles'];
+        
+        function demo5(type) {
+            let name;
+            let explanation;
+            
+            if (type === 'fantasy') {
+                let prefix = fantasyPrefixes[Math.floor(Math.random() * fantasyPrefixes.length)];
+                let suffix = fantasySuffixes[Math.floor(Math.random() * fantasySuffixes.length)];
+                name = prefix + suffix;
+                explanation = prefix + ' + ' + suffix;
+            } else if (type === 'username') {
+                let adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+                let noun = nouns[Math.floor(Math.random() * nouns.length)];
+                let num = Math.floor(Math.random() * 1000);
+                name = adj + noun + num;
+                explanation = adj + ' + ' + noun + ' + ' + num;
+            } else {
+                let adj = petAdjectives[Math.floor(Math.random() * petAdjectives.length)];
+                let noun = petNouns[Math.floor(Math.random() * petNouns.length)];
+                name = adj + ' ' + noun;
+                explanation = adj + ' + ' + noun;
+            }
+            
+            document.getElementById('demo5-result').textContent = name;
+            
+            let output = document.getElementById('demo5-output');
+            output.innerHTML = '<div>Generated: ' + name + '</div>';
+            output.innerHTML += '<div>Formula: ' + explanation + '</div>';
+            output.innerHTML += '<div style="margin-top: 10px;">Pick random item from each array and combine!</div>';
+            
+            console.log('Random name:', name);
+        }
+        
+        // Demo 6: Custom list picker
+        function demo6() {
+            let text = document.getElementById('custom-list').value;
+            let items = text.split('\n').filter(function(item) {
+                return item.trim() !== '';
+            });
+            
+            if (items.length === 0) {
+                document.getElementById('demo6-result').textContent = 'Enter some items!';
+                document.getElementById('demo6-output').innerHTML = '<div>List is empty!</div>';
+                return;
+            }
+            
+            let randomIndex = Math.floor(Math.random() * items.length);
+            let picked = items[randomIndex].trim();
+            
+            document.getElementById('demo6-result').textContent = picked;
+            
+            let output = document.getElementById('demo6-output');
+            output.innerHTML = '<div>Your list has ' + items.length + ' items</div>';
+            output.innerHTML += '<div>Random index: ' + randomIndex + '</div>';
+            output.innerHTML += '<div>Picked: ' + picked + '</div>';
+            output.innerHTML += '<div style="margin-top: 10px;">All items:</div>';
+            output.innerHTML += '<div>' + items.join(', ') + '</div>';
+            
+            console.log('Custom pick:', picked, 'from', items.length, 'items');
+        }
+        
+        console.log('Random Selection Examples loaded!');
+        console.log('Pick random items, shuffle arrays, and generate random content!');
+    </script>
+</body>
+</html>

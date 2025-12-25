@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Comparing Hands</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .battle-arena {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+        }
+
+        .players {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .player-section {
+            text-align: center;
+        }
+
+        .player-section h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .vs-divider {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .hand-display {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-rank {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-suit {
+            font-size: 24px;
+            margin-top: 2px;
+        }
+
+        .hearts .card-rank, .hearts .card-suit,
+        .diamonds .card-rank, .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank, .spades .card-suit,
+        .clubs .card-rank, .clubs .card-suit {
+            color: #333;
+        }
+
+        .hand-strength {
+            margin: 15px 0;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .winner {
+            background: #4caf50;
+            color: white;
+        }
+
+        .loser {
+            background: #f5f5f5;
+            color: #999;
+        }
+
+        .result-banner {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            display: none;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+            display: block;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .scenarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .scenarios button {
+            width: auto;
+            font-size: 14px;
+            padding: 10px 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚔️ Hand Comparison Battle</h1>
+
+    <div class="container">
+        <div class="battle-arena">
+            <h2 style="text-align: center; color: #333;">Who Wins?</h2>
+            
+            <div class="players">
+                <div class="player-section">
+                    <h3>Player 1</h3>
+                    <div class="hand-display" id="hand1"></div>
+                    <div class="hand-strength" id="strength1"></div>
+                </div>
+
+                <div class="vs-divider">VS</div>
+
+                <div class="player-section">
+                    <h3>Player 2</h3>
+                    <div class="hand-display" id="hand2"></div>
+                    <div class="hand-strength" id="strength2"></div>
+                </div>
+            </div>
+
+            <button onclick="compareHands()">Compare Hands</button>
+
+            <div id="resultBanner" class="result-banner"></div>
+        </div>
+
+        <div class="battle-arena">
+            <h3>Try Different Scenarios</h3>
+            <div class="scenarios">
+                <button onclick="scenario1()">Pair vs High Card</button>
+                <button onclick="scenario2()">Two Pair vs Pair</button>
+                <button onclick="scenario3()">Trips vs Two Pair</button>
+                <button onclick="scenario4()">Quads vs Trips</button>
+                <button onclick="scenario5()">Higher Pair Wins</button>
+                <button onclick="scenario6()">Same Hand Type</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createCard(suit, rank, value) {
+            return { suit, rank, value };
+        }
+
+        function displayCards(cards, elementId) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            const suitSymbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+            
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${card.suit}`;
+                cardEl.innerHTML = `
+                    <div class="card-rank">${card.rank}</div>
+                    <div class="card-suit">${suitSymbols[card.suit]}</div>
+                `;
+                container.appendChild(cardEl);
+            });
+        }
+
+        function countRanks(cards) {
+            const counts = {};
+            for (const card of cards) {
+                counts[card.rank] = (counts[card.rank] || 0) + 1;
+            }
+            return counts;
+        }
+
+        function evaluateHand(cards) {
+            const counts = countRanks(cards);
+            const sorted = [...cards].sort((a, b) => b.value - a.value);
+            
+            // Check four of a kind
+            for (const rank in counts) {
+                if (counts[rank] === 4) {
+                    return { rank: 2, name: 'Four of a Kind', value: rank };
+                }
+            }
+            
+            // Check three of a kind
+            for (const rank in counts) {
+                if (counts[rank] === 3) {
+                    return { rank: 4, name: 'Three of a Kind', value: rank };
+                }
+            }
+            
+            // Check two pair
+            const pairs = [];
+            for (const rank in counts) {
+                if (counts[rank] === 2) {
+                    pairs.push(rank);
+                }
+            }
+            if (pairs.length >= 2) {
+                return { rank: 7, name: 'Two Pair', values: pairs };
+            }
+            
+            // Check one pair
+            if (pairs.length === 1) {
+                return { rank: 8, name: 'One Pair', value: pairs[0] };
+            }
+            
+            // High card
+            return { rank: 9, name: 'High Card', value: sorted[0].rank };
+        }
+
+        let currentHand1 = [];
+        let currentHand2 = [];
+
+        function compareHands() {
+            const eval1 = evaluateHand(currentHand1);
+            const eval2 = evaluateHand(currentHand2);
+            
+            const strength1 = document.getElementById('strength1');
+            const strength2 = document.getElementById('strength2');
+            const banner = document.getElementById('resultBanner');
+            
+            strength1.textContent = eval1.name;
+            strength2.textContent = eval2.name;
+            
+            if (eval1.rank < eval2.rank) {
+                strength1.className = 'hand-strength winner';
+                strength2.className = 'hand-strength loser';
+                banner.textContent = '🏆 Player 1 Wins!';
+            } else if (eval2.rank < eval1.rank) {
+                strength1.className = 'hand-strength loser';
+                strength2.className = 'hand-strength winner';
+                banner.textContent = '🏆 Player 2 Wins!';
+            } else {
+                strength1.className = 'hand-strength';
+                strength2.className = 'hand-strength';
+                banner.textContent = '🤝 Tie - Would compare high cards';
+            }
+            
+            banner.style.display = 'block';
+        }
+
+        function scenario1() {
+            currentHand1 = [
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            currentHand2 = [
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', 'Q', 12),
+                createCard('hearts', 'J', 11),
+                createCard('spades', '9', 9),
+                createCard('diamonds', '5', 5)
+            ];
+            displayCards(currentHand1, 'hand1');
+            displayCards(currentHand2, 'hand2');
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('strength1').textContent = '?';
+            document.getElementById('strength2').textContent = '?';
+            document.getElementById('strength1').className = 'hand-strength';
+            document.getElementById('strength2').className = 'hand-strength';
+        }
+
+        function scenario2() {
+            currentHand1 = [
+                createCard('hearts', 'K', 13),
+                createCard('spades', 'K', 13),
+                createCard('diamonds', '7', 7),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            currentHand2 = [
+                createCard('diamonds', 'A', 14),
+                createCard('clubs', 'A', 14),
+                createCard('hearts', 'Q', 12),
+                createCard('spades', '9', 9),
+                createCard('diamonds', '5', 5)
+            ];
+            displayCards(currentHand1, 'hand1');
+            displayCards(currentHand2, 'hand2');
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('strength1').textContent = '?';
+            document.getElementById('strength2').textContent = '?';
+            document.getElementById('strength1').className = 'hand-strength';
+            document.getElementById('strength2').className = 'hand-strength';
+        }
+
+        function scenario3() {
+            currentHand1 = [
+                createCard('hearts', '8', 8),
+                createCard('spades', '8', 8),
+                createCard('diamonds', '8', 8),
+                createCard('clubs', 'K', 13),
+                createCard('hearts', '3', 3)
+            ];
+            currentHand2 = [
+                createCard('diamonds', 'A', 14),
+                createCard('clubs', 'A', 14),
+                createCard('hearts', 'K', 13),
+                createCard('spades', 'K', 13),
+                createCard('diamonds', '5', 5)
+            ];
+            displayCards(currentHand1, 'hand1');
+            displayCards(currentHand2, 'hand2');
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('strength1').textContent = '?';
+            document.getElementById('strength2').textContent = '?';
+            document.getElementById('strength1').className = 'hand-strength';
+            document.getElementById('strength2').className = 'hand-strength';
+        }
+
+        function scenario4() {
+            currentHand1 = [
+                createCard('hearts', 'J', 11),
+                createCard('spades', 'J', 11),
+                createCard('diamonds', 'J', 11),
+                createCard('clubs', 'J', 11),
+                createCard('hearts', '2', 2)
+            ];
+            currentHand2 = [
+                createCard('diamonds', 'A', 14),
+                createCard('clubs', 'A', 14),
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'K', 13),
+                createCard('diamonds', 'K', 13)
+            ];
+            displayCards(currentHand1, 'hand1');
+            displayCards(currentHand2, 'hand2');
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('strength1').textContent = '?';
+            document.getElementById('strength2').textContent = '?';
+            document.getElementById('strength1').className = 'hand-strength';
+            document.getElementById('strength2').className = 'hand-strength';
+        }
+
+        function scenario5() {
+            currentHand1 = [
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            currentHand2 = [
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', 'K', 13),
+                createCard('hearts', 'Q', 12),
+                createCard('spades', '9', 9),
+                createCard('diamonds', '5', 5)
+            ];
+            displayCards(currentHand1, 'hand1');
+            displayCards(currentHand2, 'hand2');
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('strength1').textContent = '?';
+            document.getElementById('strength2').textContent = '?';
+            document.getElementById('strength1').className = 'hand-strength';
+            document.getElementById('strength2').className = 'hand-strength';
+        }
+
+        function scenario6() {
+            currentHand1 = [
+                createCard('hearts', 'Q', 12),
+                createCard('spades', 'Q', 12),
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            currentHand2 = [
+                createCard('diamonds', 'Q', 12),
+                createCard('clubs', 'Q', 12),
+                createCard('hearts', 'A', 14),
+                createCard('spades', '9', 9),
+                createCard('diamonds', '5', 5)
+            ];
+            displayCards(currentHand1, 'hand1');
+            displayCards(currentHand2, 'hand2');
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('strength1').textContent = '?';
+            document.getElementById('strength2').textContent = '?';
+            document.getElementById('strength1').className = 'hand-strength';
+            document.getElementById('strength2').className = 'hand-strength';
+        }
+
+        window.addEventListener('load', scenario1);
+    </script>
+</body>
+</html>

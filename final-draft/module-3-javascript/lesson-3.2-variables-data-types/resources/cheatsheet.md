@@ -1,3 +1,4 @@
+# Variables and Data Types - Quick Reference 📦
 
 ## Creating Variables
 

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Hand Evaluator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2c5530;
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; }
+        .card-display {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 24px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .result h2 {
+            margin-top: 0;
+            font-size: 32px;
+        }
+        .hand-rankings {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .hand-rankings ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Complete Poker Hand Evaluator</h1>
+        <p>Tests all poker hands from High Card to Royal Flush</p>
+        
+        <div id="card-display" class="card-display"></div>
+        
+        <button onclick="testRoyalFlush()">Royal Flush</button>
+        <button onclick="testStraightFlush()">Straight Flush</button>
+        <button onclick="testFourOfKind()">Four of a Kind</button>
+        <button onclick="testFullHouse()">Full House</button>
+        <button onclick="testFlush()">Flush</button>
+        <button onclick="testStraight()">Straight</button>
+        <button onclick="testThreeOfKind()">Three of a Kind</button>
+        <button onclick="testTwoPair()">Two Pair</button>
+        <button onclick="testOnePair()">One Pair</button>
+        <button onclick="testHighCard()">High Card</button>
+        
+        <div id="result" class="result"></div>
+        
+        <div class="hand-rankings">
+            <h3>Poker Hand Rankings (Best to Worst)</h3>
+            <ol>
+                <li><strong>Royal Flush</strong> - A♠ K♠ Q♠ J♠ 10♠</li>
+                <li><strong>Straight Flush</strong> - 9♥ 8♥ 7♥ 6♥ 5♥</li>
+                <li><strong>Four of a Kind</strong> - 7♠ 7♥ 7♦ 7♣ K♠</li>
+                <li><strong>Full House</strong> - K♠ K♥ K♦ 5♣ 5♠</li>
+                <li><strong>Flush</strong> - A♦ K♦ 8♦ 5♦ 2♦</li>
+                <li><strong>Straight</strong> - 9♠ 8♥ 7♦ 6♣ 5♠</li>
+                <li><strong>Three of a Kind</strong> - 7♠ 7♥ 7♦ K♣ Q♠</li>
+                <li><strong>Two Pair</strong> - K♠ K♥ 5♦ 5♣ Q♠</li>
+                <li><strong>One Pair</strong> - K♠ K♥ Q♦ J♣ 9♠</li>
+                <li><strong>High Card</strong> - A♠ K♥ Q♦ J♣ 9♠</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Create a card object
+        function createCard(rank, suit) {
+            const valueMap = {
+                '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+                '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14
+            };
+            
+            return {
+                rank: rank,
+                suit: suit,
+                value: valueMap[rank]
+            };
+        }
+
+        // Complete hand evaluator - checks all hand types
+        function evaluateHand(cards) {
+            // Check hands from best to worst
+            
+            // 1. Royal Flush
+            if (isRoyalFlush(cards)) {
+                return { rank: 10, name: 'Royal Flush', emoji: '👑' };
+            }
+            
+            // 2. Straight Flush
+            if (isStraightFlush(cards)) {
+                return { rank: 9, name: 'Straight Flush', emoji: '💎' };
+            }
+            
+            // 3. Four of a Kind
+            if (isFourOfKind(cards)) {
+                return { rank: 8, name: 'Four of a Kind', emoji: '🃏' };
+            }
+            
+            // 4. Full House
+            if (isFullHouse(cards)) {
+                return { rank: 7, name: 'Full House', emoji: '🏠' };
+            }
+            
+            // 5. Flush
+            if (isFlush(cards)) {
+                return { rank: 6, name: 'Flush', emoji: '💧' };
+            }
+            
+            // 6. Straight
+            if (isStraight(cards)) {
+                return { rank: 5, name: 'Straight', emoji: '📈' };
+            }
+            
+            // 7. Three of a Kind
+            if (isThreeOfKind(cards)) {
+                return { rank: 4, name: 'Three of a Kind', emoji: '🎯' };
+            }
+            
+            // 8. Two Pair
+            if (isTwoPair(cards)) {
+                return { rank: 3, name: 'Two Pair', emoji: '👥' };
+            }
+            
+            // 9. One Pair
+            if (isOnePair(cards)) {
+                return { rank: 2, name: 'One Pair', emoji: '👫' };
+            }
+            
+            // 10. High Card
+            return { rank: 1, name: 'High Card', emoji: '🎴' };
+        }
+
+        // Helper: Count ranks
+        function countRanks(cards) {
+            const counts = {};
+            cards.forEach(card => {
+                counts[card.rank] = (counts[card.rank] || 0) + 1;
+            });
+            return counts;
+        }
+
+        // Royal Flush: A-K-Q-J-10 all same suit
+        function isRoyalFlush(cards) {
+            if (!isFlush(cards)) return false;
+            const values = cards.map(c => c.value).sort((a, b) => b - a);
+            return values[0] === 14 && values[1] === 13 && values[2] === 12 && 
+                   values[3] === 11 && values[4] === 10;
+        }
+
+        // Straight Flush: Straight + Flush
+        function isStraightFlush(cards) {
+            return isStraight(cards) && isFlush(cards);
+        }
+
+        // Four of a Kind
+        function isFourOfKind(cards) {
+            const counts = countRanks(cards);
+            return Object.values(counts).some(count => count === 4);
+        }
+
+        // Full House: Three of a kind + Pair
+        function isFullHouse(cards) {
+            const counts = countRanks(cards);
+            const values = Object.values(counts);
+            return values.includes(3) && values.includes(2);
+        }
+
+        // Flush: 5+ cards same suit
+        function isFlush(cards) {
+            const suitCounts = {};
+            cards.forEach(card => {
+                suitCounts[card.suit] = (suitCounts[card.suit] || 0) + 1;
+            });
+            return Object.values(suitCounts).some(count => count >= 5);
+        }
+
+        // Straight: 5 cards in sequence
+        function isStraight(cards) {
+            const values = [...new Set(cards.map(c => c.value))].sort((a, b) => a - b);
+            
+            // Check regular straight
+            for (let i = 0; i <= values.length - 5; i++) {
+                let consecutive = true;
+                for (let j = 0; j < 4; j++) {
+                    if (values[i + j + 1] !== values[i + j] + 1) {
+                        consecutive = false;
+                        break;
+                    }
+                }
+                if (consecutive) return true;
+            }
+            
+            // Check ace-low straight (A-2-3-4-5)
+            return values.includes(14) && values.includes(2) && values.includes(3) && 
+                   values.includes(4) && values.includes(5);
+        }
+
+        // Three of a Kind
+        function isThreeOfKind(cards) {
+            const counts = countRanks(cards);
+            return Object.values(counts).some(count => count === 3);
+        }
+
+        // Two Pair
+        function isTwoPair(cards) {
+            const counts = countRanks(cards);
+            const pairs = Object.values(counts).filter(count => count === 2);
+            return pairs.length >= 2;
+        }
+
+        // One Pair
+        function isOnePair(cards) {
+            const counts = countRanks(cards);
+            return Object.values(counts).some(count => count === 2);
+        }
+
+        // Display cards
+        function displayCards(cards) {
+            const container = document.getElementById('card-display');
+            container.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `card ${card.suit}`;
+                const suitSymbols = {
+                    'hearts': '♥', 'diamonds': '♦', 'clubs': '♣', 'spades': '♠'
+                };
+                cardDiv.textContent = card.rank + suitSymbols[card.suit];
+                container.appendChild(cardDiv);
+            });
+        }
+
+        // Show result
+        function showResult(cards, result) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h2>${result.emoji} ${result.name}</h2>
+                <p>Hand Rank: ${result.rank} out of 10</p>
+            `;
+        }
+
+        // Test functions
+        function testRoyalFlush() {
+            const cards = [
+                createCard('A', 'spades'), createCard('K', 'spades'),
+                createCard('Q', 'spades'), createCard('J', 'spades'),
+                createCard('10', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testStraightFlush() {
+            const cards = [
+                createCard('9', 'hearts'), createCard('8', 'hearts'),
+                createCard('7', 'hearts'), createCard('6', 'hearts'),
+                createCard('5', 'hearts')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testFourOfKind() {
+            const cards = [
+                createCard('7', 'spades'), createCard('7', 'hearts'),
+                createCard('7', 'diamonds'), createCard('7', 'clubs'),
+                createCard('K', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testFullHouse() {
+            const cards = [
+                createCard('K', 'spades'), createCard('K', 'hearts'),
+                createCard('K', 'diamonds'), createCard('5', 'clubs'),
+                createCard('5', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testFlush() {
+            const cards = [
+                createCard('A', 'diamonds'), createCard('K', 'diamonds'),
+                createCard('8', 'diamonds'), createCard('5', 'diamonds'),
+                createCard('2', 'diamonds')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testStraight() {
+            const cards = [
+                createCard('9', 'spades'), createCard('8', 'hearts'),
+                createCard('7', 'diamonds'), createCard('6', 'clubs'),
+                createCard('5', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testThreeOfKind() {
+            const cards = [
+                createCard('7', 'spades'), createCard('7', 'hearts'),
+                createCard('7', 'diamonds'), createCard('K', 'clubs'),
+                createCard('Q', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testTwoPair() {
+            const cards = [
+                createCard('K', 'spades'), createCard('K', 'hearts'),
+                createCard('5', 'diamonds'), createCard('5', 'clubs'),
+                createCard('Q', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testOnePair() {
+            const cards = [
+                createCard('K', 'spades'), createCard('K', 'hearts'),
+                createCard('Q', 'diamonds'), createCard('J', 'clubs'),
+                createCard('9', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        function testHighCard() {
+            const cards = [
+                createCard('A', 'spades'), createCard('K', 'hearts'),
+                createCard('Q', 'diamonds'), createCard('J', 'clubs'),
+                createCard('9', 'spades')
+            ];
+            displayCards(cards);
+            showResult(cards, evaluateHand(cards));
+        }
+
+        // Show initial example
+        testRoyalFlush();
+    </script>
+</body>
+</html>

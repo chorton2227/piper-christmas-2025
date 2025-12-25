@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Keyboard Shortcuts for Poker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .hint {
+            color: #FFD700;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        /* Poker Table */
+        .poker-table {
+            background: linear-gradient(135deg, #0a5f38 0%, #2c5530 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 8px solid #8B4513;
+            margin-bottom: 20px;
+        }
+
+        /* Players */
+        .players-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .player {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .player.active {
+            border-color: #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); }
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .player-chips {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .cards {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.red { color: #e74c3c; }
+        .card.black { color: #2c3e50; }
+
+        /* Community Cards */
+        .community-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pot-amount {
+            font-size: 2em;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .community-cards {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        /* Controls */
+        .controls {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 60px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Hotkey indicators */
+        .hotkey {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-fold {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-raise {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-allin {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+        }
+
+        /* Raise controls */
+        .raise-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .raise-controls label {
+            font-weight: bold;
+            min-width: 120px;
+        }
+
+        .raise-controls input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .raise-controls input[type="number"] {
+            width: 120px;
+            padding: 10px;
+            font-size: 1.1em;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            text-align: center;
+        }
+
+        .arrow-hint {
+            font-size: 0.9em;
+            color: #FFD700;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 6px;
+            text-align: center;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .action-log {
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 1em;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+        }
+
+        .action-log div {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Help Panel */
+        .help-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #4CAF50;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 1000;
+        }
+
+        .help-panel.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .help-panel h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .shortcuts-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .key-combo {
+            background: #4CAF50;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: monospace;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .shortcut-desc {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .close-help {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        /* Test panel */
+        .test-panel {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+        }
+
+        .test-panel h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        .test-item {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .test-item.pass {
+            color: #4CAF50;
+        }
+
+        .test-item.pending {
+            color: #FFD700;
+        }
+
+        /* Keyboard press feedback */
+        .key-press-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.9);
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 999;
+        }
+
+        .key-press-indicator.visible {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⌨️ Keyboard Shortcuts Poker</h1>
+            <p>Use keyboard shortcuts for faster gameplay!</p>
+            <div class="hint">Press <strong>H</strong> for help panel</div>
+        </header>
+
+        <div class="poker-table">
+            <div class="community-section">
+                <div class="pot-amount">Pot: $<span id="pot">450</span></div>
+                <div class="community-cards">
+                    <div class="card red">A♥</div>
+                    <div class="card black">K♠</div>
+                    <div class="card red">Q♦</div>
+                    <div class="card black">J♣</div>
+                    <div class="card red">10♥</div>
+                </div>
+            </div>
+
+            <div class="players-container">
+                <div class="player active" id="player">
+                    <div class="player-info">
+                        <span class="player-name">You</span>
+                        <span class="player-chips">💰 $<span id="playerChips">1250</span></span>
+                    </div>
+                    <div class="cards">
+                        <div class="card red">A♦</div>
+                        <div class="card black">K♠</div>
+                    </div>
+                </div>
+
+                <div class="player" id="ai">
+                    <div class="player-info">
+                        <span class="player-name">AI Player</span>
+                        <span class="player-chips">💰 $<span id="aiChips">890</span></span>
+                    </div>
+                    <div class="cards">
+                        <div class="card">🂠</div>
+                        <div class="card">🂠</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="button-group">
+                <button class="btn-fold" id="foldBtn">
+                    Fold
+                    <span class="hotkey">F</span>
+                </button>
+                <button class="btn-call" id="callBtn">
+                    Call $50
+                    <span class="hotkey">C</span>
+                </button>
+                <button class="btn-raise" id="raiseBtn">
+                    Raise
+                    <span class="hotkey">R</span>
+                </button>
+                <button class="btn-allin" id="allinBtn">
+                    All-In
+                    <span class="hotkey">A</span>
+                </button>
+            </div>
+
+            <div class="raise-controls">
+                <label>Raise Amount:</label>
+                <input type="range" id="raiseSlider" min="100" max="1250" value="150" step="25">
+                <input type="number" id="raiseAmount" value="150" min="100" max="1250" step="25">
+                <span class="arrow-hint">Use ↑/↓ arrows</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="game-status" id="status">Your turn - Use keyboard shortcuts!</div>
+            <div class="action-log" id="actionLog">
+                <div>🎴 Game started - Press H for help</div>
+                <div>💰 Small blind: $25</div>
+                <div>💰 Big blind: $50</div>
+                <div>🤖 AI Player calls $50</div>
+                <div>⌨️ Your turn - Try keyboard shortcuts!</div>
+            </div>
+        </div>
+
+        <div class="test-panel">
+            <h3>✅ Keyboard Shortcut Tests</h3>
+            <div class="test-grid" id="testResults">
+                <div class="test-item pending">F - Fold: <span id="test-f">Not tested</span></div>
+                <div class="test-item pending">C - Call: <span id="test-c">Not tested</span></div>
+                <div class="test-item pending">R - Raise: <span id="test-r">Not tested</span></div>
+                <div class="test-item pending">A - All-In: <span id="test-a">Not tested</span></div>
+                <div class="test-item pending">↑ - Increase: <span id="test-up">Not tested</span></div>
+                <div class="test-item pending">↓ - Decrease: <span id="test-down">Not tested</span></div>
+                <div class="test-item pending">H - Help: <span id="test-h">Not tested</span></div>
+                <div class="test-item pending">Esc - Close: <span id="test-esc">Not tested</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Panel -->
+    <div class="help-panel" id="helpPanel">
+        <h2>⌨️ Keyboard Shortcuts</h2>
+        <div class="shortcuts-list">
+            <div class="shortcut-item">
+                <span class="key-combo">F</span>
+                <span class="shortcut-desc">Fold your hand</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">C</span>
+                <span class="shortcut-desc">Call or Check</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">R</span>
+                <span class="shortcut-desc">Raise bet</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">A</span>
+                <span class="shortcut-desc">Go All-In</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">↑</span>
+                <span class="shortcut-desc">Increase raise amount</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">↓</span>
+                <span class="shortcut-desc">Decrease raise amount</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">Enter</span>
+                <span class="shortcut-desc">Confirm action</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">Esc</span>
+                <span class="shortcut-desc">Cancel or close help</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="key-combo">H</span>
+                <span class="shortcut-desc">Toggle this help panel</span>
+            </div>
+        </div>
+        <button class="close-help" onclick="toggleHelp()">Close (Esc)</button>
+    </div>
+
+    <!-- Key Press Indicator -->
+    <div class="key-press-indicator" id="keyIndicator"></div>
+
+    <script>
+        // Game state
+        let playerTurn = true;
+        let raiseAmount = 150;
+        const testResults = {};
+
+        // Elements
+        const raiseSlider = document.getElementById('raiseSlider');
+        const raiseAmountInput = document.getElementById('raiseAmount');
+        const actionLog = document.getElementById('actionLog');
+        const helpPanel = document.getElementById('helpPanel');
+        const keyIndicator = document.getElementById('keyIndicator');
+        const statusDiv = document.getElementById('status');
+
+        // Sync raise controls
+        raiseSlider.addEventListener('input', (e) => {
+            raiseAmountInput.value = e.target.value;
+            raiseAmount = parseInt(e.target.value);
+        });
+
+        raiseAmountInput.addEventListener('input', (e) => {
+            raiseSlider.value = e.target.value;
+            raiseAmount = parseInt(e.target.value);
+        });
+
+        // Show key press
+        function showKeyPress(key) {
+            keyIndicator.textContent = `Key: ${key}`;
+            keyIndicator.classList.add('visible');
+            setTimeout(() => {
+                keyIndicator.classList.remove('visible');
+            }, 1000);
+        }
+
+        // Log action
+        function logAction(message) {
+            const div = document.createElement('div');
+            div.textContent = message;
+            actionLog.appendChild(div);
+            actionLog.scrollTop = actionLog.scrollHeight;
+        }
+
+        // Toggle help panel
+        function toggleHelp() {
+            helpPanel.classList.toggle('visible');
+            if (helpPanel.classList.contains('visible')) {
+                markTestPassed('h');
+            }
+        }
+
+        // Mark test as passed
+        function markTestPassed(testKey) {
+            const testId = `test-${testKey}`;
+            const testElement = document.getElementById(testId);
+            if (testElement) {
+                testElement.textContent = '✅ Passed';
+                testElement.parentElement.classList.remove('pending');
+                testElement.parentElement.classList.add('pass');
+                testResults[testKey] = true;
+            }
+        }
+
+        // Action handlers
+        function fold() {
+            logAction('👤 You folded');
+            statusDiv.textContent = 'You folded - AI wins the pot';
+            markTestPassed('f');
+        }
+
+        function call() {
+            logAction('👤 You called $50');
+            statusDiv.textContent = 'Round continues...';
+            markTestPassed('c');
+        }
+
+        function raise() {
+            logAction(`👤 You raised to $${raiseAmount}`);
+            statusDiv.textContent = `AI considering your $${raiseAmount} raise...`;
+            markTestPassed('r');
+        }
+
+        function allin() {
+            const chips = document.getElementById('playerChips').textContent;
+            logAction(`👤 You went ALL-IN with $${chips}!`);
+            statusDiv.textContent = 'ALL-IN! AI must respond...';
+            markTestPassed('a');
+        }
+
+        function increaseRaise() {
+            const current = parseInt(raiseAmountInput.value);
+            const max = parseInt(raiseAmountInput.max);
+            const step = parseInt(raiseAmountInput.step);
+            const newValue = Math.min(current + step, max);
+            raiseAmountInput.value = newValue;
+            raiseSlider.value = newValue;
+            raiseAmount = newValue;
+            logAction(`↑ Raise amount increased to $${newValue}`);
+            markTestPassed('up');
+        }
+
+        function decreaseRaise() {
+            const current = parseInt(raiseAmountInput.value);
+            const min = parseInt(raiseAmountInput.min);
+            const step = parseInt(raiseAmountInput.step);
+            const newValue = Math.max(current - step, min);
+            raiseAmountInput.value = newValue;
+            raiseSlider.value = newValue;
+            raiseAmount = newValue;
+            logAction(`↓ Raise amount decreased to $${newValue}`);
+            markTestPassed('down');
+        }
+
+        // Keyboard event handler
+        document.addEventListener('keydown', (e) => {
+            // Don't handle if typing in input
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            showKeyPress(e.key);
+
+            switch(key) {
+                case 'f':
+                    e.preventDefault();
+                    fold();
+                    break;
+                case 'c':
+                    e.preventDefault();
+                    call();
+                    break;
+                case 'r':
+                    e.preventDefault();
+                    raise();
+                    break;
+                case 'a':
+                    e.preventDefault();
+                    allin();
+                    break;
+                case 'arrowup':
+                    e.preventDefault();
+                    increaseRaise();
+                    break;
+                case 'arrowdown':
+                    e.preventDefault();
+                    decreaseRaise();
+                    break;
+                case 'h':
+                    e.preventDefault();
+                    toggleHelp();
+                    break;
+                case 'escape':
+                    e.preventDefault();
+                    if (helpPanel.classList.contains('visible')) {
+                        toggleHelp();
+                        markTestPassed('esc');
+                    }
+                    break;
+                case 'enter':
+                    e.preventDefault();
+                    logAction('⏎ Action confirmed');
+                    break;
+            }
+        });
+
+        // Button click handlers
+        document.getElementById('foldBtn').addEventListener('click', fold);
+        document.getElementById('callBtn').addEventListener('click', call);
+        document.getElementById('raiseBtn').addEventListener('click', raise);
+        document.getElementById('allinBtn').addEventListener('click', allin);
+
+        // Initial log
+        console.log('Keyboard Shortcuts Poker loaded!');
+        console.log('Available shortcuts:');
+        console.log('  F - Fold');
+        console.log('  C - Call/Check');
+        console.log('  R - Raise');
+        console.log('  A - All-In');
+        console.log('  ↑/↓ - Adjust raise amount');
+        console.log('  H - Help panel');
+        console.log('  Esc - Close help');
+        console.log('  Enter - Confirm');
+        console.log('\nTry the shortcuts now!');
+    </script>
+</body>
+</html>

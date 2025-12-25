@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Betting Controls - User Interface & Controls</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 { 
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .description {
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        /* Betting Panel */
+        .betting-panel {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Info Bar */
+        .info-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .info-item {
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(50%);
+        }
+        
+        .btn-fold {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .btn-check {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+        }
+        
+        .btn-call {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+        
+        .btn-raise {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+        
+        .btn-all-in {
+            background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+            color: white;
+        }
+        
+        /* Raise Controls */
+        .raise-controls {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(255, 152, 0, 0.1);
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .raise-controls.active {
+            display: block;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        #raise-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        #raise-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #ff9800;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+        
+        #raise-slider::-webkit-slider-thumb:hover {
+            background: #f57c00;
+            transform: scale(1.2);
+        }
+        
+        #raise-slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #ff9800;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .raise-amount-display {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .raise-amount {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff9800;
+            text-shadow: 0 2px 8px rgba(255, 152, 0, 0.5);
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn-confirm {
+            background: #4caf50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-confirm:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background: #757575;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-cancel:hover {
+            background: #616161;
+            transform: translateY(-2px);
+        }
+        
+        /* Test Controls */
+        .test-controls {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .test-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .test-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Debug Output */
+        .debug {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #4ec9b0;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Example 3: Betting Controls</h1>
+        <p class="description">Interactive betting panel with all action buttons and raise slider</p>
+        
+        <div class="betting-panel">
+            <!-- Info Bar -->
+            <div class="info-bar">
+                <div class="info-item">
+                    <div class="info-label">Your Chips</div>
+                    <div class="info-value">$<span id="player-chips">1000</span></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Current Bet</div>
+                    <div class="info-value">$<span id="current-bet">0</span></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">To Call</div>
+                    <div class="info-value">$<span id="to-call">0</span></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Pot</div>
+                    <div class="info-value">$<span id="pot">0</span></div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="fold-btn" class="btn btn-fold" onclick="handleFold()">Fold</button>
+                <button id="check-btn" class="btn btn-check" onclick="handleCheck()">Check</button>
+                <button id="call-btn" class="btn btn-call" onclick="handleCall()">
+                    Call $<span id="call-amount">0</span>
+                </button>
+                <button id="raise-btn" class="btn btn-raise" onclick="showRaiseControls()">Raise</button>
+                <button id="all-in-btn" class="btn btn-all-in" onclick="handleAllIn()">All-In</button>
+            </div>
+            
+            <!-- Raise Controls -->
+            <div id="raise-controls" class="raise-controls">
+                <div class="slider-container">
+                    <div class="slider-label">Select Raise Amount</div>
+                    <input type="range" id="raise-slider" min="20" max="1000" value="20" step="10">
+                </div>
+                
+                <div class="raise-amount-display">
+                    <div class="raise-amount">$<span id="raise-display">20</span></div>
+                </div>
+                
+                <div class="confirm-buttons">
+                    <button class="btn-confirm" onclick="confirmRaise()">✓ Confirm Raise</button>
+                    <button class="btn-cancel" onclick="cancelRaise()">✗ Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="test-controls">
+            <button class="test-btn" onclick="test1()">Test 1: Pre-Flop</button>
+            <button class="test-btn" onclick="test2()">Test 2: Facing Bet</button>
+            <button class="test-btn" onclick="test3()">Test 3: All-In Scenario</button>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        console.log('Example 3: Betting Controls loaded\n');
+        
+        // Game state
+        let gameState = {
+            playerChips: 1000,
+            currentBet: 0,
+            toCall: 0,
+            pot: 0
+        };
+        
+        // Update display
+        function updateDisplay() {
+            document.getElementById('player-chips').textContent = gameState.playerChips;
+            document.getElementById('current-bet').textContent = gameState.currentBet;
+            document.getElementById('to-call').textContent = gameState.toCall;
+            document.getElementById('pot').textContent = gameState.pot;
+            document.getElementById('call-amount').textContent = gameState.toCall;
+            
+            // Update button states
+            const checkBtn = document.getElementById('check-btn');
+            const callBtn = document.getElementById('call-btn');
+            
+            if (gameState.toCall === 0) {
+                checkBtn.disabled = false;
+                callBtn.disabled = true;
+            } else {
+                checkBtn.disabled = true;
+                callBtn.disabled = gameState.toCall > gameState.playerChips;
+            }
+            
+            // Update raise slider
+            const raiseSlider = document.getElementById('raise-slider');
+            const minRaise = Math.max(20, gameState.toCall * 2);
+            raiseSlider.min = minRaise;
+            raiseSlider.max = gameState.playerChips;
+            raiseSlider.value = minRaise;
+            document.getElementById('raise-display').textContent = minRaise;
+        }
+        
+        // Handle Fold
+        function handleFold() {
+            console.log('Action: FOLD');
+            console.log('Player folded their hand\n');
+        }
+        
+        // Handle Check
+        function handleCheck() {
+            console.log('Action: CHECK');
+            console.log('No bet to call - player checks\n');
+        }
+        
+        // Handle Call
+        function handleCall() {
+            const callAmount = gameState.toCall - gameState.currentBet;
+            gameState.playerChips -= callAmount;
+            gameState.currentBet = gameState.toCall;
+            gameState.pot += callAmount;
+            
+            console.log(`Action: CALL $${callAmount}`);
+            console.log(`Player chips: $${gameState.playerChips}`);
+            console.log(`Pot: $${gameState.pot}\n`);
+            
+            updateDisplay();
+        }
+        
+        // Show Raise Controls
+        function showRaiseControls() {
+            document.getElementById('raise-controls').classList.add('active');
+            console.log('Raise controls opened\n');
+        }
+        
+        // Hide Raise Controls
+        function cancelRaise() {
+            document.getElementById('raise-controls').classList.remove('active');
+            console.log('Raise cancelled\n');
+        }
+        
+        // Confirm Raise
+        function confirmRaise() {
+            const raiseAmount = parseInt(document.getElementById('raise-slider').value);
+            const totalBet = raiseAmount;
+            const toAdd = totalBet - gameState.currentBet;
+            
+            gameState.playerChips -= toAdd;
+            gameState.currentBet = totalBet;
+            gameState.pot += toAdd;
+            gameState.toCall = totalBet;
+            
+            console.log(`Action: RAISE to $${raiseAmount}`);
+            console.log(`Added $${toAdd} to pot`);
+            console.log(`Player chips: $${gameState.playerChips}`);
+            console.log(`Pot: $${gameState.pot}\n`);
+            
+            document.getElementById('raise-controls').classList.remove('active');
+            updateDisplay();
+        }
+        
+        // Handle All-In
+        function handleAllIn() {
+            const allInAmount = gameState.playerChips;
+            gameState.pot += allInAmount;
+            gameState.currentBet += allInAmount;
+            gameState.playerChips = 0;
+            
+            console.log(`Action: ALL-IN for $${allInAmount}`);
+            console.log('Player is all-in!');
+            console.log(`Pot: $${gameState.pot}\n`);
+            
+            updateDisplay();
+        }
+        
+        // Raise slider update
+        document.getElementById('raise-slider').addEventListener('input', function() {
+            document.getElementById('raise-display').textContent = this.value;
+        });
+        
+        // Test Case 1: Pre-Flop
+        function test1() {
+            console.log('=== Test Case 1: Pre-Flop Betting ===');
+            gameState = {
+                playerChips: 1000,
+                currentBet: 0,
+                toCall: 0,
+                pot: 30
+            };
+            updateDisplay();
+            console.log('Scenario: Blinds posted, no bet to you yet');
+            console.log('Available actions: Check, Raise, Fold\n');
+        }
+        
+        // Test Case 2: Facing a Bet
+        function test2() {
+            console.log('=== Test Case 2: Facing a Bet ===');
+            gameState = {
+                playerChips: 1000,
+                currentBet: 0,
+                toCall: 50,
+                pot: 120
+            };
+            updateDisplay();
+            console.log('Scenario: Opponent bet $50');
+            console.log('Available actions: Fold, Call, Raise\n');
+        }
+        
+        // Test Case 3: All-In Scenario
+        function test3() {
+            console.log('=== Test Case 3: Short Stack ===');
+            gameState = {
+                playerChips: 150,
+                currentBet: 0,
+                toCall: 100,
+                pot: 250
+            };
+            updateDisplay();
+            console.log('Scenario: Short stack facing large bet');
+            console.log('Available actions: Fold, Call, All-In\n');
+        }
+        
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        };
+        
+        // Initialize
+        updateDisplay();
+        console.log('Betting controls ready!');
+        console.log('Try clicking the buttons to take actions\n');
+    </script>
+</body>
+</html>

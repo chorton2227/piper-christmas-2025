@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Game Structure Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        code {
+            color: #ffd700;
+        }
+        
+        .module-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .test-output {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Modular Game Structure</h1>
+        
+        <div class="info-section">
+            <h2>What This Example Shows:</h2>
+            <ul>
+                <li>How to organize code into separate modules</li>
+                <li>Module pattern for encapsulation</li>
+                <li>Clean API design between modules</li>
+                <li>How modules communicate with each other</li>
+                <li>Benefits of modular architecture</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>Recommended File Structure:</h2>
+            <pre><code>poker-game/
+├── index.html
+├── css/
+│   ├── main.css        - Base styles
+│   ├── table.css       - Poker table styles
+│   ├── cards.css       - Card styles
+│   └── animations.css  - Animation effects
+├── js/
+│   ├── modules/
+│   │   ├── deck.js          - Deck creation, shuffling
+│   │   ├── handEvaluator.js - Hand evaluation logic
+│   │   ├── gameState.js     - Game state management
+│   │   ├── betting.js       - Betting system
+│   │   ├── ai.js            - AI opponent logic
+│   │   └── ui.js            - UI updates
+│   └── game.js             - Main game controller
+└── sounds/
+    ├── card-deal.mp3
+    ├── chip-bet.mp3
+    └── winner.mp3</code></pre>
+        </div>
+        
+        <div class="info-section">
+            <h2>Module Examples:</h2>
+            
+            <div class="module-card">
+                <h3>1. Deck Module (deck.js)</h3>
+                <pre><code>const DeckModule = (function() {
+    function createDeck() {
+        const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+        const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+        const deck = [];
+        
+        for (let suit of suits) {
+            for (let rank of ranks) {
+                deck.push({
+                    suit: suit,
+                    rank: rank,
+                    value: ranks.indexOf(rank) + 2
+                });
+            }
+        }
+        return deck;
+    }
+    
+    function shuffleDeck(deck) {
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+    }
+    
+    // Public API
+    return {
+        create: createDeck,
+        shuffle: shuffleDeck
+    };
+})();</code></pre>
+            </div>
+            
+            <div class="module-card">
+                <h3>2. Hand Evaluator Module (handEvaluator.js)</h3>
+                <pre><code>const HandEvaluator = (function() {
+    function evaluateHand(cards) {
+        // Hand evaluation logic
+        // Returns { rank: number, name: string }
+    }
+    
+    function findBestHand(sevenCards) {
+        // Find best 5-card combination
+    }
+    
+    function compareHands(hand1, hand2) {
+        // Compare two hands
+        // Returns positive if hand1 > hand2
+    }
+    
+    return {
+        evaluate: evaluateHand,
+        findBest: findBestHand,
+        compare: compareHands
+    };
+})();</code></pre>
+            </div>
+            
+            <div class="module-card">
+                <h3>3. Game State Module (gameState.js)</h3>
+                <pre><code>const GameState = (function() {
+    let state = {
+        players: [],
+        pot: 0,
+        communityCards: [],
+        currentBet: 0,
+        phase: 'pre-flop'
+    };
+    
+    function createGame(config) {
+        // Initialize game state
+    }
+    
+    function getState() {
+        return Object.freeze({...state});
+    }
+    
+    function updateState(changes) {
+        state = {...state, ...changes};
+    }
+    
+    return {
+        create: createGame,
+        get: getState,
+        update: updateState
+    };
+})();</code></pre>
+            </div>
+            
+            <div class="module-card">
+                <h3>4. Betting Module (betting.js)</h3>
+                <pre><code>const BettingSystem = (function() {
+    function validateBet(player, amount, gameState) {
+        // Validate betting action
+    }
+    
+    function processAction(action, player, gameState) {
+        // Process fold, check, call, raise, all-in
+    }
+    
+    function calculateSidePots(players) {
+        // Calculate side pots for all-ins
+    }
+    
+    return {
+        validate: validateBet,
+        process: processAction,
+        calculateSidePots: calculateSidePots
+    };
+})();</code></pre>
+            </div>
+            
+            <div class="module-card">
+                <h3>5. AI Module (ai.js)</h3>
+                <pre><code>const AIPlayer = (function() {
+    function makeDecision(player, gameState, difficulty) {
+        // AI decision making
+        // Returns { action: string, amount: number }
+    }
+    
+    function getHandStrength(cards, communityCards) {
+        // Evaluate hand strength (0-1)
+    }
+    
+    return {
+        decide: makeDecision,
+        evaluateStrength: getHandStrength
+    };
+})();</code></pre>
+            </div>
+            
+            <div class="module-card">
+                <h3>6. UI Module (ui.js)</h3>
+                <pre><code>const UI = (function() {
+    function updatePlayers(players) {
+        // Update player displays
+    }
+    
+    function updateCommunityCards(cards) {
+        // Update community cards
+    }
+    
+    function showWinnerAnnouncement(winner, hand) {
+        // Display winner
+    }
+    
+    return {
+        updatePlayers: updatePlayers,
+        updateCommunityCards: updateCommunityCards,
+        showWinner: showWinnerAnnouncement
+    };
+})();</code></pre>
+            </div>
+            
+            <div class="module-card">
+                <h3>7. Main Game Controller (game.js)</h3>
+                <pre><code>const PokerGame = (function() {
+    function init(config) {
+        GameState.create(config);
+        startNewHand();
+    }
+    
+    async function startNewHand() {
+        const deck = DeckModule.create();
+        DeckModule.shuffle(deck);
+        
+        // Deal cards
+        // Post blinds
+        // Start betting
+    }
+    
+    async function bettingRound(roundName) {
+        // Handle betting for one round
+    }
+    
+    function showdown() {
+        // Determine winner
+        const evaluations = players.map(p => ({
+            player: p,
+            hand: HandEvaluator.findBest([...p.cards, ...communityCards])
+        }));
+        
+        // Find winner
+        // Award pot
+    }
+    
+    return {
+        start: init
+    };
+})();
+
+// Initialize game
+PokerGame.start({ playerCount: 4, startingChips: 1000 });</code></pre>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>Benefits of Modular Design:</h2>
+            <ul>
+                <li><strong>Separation of Concerns:</strong> Each module has a single responsibility</li>
+                <li><strong>Easier Testing:</strong> Test each module independently</li>
+                <li><strong>Better Maintenance:</strong> Changes in one module don't affect others</li>
+                <li><strong>Code Reusability:</strong> Modules can be reused in other projects</li>
+                <li><strong>Team Collaboration:</strong> Different people can work on different modules</li>
+                <li><strong>Cleaner Code:</strong> No global variables, clear APIs</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>How Modules Communicate:</h2>
+            <pre><code>// Example: Player makes a bet
+function playerBet(playerId, action, amount) {
+    // 1. Get current game state
+    const state = GameState.get();
+    const player = state.players[playerId];
+    
+    // 2. Validate the bet
+    if (!BettingSystem.validate(player, amount, state)) {
+        return false;
+    }
+    
+    // 3. Process the action
+    const newState = BettingSystem.process(action, player, state);
+    
+    // 4. Update game state
+    GameState.update(newState);
+    
+    // 5. Update UI
+    UI.updatePlayers(newState.players);
+    
+    // 6. If AI turn, make AI decision
+    if (nextPlayer.isAI) {
+        const decision = AIPlayer.decide(nextPlayer, newState, 'medium');
+        // Process AI decision...
+    }
+}</code></pre>
+        </div>
+        
+        <div class="test-output" id="test-output">
+            <strong>Console Output:</strong><br><br>
+        </div>
+        
+        <div style="text-align: center;">
+            <button onclick="runTests()">Run Module Tests</button>
+        </div>
+    </div>
+
+    <script>
+        // Simplified module implementations for demonstration
+        
+        const DeckModule = (function() {
+            function createDeck() {
+                const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+                const deck = [];
+                
+                for (let suit of suits) {
+                    for (let rank of ranks) {
+                        deck.push({ suit, rank, value: ranks.indexOf(rank) + 2 });
+                    }
+                }
+                return deck;
+            }
+            
+            function shuffleDeck(deck) {
+                for (let i = deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [deck[i], deck[j]] = [deck[j], deck[i]];
+                }
+            }
+            
+            return { create: createDeck, shuffle: shuffleDeck };
+        })();
+        
+        const GameState = (function() {
+            let state = {};
+            
+            function create(config) {
+                state = {
+                    players: [],
+                    pot: 0,
+                    communityCards: [],
+                    currentBet: 0,
+                    phase: 'pre-flop',
+                    config: config
+                };
+                
+                // Create players
+                for (let i = 0; i < config.playerCount; i++) {
+                    state.players.push({
+                        id: i,
+                        name: i === 0 ? 'You' : `AI ${i}`,
+                        chips: config.startingChips,
+                        cards: [],
+                        isAI: i !== 0
+                    });
+                }
+                
+                return state;
+            }
+            
+            function get() {
+                return {...state};
+            }
+            
+            function update(changes) {
+                state = {...state, ...changes};
+            }
+            
+            return { create, get, update };
+        })();
+        
+        const HandEvaluator = (function() {
+            function evaluate(cards) {
+                // Simplified evaluation
+                if (cards.length < 5) return { rank: 0, name: 'Incomplete hand' };
+                
+                const values = cards.map(c => c.value).sort((a, b) => b - a);
+                const suits = cards.map(c => c.suit);
+                
+                const isFlush = suits.every(s => s === suits[0]);
+                const isStraight = values.every((v, i) => i === 0 || values[i-1] - v === 1);
+                
+                if (isFlush && isStraight) return { rank: 9, name: 'Straight Flush' };
+                if (isFlush) return { rank: 6, name: 'Flush' };
+                if (isStraight) return { rank: 5, name: 'Straight' };
+                
+                return { rank: 1, name: 'High Card' };
+            }
+            
+            return { evaluate };
+        })();
+        
+        const BettingSystem = (function() {
+            function validate(player, amount, state) {
+                if (amount > player.chips) return false;
+                if (amount < 0) return false;
+                return true;
+            }
+            
+            function process(action, player, state) {
+                const newState = {...state};
+                
+                if (action === 'fold') {
+                    player.folded = true;
+                } else if (action === 'call') {
+                    const toCall = state.currentBet - (player.currentBet || 0);
+                    player.chips -= toCall;
+                    newState.pot += toCall;
+                }
+                
+                return newState;
+            }
+            
+            return { validate, process };
+        })();
+        
+        const AIPlayer = (function() {
+            function decide(player, state) {
+                const actions = ['fold', 'check', 'call', 'raise'];
+                const randomAction = actions[Math.floor(Math.random() * actions.length)];
+                
+                return {
+                    action: randomAction,
+                    amount: randomAction === 'raise' ? 20 : 0
+                };
+            }
+            
+            return { decide };
+        })();
+        
+        const UI = (function() {
+            function log(message) {
+                const output = document.getElementById('test-output');
+                output.innerHTML += message + '<br>';
+            }
+            
+            return { log };
+        })();
+        
+        // Test function
+        function runTests() {
+            const output = document.getElementById('test-output');
+            output.innerHTML = '<strong>Console Output:</strong><br><br>';
+            
+            UI.log('=== Testing Modular Architecture ===');
+            UI.log('');
+            
+            // Test 1: Deck Module
+            UI.log('Test 1: Deck Module');
+            const deck = DeckModule.create();
+            UI.log(`✓ Created deck with ${deck.length} cards`);
+            DeckModule.shuffle(deck);
+            UI.log(`✓ Shuffled deck (first card: ${deck[0].rank} of ${deck[0].suit})`);
+            UI.log('');
+            
+            // Test 2: Game State Module
+            UI.log('Test 2: Game State Module');
+            const state = GameState.create({ playerCount: 4, startingChips: 1000 });
+            UI.log(`✓ Created game with ${state.players.length} players`);
+            UI.log(`✓ Each player has $${state.players[0].chips} chips`);
+            UI.log('');
+            
+            // Test 3: Hand Evaluator Module
+            UI.log('Test 3: Hand Evaluator Module');
+            const testHand = deck.slice(0, 5);
+            const evaluation = HandEvaluator.evaluate(testHand);
+            UI.log(`✓ Evaluated hand: ${evaluation.name}`);
+            UI.log('');
+            
+            // Test 4: Betting System Module
+            UI.log('Test 4: Betting System Module');
+            const player = state.players[0];
+            const isValid = BettingSystem.validate(player, 50, state);
+            UI.log(`✓ Validated bet of $50: ${isValid ? 'Valid' : 'Invalid'}`);
+            UI.log('');
+            
+            // Test 5: AI Module
+            UI.log('Test 5: AI Module');
+            const decision = AIPlayer.decide(state.players[1], state);
+            UI.log(`✓ AI decided to: ${decision.action}`);
+            UI.log('');
+            
+            // Test 6: Module Communication
+            UI.log('Test 6: Module Communication');
+            UI.log('Simulating player bet:');
+            UI.log('  1. Get game state ✓');
+            UI.log('  2. Validate bet ✓');
+            UI.log('  3. Process action ✓');
+            UI.log('  4. Update state ✓');
+            UI.log('  5. Update UI ✓');
+            UI.log('');
+            
+            UI.log('=== All Tests Complete! ===');
+            UI.log('');
+            UI.log('Key Takeaways:');
+            UI.log('• Each module is independent and focused');
+            UI.log('• Modules expose clean public APIs');
+            UI.log('• Easy to test and maintain');
+            UI.log('• Can be split into separate files');
+            UI.log('• Great for team collaboration');
+        }
+        
+        // Auto-run tests on load
+        console.log('📦 Modular Game Structure Example Loaded');
+        console.log('This example demonstrates:');
+        console.log('1. How to organize code into modules');
+        console.log('2. Module pattern for encapsulation');
+        console.log('3. Clean APIs between modules');
+        console.log('4. Benefits of modular architecture');
+        console.log('');
+        console.log('Click "Run Module Tests" to see modules in action!');
+    </script>
+</body>
+</html>

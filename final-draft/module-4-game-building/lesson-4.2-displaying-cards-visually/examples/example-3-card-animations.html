@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Card Animations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .demo-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .card-display {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Base card styles */
+        .card {
+            width: 80px;
+            height: 112px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card-rank {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .card-suit {
+            font-size: 36px;
+            margin-top: 4px;
+        }
+
+        .hearts .card-rank,
+        .hearts .card-suit,
+        .diamonds .card-rank,
+        .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank,
+        .spades .card-suit,
+        .clubs .card-rank,
+        .clubs .card-suit {
+            color: #1a1a1a;
+        }
+
+        /* Animation 1: Hover Lift */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animation 2: Flip */
+        .flip-card {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card .card-rank,
+        .flip-card .card-suit {
+            backface-visibility: hidden;
+        }
+
+        /* Animation 3: Shake */
+        .shake-card:hover {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* Animation 4: Pulse */
+        .pulse-card {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Animation 5: Deal animation */
+        .deal-card {
+            animation: deal 0.8s ease-out;
+        }
+
+        @keyframes deal {
+            0% {
+                transform: translateX(-200px) rotate(-45deg);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animation 6: Glow effect */
+        .glow-card {
+            transition: all 0.3s ease;
+        }
+
+        .glow-card:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                        0 0 40px rgba(255, 215, 0, 0.6),
+                        0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 20px auto 0 auto;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .instruction {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎴 Card Animations & Effects</h1>
+
+    <!-- Hover Lift -->
+    <div class="demo-section">
+        <h2>1. Hover Lift Effect</h2>
+        <p>Card lifts up when you hover over it</p>
+        <div class="card-display">
+            <div class="card hover-lift hearts">
+                <div class="card-rank">A</div>
+                <div class="card-suit">♥</div>
+            </div>
+            <div class="card hover-lift spades">
+                <div class="card-rank">K</div>
+                <div class="card-suit">♠</div>
+            </div>
+            <div class="card hover-lift diamonds">
+                <div class="card-rank">Q</div>
+                <div class="card-suit">♦</div>
+            </div>
+        </div>
+        <p class="instruction">Hover over the cards to see the effect</p>
+    </div>
+
+    <!-- Flip -->
+    <div class="demo-section">
+        <h2>2. Flip Animation</h2>
+        <p>Card flips over when you hover</p>
+        <div class="card-display">
+            <div class="card flip-card clubs">
+                <div class="card-rank">J</div>
+                <div class="card-suit">♣</div>
+            </div>
+            <div class="card flip-card hearts">
+                <div class="card-rank">10</div>
+                <div class="card-suit">♥</div>
+            </div>
+            <div class="card flip-card spades">
+                <div class="card-rank">9</div>
+                <div class="card-suit">♠</div>
+            </div>
+        </div>
+        <p class="instruction">Hover to flip the cards</p>
+    </div>
+
+    <!-- Shake -->
+    <div class="demo-section">
+        <h2>3. Shake Effect</h2>
+        <p>Card shakes when you hover</p>
+        <div class="card-display">
+            <div class="card shake-card diamonds">
+                <div class="card-rank">8</div>
+                <div class="card-suit">♦</div>
+            </div>
+            <div class="card shake-card clubs">
+                <div class="card-rank">7</div>
+                <div class="card-suit">♣</div>
+            </div>
+            <div class="card shake-card hearts">
+                <div class="card-rank">6</div>
+                <div class="card-suit">♥</div>
+            </div>
+        </div>
+        <p class="instruction">Hover to shake the cards</p>
+    </div>
+
+    <!-- Pulse -->
+    <div class="demo-section">
+        <h2>4. Pulse Animation</h2>
+        <p>Card continuously pulses (no hover needed)</p>
+        <div class="card-display">
+            <div class="card pulse-card spades">
+                <div class="card-rank">5</div>
+                <div class="card-suit">♠</div>
+            </div>
+            <div class="card pulse-card diamonds">
+                <div class="card-rank">4</div>
+                <div class="card-suit">♦</div>
+            </div>
+            <div class="card pulse-card clubs">
+                <div class="card-rank">3</div>
+                <div class="card-suit">♣</div>
+            </div>
+        </div>
+        <p class="instruction">Watch the cards pulse automatically</p>
+    </div>
+
+    <!-- Deal -->
+    <div class="demo-section">
+        <h2>5. Deal Animation</h2>
+        <p>Cards fly in from the left when dealt</p>
+        <div class="card-display" id="dealArea">
+            <!-- Cards will be added here -->
+        </div>
+        <button onclick="dealCards()">Deal Cards</button>
+    </div>
+
+    <!-- Glow -->
+    <div class="demo-section">
+        <h2>6. Glow Effect</h2>
+        <p>Card glows with a golden aura on hover</p>
+        <div class="card-display">
+            <div class="card glow-card hearts">
+                <div class="card-rank">A</div>
+                <div class="card-suit">♥</div>
+            </div>
+            <div class="card glow-card spades">
+                <div class="card-rank">A</div>
+                <div class="card-suit">♠</div>
+            </div>
+            <div class="card glow-card diamonds">
+                <div class="card-rank">A</div>
+                <div class="card-suit">♦</div>
+            </div>
+        </div>
+        <p class="instruction">Hover to see the golden glow</p>
+    </div>
+
+    <script>
+        function dealCards() {
+            const dealArea = document.getElementById('dealArea');
+            dealArea.innerHTML = ''; // Clear existing cards
+
+            const cards = [
+                { rank: '2', suit: '♥', suitClass: 'hearts' },
+                { rank: 'J', suit: '♠', suitClass: 'spades' },
+                { rank: 'K', suit: '♦', suitClass: 'diamonds' },
+                { rank: '7', suit: '♣', suitClass: 'clubs' },
+                { rank: 'A', suit: '♥', suitClass: 'hearts' }
+            ];
+
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card deal-card ${card.suitClass}`;
+                    cardEl.innerHTML = `
+                        <div class="card-rank">${card.rank}</div>
+                        <div class="card-suit">${card.suit}</div>
+                    `;
+                    dealArea.appendChild(cardEl);
+                }, index * 200); // Stagger the animations
+            });
+        }
+
+        // Deal cards on page load
+        window.addEventListener('load', dealCards);
+    </script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+# Parent Guide: Variables and Data Types 🎓
 
 ## Lesson Overview
 This lesson teaches your child about **variables** - one of the most fundamental concepts in programming. Variables are like labeled boxes that store information. Understanding variables is essential for all future programming work.

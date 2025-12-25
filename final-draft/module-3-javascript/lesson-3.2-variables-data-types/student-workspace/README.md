@@ -1,3 +1,4 @@
+# Student Workspace - Lesson 3.2: Variables and Data Types 💻
 
 Welcome to your variables workspace! This is where you'll create programs that store and use data!
 

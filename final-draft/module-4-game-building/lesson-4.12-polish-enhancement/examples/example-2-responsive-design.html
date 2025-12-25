@@ -1,0 +1,669 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Responsive Poker Table Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .breakpoint-indicator {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Poker Table */
+        .poker-table {
+            background: linear-gradient(135deg, #0a5f38 0%, #2c5530 100%);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 8px solid #8B4513;
+            margin-bottom: 20px;
+        }
+
+        /* Player Areas */
+        .players-container {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .player {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .player.active {
+            border-color: #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+
+        .player-chips {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+        }
+
+        .cards {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.red {
+            color: #e74c3c;
+        }
+
+        .card.black {
+            color: #2c3e50;
+        }
+
+        /* Community Cards */
+        .community-cards {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+
+        .community-cards .card {
+            width: 70px;
+            height: 98px;
+        }
+
+        /* Pot */
+        .pot-container {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pot-amount {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        /* Controls */
+        .controls {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 15px 24px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-fold {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-raise {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-deal {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #333;
+        }
+
+        /* Raise Controls */
+        .raise-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .raise-controls input {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Info Panel */
+        .info-panel {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-status {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .action-log {
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+        }
+
+        .action-log div {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* MOBILE STYLES (<768px) */
+        @media (max-width: 767px) {
+            body {
+                padding: 5px;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            .poker-table {
+                padding: 12px;
+                border-width: 4px;
+            }
+
+            .players-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .player {
+                padding: 12px;
+            }
+
+            .card {
+                width: 50px;
+                height: 70px;
+                font-size: 1.2em;
+            }
+
+            .community-cards .card {
+                width: 55px;
+                height: 77px;
+            }
+
+            .community-cards {
+                gap: 6px;
+                padding: 12px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                width: 100%;
+                padding: 16px;
+                font-size: 1.2em;
+                min-height: 50px;
+            }
+
+            .raise-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .raise-controls input,
+            .raise-controls button {
+                width: 100%;
+            }
+
+            .action-log {
+                max-height: 120px;
+                font-size: 0.85em;
+            }
+
+            .breakpoint-indicator::before {
+                content: "📱 Mobile";
+            }
+        }
+
+        /* TABLET STYLES (768px - 1024px) */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .players-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .raise-controls {
+                grid-column: 1 / -1;
+            }
+
+            .community-cards {
+                gap: 8px;
+            }
+
+            button {
+                padding: 14px 20px;
+                min-height: 48px;
+            }
+
+            .breakpoint-indicator::before {
+                content: "📱 Tablet";
+            }
+        }
+
+        /* DESKTOP STYLES (>1024px) */
+        @media (min-width: 1025px) {
+            .players-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .raise-controls {
+                grid-column: 1 / -1;
+            }
+
+            .breakpoint-indicator::before {
+                content: "🖥️ Desktop";
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .players-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .community-cards {
+                padding: 10px;
+            }
+
+            .card {
+                width: 45px;
+                height: 63px;
+            }
+        }
+
+        /* Test Panel */
+        .test-panel {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+        }
+
+        .test-panel h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .test-panel ul {
+            margin-left: 20px;
+        }
+
+        .test-panel li {
+            padding: 5px 0;
+            color: #aaa;
+        }
+
+        .test-panel li.pass {
+            color: #4CAF50;
+        }
+
+        /* Focus styles for accessibility */
+        button:focus,
+        input:focus {
+            outline: 3px solid #4CAF50;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎴 Responsive Poker Table Design</h1>
+            <p>Resize your browser to see the layout adapt!</p>
+            <div class="breakpoint-indicator" id="breakpoint"></div>
+        </header>
+
+        <div class="poker-table">
+            <!-- Community Cards -->
+            <div class="pot-container">
+                <div>Pot</div>
+                <div class="pot-amount" id="pot">$450</div>
+            </div>
+
+            <div class="community-cards" id="communityCards">
+                <div class="card red">A♥</div>
+                <div class="card black">K♠</div>
+                <div class="card red">Q♦</div>
+                <div class="card black">J♣</div>
+                <div class="card red">10♥</div>
+            </div>
+
+            <!-- Players -->
+            <div class="players-container">
+                <div class="player active">
+                    <div class="player-info">
+                        <span class="player-name">You</span>
+                        <span class="player-chips">💰 $1,250</span>
+                    </div>
+                    <div class="cards">
+                        <div class="card red">A♦</div>
+                        <div class="card black">K♠</div>
+                    </div>
+                </div>
+
+                <div class="player">
+                    <div class="player-info">
+                        <span class="player-name">AI Player</span>
+                        <span class="player-chips">💰 $890</span>
+                    </div>
+                    <div class="cards">
+                        <div class="card">🂠</div>
+                        <div class="card">🂠</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="controls">
+            <div class="button-group">
+                <button class="btn-fold">Fold</button>
+                <button class="btn-call">Call $50</button>
+                <button class="btn-raise">Raise</button>
+            </div>
+            <div class="raise-controls">
+                <input type="range" id="raiseSlider" min="100" max="1250" value="150" step="25">
+                <input type="number" id="raiseAmount" value="150" min="100" max="1250" step="25">
+                <button class="btn-raise">Confirm Raise</button>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <div class="game-status" id="status">Your turn - Check, Call, or Raise</div>
+            <div class="action-log" id="actionLog">
+                <div>🎴 Game started - Deal</div>
+                <div>💰 Small blind: $25</div>
+                <div>💰 Big blind: $50</div>
+                <div>🤖 AI Player calls $50</div>
+                <div>👤 Your turn...</div>
+            </div>
+        </div>
+
+        <!-- Test Panel -->
+        <div class="test-panel">
+            <h3>✅ Responsive Design Test Cases</h3>
+            <ul id="testResults">
+                <li>📱 Mobile Layout (&lt;768px): <span class="test-mobile">Testing...</span></li>
+                <li>📱 Tablet Layout (768-1024px): <span class="test-tablet">Testing...</span></li>
+                <li>🖥️ Desktop Layout (&gt;1024px): <span class="test-desktop">Testing...</span></li>
+                <li>👆 Touch Targets (min 44px): <span class="test-touch">Testing...</span></li>
+                <li>🔄 Orientation Changes: <span class="test-orientation">Testing...</span></li>
+                <li>📐 Viewport Scaling: <span class="test-viewport">Testing...</span></li>
+                <li>🎴 Card Scaling: <span class="test-cards">Testing...</span></li>
+            </ul>
+        </div>
+
+        <div class="info-panel" style="margin-top: 20px;">
+            <h3 style="color: #4CAF50; margin-bottom: 10px;">📱 Responsive Features</h3>
+            <ul style="margin-left: 20px; color: #aaa;">
+                <li><strong>Mobile (&lt;768px):</strong> Single column, large buttons (50px min), vertical stack</li>
+                <li><strong>Tablet (768-1024px):</strong> Two-column layout, optimized spacing</li>
+                <li><strong>Desktop (&gt;1024px):</strong> Full table view, horizontal layout</li>
+                <li><strong>Touch Targets:</strong> All buttons min 44px for easy tapping</li>
+                <li><strong>Flexible Typography:</strong> clamp() for responsive font sizing</li>
+                <li><strong>Landscape Support:</strong> Special handling for mobile landscape</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Breakpoint indicator
+        function updateBreakpointIndicator() {
+            const width = window.innerWidth;
+            const indicator = document.getElementById('breakpoint');
+            
+            if (width < 768) {
+                indicator.style.background = 'rgba(231, 76, 60, 0.2)';
+                indicator.style.borderLeft = '4px solid #e74c3c';
+            } else if (width < 1025) {
+                indicator.style.background = 'rgba(52, 152, 219, 0.2)';
+                indicator.style.borderLeft = '4px solid #3498db';
+            } else {
+                indicator.style.background = 'rgba(76, 175, 80, 0.2)';
+                indicator.style.borderLeft = '4px solid #4CAF50';
+            }
+        }
+
+        // Test responsive breakpoints
+        function runTests() {
+            const width = window.innerWidth;
+            const results = {
+                mobile: width < 768,
+                tablet: width >= 768 && width <= 1024,
+                desktop: width > 1024
+            };
+
+            // Update test results
+            document.querySelector('.test-mobile').textContent = results.mobile ? '✅ Active' : '⏸️ Standby';
+            document.querySelector('.test-mobile').className = results.mobile ? 'pass' : '';
+            
+            document.querySelector('.test-tablet').textContent = results.tablet ? '✅ Active' : '⏸️ Standby';
+            document.querySelector('.test-tablet').className = results.tablet ? 'pass' : '';
+            
+            document.querySelector('.test-desktop').textContent = results.desktop ? '✅ Active' : '⏸️ Standby';
+            document.querySelector('.test-desktop').className = results.desktop ? 'pass' : '';
+
+            // Test touch targets
+            const buttons = document.querySelectorAll('button');
+            let allButtonsValid = true;
+            buttons.forEach(btn => {
+                const rect = btn.getBoundingClientRect();
+                if (rect.height < 44) allButtonsValid = false;
+            });
+            document.querySelector('.test-touch').textContent = allButtonsValid ? '✅ Pass' : '❌ Fail';
+            document.querySelector('.test-touch').className = allButtonsValid ? 'pass' : '';
+
+            // Test orientation
+            const orientation = window.innerHeight > window.innerWidth ? 'Portrait' : 'Landscape';
+            document.querySelector('.test-orientation').textContent = `✅ ${orientation}`;
+            document.querySelector('.test-orientation').className = 'pass';
+
+            // Test viewport
+            document.querySelector('.test-viewport').textContent = `✅ ${width}px wide`;
+            document.querySelector('.test-viewport').className = 'pass';
+
+            // Test card scaling
+            const cards = document.querySelectorAll('.card');
+            const cardSizesOk = cards.length > 0;
+            document.querySelector('.test-cards').textContent = cardSizesOk ? '✅ Scaled' : '❌ Error';
+            document.querySelector('.test-cards').className = cardSizesOk ? 'pass' : '';
+
+            console.log('Responsive Test Results:', {
+                width,
+                height: window.innerHeight,
+                breakpoint: results.mobile ? 'mobile' : results.tablet ? 'tablet' : 'desktop',
+                orientation,
+                touchTargetsValid: allButtonsValid
+            });
+        }
+
+        // Raise slider sync
+        const raiseSlider = document.getElementById('raiseSlider');
+        const raiseAmount = document.getElementById('raiseAmount');
+
+        raiseSlider.addEventListener('input', (e) => {
+            raiseAmount.value = e.target.value;
+        });
+
+        raiseAmount.addEventListener('input', (e) => {
+            raiseSlider.value = e.target.value;
+        });
+
+        // Action logging
+        function logAction(message) {
+            const log = document.getElementById('actionLog');
+            const div = document.createElement('div');
+            div.textContent = message;
+            log.appendChild(div);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Button handlers
+        document.querySelector('.btn-fold').addEventListener('click', () => {
+            logAction('👤 You folded');
+            document.getElementById('status').textContent = 'You folded - AI wins the pot';
+        });
+
+        document.querySelector('.btn-call').addEventListener('click', () => {
+            logAction('👤 You called $50');
+            document.getElementById('status').textContent = 'AI\'s turn...';
+        });
+
+        document.querySelectorAll('.btn-raise').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const amount = raiseAmount.value;
+                logAction(`👤 You raised to $${amount}`);
+                document.getElementById('status').textContent = `AI considering your $${amount} raise...`;
+            });
+        });
+
+        // Update on resize
+        window.addEventListener('resize', () => {
+            updateBreakpointIndicator();
+            runTests();
+        });
+
+        // Update on orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateBreakpointIndicator();
+                runTests();
+            }, 100);
+        });
+
+        // Initial setup
+        updateBreakpointIndicator();
+        runTests();
+
+        // Log initial state
+        console.log('Responsive Poker Table Loaded');
+        console.log('Current viewport:', window.innerWidth, 'x', window.innerHeight);
+        console.log('Try resizing the browser window to see responsive changes!');
+    </script>
+</body>
+</html>

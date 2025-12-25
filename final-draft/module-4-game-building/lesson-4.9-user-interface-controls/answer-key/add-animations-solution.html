@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Animated Poker Table UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-right: 320px;
+        }
+        
+        @media (max-width: 1600px) {
+            .container {
+                padding-right: 20px;
+            }
+            .action-log {
+                position: relative;
+                margin: 20px auto;
+                top: auto;
+                right: auto;
+            }
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            max-width: 800px;
+            color: #333;
+        }
+        
+        /* Poker Table */
+        .poker-table {
+            background: radial-gradient(ellipse at center, #1a5d1a 0%, #0d4d0d 100%);
+            border-radius: 50%;
+            padding: 80px 60px;
+            box-shadow: 
+                inset 0 0 100px rgba(0, 0, 0, 0.3),
+                0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 20px solid #8b4513;
+            position: relative;
+            aspect-ratio: 16/9;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        
+        .poker-table::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    rgba(255, 255, 255, 0.02) 4px
+                );
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        
+        /* Player Seats with Enhanced Animations */
+        .player-seat {
+            position: absolute;
+            width: 200px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 12px;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Active Player Pulse Animation */
+        .player-seat.active {
+            border-color: #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+            animation: active-pulse 2s infinite ease-in-out;
+        }
+        
+        @keyframes active-pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+                border-color: #4CAF50;
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(76, 175, 80, 1);
+                border-color: #66bb6a;
+            }
+        }
+        
+        /* Fold Animation */
+        .player-seat.folded {
+            opacity: 0.4;
+            transition: opacity 0.6s ease;
+        }
+        
+        .player-seat.folded .card {
+            animation: fold-cards 0.6s ease forwards;
+        }
+        
+        @keyframes fold-cards {
+            0% {
+                transform: rotateY(0deg) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: rotateY(90deg) scale(0.8);
+            }
+            100% {
+                transform: rotateY(180deg) scale(0.6);
+                opacity: 0.3;
+            }
+        }
+        
+        /* Winner Celebration Animation */
+        .player-seat.winner {
+            animation: winner-celebration 2s ease-in-out;
+            border-color: #ffd700;
+        }
+        
+        @keyframes winner-celebration {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+                transform: scale(1);
+            }
+            25% {
+                box-shadow: 0 0 50px rgba(255, 215, 0, 1);
+                transform: scale(1.05);
+            }
+            50% {
+                box-shadow: 0 0 80px rgba(255, 215, 0, 1);
+                transform: scale(1.08);
+            }
+            75% {
+                box-shadow: 0 0 50px rgba(255, 215, 0, 1);
+                transform: scale(1.05);
+            }
+        }
+        
+        .player-seat.winner .player-info {
+            animation: glow-pulse 1s infinite alternate;
+        }
+        
+        @keyframes glow-pulse {
+            from {
+                text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+            }
+            to {
+                text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 60px #ffed4e;
+            }
+        }
+        
+        /* Player seat positions (6-max) */
+        .seat-0 { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .seat-1 { bottom: 120px; left: 40px; }
+        .seat-2 { top: 30%; left: 10px; transform: translateY(-50%); }
+        .seat-3 { top: 10px; left: 50%; transform: translateX(-50%); }
+        .seat-4 { top: 30%; right: 10px; transform: translateY(-50%); }
+        .seat-5 { bottom: 120px; right: 40px; }
+        
+        .player-info {
+            margin-bottom: 10px;
+        }
+        
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .player-chips {
+            font-size: 16px;
+            color: #ffd700;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .player-hand {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin: 8px 0;
+            min-height: 70px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Animated Player Bet with Chip Movement */
+        .player-bet {
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 5px 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #ffd700;
+            margin-top: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .player-bet.updated {
+            animation: bet-update 0.5s ease;
+        }
+        
+        @keyframes bet-update {
+            0% {
+                transform: scale(1);
+                background: rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                transform: scale(1.2);
+                background: rgba(255, 215, 0, 0.7);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                background: rgba(255, 215, 0, 0.3);
+            }
+        }
+        
+        .player-status {
+            margin-top: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .player-status.folded { color: #ff4444; }
+        .player-status.all-in { 
+            color: #ff9800;
+            animation: all-in-flash 1s infinite;
+        }
+        
+        @keyframes all-in-flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .player-status.thinking { 
+            color: #2196f3;
+            animation: thinking-dots 1.5s infinite;
+        }
+        
+        @keyframes thinking-dots {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* Animated Dealer Button */
+        .dealer-button {
+            width: 35px;
+            height: 35px;
+            background: white;
+            border: 3px solid #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .dealer-button.rotating {
+            animation: dealer-rotate 1s ease-in-out;
+        }
+        
+        @keyframes dealer-rotate {
+            0% {
+                transform: translateX(-50%) rotate(0deg) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) rotate(180deg) scale(1.3);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg) scale(1);
+            }
+        }
+        
+        /* Community Cards Area */
+        .community-area {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .round-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        
+        .round-label.updated {
+            animation: label-flash 0.5s ease;
+        }
+        
+        @keyframes label-flash {
+            0%, 100% {
+                transform: scale(1);
+                color: #ffd700;
+            }
+            50% {
+                transform: scale(1.2);
+                color: #fff;
+                text-shadow: 0 0 20px #ffd700;
+            }
+        }
+        
+        .community-cards {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            min-width: 450px;
+            min-height: 120px;
+            align-items: center;
+        }
+        
+        /* Animated Pot Display */
+        .pot-display {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .pot-display.updated {
+            animation: pot-update 0.6s ease;
+        }
+        
+        @keyframes pot-update {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            }
+            30% {
+                transform: scale(1.15);
+                box-shadow: 0 8px 24px rgba(255, 215, 0, 0.6);
+            }
+            60% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            }
+        }
+        
+        .pot-amount {
+            color: #d32f2f;
+        }
+        
+        /* Animated Chip Movement */
+        .chip {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 50%;
+            border: 3px solid #ff9800;
+            pointer-events: none;
+            z-index: 100;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes move-chip-to-pot {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+        
+        /* Card Styles with Enhanced Animations */
+        .card {
+            width: 55px;
+            height: 75px;
+            background: white;
+            border-radius: 6px;
+            border: 2px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        
+        .card.back {
+            background: repeating-linear-gradient(
+                45deg,
+                #2196F3,
+                #2196F3 10px,
+                #1976D2 10px,
+                #1976D2 20px
+            );
+            color: white;
+        }
+        
+        /* Card Dealing Animation */
+        .card.dealing {
+            animation: deal-card 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes deal-card {
+            0% {
+                transform: translate(-300px, -200px) rotate(-45deg) scale(0.5);
+                opacity: 0;
+            }
+            60% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Community Card Reveal Animation */
+        .card.revealing {
+            animation: reveal-card 0.6s ease;
+        }
+        
+        @keyframes reveal-card {
+            0% {
+                transform: rotateY(180deg) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateY(90deg) scale(0.8);
+            }
+            100% {
+                transform: rotateY(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Action Log */
+        .action-log {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            width: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .action-log-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ffd700;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 5px;
+        }
+        
+        .action-log-content {
+            font-size: 13px;
+            color: #fff;
+        }
+        
+        .action-entry {
+            margin: 8px 0;
+            padding: 5px;
+            border-left: 3px solid #4CAF50;
+            padding-left: 8px;
+            animation: slide-in 0.3s ease;
+        }
+        
+        @keyframes slide-in {
+            from {
+                transform: translateX(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Betting Controls with Enhanced Animations */
+        .betting-controls {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 30px auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .betting-controls h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .bet-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        /* Animated Buttons with Click Feedback */
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0) scale(0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        button.clicked {
+            animation: button-click 0.3s ease;
+        }
+        
+        @keyframes button-click {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        button.fold-btn {
+            background: #f44336;
+        }
+        
+        button.fold-btn:hover {
+            background: #da190b;
+        }
+        
+        button.call-btn {
+            background: #2196F3;
+        }
+        
+        button.call-btn:hover {
+            background: #0b7dda;
+        }
+        
+        button.raise-btn {
+            background: #ff9800;
+        }
+        
+        button.raise-btn:hover {
+            background: #e68900;
+        }
+        
+        /* Animated Raise Slider */
+        .raise-controls {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 152, 0, 0.1);
+            border-radius: 10px;
+            border: 2px solid #ff9800;
+        }
+        
+        .raise-controls label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .slider-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #4CAF50 0%, #ff9800 100%);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffd700;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.1);
+            animation: slider-pulse 0.3s ease;
+        }
+        
+        @keyframes slider-pulse {
+            0%, 100% {
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 12px rgba(255, 215, 0, 0.8);
+            }
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffd700;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .raise-amount-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 10px 0;
+            transition: all 0.2s ease;
+        }
+        
+        .raise-amount-display.updating {
+            animation: amount-update 0.2s ease;
+        }
+        
+        @keyframes amount-update {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+                color: #ffed4e;
+            }
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Answer Key: Animated Poker Table UI</h1>
+        
+        <div class="note">
+            <strong>🎨 Animation Features:</strong> This solution includes comprehensive animations for card dealing (slide from deck), chip movement (to pot), button click feedback (scale transform), fold animation (fade/flip), winner celebration (glow/pulse), dealer button rotation, and smooth raise slider transitions.
+        </div>
+        
+        <!-- Poker Table -->
+        <div class="poker-table">
+            <!-- Community Cards Area (Center) -->
+            <div class="community-area">
+                <div class="round-label" id="round-label">Pre-Flop</div>
+                <div id="community-cards" class="community-cards"></div>
+                <div class="pot-display" id="pot-display">
+                    Pot: $<span id="pot-amount" class="pot-amount">0</span>
+                </div>
+            </div>
+            
+            <!-- Player Seats -->
+            <div class="player-seat seat-0" data-seat="0">
+                <div class="dealer-button" id="dealer-btn-0" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">You</div>
+                    <div class="player-chips">$<span class="chip-amount">1000</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-1" data-seat="1">
+                <div class="dealer-button" id="dealer-btn-1" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Alice</div>
+                    <div class="player-chips">$<span class="chip-amount">850</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-2" data-seat="2">
+                <div class="dealer-button" id="dealer-btn-2" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Bob</div>
+                    <div class="player-chips">$<span class="chip-amount">1200</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-3" data-seat="3">
+                <div class="dealer-button" id="dealer-btn-3" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Charlie</div>
+                    <div class="player-chips">$<span class="chip-amount">950</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-4" data-seat="4">
+                <div class="dealer-button" id="dealer-btn-4" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Diana</div>
+                    <div class="player-chips">$<span class="chip-amount">1100</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+            
+            <div class="player-seat seat-5" data-seat="5">
+                <div class="dealer-button" id="dealer-btn-5" style="display: none;">D</div>
+                <div class="player-info">
+                    <div class="player-name">Eve</div>
+                    <div class="player-chips">$<span class="chip-amount">900</span></div>
+                </div>
+                <div class="player-hand"></div>
+                <div class="player-bet">$<span class="bet-amount">0</span></div>
+                <div class="player-status"></div>
+            </div>
+        </div>
+        
+        <!-- Betting Controls -->
+        <div class="betting-controls">
+            <h3>Player Controls</h3>
+            <div class="bet-buttons">
+                <button class="fold-btn" onclick="animateFold()">Fold</button>
+                <button class="call-btn" onclick="animateCall()">Call $20</button>
+                <button class="raise-btn" onclick="animateRaise()">Raise</button>
+            </div>
+            
+            <div class="raise-controls">
+                <label for="raise-slider">Raise Amount:</label>
+                <div class="slider-container">
+                    <input type="range" id="raise-slider" min="20" max="1000" value="100" step="10">
+                    <div class="raise-amount-display" id="raise-amount">$100</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="controls">
+            <button onclick="test1()">Test 1: Initial Deal</button>
+            <button onclick="test2()">Test 2: Community Cards</button>
+            <button onclick="test3()">Test 3: Betting & Winner</button>
+        </div>
+        
+        <!-- Action Log -->
+        <div class="action-log">
+            <div class="action-log-title">Action Log</div>
+            <div class="action-log-content" id="action-log"></div>
+        </div>
+        
+        <!-- Debug Output -->
+        <div class="debug" id="debug">Console Output:</div>
+    </div>
+    
+    <script>
+        // Utility Functions
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit] || suit;
+        }
+        
+        function createCard(rank, suit, faceDown = false) {
+            const card = document.createElement('div');
+            card.className = `card ${suit}`;
+            
+            if (faceDown) {
+                card.className = 'card back';
+                card.textContent = '?';
+            } else {
+                card.textContent = `${rank}${getSuitSymbol(suit)}`;
+            }
+            
+            return card;
+        }
+        
+        // Animation: Deal hole cards with slide animation
+        function dealHoleCards(seatIndex, cards, faceDown = false) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const hand = seat.querySelector('.player-hand');
+            hand.innerHTML = '';
+            
+            cards.forEach((cardData, index) => {
+                setTimeout(() => {
+                    const card = createCard(cardData.rank, cardData.suit, faceDown);
+                    card.classList.add('dealing');
+                    hand.appendChild(card);
+                    
+                    // Remove animation class after completion
+                    setTimeout(() => {
+                        card.classList.remove('dealing');
+                    }, 500);
+                }, index * 200);
+            });
+        }
+        
+        // Animation: Deal community cards with reveal animation
+        function dealCommunityCards(cards) {
+            const container = document.getElementById('community-cards');
+            const currentCount = container.children.length;
+            const newCards = cards.slice(currentCount);
+            
+            newCards.forEach((cardData, index) => {
+                setTimeout(() => {
+                    const card = createCard(cardData.rank, cardData.suit);
+                    card.classList.add('revealing');
+                    container.appendChild(card);
+                    
+                    setTimeout(() => {
+                        card.classList.remove('revealing');
+                    }, 600);
+                }, index * 300);
+            });
+        }
+        
+        // Animation: Chip movement to pot
+        function animateChipToPot(seatIndex, amount) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const potDisplay = document.getElementById('pot-display');
+            const seatRect = seat.getBoundingClientRect();
+            const potRect = potDisplay.getBoundingClientRect();
+            
+            const chip = document.createElement('div');
+            chip.className = 'chip';
+            chip.style.left = seatRect.left + seatRect.width / 2 + 'px';
+            chip.style.top = seatRect.top + seatRect.height / 2 + 'px';
+            document.body.appendChild(chip);
+            
+            const deltaX = potRect.left + potRect.width / 2 - (seatRect.left + seatRect.width / 2);
+            const deltaY = potRect.top + potRect.height / 2 - (seatRect.top + seatRect.height / 2);
+            
+            chip.style.animation = 'move-chip-to-pot 0.8s ease-out forwards';
+            chip.style.setProperty('--delta-x', deltaX + 'px');
+            chip.style.setProperty('--delta-y', deltaY + 'px');
+            
+            chip.animate([
+                { transform: 'translate(0, 0)', opacity: 1 },
+                { transform: `translate(${deltaX}px, ${deltaY}px)`, opacity: 0 }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            }).onfinish = () => {
+                chip.remove();
+                potDisplay.classList.add('updated');
+                setTimeout(() => potDisplay.classList.remove('updated'), 600);
+            };
+        }
+        
+        // Animation: Update pot with animation
+        function updatePot(amount) {
+            const potAmount = document.getElementById('pot-amount');
+            potAmount.textContent = amount;
+            const potDisplay = document.getElementById('pot-display');
+            potDisplay.classList.add('updated');
+            setTimeout(() => {
+                potDisplay.classList.remove('updated');
+            }, 600);
+        }
+        
+        // Animation: Update player bet with animation
+        function updatePlayerBet(seatIndex, amount) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const betAmount = seat.querySelector('.bet-amount');
+            betAmount.textContent = amount;
+            
+            const betDisplay = seat.querySelector('.player-bet');
+            betDisplay.classList.add('updated');
+            setTimeout(() => {
+                betDisplay.classList.remove('updated');
+            }, 500);
+            
+            if (amount > 0) {
+                animateChipToPot(seatIndex, amount);
+            }
+        }
+        
+        // Set active player with pulse animation
+        function setActivePlayer(seatIndex) {
+            document.querySelectorAll('.player-seat').forEach(seat => {
+                seat.classList.remove('active');
+            });
+            
+            if (seatIndex !== null) {
+                const seat = document.querySelector(`.seat-${seatIndex}`);
+                seat.classList.add('active');
+            }
+        }
+        
+        // Update player status
+        function updatePlayerStatus(seatIndex, status) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            const statusDiv = seat.querySelector('.player-status');
+            statusDiv.textContent = status;
+            statusDiv.className = `player-status ${status.toLowerCase()}`;
+        }
+        
+        // Animation: Rotate dealer button
+        function moveDealerButton(fromSeat, toSeat) {
+            // Hide all dealer buttons
+            document.querySelectorAll('.dealer-button').forEach(btn => {
+                btn.style.display = 'none';
+                btn.classList.remove('rotating');
+            });
+            
+            // Show and animate new dealer button
+            const newButton = document.getElementById(`dealer-btn-${toSeat}`);
+            newButton.style.display = 'flex';
+            newButton.classList.add('rotating');
+            
+            setTimeout(() => {
+                newButton.classList.remove('rotating');
+            }, 1000);
+        }
+        
+        // Animation: Winner celebration
+        function celebrateWinner(seatIndex) {
+            const seat = document.querySelector(`.seat-${seatIndex}`);
+            seat.classList.add('winner');
+            
+            setTimeout(() => {
+                seat.classList.remove('winner');
+            }, 2000);
+        }
+        
+        // Update round label with animation
+        function updateRoundLabel(text) {
+            const label = document.getElementById('round-label');
+            label.textContent = text;
+            label.classList.add('updated');
+            setTimeout(() => {
+                label.classList.remove('updated');
+            }, 500);
+        }
+        
+        // Log action to action log with slide-in animation
+        function logAction(message) {
+            const log = document.getElementById('action-log');
+            const entry = document.createElement('div');
+            entry.className = 'action-entry';
+            entry.textContent = message;
+            log.insertBefore(entry, log.firstChild);
+            
+            // Limit to 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+        }
+        
+        // Button Click Animations
+        function animateButtonClick(button) {
+            button.classList.add('clicked');
+            setTimeout(() => {
+                button.classList.remove('clicked');
+            }, 300);
+        }
+        
+        // Player Action: Fold with animation
+        function animateFold() {
+            const button = event.target;
+            animateButtonClick(button);
+            
+            const seat = document.querySelector('.seat-0');
+            seat.classList.add('folded');
+            updatePlayerStatus(0, 'Folded');
+            logAction('You folded');
+            console.log('Player folded with animation');
+        }
+        
+        // Player Action: Call with animation
+        function animateCall() {
+            const button = event.target;
+            animateButtonClick(button);
+            
+            updatePlayerBet(0, 20);
+            updatePlayerStatus(0, 'Called');
+            logAction('You called $20');
+            console.log('Player called $20 with chip animation');
+        }
+        
+        // Player Action: Raise with animation
+        function animateRaise() {
+            const button = event.target;
+            animateButtonClick(button);
+            
+            const amount = parseInt(document.getElementById('raise-slider').value);
+            updatePlayerBet(0, amount);
+            updatePlayerStatus(0, 'Raised');
+            logAction(`You raised to $${amount}`);
+            console.log(`Player raised to $${amount} with chip animation`);
+        }
+        
+        // Raise slider animation
+        const raiseSlider = document.getElementById('raise-slider');
+        const raiseAmountDisplay = document.getElementById('raise-amount');
+        
+        raiseSlider.addEventListener('input', function() {
+            raiseAmountDisplay.textContent = '$' + this.value;
+            raiseAmountDisplay.classList.add('updating');
+            setTimeout(() => {
+                raiseAmountDisplay.classList.remove('updating');
+            }, 200);
+        });
+        
+        // Test Case 1: Initial Deal with Animations
+        function test1() {
+            console.log('\n=== Test 1: Initial Deal with Animations ===');
+            
+            // Reset table
+            document.querySelectorAll('.player-hand').forEach(hand => hand.innerHTML = '');
+            document.getElementById('community-cards').innerHTML = '';
+            document.querySelectorAll('.bet-amount').forEach(el => el.textContent = '0');
+            document.querySelectorAll('.player-status').forEach(el => el.textContent = '');
+            document.querySelectorAll('.player-seat').forEach(seat => {
+                seat.classList.remove('folded', 'active', 'winner');
+            });
+            updatePot(0);
+            
+            // Set dealer button with rotation
+            moveDealerButton(null, 2);
+            logAction('New hand started - Dealer: Bob');
+            console.log('✓ Dealer button set to seat 2 (Bob) with rotation');
+            
+            // Deal hole cards with animation
+            const playerCards = [
+                { rank: 'A', suit: 'spades' },
+                { rank: 'K', suit: 'spades' }
+            ];
+            
+            const sampleCards = [
+                { rank: 'Q', suit: 'hearts' },
+                { rank: 'J', suit: 'diamonds' }
+            ];
+            
+            setTimeout(() => {
+                for (let i = 0; i < 6; i++) {
+                    dealHoleCards(i, i === 0 ? playerCards : sampleCards, i !== 0);
+                }
+                console.log('✓ Hole cards dealt with slide animation');
+                logAction('Hole cards dealt');
+            }, 500);
+            
+            // Post blinds with chip animation
+            setTimeout(() => {
+                updatePlayerBet(3, 10);
+                logAction('Charlie posts small blind $10');
+                console.log('✓ Small blind posted with chip animation');
+            }, 2000);
+            
+            setTimeout(() => {
+                updatePlayerBet(4, 20);
+                logAction('Diana posts big blind $20');
+                console.log('✓ Big blind posted with chip animation');
+            }, 2500);
+            
+            setTimeout(() => {
+                updatePot(30);
+                updateRoundLabel('Pre-Flop');
+                console.log('✓ Pot updated to $30');
+                console.log('\n✅ Test 1 Complete: Animated deal sequence!');
+            }, 3500);
+        }
+        
+        // Test Case 2: Community Cards with Reveal Animations
+        function test2() {
+            console.log('\n=== Test 2: Community Cards with Animations ===');
+            
+            // Clear community cards
+            document.getElementById('community-cards').innerHTML = '';
+            
+            // Deal the flop with reveal animation
+            setTimeout(() => {
+                const flop = [
+                    { rank: 'K', suit: 'diamonds' },
+                    { rank: 'Q', suit: 'clubs' },
+                    { rank: 'J', suit: 'hearts' }
+                ];
+                
+                dealCommunityCards(flop);
+                updateRoundLabel('Flop');
+                logAction('Flop: K♦ Q♣ J♥');
+                console.log('✓ Flop dealt with reveal animation');
+                
+                updatePot(150);
+            }, 500);
+            
+            // Deal the turn
+            setTimeout(() => {
+                const turn = [
+                    { rank: 'K', suit: 'diamonds' },
+                    { rank: 'Q', suit: 'clubs' },
+                    { rank: 'J', suit: 'hearts' },
+                    { rank: '10', suit: 'spades' }
+                ];
+                
+                dealCommunityCards(turn);
+                updateRoundLabel('Turn');
+                logAction('Turn: 10♠');
+                console.log('✓ Turn dealt with reveal animation');
+                
+                updatePot(300);
+            }, 3000);
+            
+            // Deal the river
+            setTimeout(() => {
+                const river = [
+                    { rank: 'K', suit: 'diamonds' },
+                    { rank: 'Q', suit: 'clubs' },
+                    { rank: 'J', suit: 'hearts' },
+                    { rank: '10', suit: 'spades' },
+                    { rank: 'A', suit: 'hearts' }
+                ];
+                
+                dealCommunityCards(river);
+                updateRoundLabel('River');
+                logAction('River: A♥');
+                console.log('✓ River dealt with reveal animation');
+                
+                updatePot(500);
+                console.log('\n✅ Test 2 Complete: Royal flush on board!');
+            }, 5500);
+        }
+        
+        // Test Case 3: Betting Round with All Animations
+        function test3() {
+            console.log('\n=== Test 3: Betting Round with Animations ===');
+            
+            // Reset states
+            document.querySelectorAll('.bet-amount').forEach(el => el.textContent = '0');
+            document.querySelectorAll('.player-seat').forEach(seat => {
+                seat.classList.remove('folded', 'winner');
+            });
+            
+            // Betting sequence with animations
+            setTimeout(() => {
+                setActivePlayer(5);
+                updatePlayerBet(5, 40);
+                updatePlayerStatus(5, 'Raised');
+                logAction('Eve raises to $40');
+                console.log('✓ Player 5 raises with chip animation');
+            }, 500);
+            
+            setTimeout(() => {
+                setActivePlayer(0);
+                updatePlayerBet(0, 40);
+                updatePlayerStatus(0, 'Called');
+                logAction('You call $40');
+                console.log('✓ Player 0 calls with chip animation');
+            }, 1500);
+            
+            setTimeout(() => {
+                setActivePlayer(1);
+                const seat1 = document.querySelector('.seat-1');
+                seat1.classList.add('folded');
+                updatePlayerStatus(1, 'Folded');
+                logAction('Alice folds');
+                console.log('✓ Player 1 folds with fade animation');
+            }, 2500);
+            
+            setTimeout(() => {
+                setActivePlayer(2);
+                updatePlayerBet(2, 40);
+                updatePlayerStatus(2, 'Called');
+                logAction('Bob calls $40');
+                console.log('✓ Player 2 calls with chip animation');
+            }, 3500);
+            
+            setTimeout(() => {
+                setActivePlayer(3);
+                updatePlayerBet(3, 40);
+                updatePlayerStatus(3, 'Called');
+                logAction('Charlie calls $40');
+                console.log('✓ Player 3 calls with chip animation');
+            }, 4500);
+            
+            setTimeout(() => {
+                setActivePlayer(4);
+                updatePlayerBet(4, 200);
+                updatePlayerStatus(4, 'All-In');
+                logAction('Diana goes all-in for $200!');
+                console.log('✓ Player 4 all-in with flashing animation');
+            }, 5500);
+            
+            setTimeout(() => {
+                updatePot(390);
+                setActivePlayer(null);
+                console.log('✓ Pot updated to $390');
+            }, 6500);
+            
+            // Winner celebration
+            setTimeout(() => {
+                celebrateWinner(0);
+                logAction('🎉 You win with a Royal Flush!');
+                console.log('✓ Winner celebration animation triggered');
+                console.log('\n✅ Test 3 Complete: Full betting round with winner!');
+            }, 7500);
+        }
+        
+        // Capture console output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        };
+        
+        // Initialize
+        console.log('🎬 Animated Poker Table UI initialized');
+        console.log('✓ All animation systems ready:');
+        console.log('  - Card dealing animations (slide from deck)');
+        console.log('  - Chip movement animations (to pot)');
+        console.log('  - Button click feedback (scale transform)');
+        console.log('  - Fold animations (fade/flip)');
+        console.log('  - Winner celebration (glow/pulse)');
+        console.log('  - Dealer button rotation');
+        console.log('  - Raise slider transitions');
+        console.log('\n💡 Run tests to see all animations in action!');
+        console.log('🎮 Use player controls to test interactive animations');
+    </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Effects - Polish & Enhancement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c5530 0%, #0a5f38 100%);
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; margin-top: 0; }
+        .sound-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .sound-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .sound-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .volume-control {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .volume-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+        }
+        .toggle-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .toggle-button.muted { background: #f44336; }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔊 Example 1: Sound Effects</h1>
+        <p>Add sound effects to poker actions for an immersive experience using Web Audio API.</p>
+        
+        <div class="volume-control">
+            <label for="volume"><strong>Volume:</strong> <span id="volumeValue">50%</span></label>
+            <input type="range" id="volume" class="volume-slider" min="0" max="100" value="50">
+        </div>
+        
+        <button id="toggleSound" class="toggle-button">🔊 Sound: ON</button>
+        
+        <div class="sound-controls">
+            <button class="sound-button" onclick="playSound('deal')">🃏 Deal Card</button>
+            <button class="sound-button" onclick="playSound('shuffle')">🔀 Shuffle</button>
+            <button class="sound-button" onclick="playSound('chips')">🪙 Bet Chips</button>
+            <button class="sound-button" onclick="playSound('fold')">❌ Fold</button>
+            <button class="sound-button" onclick="playSound('win')">🏆 Win</button>
+            <button class="sound-button" onclick="playSound('lose')">😞 Lose</button>
+        </div>
+        
+        <button onclick="runExample()" class="toggle-button">Run Test Sequence</button>
+        <button onclick="testCase1()" class="toggle-button">Test Case 1: All Sounds</button>
+        <button onclick="testCase2()" class="toggle-button">Test Case 2: Volume Test</button>
+        
+        <div id="output" class="output"><h3>Click buttons to test sounds...</h3></div>
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        console.log('🔊 Sound Effects Example');
+        
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let soundEnabled = true;
+        let masterVolume = 0.5;
+        
+        const volumeSlider = document.getElementById('volume');
+        const volumeValue = document.getElementById('volumeValue');
+        const toggleButton = document.getElementById('toggleSound');
+        
+        volumeSlider.addEventListener('input', (e) => {
+            masterVolume = e.target.value / 100;
+            volumeValue.textContent = e.target.value + '%';
+            log(`Volume: ${e.target.value}%`);
+        });
+        
+        toggleButton.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            toggleButton.textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+            toggleButton.classList.toggle('muted');
+            log(`Sound ${soundEnabled ? 'enabled' : 'disabled'}`);
+        });
+        
+        function playSound(type) {
+            if (!soundEnabled) {
+                log(`Sound disabled - skipping ${type}`);
+                return;
+            }
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            let duration = 0.1, frequency = 440, waveType = 'sine';
+            
+            switch(type) {
+                case 'deal':
+                    frequency = 200; duration = 0.05; waveType = 'triangle';
+                    log('🃏 Deal card');
+                    break;
+                case 'shuffle':
+                    frequency = 150; duration = 0.3; waveType = 'square';
+                    log('🔀 Shuffle');
+                    break;
+                case 'chips':
+                    frequency = 800; duration = 0.08; waveType = 'triangle';
+                    log('🪙 Bet chips');
+                    break;
+                case 'fold':
+                    frequency = 100; duration = 0.15; waveType = 'sawtooth';
+                    log('❌ Fold');
+                    break;
+                case 'win':
+                    frequency = 523; duration = 0.3; waveType = 'sine';
+                    log('🏆 Win');
+                    break;
+                case 'lose':
+                    frequency = 220; duration = 0.25; waveType = 'sawtooth';
+                    log('😞 Lose');
+                    break;
+            }
+            
+            oscillator.type = waveType;
+            oscillator.frequency.value = frequency;
+            
+            const now = audioContext.currentTime;
+            gainNode.gain.setValueAtTime(masterVolume * 0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+            
+            oscillator.start(now);
+            oscillator.stop(now + duration);
+        }
+        
+        function log(message) {
+            console.log(message);
+            const debug = document.getElementById('debug');
+            debug.textContent += message + '\n';
+            debug.scrollTop = debug.scrollHeight;
+        }
+        
+        function runExample() {
+            log('\n=== Running Sound Sequence ===');
+            document.getElementById('output').innerHTML = '<h3>Playing poker hand sequence...</h3>';
+            
+            const sounds = ['shuffle', 'deal', 'deal', 'chips', 'deal', 'chips', 'fold', 'win'];
+            sounds.forEach((sound, index) => {
+                setTimeout(() => playSound(sound), index * 400);
+            });
+            
+            setTimeout(() => {
+                document.getElementById('output').innerHTML += '<p>✅ Sequence complete!</p>';
+                log('✅ Sequence complete');
+            }, sounds.length * 400);
+        }
+        
+        function testCase1() {
+            log('\n=== Test Case 1: All Sounds ===');
+            document.getElementById('output').innerHTML = '<h3>Test Case 1: Testing all sound types</h3>';
+            
+            const allSounds = ['deal', 'shuffle', 'chips', 'fold', 'win', 'lose'];
+            allSounds.forEach((sound, index) => {
+                setTimeout(() => playSound(sound), index * 500);
+            });
+            
+            setTimeout(() => {
+                document.getElementById('output').innerHTML += '<p>✅ All sounds tested!</p>';
+                log('✅ Test 1 complete');
+            }, allSounds.length * 500);
+        }
+        
+        function testCase2() {
+            log('\n=== Test Case 2: Volume Control ===');
+            document.getElementById('output').innerHTML = '<h3>Test Case 2: Testing volume levels</h3>';
+            
+            const volumes = [100, 75, 50, 25, 10];
+            volumes.forEach((vol, index) => {
+                setTimeout(() => {
+                    volumeSlider.value = vol;
+                    masterVolume = vol / 100;
+                    volumeValue.textContent = vol + '%';
+                    playSound('chips');
+                    log(`Volume: ${vol}%`);
+                }, index * 800);
+            });
+            
+            setTimeout(() => {
+                document.getElementById('output').innerHTML += '<p>✅ Volume test complete!</p>';
+                log('✅ Test 2 complete');
+            }, volumes.length * 800);
+        }
+        
+        log('🔊 Sound system ready');
+    </script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4: Side Pots - Betting System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2c5530;
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; margin-top: 0; }
+        .main-pot {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5530;
+            text-align: center;
+            padding: 15px;
+            background: #ffd700;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .player-card {
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background: white;
+        }
+        .player-card.all-in {
+            border-color: #e91e63;
+            background: #fce4ec;
+        }
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+        .player-stats {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .pots-breakdown {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .pot-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .pot-item.main { border-left-color: #ffd700; }
+        .pot-item.side1 { border-left-color: #2196F3; }
+        .pot-item.side2 { border-left-color: #9c27b0; }
+        .pot-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        .eligible-players {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Example 4: Side Pots Calculation</h1>
+        <p>This example demonstrates <strong>side pots</strong> when multiple players go all-in for different amounts.</p>
+        <p><strong>Key Concept:</strong> Create separate pots for each betting level, with different eligible players!</p>
+        
+        <div class="main-pot">
+            Total Pot: $<span id="totalPot">0</span>
+        </div>
+
+        <div id="playersDisplay" class="players-grid"></div>
+
+        <div id="potsDisplay" class="pots-breakdown">
+            <h3>Pots Breakdown</h3>
+            <div id="potsList"></div>
+        </div>
+
+        <button onclick="runExample()">Calculate Side Pots</button>
+        <button onclick="testCase1()">Test Case 1: Classic Example</button>
+        <button onclick="testCase2()">Test Case 2: Three Levels</button>
+        <button onclick="testCase3()">Test Case 3: Equal Bets</button>
+        
+        <div id="output" class="output">
+            <h3>Click "Calculate Side Pots" to see the breakdown...</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            players: [
+                { id: 0, name: 'Player 1', chips: 0, bet: 100, allIn: true },
+                { id: 1, name: 'Player 2', chips: 0, bet: 500, allIn: true },
+                { id: 2, name: 'Player 3', chips: 0, bet: 1000, allIn: true },
+                { id: 3, name: 'Player 4', chips: 0, bet: 1000, allIn: true }
+            ],
+            pot: 2600
+        };
+
+        // Calculate side pots
+        function calculateSidePots(state) {
+            const pots = [];
+            const activePlayers = state.players.filter(p => !p.folded);
+            
+            if (activePlayers.length === 0) {
+                return pots;
+            }
+            
+            // Sort players by bet amount
+            const playerBets = activePlayers
+                .map(p => ({ id: p.id, name: p.name, bet: p.bet }))
+                .sort((a, b) => a.bet - b.bet);
+            
+            let previousBet = 0;
+            let remainingPlayers = [...playerBets];
+            
+            for (let i = 0; i < playerBets.length; i++) {
+                const currentBet = playerBets[i].bet;
+                const betDifference = currentBet - previousBet;
+                
+                if (betDifference > 0 && remainingPlayers.length > 0) {
+                    // Calculate pot amount for this level
+                    const potAmount = betDifference * remainingPlayers.length;
+                    
+                    // Create pot entry
+                    const potType = pots.length === 0 ? 'Main Pot' : `Side Pot ${pots.length}`;
+                    pots.push({
+                        type: potType,
+                        amount: potAmount,
+                        eligiblePlayers: remainingPlayers.map(p => ({ id: p.id, name: p.name })),
+                        betLevel: currentBet
+                    });
+                    
+                    console.log(`${potType}: $${potAmount} (${remainingPlayers.length} players × $${betDifference})`);
+                    console.log(`  Eligible: ${remainingPlayers.map(p => p.name).join(', ')}`);
+                }
+                
+                // Remove current player from remaining players
+                remainingPlayers = remainingPlayers.filter(p => p.id !== playerBets[i].id);
+                previousBet = currentBet;
+            }
+            
+            return pots;
+        }
+
+        // UI Functions
+        function updateDisplay() {
+            document.getElementById('totalPot').textContent = gameState.pot;
+            
+            const playersDiv = document.getElementById('playersDisplay');
+            playersDiv.innerHTML = '';
+            
+            gameState.players.forEach(player => {
+                const card = document.createElement('div');
+                card.className = 'player-card' + (player.allIn ? ' all-in' : '');
+                card.innerHTML = `
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-stats">💰 Starting Chips: $${player.bet}</div>
+                    <div class="player-stats">🎯 Total Bet: $${player.bet}</div>
+                    ${player.allIn ? '<div class="player-stats" style="color: #e91e63; font-weight: bold;">🔥 ALL-IN</div>' : ''}
+                `;
+                playersDiv.appendChild(card);
+            });
+        }
+
+        function displayPots(pots) {
+            const potsDiv = document.getElementById('potsList');
+            potsDiv.innerHTML = '';
+            
+            if (pots.length === 0) {
+                potsDiv.innerHTML = '<p>No pots calculated yet.</p>';
+                return;
+            }
+            
+            pots.forEach((pot, idx) => {
+                const potClass = idx === 0 ? 'main' : `side${idx}`;
+                const div = document.createElement('div');
+                div.className = `pot-item ${potClass}`;
+                div.innerHTML = `
+                    <div class="pot-amount">${pot.type}: $${pot.amount}</div>
+                    <div style="font-size: 12px; color: #666;">Bet level: $${pot.betLevel}</div>
+                    <div class="eligible-players">
+                        <strong>✅ Eligible Players (${pot.eligiblePlayers.length}):</strong>
+                        ${pot.eligiblePlayers.map(p => p.name).join(', ')}
+                    </div>
+                `;
+                potsDiv.appendChild(div);
+            });
+        }
+
+        function logOutput(message, isError = false) {
+            const output = document.getElementById('output');
+            const color = isError ? '#d32f2f' : '#2c5530';
+            output.innerHTML = `<h3 style="color: ${color}">${message}</h3>`;
+        }
+
+        // Run example
+        function runExample() {
+            console.log('\n=== Calculating Side Pots ===');
+            console.log('Player Bets:');
+            gameState.players.forEach(p => {
+                console.log(`  ${p.name}: $${p.bet}`);
+            });
+            
+            const pots = calculateSidePots(gameState);
+            displayPots(pots);
+            
+            const totalPots = pots.reduce((sum, pot) => sum + pot.amount, 0);
+            logOutput(`✅ Side pots calculated! ${pots.length} pot(s) created. Total: $${totalPots}`);
+        }
+
+        // Test Cases
+        function testCase1() {
+            console.log('\n=== Test Case 1: Classic Side Pot Example ===');
+            gameState = {
+                players: [
+                    { id: 0, name: 'P1 (100)', chips: 0, bet: 100, allIn: true, folded: false },
+                    { id: 1, name: 'P2 (500)', chips: 0, bet: 500, allIn: true, folded: false },
+                    { id: 2, name: 'P3 (1000)', chips: 0, bet: 1000, allIn: true, folded: false },
+                    { id: 3, name: 'P4 (1000)', chips: 0, bet: 1000, allIn: true, folded: false }
+                ],
+                pot: 2600
+            };
+            
+            updateDisplay();
+            const pots = calculateSidePots(gameState);
+            displayPots(pots);
+            
+            logOutput('✅ Test Case 1: Main pot ($400) + Side pot 1 ($1200) + Side pot 2 ($1000)');
+            console.log('Expected: Main=$400, Side1=$1200, Side2=$1000');
+            console.log('Main pot: 4 players × $100 = $400 (all eligible)');
+            console.log('Side pot 1: 3 players × $400 = $1200 (P2, P3, P4)');
+            console.log('Side pot 2: 2 players × $500 = $1000 (P3, P4)');
+        }
+
+        function testCase2() {
+            console.log('\n=== Test Case 2: Three Different Levels ===');
+            gameState = {
+                players: [
+                    { id: 0, name: 'Short (50)', chips: 0, bet: 50, allIn: true, folded: false },
+                    { id: 1, name: 'Medium (200)', chips: 0, bet: 200, allIn: true, folded: false },
+                    { id: 2, name: 'Big (500)', chips: 0, bet: 500, allIn: true, folded: false }
+                ],
+                pot: 750
+            };
+            
+            updateDisplay();
+            const pots = calculateSidePots(gameState);
+            displayPots(pots);
+            
+            logOutput('✅ Test Case 2: Three distinct pot levels created!');
+            console.log('Expected: Main=$150, Side1=$450, Side2=$150');
+            console.log('Main pot: 3 × $50 = $150');
+            console.log('Side pot 1: 2 × $150 = $300');
+            console.log('Side pot 2: 1 × $300 = $300');
+        }
+
+        function testCase3() {
+            console.log('\n=== Test Case 3: All Players Bet Same Amount ===');
+            gameState = {
+                players: [
+                    { id: 0, name: 'Alice', chips: 0, bet: 300, allIn: true, folded: false },
+                    { id: 1, name: 'Bob', chips: 0, bet: 300, allIn: true, folded: false },
+                    { id: 2, name: 'Charlie', chips: 0, bet: 300, allIn: true, folded: false }
+                ],
+                pot: 900
+            };
+            
+            updateDisplay();
+            const pots = calculateSidePots(gameState);
+            displayPots(pots);
+            
+            logOutput('✅ Test Case 3: Only main pot created (all players bet same amount)');
+            console.log('Expected: Single pot of $900 (3 × $300)');
+            console.log('No side pots needed when all bets are equal');
+        }
+
+        // Capture console output to debug div
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Initialize
+        console.log('=== Example 4: Side Pots Calculation ===');
+        console.log('Demonstrating how to split pots when players bet different amounts');
+        updateDisplay();
+    </script>
+</body>
+</html>

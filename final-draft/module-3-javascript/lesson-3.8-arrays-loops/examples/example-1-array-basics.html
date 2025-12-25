@@ -1,0 +1,624 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Basics - Examples</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .demo-title {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .array-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            min-height: 40px;
+        }
+
+        .array-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .array-index {
+            display: inline-block;
+            background: #95a5a6;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .output {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📦 Array Basics - Interactive Examples</h1>
+
+    <!-- Demo 1: Creating Arrays -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 1: Creating Arrays</h2>
+        <p>Arrays can be created in multiple ways. Let's see the different methods!</p>
+        
+        <button onclick="demo1CreateEmpty()">Create Empty Array</button>
+        <button onclick="demo1CreateWithValues()">Create Array with Values</button>
+        <button onclick="demo1CreateMixed()">Create Mixed Type Array</button>
+        
+        <div id="demo1-output" class="output" style="display:none;"></div>
+        <div id="demo1-array" class="array-display"></div>
+    </div>
+
+    <!-- Demo 2: Accessing Elements -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 2: Accessing Array Elements</h2>
+        <p>Arrays use zero-based indexing. The first element is at index 0!</p>
+        
+        <div class="controls">
+            <input type="number" id="demo2-index" placeholder="Enter index (0-4)" min="0" max="4">
+            <button onclick="demo2Access()">Get Element at Index</button>
+        </div>
+        
+        <div class="info">
+            Current Array: <strong>['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']</strong>
+        </div>
+        
+        <div id="demo2-array" class="array-display"></div>
+        <div id="demo2-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 3: Array Length -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 3: Array Length Property</h2>
+        <p>Every array has a .length property that tells you how many items it contains.</p>
+        
+        <div class="controls">
+            <input type="text" id="demo3-input" placeholder="Add an item">
+            <button onclick="demo3Add()">Add Item</button>
+            <button onclick="demo3Remove()">Remove Last Item</button>
+            <button onclick="demo3Clear()">Clear All</button>
+        </div>
+        
+        <div id="demo3-array" class="array-display"></div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Length</div>
+                <div class="stat-value" id="demo3-length">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">First Item</div>
+                <div class="stat-value" id="demo3-first">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Last Item</div>
+                <div class="stat-value" id="demo3-last">-</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 4: Modifying Arrays -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 4: Modifying Array Elements</h2>
+        <p>You can change array elements by assigning new values to specific indexes.</p>
+        
+        <div class="controls">
+            <input type="number" id="demo4-index" placeholder="Index" min="0" max="4">
+            <input type="text" id="demo4-value" placeholder="New Value">
+            <button onclick="demo4Modify()">Update Element</button>
+        </div>
+        
+        <div id="demo4-array" class="array-display"></div>
+        <div id="demo4-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 5: Array Methods Overview -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 5: Common Array Methods</h2>
+        <p>JavaScript provides many built-in methods to work with arrays.</p>
+        
+        <div class="info">
+            <strong>Current Array:</strong> <span id="demo5-current">[1, 2, 3]</span>
+        </div>
+        
+        <div class="controls">
+            <button onclick="demo5Push()">push(4) - Add to End</button>
+            <button onclick="demo5Pop()">pop() - Remove from End</button>
+            <button onclick="demo5Unshift()">unshift(0) - Add to Start</button>
+            <button onclick="demo5Shift()">shift() - Remove from Start</button>
+            <button onclick="demo5Reset()">Reset Array</button>
+        </div>
+        
+        <div id="demo5-array" class="array-display"></div>
+        <div id="demo5-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Demo 6: Finding Elements -->
+    <div class="demo-container">
+        <h2 class="demo-title">Demo 6: Finding Elements</h2>
+        <p>Use indexOf() and includes() to find elements in arrays.</p>
+        
+        <div class="controls">
+            <input type="text" id="demo6-search" placeholder="Search for...">
+            <button onclick="demo6IndexOf()">indexOf()</button>
+            <button onclick="demo6Includes()">includes()</button>
+        </div>
+        
+        <div class="info">
+            Array: <strong>['cat', 'dog', 'bird', 'fish', 'cat']</strong>
+        </div>
+        
+        <div id="demo6-output" class="output" style="display:none;"></div>
+    </div>
+
+    <script>
+        console.log('=== Array Basics Examples Loaded ===');
+
+        // Demo 1: Creating Arrays
+        function demo1CreateEmpty() {
+            console.log('Creating empty array...');
+            
+            let emptyArray = [];
+            
+            document.getElementById('demo1-output').style.display = 'block';
+            document.getElementById('demo1-output').innerHTML = `
+                <strong>Code:</strong> <code>let emptyArray = [];</code><br>
+                <strong>Result:</strong> Empty array created<br>
+                <strong>Length:</strong> ${emptyArray.length}
+            `;
+            
+            document.getElementById('demo1-array').innerHTML = 
+                '<em>Empty array - no items to display</em>';
+            
+            console.log('Empty array:', emptyArray);
+        }
+
+        function demo1CreateWithValues() {
+            console.log('Creating array with values...');
+            
+            let fruits = ['Apple', 'Banana', 'Orange', 'Grape'];
+            
+            document.getElementById('demo1-output').style.display = 'block';
+            document.getElementById('demo1-output').innerHTML = `
+                <strong>Code:</strong> <code>let fruits = ['Apple', 'Banana', 'Orange', 'Grape'];</code><br>
+                <strong>Result:</strong> Array with 4 items created
+            `;
+            
+            displayArray(fruits, 'demo1-array');
+            console.log('Fruits array:', fruits);
+        }
+
+        function demo1CreateMixed() {
+            console.log('Creating mixed type array...');
+            
+            let mixed = ['text', 42, true, null, 3.14];
+            
+            document.getElementById('demo1-output').style.display = 'block';
+            document.getElementById('demo1-output').innerHTML = `
+                <strong>Code:</strong> <code>let mixed = ['text', 42, true, null, 3.14];</code><br>
+                <strong>Result:</strong> Arrays can hold different data types!<br>
+                <strong>Types:</strong> string, number, boolean, null, number
+            `;
+            
+            displayArray(mixed, 'demo1-array');
+            console.log('Mixed array:', mixed);
+        }
+
+        // Demo 2: Accessing Elements
+        const demo2Fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'];
+        
+        // Display initial array
+        displayArray(demo2Fruits, 'demo2-array');
+
+        function demo2Access() {
+            const index = parseInt(document.getElementById('demo2-index').value);
+            
+            console.log('Accessing index:', index);
+            
+            if (isNaN(index)) {
+                document.getElementById('demo2-output').style.display = 'block';
+                document.getElementById('demo2-output').innerHTML = 
+                    '❌ Please enter a valid index number!';
+                return;
+            }
+            
+            if (index < 0 || index >= demo2Fruits.length) {
+                document.getElementById('demo2-output').style.display = 'block';
+                document.getElementById('demo2-output').innerHTML = 
+                    `❌ Index ${index} is out of bounds! Array has indices 0-${demo2Fruits.length - 1}`;
+                return;
+            }
+            
+            const value = demo2Fruits[index];
+            
+            document.getElementById('demo2-output').style.display = 'block';
+            document.getElementById('demo2-output').innerHTML = `
+                <strong>Code:</strong> <code>fruits[${index}]</code><br>
+                <strong>Result:</strong> "${value}"<br>
+                <strong>Remember:</strong> Arrays are zero-indexed (first item is at index 0)
+            `;
+            
+            console.log(`demo2Fruits[${index}] =`, value);
+        }
+
+        // Demo 3: Array Length
+        let demo3Array = [];
+        updateDemo3Display();
+
+        function demo3Add() {
+            const input = document.getElementById('demo3-input');
+            const value = input.value.trim();
+            
+            if (value === '') {
+                alert('Please enter an item to add!');
+                return;
+            }
+            
+            demo3Array.push(value);
+            console.log('Added:', value, '| Array:', demo3Array);
+            
+            input.value = '';
+            updateDemo3Display();
+        }
+
+        function demo3Remove() {
+            if (demo3Array.length === 0) {
+                alert('Array is already empty!');
+                return;
+            }
+            
+            const removed = demo3Array.pop();
+            console.log('Removed:', removed, '| Array:', demo3Array);
+            
+            updateDemo3Display();
+        }
+
+        function demo3Clear() {
+            demo3Array = [];
+            console.log('Array cleared');
+            updateDemo3Display();
+        }
+
+        function updateDemo3Display() {
+            if (demo3Array.length === 0) {
+                document.getElementById('demo3-array').innerHTML = '<em>Array is empty</em>';
+            } else {
+                displayArray(demo3Array, 'demo3-array');
+            }
+            
+            document.getElementById('demo3-length').textContent = demo3Array.length;
+            document.getElementById('demo3-first').textContent = 
+                demo3Array.length > 0 ? demo3Array[0] : '-';
+            document.getElementById('demo3-last').textContent = 
+                demo3Array.length > 0 ? demo3Array[demo3Array.length - 1] : '-';
+        }
+
+        // Demo 4: Modifying Arrays
+        let demo4Array = ['Red', 'Green', 'Blue', 'Yellow', 'Purple'];
+        displayArray(demo4Array, 'demo4-array');
+
+        function demo4Modify() {
+            const index = parseInt(document.getElementById('demo4-index').value);
+            const newValue = document.getElementById('demo4-value').value.trim();
+            
+            if (isNaN(index) || newValue === '') {
+                alert('Please enter both an index and a new value!');
+                return;
+            }
+            
+            if (index < 0 || index >= demo4Array.length) {
+                document.getElementById('demo4-output').style.display = 'block';
+                document.getElementById('demo4-output').innerHTML = 
+                    `❌ Index ${index} is out of bounds! Array has indices 0-${demo4Array.length - 1}`;
+                return;
+            }
+            
+            const oldValue = demo4Array[index];
+            demo4Array[index] = newValue;
+            
+            console.log(`Changed demo4Array[${index}] from "${oldValue}" to "${newValue}"`);
+            
+            document.getElementById('demo4-output').style.display = 'block';
+            document.getElementById('demo4-output').innerHTML = `
+                ✅ Updated index ${index}<br>
+                <strong>Old Value:</strong> "${oldValue}"<br>
+                <strong>New Value:</strong> "${newValue}"
+            `;
+            
+            displayArray(demo4Array, 'demo4-array');
+        }
+
+        // Demo 5: Array Methods
+        let demo5Array = [1, 2, 3];
+        updateDemo5Display();
+
+        function demo5Push() {
+            const nextNum = demo5Array[demo5Array.length - 1] + 1;
+            demo5Array.push(nextNum);
+            
+            console.log('push(' + nextNum + '):', demo5Array);
+            
+            document.getElementById('demo5-output').style.display = 'block';
+            document.getElementById('demo5-output').innerHTML = 
+                `✅ Added ${nextNum} to the end of the array`;
+            
+            updateDemo5Display();
+        }
+
+        function demo5Pop() {
+            if (demo5Array.length === 0) {
+                alert('Array is empty!');
+                return;
+            }
+            
+            const removed = demo5Array.pop();
+            console.log('pop():', 'Removed', removed, '| Array:', demo5Array);
+            
+            document.getElementById('demo5-output').style.display = 'block';
+            document.getElementById('demo5-output').innerHTML = 
+                `✅ Removed ${removed} from the end. Returned: ${removed}`;
+            
+            updateDemo5Display();
+        }
+
+        function demo5Unshift() {
+            const prevNum = demo5Array[0] - 1;
+            demo5Array.unshift(prevNum);
+            
+            console.log('unshift(' + prevNum + '):', demo5Array);
+            
+            document.getElementById('demo5-output').style.display = 'block';
+            document.getElementById('demo5-output').innerHTML = 
+                `✅ Added ${prevNum} to the beginning of the array`;
+            
+            updateDemo5Display();
+        }
+
+        function demo5Shift() {
+            if (demo5Array.length === 0) {
+                alert('Array is empty!');
+                return;
+            }
+            
+            const removed = demo5Array.shift();
+            console.log('shift():', 'Removed', removed, '| Array:', demo5Array);
+            
+            document.getElementById('demo5-output').style.display = 'block';
+            document.getElementById('demo5-output').innerHTML = 
+                `✅ Removed ${removed} from the beginning. Returned: ${removed}`;
+            
+            updateDemo5Display();
+        }
+
+        function demo5Reset() {
+            demo5Array = [1, 2, 3];
+            console.log('Array reset:', demo5Array);
+            
+            document.getElementById('demo5-output').style.display = 'none';
+            updateDemo5Display();
+        }
+
+        function updateDemo5Display() {
+            displayArray(demo5Array, 'demo5-array');
+            document.getElementById('demo5-current').textContent = 
+                '[' + demo5Array.join(', ') + ']';
+        }
+
+        // Demo 6: Finding Elements
+        const demo6Array = ['cat', 'dog', 'bird', 'fish', 'cat'];
+
+        function demo6IndexOf() {
+            const searchTerm = document.getElementById('demo6-search').value.trim();
+            
+            if (searchTerm === '') {
+                alert('Please enter a search term!');
+                return;
+            }
+            
+            const index = demo6Array.indexOf(searchTerm);
+            
+            console.log(`indexOf("${searchTerm}"):`, index);
+            
+            document.getElementById('demo6-output').style.display = 'block';
+            
+            if (index === -1) {
+                document.getElementById('demo6-output').innerHTML = `
+                    <strong>indexOf("${searchTerm}"):</strong> -1<br>
+                    ❌ "${searchTerm}" was not found in the array<br>
+                    <em>indexOf() returns -1 when the item doesn't exist</em>
+                `;
+            } else {
+                document.getElementById('demo6-output').innerHTML = `
+                    <strong>indexOf("${searchTerm}"):</strong> ${index}<br>
+                    ✅ "${searchTerm}" was found at index ${index}<br>
+                    <em>Note: indexOf() returns the FIRST occurrence</em>
+                `;
+            }
+        }
+
+        function demo6Includes() {
+            const searchTerm = document.getElementById('demo6-search').value.trim();
+            
+            if (searchTerm === '') {
+                alert('Please enter a search term!');
+                return;
+            }
+            
+            const found = demo6Array.includes(searchTerm);
+            
+            console.log(`includes("${searchTerm}"):`, found);
+            
+            document.getElementById('demo6-output').style.display = 'block';
+            
+            if (found) {
+                document.getElementById('demo6-output').innerHTML = `
+                    <strong>includes("${searchTerm}"):</strong> true<br>
+                    ✅ "${searchTerm}" exists in the array<br>
+                    <em>includes() returns true or false</em>
+                `;
+            } else {
+                document.getElementById('demo6-output').innerHTML = `
+                    <strong>includes("${searchTerm}"):</strong> false<br>
+                    ❌ "${searchTerm}" does not exist in the array<br>
+                    <em>includes() returns true or false</em>
+                `;
+            }
+        }
+
+        // Helper function to display arrays
+        function displayArray(arr, elementId) {
+            const container = document.getElementById(elementId);
+            
+            if (arr.length === 0) {
+                container.innerHTML = '<em>Empty array</em>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < arr.length; i++) {
+                html += `
+                    <span class="array-item">
+                        <span class="array-index">${i}</span>
+                        ${arr[i]}
+                    </span>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        console.log('All demos ready!');
+    </script>
+</body>
+</html>

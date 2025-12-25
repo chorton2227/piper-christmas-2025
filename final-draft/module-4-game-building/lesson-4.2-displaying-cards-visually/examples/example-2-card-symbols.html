@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Card Symbols & Unicode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+
+        .info h2 {
+            margin-top: 0;
+        }
+
+        .info code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-showcase {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .suit-group {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .suit-group h3 {
+            margin: 0 0 15px 0;
+            text-align: center;
+        }
+
+        .suit-cards {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.1);
+        }
+
+        .card-rank {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .card-suit {
+            font-size: 32px;
+            line-height: 1;
+            margin-top: 3px;
+        }
+
+        .hearts .card-rank,
+        .hearts .card-suit,
+        .diamonds .card-rank,
+        .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank,
+        .spades .card-suit,
+        .clubs .card-rank,
+        .clubs .card-suit {
+            color: #1a1a1a;
+        }
+
+        .symbol-reference {
+            background: white;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .symbol-reference h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .symbol-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .symbol-table th,
+        .symbol-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .symbol-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .symbol-table .suit-symbol {
+            font-size: 28px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>♠♥♦♣ Card Symbols & Unicode</h1>
+
+    <div class="info">
+        <h2>Using Unicode for Card Suits</h2>
+        <p>Unicode provides special characters for card suits that work in all modern browsers. You can use them in two ways:</p>
+        <ul>
+            <li><strong>HTML Entity:</strong> <code>&amp;spades;</code> displays as ♠</li>
+            <li><strong>Direct Symbol:</strong> Just type <code>♠</code> directly in your HTML</li>
+        </ul>
+        <p>These symbols are fonts, so you can style them with CSS (color, size, etc.)</p>
+    </div>
+
+    <div class="card-showcase">
+        <div class="suit-group">
+            <h3>♠ Spades (Black)</h3>
+            <div class="suit-cards">
+                <div class="card spades">
+                    <div class="card-rank">A</div>
+                    <div class="card-suit">♠</div>
+                </div>
+                <div class="card spades">
+                    <div class="card-rank">K</div>
+                    <div class="card-suit">♠</div>
+                </div>
+                <div class="card spades">
+                    <div class="card-rank">Q</div>
+                    <div class="card-suit">♠</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="suit-group">
+            <h3>♥ Hearts (Red)</h3>
+            <div class="suit-cards">
+                <div class="card hearts">
+                    <div class="card-rank">A</div>
+                    <div class="card-suit">♥</div>
+                </div>
+                <div class="card hearts">
+                    <div class="card-rank">K</div>
+                    <div class="card-suit">♥</div>
+                </div>
+                <div class="card hearts">
+                    <div class="card-rank">Q</div>
+                    <div class="card-suit">♥</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="suit-group">
+            <h3>♦ Diamonds (Red)</h3>
+            <div class="suit-cards">
+                <div class="card diamonds">
+                    <div class="card-rank">A</div>
+                    <div class="card-suit">♦</div>
+                </div>
+                <div class="card diamonds">
+                    <div class="card-rank">K</div>
+                    <div class="card-suit">♦</div>
+                </div>
+                <div class="card diamonds">
+                    <div class="card-rank">Q</div>
+                    <div class="card-suit">♦</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="suit-group">
+            <h3>♣ Clubs (Black)</h3>
+            <div class="suit-cards">
+                <div class="card clubs">
+                    <div class="card-rank">A</div>
+                    <div class="card-suit">♣</div>
+                </div>
+                <div class="card clubs">
+                    <div class="card-rank">K</div>
+                    <div class="card-suit">♣</div>
+                </div>
+                <div class="card clubs">
+                    <div class="card-rank">Q</div>
+                    <div class="card-suit">♣</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="symbol-reference">
+        <h2>Unicode Symbol Reference</h2>
+        <table class="symbol-table">
+            <thead>
+                <tr>
+                    <th>Suit</th>
+                    <th class="suit-symbol">Symbol</th>
+                    <th>HTML Entity</th>
+                    <th>Direct Unicode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Spades</td>
+                    <td class="suit-symbol">♠</td>
+                    <td><code>&amp;spades;</code></td>
+                    <td><code>♠</code></td>
+                </tr>
+                <tr style="color: #d32f2f;">
+                    <td>Hearts</td>
+                    <td class="suit-symbol">♥</td>
+                    <td><code>&amp;hearts;</code></td>
+                    <td><code>♥</code></td>
+                </tr>
+                <tr style="color: #d32f2f;">
+                    <td>Diamonds</td>
+                    <td class="suit-symbol">♦</td>
+                    <td><code>&amp;diams;</code></td>
+                    <td><code>♦</code></td>
+                </tr>
+                <tr>
+                    <td>Clubs</td>
+                    <td class="suit-symbol">♣</td>
+                    <td><code>&amp;clubs;</code></td>
+                    <td><code>♣</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

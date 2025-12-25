@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1 Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .hand-display {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-rank {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .card-suit {
+            font-size: 28px;
+            margin-top: 2px;
+        }
+
+        .card-value {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .hearts .card-rank, .hearts .card-suit, .diamonds .card-rank, .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank, .spades .card-suit, .clubs .card-rank, .clubs .card-suit {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exercise 1 Solution: Sort and Count</h1>
+
+        <h2>Unsorted Hand</h2>
+        <div class="hand-display" id="unsorted"></div>
+
+        <h2>Sorted Hand (Descending)</h2>
+        <div class="hand-display" id="sorted"></div>
+
+        <h2>Rank Counts</h2>
+        <table id="countsTable">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody id="countsBody"></tbody>
+        </table>
+
+        <button onclick="runAnalysis()">Run Analysis</button>
+        <button onclick="newHand()">Generate New Hand</button>
+    </div>
+
+    <script>
+        function createCard(suit, rank, value) {
+            return { suit, rank, value };
+        }
+
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push(createCard(suit, ranks[i], values[i]));
+                }
+            }
+            return deck;
+        }
+
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function sortCards(cards) {
+            return cards.sort((a, b) => b.value - a.value);
+        }
+
+        function countRanks(cards) {
+            const counts = {};
+            for (const card of cards) {
+                counts[card.rank] = (counts[card.rank] || 0) + 1;
+            }
+            return counts;
+        }
+
+        function displayCards(cards, elementId) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            const suitSymbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+            
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${card.suit}`;
+                cardEl.innerHTML = `
+                    <div class="card-rank">${card.rank}</div>
+                    <div class="card-suit">${suitSymbols[card.suit]}</div>
+                    <div class="card-value">${card.value}</div>
+                `;
+                container.appendChild(cardEl);
+            });
+        }
+
+        function displayCounts(counts) {
+            const tbody = document.getElementById('countsBody');
+            tbody.innerHTML = '';
+            
+            for (const rank in counts) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${rank}</strong></td>
+                    <td>${counts[rank]}</td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        let myHand = [];
+
+        function newHand() {
+            const deck = createDeck();
+            const shuffled = shuffle(deck);
+            myHand = shuffled.slice(0, 7);
+            displayCards(myHand, 'unsorted');
+            document.getElementById('sorted').innerHTML = '';
+            document.getElementById('countsBody').innerHTML = '';
+        }
+
+        function runAnalysis() {
+            if (myHand.length === 0) newHand();
+            
+            const sorted = sortCards([...myHand]);
+            const counts = countRanks(myHand);
+            
+            displayCards(sorted, 'sorted');
+            displayCounts(counts);
+        }
+
+        window.addEventListener('load', () => {
+            myHand = [
+                createCard('hearts', '7', 7),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', '3', 3),
+                createCard('clubs', 'K', 13),
+                createCard('clubs', '7', 7),
+                createCard('hearts', 'Q', 12),
+                createCard('diamonds', '7', 7)
+            ];
+            displayCards(myHand, 'unsorted');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Library - Answer Key</title>
+</head>
+<body>
+    <h1>📚 My Function Library</h1>
+    <p>Open the console (F12) to see all functions!</p>
+
+    <script>
+        console.log('====================================');
+        console.log('📚 MY FUNCTION LIBRARY');
+        console.log('====================================');
+
+        // ====================
+        // MATH FUNCTIONS
+        // ====================
+        
+        console.log('\n=== MATH FUNCTIONS ===');
+        console.log('--------------------');
+
+        // Add two numbers
+        function add(a, b) {
+            return a + b;
+        }
+
+        // Subtract two numbers
+        function subtract(a, b) {
+            return a - b;
+        }
+
+        // Multiply two numbers
+        function multiply(a, b) {
+            return a * b;
+        }
+
+        // Divide two numbers
+        function divide(a, b) {
+            if (b === 0) {
+                return 'Error: Cannot divide by zero';
+            }
+            return a / b;
+        }
+
+        // Calculate square of a number
+        function calculateSquare(number) {
+            return number * number;
+        }
+
+        // Calculate area of a circle
+        function calculateCircleArea(radius) {
+            return 3.14159 * radius * radius;
+        }
+
+        // Check if number is even
+        function isEven(number) {
+            return number % 2 === 0;
+        }
+
+        // Test math functions
+        console.log('5 + 3 =', add(5, 3));
+        console.log('10 - 4 =', subtract(10, 4));
+        console.log('6 × 7 =', multiply(6, 7));
+        console.log('20 ÷ 4 =', divide(20, 4));
+        console.log('5² =', calculateSquare(5));
+        console.log('Circle area (r=10):', calculateCircleArea(10).toFixed(2));
+        console.log('Is 8 even?', isEven(8));
+        console.log('Is 7 even?', isEven(7));
+
+        // ====================
+        // STRING FUNCTIONS
+        // ====================
+        
+        console.log('\n=== STRING FUNCTIONS ===');
+        console.log('--------------------');
+
+        // Create a greeting message
+        function makeGreeting(name) {
+            return 'Hello, ' + name + '! Welcome!';
+        }
+
+        // Combine first and last name
+        function makeFullName(firstName, lastName) {
+            return firstName + ' ' + lastName;
+        }
+
+        // Count characters in text
+        function countCharacters(text) {
+            return text.length;
+        }
+
+        // Repeat text multiple times
+        function repeatText(text, times) {
+            let result = '';
+            for (let i = 0; i < times; i++) {
+                result = result + text;
+            }
+            return result;
+        }
+
+        // Convert text to uppercase
+        function makeUppercase(text) {
+            return text.toUpperCase();
+        }
+
+        // Make a shout message
+        function makeShoutMessage(text) {
+            return text.toUpperCase() + '!!!';
+        }
+
+        // Add quotation marks around text
+        function addQuotes(text) {
+            return '"' + text + '"';
+        }
+
+        // Test string functions
+        console.log(makeGreeting('Alex'));
+        console.log('Full name:', makeFullName('Alex', 'Smith'));
+        console.log('Characters in "Hello":', countCharacters('Hello'));
+        console.log('Ha repeated 5 times:', repeatText('Ha', 5));
+        console.log('Uppercase:', makeUppercase('hello world'));
+        console.log('Shout:', makeShoutMessage('watch out'));
+        console.log('Quoted:', addQuotes('JavaScript is fun'));
+
+        // ====================
+        // CHECK FUNCTIONS
+        // ====================
+        
+        console.log('\n=== CHECK FUNCTIONS (Boolean) ===');
+        console.log('--------------------');
+
+        // Check if age 18 or older
+        function isAdult(age) {
+            return age >= 18;
+        }
+
+        // Check if password is 8+ characters
+        function isPasswordLong(password) {
+            return password.length >= 8;
+        }
+
+        // Check if have enough money
+        function hasEnoughMoney(price, money) {
+            return money >= price;
+        }
+
+        // Check if number is positive
+        function isPositive(number) {
+            return number > 0;
+        }
+
+        // Check if day is weekend (6=Saturday, 7=Sunday)
+        function isWeekend(dayNumber) {
+            return dayNumber === 6 || dayNumber === 7;
+        }
+
+        // Check if can vote (age 18+)
+        function canVote(age) {
+            return age >= 18;
+        }
+
+        // Check if number is negative
+        function isNegative(number) {
+            return number < 0;
+        }
+
+        // Test check functions
+        console.log('Is age 20 adult?', isAdult(20));
+        console.log('Is age 15 adult?', isAdult(15));
+        console.log('Is "pass123" long enough?', isPasswordLong('pass123'));
+        console.log('Is "password123" long enough?', isPasswordLong('password123'));
+        console.log('Can afford $50 with $100?', hasEnoughMoney(50, 100));
+        console.log('Can afford $150 with $100?', hasEnoughMoney(150, 100));
+        console.log('Is 42 positive?', isPositive(42));
+        console.log('Is -10 positive?', isPositive(-10));
+        console.log('Is day 6 weekend?', isWeekend(6));
+        console.log('Is day 3 weekend?', isWeekend(3));
+
+        // ====================
+        // DISPLAY FUNCTIONS
+        // ====================
+        
+        console.log('\n=== DISPLAY FUNCTIONS ===');
+        console.log('--------------------');
+
+        // Display welcome message
+        function displayWelcome(name) {
+            console.log('╔═══════════════════════╗');
+            console.log('║   WELCOME ' + name.toUpperCase() + '!   ║');
+            console.log('╚═══════════════════════╝');
+        }
+
+        // Display game stats
+        function displayStats(health, mana, level) {
+            console.log('⚔️  STATS:');
+            console.log('   Health: ' + health + ' HP');
+            console.log('   Mana: ' + mana + ' MP');
+            console.log('   Level: ' + level);
+        }
+
+        // Display divider line
+        function displayDivider() {
+            console.log('─'.repeat(40));
+        }
+
+        // Display message in a box
+        function displayBox(message) {
+            let border = '═'.repeat(message.length + 4);
+            console.log('╔' + border + '╗');
+            console.log('║  ' + message + '  ║');
+            console.log('╚' + border + '╝');
+        }
+
+        // Display numbered list of items
+        function displayList(item1, item2, item3) {
+            console.log('📋 List:');
+            console.log('  1. ' + item1);
+            console.log('  2. ' + item2);
+            console.log('  3. ' + item3);
+        }
+
+        // Display error message
+        function displayError(errorMessage) {
+            console.log('❌ ERROR: ' + errorMessage);
+        }
+
+        // Display success message
+        function displaySuccess(successMessage) {
+            console.log('✅ SUCCESS: ' + successMessage);
+        }
+
+        // Test display functions
+        displayWelcome('Hero');
+        
+        console.log('');
+        displayStats(100, 50, 5);
+        
+        console.log('');
+        displayDivider();
+        
+        console.log('');
+        displayBox('GAME OVER');
+        
+        console.log('');
+        displayList('Sword', 'Shield', 'Potion');
+        
+        console.log('');
+        displayError('Invalid password');
+        displaySuccess('Level up!');
+
+        // ====================
+        // BONUS: CONVERSION FUNCTIONS
+        // ====================
+        
+        console.log('\n=== BONUS: CONVERSION FUNCTIONS ===');
+        console.log('--------------------');
+
+        // Miles to kilometers
+        function milesToKm(miles) {
+            return miles * 1.60934;
+        }
+
+        // Celsius to Fahrenheit
+        function celsiusToFahrenheit(celsius) {
+            return (celsius * 9 / 5) + 32;
+        }
+
+        // Hours to minutes
+        function hoursToMinutes(hours) {
+            return hours * 60;
+        }
+
+        // Test conversion functions
+        console.log('10 miles =', milesToKm(10).toFixed(2), 'km');
+        console.log('25°C =', celsiusToFahrenheit(25), '°F');
+        console.log('2 hours =', hoursToMinutes(2), 'minutes');
+
+        // ====================
+        // BONUS: GAME FUNCTIONS
+        // ====================
+        
+        console.log('\n=== BONUS: GAME FUNCTIONS ===');
+        console.log('--------------------');
+
+        // Roll a dice (1-6)
+        function rollDice() {
+            return Math.floor(Math.random() * 6) + 1;
+        }
+
+        // Calculate damage in game
+        function calculateDamage(attack, defense) {
+            let damage = attack - defense;
+            if (damage < 0) {
+                damage = 0;
+            }
+            return damage;
+        }
+
+        // Heal player
+        function healPlayer(currentHealth, healAmount, maxHealth) {
+            let newHealth = currentHealth + healAmount;
+            if (newHealth > maxHealth) {
+                newHealth = maxHealth;
+            }
+            return newHealth;
+        }
+
+        // Test game functions
+        console.log('Dice roll:', rollDice());
+        console.log('Dice roll:', rollDice());
+        console.log('Dice roll:', rollDice());
+        console.log('Damage (Attack:30, Defense:10):', calculateDamage(30, 10));
+        console.log('Heal (Current:50, Heal:30, Max:100):', healPlayer(50, 30, 100));
+        console.log('Heal (Current:90, Heal:30, Max:100):', healPlayer(90, 30, 100));
+
+        console.log('\n====================================');
+        console.log('✅ LIBRARY COMPLETE!');
+        console.log('====================================');
+        console.log('Total functions created: 30+');
+        console.log('Categories:');
+        console.log('  ✓ Math functions (7)');
+        console.log('  ✓ String functions (7)');
+        console.log('  ✓ Check functions (7)');
+        console.log('  ✓ Display functions (7)');
+        console.log('  ✓ Bonus conversions (3)');
+        console.log('  ✓ Bonus game functions (3)');
+        console.log('====================================');
+    </script>
+</body>
+</html>

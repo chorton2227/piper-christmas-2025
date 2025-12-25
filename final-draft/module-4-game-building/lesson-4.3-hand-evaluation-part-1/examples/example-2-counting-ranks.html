@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2: Counting Ranks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 10px;
+        }
+
+        .hand-display {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-rank {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .card-suit {
+            font-size: 28px;
+            margin-top: 2px;
+        }
+
+        .hearts .card-rank, .hearts .card-suit,
+        .diamonds .card-rank, .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank, .spades .card-suit,
+        .clubs .card-rank, .clubs .card-suit {
+            color: #333;
+        }
+
+        .frequency-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .frequency-table th,
+        .frequency-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .frequency-table th {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .frequency-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .count-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .count-badge.pair {
+            background: #4caf50;
+        }
+
+        .count-badge.trips {
+            background: #ff9800;
+        }
+
+        .count-badge.quads {
+            background: #f44336;
+        }
+
+        button {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2a5298;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 Counting Card Ranks</h1>
+
+    <div class="container">
+        <div class="section">
+            <h2>The Frequency Map</h2>
+            <p>To detect pairs, three of a kind, and four of a kind, we need to count how many cards we have of each rank.</p>
+            
+            <div class="code-block">
+function countRanks(cards) {
+    const counts = {};
+    
+    for (const card of cards) {
+        const rank = card.rank;
+        counts[rank] = (counts[rank] || 0) + 1;
+    }
+    
+    return counts;
+}
+            </div>
+
+            <p><strong>How it works:</strong></p>
+            <ul>
+                <li>Create an empty object to store counts</li>
+                <li>Loop through each card</li>
+                <li>If the rank doesn't exist in counts, set it to 0, then add 1</li>
+                <li>Return the counts object</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Current Hand</h2>
+            <div class="hand-display" id="hand"></div>
+            <button onclick="generateHand()">Generate New Hand</button>
+            <button onclick="countCurrentHand()">Count Ranks</button>
+        </div>
+
+        <div class="section">
+            <h2>Rank Frequency</h2>
+            <table class="frequency-table" id="frequencyTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Count</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="frequencyBody">
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #999;">
+                            Click "Count Ranks" to analyze the hand
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Try These Scenarios</h2>
+            <button onclick="showPairHand()">Show Pair Hand</button>
+            <button onclick="showTwoPairHand()">Show Two Pair</button>
+            <button onclick="showTripsHand()">Show Three of a Kind</button>
+            <button onclick="showQuadsHand()">Show Four of a Kind</button>
+        </div>
+    </div>
+
+    <script>
+        function createCard(suit, rank, value) {
+            return { suit, rank, value };
+        }
+
+        function createDeck() {
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            
+            const deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push(createCard(suit, ranks[i], values[i]));
+                }
+            }
+            return deck;
+        }
+
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function displayCards(cards) {
+            const container = document.getElementById('hand');
+            container.innerHTML = '';
+            
+            const suitSymbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+            
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${card.suit}`;
+                cardEl.innerHTML = `
+                    <div class="card-rank">${card.rank}</div>
+                    <div class="card-suit">${suitSymbols[card.suit]}</div>
+                `;
+                container.appendChild(cardEl);
+            });
+        }
+
+        function countRanks(cards) {
+            const counts = {};
+            
+            for (const card of cards) {
+                const rank = card.rank;
+                counts[rank] = (counts[rank] || 0) + 1;
+            }
+            
+            return counts;
+        }
+
+        function displayCounts(counts) {
+            const tbody = document.getElementById('frequencyBody');
+            tbody.innerHTML = '';
+            
+            for (const rank in counts) {
+                const count = counts[rank];
+                const row = document.createElement('tr');
+                
+                let description = '';
+                let badgeClass = '';
+                
+                if (count === 4) {
+                    description = 'Four of a Kind!';
+                    badgeClass = 'quads';
+                } else if (count === 3) {
+                    description = 'Three of a Kind!';
+                    badgeClass = 'trips';
+                } else if (count === 2) {
+                    description = 'Pair!';
+                    badgeClass = 'pair';
+                } else {
+                    description = 'Single card';
+                }
+                
+                row.innerHTML = `
+                    <td><strong>${rank}</strong></td>
+                    <td><span class="count-badge ${badgeClass}">${count}</span></td>
+                    <td>${description}</td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        let currentHand = [];
+
+        function generateHand() {
+            const deck = createDeck();
+            const shuffled = shuffle(deck);
+            currentHand = shuffled.slice(0, 7);
+            displayCards(currentHand);
+            document.getElementById('frequencyBody').innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align: center; color: #999;">
+                        Click "Count Ranks" to analyze the hand
+                    </td>
+                </tr>
+            `;
+        }
+
+        function countCurrentHand() {
+            if (currentHand.length === 0) {
+                generateHand();
+            }
+            const counts = countRanks(currentHand);
+            displayCounts(counts);
+        }
+
+        function showPairHand() {
+            currentHand = [
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', 'K', 13),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            displayCards(currentHand);
+            countCurrentHand();
+        }
+
+        function showTwoPairHand() {
+            currentHand = [
+                createCard('hearts', 'K', 13),
+                createCard('spades', 'K', 13),
+                createCard('diamonds', '7', 7),
+                createCard('clubs', '7', 7),
+                createCard('hearts', '3', 3)
+            ];
+            displayCards(currentHand);
+            countCurrentHand();
+        }
+
+        function showTripsHand() {
+            currentHand = [
+                createCard('hearts', '7', 7),
+                createCard('spades', '7', 7),
+                createCard('diamonds', '7', 7),
+                createCard('clubs', 'K', 13),
+                createCard('hearts', '3', 3)
+            ];
+            displayCards(currentHand);
+            countCurrentHand();
+        }
+
+        function showQuadsHand() {
+            currentHand = [
+                createCard('hearts', 'A', 14),
+                createCard('spades', 'A', 14),
+                createCard('diamonds', 'A', 14),
+                createCard('clubs', 'A', 14),
+                createCard('hearts', 'K', 13)
+            ];
+            displayCards(currentHand);
+            countCurrentHand();
+        }
+
+        window.addEventListener('load', generateHand);
+    </script>
+</body>
+</html>

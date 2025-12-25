@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1: Pre-Flop Hand Strength Evaluation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .card-inputs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .card-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #868e96 0%, #495057 100%);
+            box-shadow: 0 4px 15px rgba(73, 80, 87, 0.4);
+        }
+
+        .result {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #e9ecef;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hand-display {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100px;
+            height: 140px;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .card.hearts, .card.diamonds {
+            color: #dc3545;
+        }
+
+        .card.clubs, .card.spades {
+            color: #212529;
+        }
+
+        .card .suit {
+            font-size: 1.5em;
+        }
+
+        .strength-meter {
+            margin: 25px 0;
+        }
+
+        .strength-label {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #495057;
+        }
+
+        .meter-container {
+            background: #e9ecef;
+            height: 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .meter-fill {
+            height: 100%;
+            transition: width 1s ease-out, background 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-premium {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #fff;
+        }
+
+        .category-strong {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .category-medium {
+            background: linear-gradient(135deg, #17a2b8 0%, #007bff 100%);
+            color: white;
+        }
+
+        .category-weak {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+        }
+
+        .category-trash {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .test-results {
+            margin-top: 30px;
+        }
+
+        .test-hand {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #dee2e6;
+            transition: all 0.3s;
+        }
+
+        .test-hand:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .test-hand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .test-hand-cards {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .description h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .description p {
+            color: #495057;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎴 Pre-Flop Hand Strength Evaluation</h1>
+        <p class="subtitle">Learn how AI evaluates starting hands before the flop</p>
+
+        <div class="description">
+            <h3>How It Works</h3>
+            <p>Before the flop, AI evaluates the two hole cards to determine hand strength. Premium hands like AA, KK, and AK suited get high ratings (0.90-0.95), while trash hands like 7-2 offsuit get low ratings (0.10-0.20). This helps the AI decide whether to play the hand.</p>
+        </div>
+
+        <div class="input-section">
+            <h2 style="margin-bottom: 20px; color: #495057;">Select Your Two Hole Cards</h2>
+            
+            <div class="card-inputs">
+                <div class="card-input">
+                    <label for="card1-rank">Card 1 Rank:</label>
+                    <select id="card1-rank">
+                        <option value="14">Ace</option>
+                        <option value="13" selected>King</option>
+                        <option value="12">Queen</option>
+                        <option value="11">Jack</option>
+                        <option value="10">10</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="7">7</option>
+                        <option value="6">6</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+
+                <div class="card-input">
+                    <label for="card1-suit">Card 1 Suit:</label>
+                    <select id="card1-suit">
+                        <option value="hearts">Hearts ♥</option>
+                        <option value="diamonds">Diamonds ♦</option>
+                        <option value="clubs">Clubs ♣</option>
+                        <option value="spades" selected>Spades ♠</option>
+                    </select>
+                </div>
+
+                <div class="card-input">
+                    <label for="card2-rank">Card 2 Rank:</label>
+                    <select id="card2-rank">
+                        <option value="14" selected>Ace</option>
+                        <option value="13">King</option>
+                        <option value="12">Queen</option>
+                        <option value="11">Jack</option>
+                        <option value="10">10</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="7">7</option>
+                        <option value="6">6</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+
+                <div class="card-input">
+                    <label for="card2-suit">Card 2 Suit:</label>
+                    <select id="card2-suit">
+                        <option value="hearts">Hearts ♥</option>
+                        <option value="diamonds">Diamonds ♦</option>
+                        <option value="clubs">Clubs ♣</option>
+                        <option value="spades" selected>Spades ♠</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="evaluateHand()">Evaluate Hand Strength</button>
+                <button class="secondary" onclick="runTests()">Run Example Tests</button>
+            </div>
+        </div>
+
+        <div id="result" class="result">
+            <div class="hand-display" id="handDisplay"></div>
+            
+            <div class="strength-meter">
+                <div class="strength-label">Hand Strength Score</div>
+                <div class="meter-container">
+                    <div class="meter-fill" id="meterFill"></div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <div class="category-badge" id="categoryBadge"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-label">Strength Score</div>
+                    <div class="stat-value" id="strengthScore">0.00</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Suited</div>
+                    <div class="stat-value" id="suitedStatus">No</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Pair</div>
+                    <div class="stat-value" id="pairStatus">No</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Playability</div>
+                    <div class="stat-value" id="playability">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="testResults" class="test-results" style="display: none;">
+            <h2 style="margin-bottom: 20px; color: #495057;">Example Hand Evaluations</h2>
+            <div id="testResultsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Card rank mapping
+        const rankNames = {
+            14: 'A', 13: 'K', 12: 'Q', 11: 'J',
+            10: '10', 9: '9', 8: '8', 7: '7',
+            6: '6', 5: '5', 4: '4', 3: '3', 2: '2'
+        };
+
+        const suitSymbols = {
+            hearts: '♥',
+            diamonds: '♦',
+            clubs: '♣',
+            spades: '♠'
+        };
+
+        // Pre-flop hand strength evaluation
+        function evaluatePreFlopHand(card1, card2) {
+            const v1 = card1.value;
+            const v2 = card2.value;
+            const suited = card1.suit === card2.suit;
+            
+            const high = Math.max(v1, v2);
+            const low = Math.min(v1, v2);
+            const isPair = v1 === v2;
+            
+            console.log(`Evaluating: ${rankNames[v1]}${suitSymbols[card1.suit]} ${rankNames[v2]}${suitSymbols[card2.suit]}`);
+            console.log(`High: ${high}, Low: ${low}, Pair: ${isPair}, Suited: ${suited}`);
+            
+            // Premium pairs (AA, KK, QQ, JJ)
+            if (isPair && high >= 11) {
+                console.log('Category: Premium Pair');
+                return { strength: 0.95, category: 'premium' };
+            }
+            
+            // Premium high cards (AK, AQ suited)
+            if (high === 14 && low >= 13) {
+                const strength = suited ? 0.93 : 0.88;
+                console.log('Category: Premium High Cards');
+                return { strength, category: 'premium' };
+            }
+            
+            // Strong pairs (TT, 99)
+            if (isPair && high >= 9) {
+                console.log('Category: Strong Pair');
+                return { strength: 0.80, category: 'strong' };
+            }
+            
+            // Strong high cards (AJ, KQ, KJ suited)
+            if (high >= 13 && low >= 11 && suited) {
+                console.log('Category: Strong Suited');
+                return { strength: 0.75, category: 'strong' };
+            }
+            
+            // AQ, AJ offsuit
+            if (high === 14 && low >= 11) {
+                console.log('Category: Strong Ace-high');
+                return { strength: 0.72, category: 'strong' };
+            }
+            
+            // Medium pairs (88, 77)
+            if (isPair && high >= 7) {
+                console.log('Category: Medium Pair');
+                return { strength: 0.65, category: 'medium' };
+            }
+            
+            // Medium suited connectors (T9s, J9s, QJ)
+            if (suited && high - low <= 2 && high >= 9) {
+                console.log('Category: Medium Suited Connectors');
+                return { strength: 0.60, category: 'medium' };
+            }
+            
+            // Playable high cards (KT, QT, JT)
+            if (high >= 11 && low >= 9) {
+                const strength = suited ? 0.58 : 0.50;
+                console.log('Category: Medium High Cards');
+                return { strength, category: 'medium' };
+            }
+            
+            // Small pairs (66, 55, 44, 33, 22)
+            if (isPair) {
+                console.log('Category: Small Pair');
+                return { strength: 0.45, category: 'weak' };
+            }
+            
+            // Any ace or high card
+            if (high >= 12) {
+                const strength = suited ? 0.40 : 0.30;
+                console.log('Category: Weak High Card');
+                return { strength, category: 'weak' };
+            }
+            
+            // Suited connectors
+            if (suited && high - low <= 3) {
+                console.log('Category: Weak Suited');
+                return { strength: 0.35, category: 'weak' };
+            }
+            
+            // Trash hands
+            console.log('Category: Trash');
+            return { strength: 0.15, category: 'trash' };
+        }
+
+        function getCard(cardNum) {
+            const rank = parseInt(document.getElementById(`card${cardNum}-rank`).value);
+            const suit = document.getElementById(`card${cardNum}-suit`).value;
+            return { value: rank, suit: suit, rank: rankNames[rank] };
+        }
+
+        function displayCard(card) {
+            return `
+                <div class="card ${card.suit}">
+                    <div>${card.rank}</div>
+                    <div class="suit">${suitSymbols[card.suit]}</div>
+                </div>
+            `;
+        }
+
+        function getMeterColor(strength) {
+            if (strength >= 0.85) return 'linear-gradient(135deg, #ffd700 0%, #ff8c00 100%)';
+            if (strength >= 0.70) return 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+            if (strength >= 0.50) return 'linear-gradient(135deg, #17a2b8 0%, #007bff 100%)';
+            if (strength >= 0.30) return 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)';
+            return 'linear-gradient(135deg, #6c757d 0%, #495057 100%)';
+        }
+
+        function evaluateHand() {
+            const card1 = getCard(1);
+            const card2 = getCard(2);
+            
+            const result = evaluatePreFlopHand(card1, card2);
+            const suited = card1.suit === card2.suit;
+            const isPair = card1.value === card2.value;
+            
+            // Display cards
+            document.getElementById('handDisplay').innerHTML = 
+                displayCard(card1) + displayCard(card2);
+            
+            // Update meter
+            const meterFill = document.getElementById('meterFill');
+            meterFill.style.width = (result.strength * 100) + '%';
+            meterFill.style.background = getMeterColor(result.strength);
+            meterFill.textContent = (result.strength * 100).toFixed(0) + '%';
+            
+            // Update category badge
+            const badge = document.getElementById('categoryBadge');
+            badge.textContent = result.category.toUpperCase();
+            badge.className = 'category-badge category-' + result.category;
+            
+            // Update stats
+            document.getElementById('strengthScore').textContent = result.strength.toFixed(2);
+            document.getElementById('suitedStatus').textContent = suited ? 'Yes' : 'No';
+            document.getElementById('pairStatus').textContent = isPair ? 'Yes' : 'No';
+            document.getElementById('playability').textContent = 
+                (result.strength * 100).toFixed(0) + '%';
+            
+            // Show result
+            document.getElementById('result').classList.add('show');
+            
+            console.log('Final evaluation:', result);
+        }
+
+        function runTests() {
+            const testHands = [
+                // Premium hands
+                { cards: [{value: 14, suit: 'spades', rank: 'A'}, {value: 14, suit: 'hearts', rank: 'A'}], 
+                  description: 'Pocket Aces - The best starting hand in poker' },
+                { cards: [{value: 13, suit: 'diamonds', rank: 'K'}, {value: 13, suit: 'clubs', rank: 'K'}], 
+                  description: 'Pocket Kings - Second best starting hand' },
+                { cards: [{value: 14, suit: 'hearts', rank: 'A'}, {value: 13, suit: 'hearts', rank: 'K'}], 
+                  description: 'Ace-King Suited - Premium drawing hand' },
+                
+                // Strong hands
+                { cards: [{value: 12, suit: 'spades', rank: 'Q'}, {value: 12, suit: 'hearts', rank: 'Q'}], 
+                  description: 'Pocket Queens - Strong pair' },
+                { cards: [{value: 11, suit: 'diamonds', rank: 'J'}, {value: 10, suit: 'diamonds', rank: '10'}], 
+                  description: 'Jack-Ten Suited - Good suited connector' },
+                
+                // Medium hands
+                { cards: [{value: 8, suit: 'clubs', rank: '8'}, {value: 8, suit: 'spades', rank: '8'}], 
+                  description: 'Pocket Eights - Medium pair, playable' },
+                { cards: [{value: 14, suit: 'hearts', rank: 'A'}, {value: 10, suit: 'spades', rank: '10'}], 
+                  description: 'Ace-Ten Offsuit - Marginal hand' },
+                
+                // Weak hands
+                { cards: [{value: 5, suit: 'diamonds', rank: '5'}, {value: 5, suit: 'hearts', rank: '5'}], 
+                  description: 'Pocket Fives - Small pair, needs improvement' },
+                { cards: [{value: 12, suit: 'clubs', rank: 'Q'}, {value: 7, suit: 'spades', rank: '7'}], 
+                  description: 'Queen-Seven Offsuit - Weak, rarely playable' },
+                
+                // Trash hands
+                { cards: [{value: 7, suit: 'spades', rank: '7'}, {value: 2, suit: 'hearts', rank: '2'}], 
+                  description: 'Seven-Two Offsuit - Worst hand in poker' },
+                { cards: [{value: 9, suit: 'diamonds', rank: '9'}, {value: 3, suit: 'clubs', rank: '3'}], 
+                  description: 'Nine-Three Offsuit - Trash hand, fold pre-flop' }
+            ];
+
+            let html = '';
+            
+            testHands.forEach((test, index) => {
+                const result = evaluatePreFlopHand(test.cards[0], test.cards[1]);
+                const suited = test.cards[0].suit === test.cards[1].suit;
+                const suitedText = suited ? 's' : 'o';
+                
+                html += `
+                    <div class="test-hand" style="border-left-color: ${getMeterColor(result.strength).match(/\#[a-f0-9]{6}/i)?.[0] || '#dee2e6'}">
+                        <div class="test-hand-header">
+                            <div class="test-hand-cards">
+                                ${test.cards[0].rank}${suitSymbols[test.cards[0].suit]} 
+                                ${test.cards[1].rank}${suitSymbols[test.cards[1].suit]}
+                            </div>
+                            <span class="category-badge category-${result.category}" style="margin: 0; padding: 8px 16px; font-size: 0.9em;">
+                                ${result.category.toUpperCase()}
+                            </span>
+                        </div>
+                        <div style="color: #6c757d; margin-bottom: 10px;">
+                            ${test.description}
+                        </div>
+                        <div class="meter-container" style="height: 30px;">
+                            <div class="meter-fill" style="width: ${result.strength * 100}%; background: ${getMeterColor(result.strength)}">
+                                ${(result.strength * 100).toFixed(0)}%
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 0.9em; color: #6c757d;">
+                            <span>Strength: ${result.strength.toFixed(2)}</span>
+                            <span>${suited ? 'Suited' : 'Offsuit'}</span>
+                            <span>${test.cards[0].value === test.cards[1].value ? 'Pair' : 'Unpaired'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('testResultsContainer').innerHTML = html;
+            document.getElementById('testResults').style.display = 'block';
+            document.getElementById('testResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Run tests on page load
+        window.addEventListener('load', () => {
+            console.log('Pre-Flop Hand Strength Evaluator Loaded');
+            console.log('='.repeat(50));
+        });
+    </script>
+</body>
+</html>

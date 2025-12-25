@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer - Answer Key</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+        
+        body.work-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        body.break-mode {
+            background: linear-gradient(135deg, #51cf66 0%, #2b8a3e 100%);
+        }
+        
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+            transition: color 0.5s;
+        }
+        
+        body.work-mode h1 { color: #667eea; }
+        body.break-mode h1 { color: #51cf66; }
+        
+        .mode-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        body.work-mode .mode-badge {
+            background: #667eea;
+            color: white;
+        }
+        
+        body.break-mode .mode-badge {
+            background: #51cf66;
+            color: white;
+        }
+        
+        #timer-display {
+            font-size: 120px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            margin: 40px 0;
+            transition: color 0.5s;
+        }
+        
+        body.work-mode #timer-display { color: #667eea; }
+        body.break-mode #timer-display { color: #51cf66; }
+        
+        #timer-display.warning {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        button {
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #51cf66 0%, #2b8a3e 100%);
+            color: white;
+        }
+        
+        .btn-pause {
+            background: linear-gradient(135deg, #ffd43b 0%, #fab005 100%);
+            color: white;
+        }
+        
+        .btn-reset {
+            background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%);
+            color: white;
+        }
+        
+        .btn-add {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .mode-switch {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 30px 0;
+            border-top: 2px solid #e9ecef;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .mode-btn {
+            padding: 15px 25px;
+            font-size: 16px;
+        }
+        
+        .stats {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .stats h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .progress-ring {
+            margin: 20px auto;
+        }
+        
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.1); }
+            75% { transform: rotate(10deg) scale(1.1); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 3;
+        }
+    </style>
+</head>
+<body class="work-mode">
+    <div class="container">
+        <h1 id="mode-title">💼 Work Time</h1>
+        <div class="mode-badge" id="mode-badge">WORK MODE</div>
+        
+        <div id="timer-display">25:00</div>
+        
+        <div class="controls">
+            <button id="start-btn" class="btn-start">▶️ Start</button>
+            <button id="pause-btn" class="btn-pause" disabled>⏸️ Pause</button>
+            <button id="reset-btn" class="btn-reset">🔄 Reset</button>
+            <button id="add-time-btn" class="btn-add">➕ Add 1 Min</button>
+        </div>
+        
+        <div class="mode-switch">
+            <button class="mode-btn btn-start" onclick="switchToWork()">💼 Work (25 min)</button>
+            <button class="mode-btn" style="background: linear-gradient(135deg, #51cf66 0%, #2b8a3e 100%); color: white;" 
+                    onclick="switchToBreak()">☕ Break (5 min)</button>
+        </div>
+        
+        <div class="stats">
+            <h3>📊 Today's Progress</h3>
+            <div class="stat-row">
+                <span class="stat-label">🍅 Work Sessions</span>
+                <span class="stat-value" id="work-count">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">☕ Breaks Taken</span>
+                <span class="stat-value" id="break-count">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">⏱️ Total Time Worked</span>
+                <span class="stat-value" id="total-time">0 minutes</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">🔥 Current Streak</span>
+                <span class="stat-value" id="streak">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State variables
+        let timerInterval = null;
+        let timeLeft = 1500; // 25 minutes in seconds
+        let isWorkMode = true;
+        let isRunning = false;
+        
+        // Stats
+        let workSessions = 0;
+        let breaksTaken = 0;
+        let totalMinutesWorked = 0;
+        let currentStreak = 0;
+        
+        // Work/break durations (in seconds)
+        const WORK_DURATION = 1500; // 25 minutes
+        const BREAK_DURATION = 300;  // 5 minutes
+        const LONG_BREAK = 900;      // 15 minutes
+        
+        // DOM elements
+        const timerDisplay = document.getElementById('timer-display');
+        const modeTitle = document.getElementById('mode-title');
+        const modeBadge = document.getElementById('mode-badge');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const addTimeBtn = document.getElementById('add-time-btn');
+        
+        // Format time as MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+        
+        // Update the display
+        function updateDisplay() {
+            timerDisplay.textContent = formatTime(timeLeft);
+            
+            // Add warning animation when under 10 seconds
+            if (timeLeft <= 10 && timeLeft > 0) {
+                timerDisplay.classList.add('warning');
+            } else {
+                timerDisplay.classList.remove('warning');
+            }
+        }
+        
+        // Countdown function
+        function countdown() {
+            timeLeft--;
+            updateDisplay();
+            console.log('Time remaining:', formatTime(timeLeft));
+            
+            if (timeLeft <= 0) {
+                timerFinished();
+            }
+        }
+        
+        // Start the timer
+        function startTimer() {
+            if (timerInterval === null && timeLeft > 0) {
+                console.log('Timer started');
+                isRunning = true;
+                timerInterval = setInterval(countdown, 1000);
+                
+                // Update UI
+                startBtn.disabled = true;
+                pauseBtn.disabled = false;
+                
+                console.log('Interval ID:', timerInterval);
+            }
+        }
+        
+        // Pause the timer
+        function pauseTimer() {
+            if (timerInterval !== null) {
+                console.log('Timer paused at', formatTime(timeLeft));
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isRunning = false;
+                
+                // Update UI
+                startBtn.disabled = false;
+                pauseBtn.disabled = true;
+            }
+        }
+        
+        // Reset the timer
+        function resetTimer() {
+            console.log('Timer reset');
+            pauseTimer();
+            
+            // Reset to appropriate duration
+            timeLeft = isWorkMode ? WORK_DURATION : BREAK_DURATION;
+            updateDisplay();
+        }
+        
+        // Add time to timer
+        function addTime() {
+            timeLeft += 60; // Add 1 minute
+            updateDisplay();
+            console.log('Added 1 minute. New time:', formatTime(timeLeft));
+        }
+        
+        // Timer finished
+        function timerFinished() {
+            console.log('Timer finished!');
+            pauseTimer();
+            timerDisplay.classList.remove('warning');
+            
+            // Play completion sound (if you add audio)
+            // new Audio('ding.mp3').play();
+            
+            if (isWorkMode) {
+                // Work session completed
+                workSessions++;
+                totalMinutesWorked += 25;
+                currentStreak++;
+                
+                alert('🎉 Great job! Work session complete!\n\nTime for a ' + 
+                      (workSessions % 4 === 0 ? '15' : '5') + ' minute break!');
+                
+                console.log('Work session completed! Total sessions:', workSessions);
+                
+                // Auto-switch to break
+                if (workSessions % 4 === 0) {
+                    // Long break after 4 sessions
+                    switchToBreak(true);
+                } else {
+                    switchToBreak();
+                }
+                
+            } else {
+                // Break completed
+                breaksTaken++;
+                
+                alert('⏰ Break time is over!\n\nReady to get back to work?');
+                console.log('Break completed! Total breaks:', breaksTaken);
+                
+                // Auto-switch to work
+                switchToWork();
+            }
+            
+            updateStats();
+            
+            // Celebrate animation
+            document.querySelector('.container').classList.add('celebrate');
+            setTimeout(() => {
+                document.querySelector('.container').classList.remove('celebrate');
+            }, 1500);
+        }
+        
+        // Switch to work mode
+        function switchToWork() {
+            console.log('Switching to work mode');
+            pauseTimer();
+            
+            isWorkMode = true;
+            timeLeft = WORK_DURATION;
+            
+            // Update UI
+            document.body.className = 'work-mode';
+            modeTitle.textContent = '💼 Work Time';
+            modeBadge.textContent = 'WORK MODE';
+            updateDisplay();
+        }
+        
+        // Switch to break mode
+        function switchToBreak(longBreak = false) {
+            console.log('Switching to break mode' + (longBreak ? ' (long)' : ''));
+            pauseTimer();
+            
+            isWorkMode = false;
+            timeLeft = longBreak ? LONG_BREAK : BREAK_DURATION;
+            
+            // Update UI
+            document.body.className = 'break-mode';
+            modeTitle.textContent = longBreak ? '☕ Long Break' : '☕ Break Time';
+            modeBadge.textContent = longBreak ? 'LONG BREAK' : 'BREAK MODE';
+            updateDisplay();
+        }
+        
+        // Update statistics display
+        function updateStats() {
+            document.getElementById('work-count').textContent = workSessions;
+            document.getElementById('break-count').textContent = breaksTaken;
+            document.getElementById('total-time').textContent = totalMinutesWorked + ' minutes';
+            document.getElementById('streak').textContent = currentStreak;
+            
+            console.log('Stats updated:', {
+                workSessions,
+                breaksTaken,
+                totalMinutesWorked,
+                currentStreak
+            });
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        addTimeBtn.addEventListener('click', addTime);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === ' ') {
+                event.preventDefault();
+                if (isRunning) {
+                    pauseTimer();
+                } else {
+                    startTimer();
+                }
+            } else if (event.key === 'r' || event.key === 'R') {
+                resetTimer();
+            } else if (event.key === 'w' || event.key === 'W') {
+                switchToWork();
+            } else if (event.key === 'b' || event.key === 'B') {
+                switchToBreak();
+            }
+        });
+        
+        // Initialize
+        console.log('Pomodoro Timer initialized!');
+        console.log('Keyboard shortcuts:');
+        console.log('  SPACE - Start/Pause');
+        console.log('  R - Reset');
+        console.log('  W - Work mode');
+        console.log('  B - Break mode');
+        
+        updateDisplay();
+        updateStats();
+    </script>
+</body>
+</html>

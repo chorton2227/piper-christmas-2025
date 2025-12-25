@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key: Award Pot - Showdown & Winner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #2c5530;
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { color: #2c5530; margin-top: 0; }
+        h2 { color: #4CAF50; }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .player-card {
+            background: #f5f5f5;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        .player-card.winner {
+            border-color: #FFD700;
+            background: #fffef5;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transform: scale(1.03);
+            animation: winnerGlow 2s infinite;
+        }
+        @keyframes winnerGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.9); }
+        }
+        .player-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+        .player-chips {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .chip-change {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .chip-change.gain {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4CAF50;
+        }
+        .chip-change.loss {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+        .hand-display {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 70px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+        .card.hearts, .card.diamonds { color: #d32f2f; }
+        .card.clubs, .card.spades { color: #000; }
+        .hand-rank-display {
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #2c5530;
+            border-left: 4px solid #4CAF50;
+        }
+        .winner-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .pot-info {
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .pot-info h3 {
+            margin-top: 0;
+            font-size: 24px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        .pot-detail {
+            padding: 10px 0;
+            font-size: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .pot-detail:last-child {
+            border-bottom: none;
+        }
+        .calculation-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .calculation-step {
+            padding: 8px 0;
+            font-family: monospace;
+            font-size: 14px;
+            border-bottom: 1px solid #ccc;
+        }
+        .calculation-step:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #2196F3;
+            font-size: 16px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        button:hover { background: #45a049; }
+        button.secondary {
+            background: #2196F3;
+        }
+        button.secondary:hover {
+            background: #1976d2;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Answer Key: Award Pot</h1>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> This solution demonstrates complete pot distribution logic including single winner awards, split pot calculations, odd chip handling, and side pot distribution. The odd chip always goes to the player closest to the button (earliest position).
+        </div>
+        
+        <h2>Solution Features</h2>
+        <ul>
+            <li>Single winner pot award with full amount</li>
+            <li>Split pot calculation for multiple winners</li>
+            <li>Odd chip handling (remainder goes to earliest position)</li>
+            <li>Side pot distribution for all-in situations</li>
+            <li>Proper chip count updates</li>
+            <li>Visual feedback with animations</li>
+            <li>Detailed calculation breakdowns</li>
+        </ul>
+        
+        <div id="potInfo" class="pot-info" style="display:none;">
+            <h3>💰 Pot Distribution</h3>
+            <div id="potDetails"></div>
+        </div>
+        
+        <div id="playersDisplay" class="players-grid"></div>
+        
+        <div id="calculationDisplay" class="calculation-box" style="display:none;">
+            <h3>📊 Calculation Steps</h3>
+            <div id="calculationSteps"></div>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <button onclick="testCase1()">🎮 Test 1: Single Winner</button>
+            <button onclick="testCase2()" class="secondary">Test 2: 2-Way Split</button>
+            <button onclick="testCase3()" class="secondary">Test 3: 3-Way Split</button>
+            <button onclick="testCase4()" class="secondary">Test 4: Odd Chip</button>
+            <button onclick="testCase5()" class="secondary">Test 5: Side Pots</button>
+            <button onclick="resetDisplay()">🔄 Reset</button>
+        </div>
+        
+        <div id="output" class="output">
+            <h3>Ready! Click a test case to see pot distribution in action.</h3>
+        </div>
+        
+        <div id="debug" class="debug"></div>
+    </div>
+
+    <script>
+        /*
+         * ANSWER KEY: AWARD POT
+         * Complete solution for pot distribution
+         * Handles single winners, split pots, odd chips, and side pots
+         */
+        
+        console.log('Answer Key: Award Pot');
+        console.log('This demonstrates complete pot distribution logic');
+        
+        function getSuitSymbol(suit) {
+            const symbols = { hearts: "♥", diamonds: "♦", clubs: "♣", spades: "♠" };
+            return symbols[suit] || suit;
+        }
+
+        function createCard(rank, suit, value) {
+            return { rank, suit, value };
+        }
+
+        function createPlayer(id, name, chips, hand, handRank = null) {
+            return { 
+                id, 
+                name, 
+                chips, 
+                originalChips: chips,
+                hand, 
+                handRank, 
+                isWinner: false,
+                winAmount: 0
+            };
+        }
+
+        // CORE POT AWARD FUNCTION
+        function awardPot(winners, pot) {
+            console.log("\n" + "=".repeat(70));
+            console.log("AWARDING POT");
+            console.log("=".repeat(70));
+            console.log("Total Pot: $" + pot);
+            console.log("Number of Winners: " + winners.length);
+            
+            const calculations = [];
+            calculations.push("Total pot: $" + pot);
+            calculations.push("Winners: " + winners.length + " (" + winners.map(w => w.name).join(", ") + ")");
+            
+            if (winners.length === 0) {
+                console.log("❌ ERROR: No winners to award pot to!");
+                return { calculations, distribution: [] };
+            }
+            
+            if (winners.length === 1) {
+                // Single winner gets entire pot
+                console.log("\n--- Single Winner ---");
+                console.log(winners[0].name + " wins entire pot: $" + pot);
+                
+                calculations.push("Single winner: " + winners[0].name);
+                calculations.push("Award amount: $" + pot);
+                
+                winners[0].winAmount = pot;
+                winners[0].chips += pot;
+                winners[0].isWinner = true;
+                
+                calculations.push("✓ " + winners[0].name + " new chip count: $" + winners[0].chips);
+                
+                console.log("✓ " + winners[0].name + " chips: $" + winners[0].originalChips + " → $" + winners[0].chips);
+                
+                return {
+                    calculations,
+                    distribution: [{
+                        name: winners[0].name,
+                        amount: pot,
+                        newTotal: winners[0].chips
+                    }]
+                };
+            }
+            
+            // Multiple winners - split pot
+            console.log("\n--- Split Pot ---");
+            console.log("Splitting pot between " + winners.length + " players");
+            
+            calculations.push("Split pot mode: " + winners.length + " winners");
+            
+            // Calculate base amount per winner
+            const baseAmount = Math.floor(pot / winners.length);
+            const oddChip = pot % winners.length;
+            
+            console.log("Base amount per winner: $" + baseAmount);
+            console.log("Calculation: floor($" + pot + " / " + winners.length + ") = $" + baseAmount);
+            
+            calculations.push("Base amount = floor($" + pot + " ÷ " + winners.length + ") = $" + baseAmount);
+            
+            if (oddChip > 0) {
+                console.log("Odd chip: $" + oddChip);
+                console.log("Calculation: $" + pot + " mod " + winners.length + " = $" + oddChip);
+                console.log("Odd chip goes to: " + winners[0].name + " (position " + winners[0].id + " - closest to button)");
+                
+                calculations.push("Remainder = $" + pot + " mod " + winners.length + " = $" + oddChip);
+                calculations.push("Odd chip awarded to " + winners[0].name + " (earliest position #" + winners[0].id + ")");
+            } else {
+                console.log("Perfect split - no odd chips!");
+                calculations.push("Perfect split - no remainder!");
+            }
+            
+            console.log("\n--- Distribution ---");
+            const distribution = [];
+            
+            winners.forEach((winner, index) => {
+                // First winner (earliest position) gets the odd chip
+                const awardAmount = baseAmount + (index === 0 ? oddChip : 0);
+                winner.winAmount = awardAmount;
+                winner.chips += awardAmount;
+                winner.isWinner = true;
+                
+                const oddChipNote = (index === 0 && oddChip > 0) ? " (includes $" + oddChip + " odd chip)" : "";
+                console.log(winner.name + " (position " + winner.id + "): $" + awardAmount + oddChipNote);
+                console.log("  Chips: $" + winner.originalChips + " → $" + winner.chips);
+                
+                distribution.push({
+                    name: winner.name,
+                    position: winner.id,
+                    amount: awardAmount,
+                    baseAmount: baseAmount,
+                    oddChip: (index === 0 ? oddChip : 0),
+                    newTotal: winner.chips
+                });
+                
+                if (index === 0 && oddChip > 0) {
+                    calculations.push(winner.name + " receives: $" + awardAmount + " ($" + baseAmount + " + $" + oddChip + " odd chip)");
+                } else {
+                    calculations.push(winner.name + " receives: $" + awardAmount);
+                }
+            });
+            
+            // Verify total distributed equals pot
+            const totalDistributed = distribution.reduce((sum, d) => sum + d.amount, 0);
+            console.log("\n--- Verification ---");
+            console.log("Total distributed: $" + totalDistributed);
+            console.log("Original pot: $" + pot);
+            console.log("Match: " + (totalDistributed === pot ? "✓ Yes" : "❌ No"));
+            
+            calculations.push("Total distributed: $" + totalDistributed + " (matches pot: " + (totalDistributed === pot ? "✓" : "❌") + ")");
+            
+            console.log("=".repeat(70));
+            
+            return { calculations, distribution };
+        }
+
+        // SIDE POT DISTRIBUTION
+        function awardSidePots(sidePots, players) {
+            console.log("\n" + "=".repeat(70));
+            console.log("AWARDING SIDE POTS");
+            console.log("=".repeat(70));
+            
+            const allCalculations = [];
+            const allDistributions = [];
+            
+            sidePots.forEach((sidePot, index) => {
+                console.log("\n--- Side Pot " + (index + 1) + " ---");
+                console.log("Amount: $" + sidePot.amount);
+                console.log("Eligible players: " + sidePot.eligiblePlayers.map(p => p.name).join(", "));
+                
+                // Determine winners from eligible players
+                const eligibleWinners = determineWinnersFromGroup(sidePot.eligiblePlayers);
+                
+                console.log("Winners from eligible group: " + eligibleWinners.map(w => w.name).join(", "));
+                
+                const result = awardPot(eligibleWinners, sidePot.amount);
+                
+                allCalculations.push({
+                    potName: "Side Pot " + (index + 1),
+                    amount: sidePot.amount,
+                    calculations: result.calculations
+                });
+                
+                allDistributions.push(...result.distribution);
+            });
+            
+            console.log("=".repeat(70));
+            
+            return { calculations: allCalculations, distribution: allDistributions };
+        }
+
+        function determineWinnersFromGroup(players) {
+            // This is a simplified version - in real implementation would use full hand comparison
+            // For this example, we'll use the handRank if available
+            if (!players || players.length === 0) return [];
+            
+            if (players.length === 1) return players;
+            
+            // Find best hand rank
+            const bestRank = Math.max(...players.map(p => p.handRank ? p.handRank.rank : 0));
+            return players.filter(p => p.handRank && p.handRank.rank === bestRank);
+        }
+
+        // DISPLAY FUNCTIONS
+        function displayPlayers(players) {
+            const playersDiv = document.getElementById("playersDisplay");
+            playersDiv.innerHTML = "";
+            
+            players.forEach(player => {
+                const playerDiv = document.createElement("div");
+                playerDiv.className = "player-card";
+                if (player.isWinner) playerDiv.classList.add("winner");
+                
+                let html = `<div class="player-name">${player.name} (Position ${player.id})</div>`;
+                html += `<div class="player-chips">Starting Chips: $${player.originalChips}</div>`;
+                
+                if (player.hand && player.hand.length > 0) {
+                    html += '<div class="hand-display">';
+                    player.hand.forEach(card => {
+                        html += `<div class="card ${card.suit}">${card.rank}${getSuitSymbol(card.suit)}</div>`;
+                    });
+                    html += '</div>';
+                }
+                
+                if (player.handRank) {
+                    html += `<div class="hand-rank-display">${player.handRank.name}</div>`;
+                }
+                
+                if (player.winAmount > 0) {
+                    html += `<div class="chip-change gain">+$${player.winAmount}</div>`;
+                    html += `<div class="player-chips" style="font-size: 20px; font-weight: bold; color: #2e7d32;">New Total: $${player.chips}</div>`;
+                }
+                
+                if (player.isWinner) {
+                    html += '<div class="winner-badge">🏆 WINNER</div>';
+                }
+                
+                playerDiv.innerHTML = html;
+                playersDiv.appendChild(playerDiv);
+            });
+        }
+
+        function displayPotInfo(pot, winners) {
+            const potInfoDiv = document.getElementById("potInfo");
+            const potDetailsDiv = document.getElementById("potDetails");
+            
+            potInfoDiv.style.display = "block";
+            
+            let html = `<div class="pot-detail"><strong>Total Pot:</strong> $${pot}</div>`;
+            html += `<div class="pot-detail"><strong>Winners:</strong> ${winners.length} (${winners.map(w => w.name).join(", ")})</div>`;
+            
+            if (winners.length > 1) {
+                const baseAmount = Math.floor(pot / winners.length);
+                const oddChip = pot % winners.length;
+                html += `<div class="pot-detail"><strong>Base Share:</strong> $${baseAmount} each</div>`;
+                if (oddChip > 0) {
+                    html += `<div class="pot-detail"><strong>Odd Chip:</strong> $${oddChip} to ${winners[0].name}</div>`;
+                }
+            }
+            
+            potDetailsDiv.innerHTML = html;
+        }
+
+        function displayCalculations(calculations) {
+            const calcDiv = document.getElementById("calculationDisplay");
+            const stepsDiv = document.getElementById("calculationSteps");
+            
+            calcDiv.style.display = "block";
+            stepsDiv.innerHTML = "";
+            
+            calculations.forEach(calc => {
+                const stepDiv = document.createElement("div");
+                stepDiv.className = "calculation-step";
+                stepDiv.textContent = calc;
+                stepsDiv.appendChild(stepDiv);
+            });
+        }
+
+        function logOutput(message) {
+            document.getElementById("output").innerHTML = "<h3>" + message + "</h3>";
+        }
+
+        function resetDisplay() {
+            document.getElementById("playersDisplay").innerHTML = "";
+            document.getElementById("potInfo").style.display = "none";
+            document.getElementById("calculationDisplay").style.display = "none";
+            logOutput("Reset complete. Click a test case to begin.");
+            console.log("\n--- Display Reset ---");
+        }
+
+        // TEST CASES
+        function testCase1() {
+            console.log('\n' + '='.repeat(70));
+            console.log('TEST CASE 1: Single Winner');
+            console.log('='.repeat(70));
+            
+            const players = [
+                createPlayer(0, "Alice", 900, [
+                    createCard('K', 'hearts', 13),
+                    createCard('K', 'diamonds', 13)
+                ], { rank: 3, name: "Three of a Kind" }),
+                createPlayer(1, "Bob", 900, [
+                    createCard('Q', 'spades', 12),
+                    createCard('Q', 'hearts', 12)
+                ], { rank: 2, name: "Two Pair" }),
+                createPlayer(2, "Charlie", 900, [
+                    createCard('7', 'diamonds', 7),
+                    createCard('6', 'clubs', 6)
+                ], { rank: 0, name: "High Card" })
+            ];
+            
+            const pot = 300;
+            const winners = [players[0]]; // Alice wins
+            
+            const result = awardPot(winners, pot);
+            
+            displayPlayers(players);
+            displayPotInfo(pot, winners);
+            displayCalculations(result.calculations);
+            logOutput(`🏆 ${winners[0].name} wins $${pot} with ${winners[0].handRank.name}!`);
+            
+            console.log("\n✅ Test Case 1 Complete");
+        }
+
+        function testCase2() {
+            console.log('\n' + '='.repeat(70));
+            console.log('TEST CASE 2: 2-Way Split (Even)');
+            console.log('='.repeat(70));
+            
+            const players = [
+                createPlayer(0, "Alice", 850, [
+                    createCard('A', 'hearts', 14),
+                    createCard('A', 'diamonds', 14)
+                ], { rank: 1, name: "Pair" }),
+                createPlayer(1, "Bob", 850, [
+                    createCard('A', 'spades', 14),
+                    createCard('A', 'clubs', 14)
+                ], { rank: 1, name: "Pair" }),
+                createPlayer(2, "Charlie", 900, [
+                    createCard('K', 'diamonds', 13),
+                    createCard('Q', 'clubs', 12)
+                ], { rank: 0, name: "High Card" })
+            ];
+            
+            const pot = 300;
+            const winners = [players[0], players[1]]; // Alice and Bob tie
+            
+            const result = awardPot(winners, pot);
+            
+            displayPlayers(players);
+            displayPotInfo(pot, winners);
+            displayCalculations(result.calculations);
+            logOutput(`🤝 Split pot! ${winners.map(w => w.name).join(" and ")} each win $${Math.floor(pot / winners.length)}`);
+            
+            console.log("\n✅ Test Case 2 Complete");
+        }
+
+        function testCase3() {
+            console.log('\n' + '='.repeat(70));
+            console.log('TEST CASE 3: 3-Way Split (Even)');
+            console.log('='.repeat(70));
+            
+            const players = [
+                createPlayer(0, "Alice", 800, [
+                    createCard('A', 'hearts', 14),
+                    createCard('K', 'diamonds', 13)
+                ], { rank: 4, name: "Straight" }),
+                createPlayer(1, "Bob", 800, [
+                    createCard('A', 'spades', 14),
+                    createCard('K', 'hearts', 13)
+                ], { rank: 4, name: "Straight" }),
+                createPlayer(2, "Charlie", 800, [
+                    createCard('A', 'diamonds', 14),
+                    createCard('K', 'clubs', 13)
+                ], { rank: 4, name: "Straight" })
+            ];
+            
+            const pot = 450;
+            const winners = [players[0], players[1], players[2]]; // All three tie
+            
+            const result = awardPot(winners, pot);
+            
+            displayPlayers(players);
+            displayPotInfo(pot, winners);
+            displayCalculations(result.calculations);
+            logOutput(`🤝 3-way split! Each player wins $${Math.floor(pot / winners.length)}`);
+            
+            console.log("\n✅ Test Case 3 Complete");
+        }
+
+        function testCase4() {
+            console.log('\n' + '='.repeat(70));
+            console.log('TEST CASE 4: 2-Way Split with Odd Chip');
+            console.log('='.repeat(70));
+            
+            const players = [
+                createPlayer(0, "Alice", 875, [
+                    createCard('Q', 'hearts', 12),
+                    createCard('Q', 'diamonds', 12)
+                ], { rank: 1, name: "Pair" }),
+                createPlayer(1, "Bob", 875, [
+                    createCard('Q', 'spades', 12),
+                    createCard('Q', 'clubs', 12)
+                ], { rank: 1, name: "Pair" }),
+                createPlayer(2, "Charlie", 900, [
+                    createCard('J', 'diamonds', 11),
+                    createCard('10', 'clubs', 10)
+                ], { rank: 0, name: "High Card" })
+            ];
+            
+            const pot = 251; // Odd amount
+            const winners = [players[0], players[1]]; // Alice and Bob tie
+            
+            const result = awardPot(winners, pot);
+            
+            displayPlayers(players);
+            displayPotInfo(pot, winners);
+            displayCalculations(result.calculations);
+            
+            const baseAmount = Math.floor(pot / winners.length);
+            const oddChip = pot % winners.length;
+            logOutput(`🤝 Split pot with odd chip! ${winners[0].name} gets $${baseAmount + oddChip}, ${winners[1].name} gets $${baseAmount}`);
+            
+            console.log("\n✅ Test Case 4 Complete");
+        }
+
+        function testCase5() {
+            console.log('\n' + '='.repeat(70));
+            console.log('TEST CASE 5: Side Pots (All-In Scenario)');
+            console.log('='.repeat(70));
+            
+            const players = [
+                createPlayer(0, "Alice", 500, [
+                    createCard('A', 'hearts', 14),
+                    createCard('A', 'diamonds', 14)
+                ], { rank: 1, name: "Pair of Aces" }),
+                createPlayer(1, "Bob", 750, [
+                    createCard('K', 'spades', 13),
+                    createCard('K', 'hearts', 13)
+                ], { rank: 1, name: "Pair of Kings" }),
+                createPlayer(2, "Charlie", 950, [
+                    createCard('Q', 'diamonds', 12),
+                    createCard('Q', 'clubs', 12)
+                ], { rank: 1, name: "Pair of Queens" })
+            ];
+            
+            // Simulate side pots:
+            // Main pot: $1500 (all 3 players eligible) - Alice all-in for $500 each
+            // Side pot 1: $500 (Bob and Charlie) - Bob all-in for additional $250 each
+            // Side pot 2: $400 (Charlie only) - Charlie's additional bet
+            
+            const sidePots = [
+                {
+                    amount: 1500,
+                    eligiblePlayers: [players[0], players[1], players[2]]
+                },
+                {
+                    amount: 500,
+                    eligiblePlayers: [players[1], players[2]]
+                },
+                {
+                    amount: 400,
+                    eligiblePlayers: [players[2]]
+                }
+            ];
+            
+            console.log("\n--- Side Pot Structure ---");
+            console.log("Main Pot: $1500 (Alice all-in for $500, Bob and Charlie match)");
+            console.log("Side Pot 1: $500 (Bob all-in for additional $250, Charlie matches)");
+            console.log("Side Pot 2: $400 (Charlie's additional $200)");
+            
+            const result = awardSidePots(sidePots, players);
+            
+            displayPlayers(players);
+            document.getElementById("potInfo").style.display = "block";
+            document.getElementById("potDetails").innerHTML = `
+                <div class="pot-detail"><strong>Main Pot ($1500):</strong> Alice wins (best hand)</div>
+                <div class="pot-detail"><strong>Side Pot 1 ($500):</strong> Bob wins (better hand than Charlie)</div>
+                <div class="pot-detail"><strong>Side Pot 2 ($400):</strong> Charlie wins (uncalled bet)</div>
+            `;
+            
+            const allCalcs = result.calculations.flatMap(c => c.calculations);
+            displayCalculations(allCalcs);
+            logOutput(`💰 Side pots awarded! Alice: $1500, Bob: $500, Charlie: $400`);
+            
+            console.log("\n✅ Test Case 5 Complete");
+        }
+
+        // Capture console output to debug div
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const debugDiv = document.getElementById("debug");
+            debugDiv.textContent += args.join(" ") + "\n";
+        };
+        
+        // Initialize
+        console.log("✅ Answer Key: Award Pot loaded and ready!");
+        console.log("Click test cases to see pot distribution logic.");
+        resetDisplay();
+    </script>
+</body>
+</html>

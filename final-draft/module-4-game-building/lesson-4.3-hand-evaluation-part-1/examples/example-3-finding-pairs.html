@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Finding Pairs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .demo-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+        }
+
+        .demo-card h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #2c5364;
+            padding-bottom: 10px;
+        }
+
+        .hand-display {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .card {
+            width: 70px;
+            height: 98px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card.highlighted {
+            border-color: #4caf50;
+            border-width: 3px;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
+        }
+
+        .card-rank {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .card-suit {
+            font-size: 28px;
+            margin-top: 2px;
+        }
+
+        .hearts .card-rank, .hearts .card-suit,
+        .diamonds .card-rank, .diamonds .card-suit {
+            color: #d32f2f;
+        }
+
+        .spades .card-rank, .spades .card-suit,
+        .clubs .card-rank, .clubs .card-suit {
+            color: #333;
+        }
+
+        .result-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .result-box.success {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .result-box.warning {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+
+        button {
+            background: #2c5364;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1a3240;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Finding Pairs, Trips, and Quads</h1>
+
+    <div class="container">
+        <!-- One Pair Demo -->
+        <div class="demo-card">
+            <h2>One Pair Detection</h2>
+            <p>A pair is exactly 2 cards of the same rank.</p>
+            <div class="hand-display" id="pairHand"></div>
+            <div id="pairResult" class="result-box" style="display:none;"></div>
+            <button onclick="testPair()">Test for Pair</button>
+        </div>
+
+        <!-- Two Pair Demo -->
+        <div class="demo-card">
+            <h2>Two Pair Detection</h2>
+            <p>Two different pairs in the same hand.</p>
+            <div class="hand-display" id="twoPairHand"></div>
+            <div id="twoPairResult" class="result-box" style="display:none;"></div>
+            <button onclick="testTwoPair()">Test for Two Pair</button>
+        </div>
+
+        <!-- Three of a Kind Demo -->
+        <div class="demo-card">
+            <h2>Three of a Kind Detection</h2>
+            <p>Three cards of the same rank.</p>
+            <div class="hand-display" id="tripsHand"></div>
+            <div id="tripsResult" class="result-box" style="display:none;"></div>
+            <button onclick="testTrips()">Test for Three of a Kind</button>
+        </div>
+
+        <!-- Four of a Kind Demo -->
+        <div class="demo-card">
+            <h2>Four of a Kind Detection</h2>
+            <p>Four cards of the same rank (very rare and powerful!).</p>
+            <div class="hand-display" id="quadsHand"></div>
+            <div id="quadsResult" class="result-box" style="display:none;"></div>
+            <button onclick="testQuads()">Test for Four of a Kind</button>
+        </div>
+    </div>
+
+    <script>
+        function createCard(suit, rank, value) {
+            return { suit, rank, value };
+        }
+
+        function displayCards(cards, elementId, highlightRank = null) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            const suitSymbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+            
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${card.suit}`;
+                
+                if (highlightRank && card.rank === highlightRank) {
+                    cardEl.classList.add('highlighted');
+                }
+                
+                cardEl.innerHTML = `
+                    <div class="card-rank">${card.rank}</div>
+                    <div class="card-suit">${suitSymbols[card.suit]}</div>
+                `;
+                container.appendChild(cardEl);
+            });
+        }
+
+        function countRanks(cards) {
+            const counts = {};
+            for (const card of cards) {
+                counts[card.rank] = (counts[card.rank] || 0) + 1;
+            }
+            return counts;
+        }
+
+        function hasPair(cards) {
+            const counts = countRanks(cards);
+            for (const rank in counts) {
+                if (counts[rank] === 2) {
+                    return { hasPair: true, rank: rank };
+                }
+            }
+            return { hasPair: false };
+        }
+
+        function hasTwoPair(cards) {
+            const counts = countRanks(cards);
+            const pairs = [];
+            for (const rank in counts) {
+                if (counts[rank] === 2) {
+                    pairs.push(rank);
+                }
+            }
+            if (pairs.length >= 2) {
+                return { hasTwoPair: true, ranks: pairs };
+            }
+            return { hasTwoPair: false };
+        }
+
+        function hasThreeOfAKind(cards) {
+            const counts = countRanks(cards);
+            for (const rank in counts) {
+                if (counts[rank] === 3) {
+                    return { hasTrips: true, rank: rank };
+                }
+            }
+            return { hasTrips: false };
+        }
+
+        function hasFourOfAKind(cards) {
+            const counts = countRanks(cards);
+            for (const rank in counts) {
+                if (counts[rank] === 4) {
+                    return { hasQuads: true, rank: rank };
+                }
+            }
+            return { hasQuads: false };
+        }
+
+        // Test hands
+        const pairHand = [
+            createCard('hearts', 'A', 14),
+            createCard('spades', 'A', 14),
+            createCard('diamonds', 'K', 13),
+            createCard('clubs', '7', 7),
+            createCard('hearts', '3', 3)
+        ];
+
+        const twoPairHand = [
+            createCard('hearts', 'K', 13),
+            createCard('spades', 'K', 13),
+            createCard('diamonds', '7', 7),
+            createCard('clubs', '7', 7),
+            createCard('hearts', '3', 3)
+        ];
+
+        const tripsHand = [
+            createCard('hearts', '7', 7),
+            createCard('spades', '7', 7),
+            createCard('diamonds', '7', 7),
+            createCard('clubs', 'A', 14),
+            createCard('hearts', 'K', 13)
+        ];
+
+        const quadsHand = [
+            createCard('hearts', 'Q', 12),
+            createCard('spades', 'Q', 12),
+            createCard('diamonds', 'Q', 12),
+            createCard('clubs', 'Q', 12),
+            createCard('hearts', '5', 5)
+        ];
+
+        function testPair() {
+            const result = hasPair(pairHand);
+            const resultDiv = document.getElementById('pairResult');
+            
+            if (result.hasPair) {
+                displayCards(pairHand, 'pairHand', result.rank);
+                resultDiv.className = 'result-box success';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>✓ Pair Found!</strong><br>Pair of ${result.rank}s`;
+            }
+        }
+
+        function testTwoPair() {
+            const result = hasTwoPair(twoPairHand);
+            const resultDiv = document.getElementById('twoPairResult');
+            
+            if (result.hasTwoPair) {
+                resultDiv.className = 'result-box success';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>✓ Two Pair Found!</strong><br>Pairs of ${result.ranks.join(' and ')}`;
+            }
+        }
+
+        function testTrips() {
+            const result = hasThreeOfAKind(tripsHand);
+            const resultDiv = document.getElementById('tripsResult');
+            
+            if (result.hasTrips) {
+                displayCards(tripsHand, 'tripsHand', result.rank);
+                resultDiv.className = 'result-box success';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>✓ Three of a Kind Found!</strong><br>Three ${result.rank}s`;
+            }
+        }
+
+        function testQuads() {
+            const result = hasFourOfAKind(quadsHand);
+            const resultDiv = document.getElementById('quadsResult');
+            
+            if (result.hasQuads) {
+                displayCards(quadsHand, 'quadsHand', result.rank);
+                resultDiv.className = 'result-box success';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>✓ Four of a Kind Found!</strong><br>Four ${result.rank}s - Very Strong!`;
+            }
+        }
+
+        // Initialize displays
+        window.addEventListener('load', () => {
+            displayCards(pairHand, 'pairHand');
+            displayCards(twoPairHand, 'twoPairHand');
+            displayCards(tripsHand, 'tripsHand');
+            displayCards(quadsHand, 'quadsHand');
+        });
+    </script>
+</body>
+</html>
