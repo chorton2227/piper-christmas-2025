@@ -169,7 +169,10 @@ function postBlind(playerIndex, amount) {
 function playerAction(action) {
     const player = gameState.players[0]; // Human player
     
-    if (gameState.currentPlayerIndex !== 0) return;
+    // Can't act if not their turn, folded, all-in, or in showdown
+    if (gameState.currentPlayerIndex !== 0 || player.folded || player.allIn || gameState.phase === 'showdown') {
+        return;
+    }
     
     let amount = 0;
     
@@ -210,6 +213,7 @@ function playerAction(action) {
         
         if (player.chips === 0) {
             player.allIn = true;
+            player.lastAction = 'allin';
             SoundModule.allin();
         } else {
             SoundModule.raise();
@@ -514,20 +518,35 @@ function dealRiver() {
 function calculateSidePots() {
     const activePlayers = gameState.players.filter(p => !p.folded);
     
+    // If everyone has the same bet or only one player, return single pot
+    if (activePlayers.length <= 1) {
+        return [{
+            amount: gameState.pot,
+            eligiblePlayers: activePlayers
+        }];
+    }
+    
     // Create array of {player, contribution} sorted by contribution
     const contributions = activePlayers.map(p => ({
         player: p,
         amount: p.currentBet
     })).sort((a, b) => a.amount - b.amount);
     
+    // Remove duplicates and create betting levels
+    const uniqueLevels = [...new Set(contributions.map(c => c.amount))].sort((a, b) => a - b);
+    
     const pots = [];
     let previousLevel = 0;
     
-    for (let i = 0; i < contributions.length; i++) {
-        const level = contributions[i].amount;
+    for (let i = 0; i < uniqueLevels.length; i++) {
+        const level = uniqueLevels[i];
         if (level > previousLevel) {
-            // Create a pot for this betting level
-            const eligiblePlayers = contributions.slice(i).map(c => c.player);
+            // Find all players who contributed at least this level
+            const eligiblePlayers = contributions
+                .filter(c => c.amount >= level)
+                .map(c => c.player);
+            
+            // Calculate pot amount for this level
             const potAmount = (level - previousLevel) * eligiblePlayers.length;
             
             if (potAmount > 0) {
@@ -541,7 +560,10 @@ function calculateSidePots() {
         }
     }
     
-    return pots;
+    return pots.length > 0 ? pots : [{
+        amount: gameState.pot,
+        eligiblePlayers: activePlayers
+    }];
 }
 
 /**
