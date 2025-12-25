@@ -1,0 +1,544 @@
+// ===== MAIN GAME LOGIC =====
+// Core game state and flow management
+
+// Game state and config
+let gameState = {
+    deck: [],
+    communityCards: [],
+    players: [],
+    pot: 0,
+    currentBet: 0,
+    dealerIndex: 0,
+    currentPlayerIndex: 0,
+    phase: 'pre-flop',
+    smallBlind: 10,
+    bigBlind: 20,
+    actionLog: [],
+    lastRaiserIndex: -1,
+    playersActed: []
+};
+
+let config = {
+    playerCount: 3,
+    startingChips: 1000,
+    smallBlind: 10,
+    aiDifficulty: 'medium'
+};
+
+/**
+ * Initializes a new game with settings from modal
+ */
+function initGame() {
+    const playerCount = parseInt(document.getElementById('player-count').value);
+    const startingChips = parseInt(document.getElementById('starting-chips').value);
+    const smallBlind = parseInt(document.getElementById('small-blind').value);
+    
+    config.playerCount = playerCount;
+    config.startingChips = startingChips;
+    config.smallBlind = smallBlind;
+    config.aiDifficulty = document.getElementById('ai-difficulty').value;
+    
+    gameState = {
+        deck: DeckModule.createDeck(),
+        communityCards: [],
+        players: [],
+        pot: 0,
+        currentBet: 0,
+        dealerIndex: 0,
+        currentPlayerIndex: 0,
+        phase: 'pre-flop',
+        smallBlind: smallBlind,
+        bigBlind: smallBlind * 2,
+        actionLog: [],
+        lastRaiserIndex: -1,
+        playersActed: []
+    };
+    
+    // Create players
+    gameState.players.push({
+        id: 0,
+        name: 'You',
+        chips: startingChips,
+        cards: [],
+        currentBet: 0,
+        folded: false,
+        allIn: false,
+        isAI: false
+    });
+    
+    const aiNames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
+    for (let i = 0; i < playerCount; i++) {
+        gameState.players.push({
+            id: i + 1,
+            name: aiNames[i],
+            chips: startingChips,
+            cards: [],
+            currentBet: 0,
+            folded: false,
+            allIn: false,
+            isAI: true
+        });
+    }
+    
+    DeckModule.shuffleDeck(gameState.deck);
+    startHand();
+}
+
+/**
+ * Starts a new hand
+ */
+function startHand() {
+    // Reset for new hand
+    gameState.communityCards = [];
+    gameState.pot = 0;
+    gameState.currentBet = 0;
+    gameState.phase = 'pre-flop';
+    gameState.deck = DeckModule.createDeck();
+    DeckModule.shuffleDeck(gameState.deck);
+    gameState.lastRaiserIndex = -1;
+    gameState.playersActed = [];
+    
+    gameState.players.forEach(player => {
+        player.cards = [];
+        player.currentBet = 0;
+        player.folded = false;
+        player.allIn = false;
+    });
+    
+    gameState.actionLog = [];
+    
+    // Post blinds
+    const sbIndex = (gameState.dealerIndex + 1) % gameState.players.length;
+    const bbIndex = (gameState.dealerIndex + 2) % gameState.players.length;
+    
+    postBlind(sbIndex, gameState.smallBlind);
+    postBlind(bbIndex, gameState.bigBlind);
+    
+    gameState.currentBet = gameState.bigBlind;
+    gameState.currentPlayerIndex = (bbIndex + 1) % gameState.players.length;
+    gameState.lastRaiserIndex = bbIndex;
+    
+    // Deal hole cards
+    for (let i = 0; i < 2; i++) {
+        for (let player of gameState.players) {
+            player.cards.push(gameState.deck.pop());
+        }
+    }
+    
+    UIModule.updateUI(gameState);
+    
+    // Start action if first player is AI
+    if (gameState.players[gameState.currentPlayerIndex].isAI) {
+        setTimeout(aiTurn, 1000);
+    }
+}
+
+/**
+ * Posts a blind bet
+ * @param {number} playerIndex - Index of player posting blind
+ * @param {number} amount - Blind amount
+ */
+function postBlind(playerIndex, amount) {
+    const player = gameState.players[playerIndex];
+    const actualAmount = Math.min(amount, player.chips);
+    player.chips -= actualAmount;
+    player.currentBet += actualAmount;
+    gameState.pot += actualAmount;
+    
+    logAction(`${player.name} posts ${actualAmount === amount ? '' : 'partial '}${amount === gameState.smallBlind ? 'small' : 'big'} blind $${actualAmount}`);
+}
+
+/**
+ * Handles player action
+ * @param {string} action - Action type (fold, check, call, raise, allin)
+ */
+function playerAction(action) {
+    const player = gameState.players[0]; // Human player
+    
+    if (gameState.currentPlayerIndex !== 0) return;
+    
+    let amount = 0;
+    
+    if (action === 'fold') {
+        player.folded = true;
+        logAction(`${player.name} folds`);
+    } else if (action === 'check') {
+        logAction(`${player.name} checks`);
+    } else if (action === 'call') {
+        amount = gameState.currentBet - player.currentBet;
+        amount = Math.min(amount, player.chips);
+        player.chips -= amount;
+        player.currentBet += amount;
+        gameState.pot += amount;
+        logAction(`${player.name} calls $${amount}`);
+        
+        if (player.chips === 0) player.allIn = true;
+    } else if (action === 'raise') {
+        const raiseInput = parseInt(document.getElementById('raise-amount').value);
+        amount = raiseInput;
+        
+        if (amount > player.chips) amount = player.chips;
+        if (amount < gameState.currentBet * 2 - player.currentBet) {
+            alert('Raise must be at least double the current bet');
+            return;
+        }
+        
+        player.chips -= amount;
+        gameState.pot += amount;
+        player.currentBet += amount;
+        gameState.currentBet = player.currentBet;
+        gameState.lastRaiserIndex = 0;
+        logAction(`${player.name} raises to $${player.currentBet}`);
+        
+        if (player.chips === 0) player.allIn = true;
+        
+        document.getElementById('raise-controls').style.display = 'none';
+    } else if (action === 'allin') {
+        amount = player.chips;
+        player.chips = 0;
+        player.currentBet += amount;
+        gameState.pot += amount;
+        player.allIn = true;
+        
+        if (player.currentBet > gameState.currentBet) {
+            gameState.currentBet = player.currentBet;
+            gameState.lastRaiserIndex = 0;
+        }
+        
+        logAction(`${player.name} goes all-in with $${amount}`);
+    }
+    
+    nextPlayer();
+}
+
+/**
+ * AI turn handler
+ */
+function aiTurn() {
+    const player = gameState.players[gameState.currentPlayerIndex];
+    
+    if (player.folded || player.allIn) {
+        nextPlayer();
+        return;
+    }
+    
+    const decision = AIModule.makeAIDecision(player, gameState, config);
+    
+    setTimeout(() => {
+        if (decision.action === 'fold') {
+            player.folded = true;
+            logAction(`${player.name} folds`);
+        } else if (decision.action === 'check') {
+            logAction(`${player.name} checks`);
+        } else if (decision.action === 'call') {
+            const amount = Math.min(gameState.currentBet - player.currentBet, player.chips);
+            player.chips -= amount;
+            player.currentBet += amount;
+            gameState.pot += amount;
+            logAction(`${player.name} calls $${amount}`);
+            
+            if (player.chips === 0) player.allIn = true;
+        } else if (decision.action === 'raise') {
+            const toCall = gameState.currentBet - player.currentBet;
+            const raiseAmount = Math.min(decision.amount, player.chips - toCall);
+            const totalBet = toCall + raiseAmount;
+            
+            player.chips -= totalBet;
+            player.currentBet += totalBet;
+            gameState.pot += totalBet;
+            gameState.currentBet = player.currentBet;
+            gameState.lastRaiserIndex = gameState.currentPlayerIndex;
+            logAction(`${player.name} raises to $${player.currentBet}`);
+            
+            if (player.chips === 0) player.allIn = true;
+        }
+        
+        nextPlayer();
+    }, 800 + Math.random() * 1200);
+}
+
+/**
+ * Moves to next player
+ */
+function nextPlayer() {
+    UIModule.updateUI(gameState);
+    
+    // Mark current player as having acted
+    if (!gameState.playersActed.includes(gameState.currentPlayerIndex)) {
+        gameState.playersActed.push(gameState.currentPlayerIndex);
+    }
+    
+    // Check if betting round is complete
+    const activePlayers = gameState.players.filter(p => !p.folded && !p.allIn);
+    
+    // If only 0-1 active players (rest are all-in or folded), end betting round
+    if (activePlayers.length <= 1) {
+        advancePhase();
+        return;
+    }
+    
+    // Check if all active players have matched the current bet
+    const allMatched = activePlayers.every(p => p.currentBet === gameState.currentBet);
+    
+    // Check if action has returned to the last raiser (or gone around once if no raise)
+    let actionComplete = false;
+    if (gameState.lastRaiserIndex === -1) {
+        // No raise yet, check if everyone has acted
+        actionComplete = activePlayers.every((p) => {
+            const playerIndex = gameState.players.indexOf(p);
+            return gameState.playersActed.includes(playerIndex);
+        });
+    } else {
+        // There was a raise, check if action is back to raiser
+        const nextIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+        actionComplete = nextIndex === gameState.lastRaiserIndex || 
+                        (gameState.players[nextIndex].folded && 
+                         activePlayers.every(p => {
+                            const pIndex = gameState.players.indexOf(p);
+                            return pIndex === gameState.lastRaiserIndex || gameState.playersActed.includes(pIndex);
+                         }));
+    }
+    
+    // If all active players have acted and bets are matched, end betting round
+    if (allMatched && actionComplete) {
+        advancePhase();
+        return;
+    }
+    
+    // Move to next player
+    let count = 0;
+    do {
+        gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+        count++;
+    } while ((gameState.players[gameState.currentPlayerIndex].folded || 
+             gameState.players[gameState.currentPlayerIndex].allIn) && 
+             count < gameState.players.length);
+    
+    // Continue betting
+    if (activePlayers.length > 0) {
+        if (gameState.players[gameState.currentPlayerIndex].isAI) {
+            aiTurn();
+        } else {
+            UIModule.updateUI(gameState);
+        }
+    } else {
+        advancePhase();
+    }
+}
+
+/**
+ * Advances to next phase of the hand
+ */
+function advancePhase() {
+    // Reset bets and tracking for next round
+    gameState.players.forEach(p => p.currentBet = 0);
+    gameState.currentBet = 0;
+    gameState.lastRaiserIndex = -1;
+    gameState.playersActed = [];
+    
+    // Check if only one player remains (everyone else folded)
+    const playersInHand = gameState.players.filter(p => !p.folded);
+    if (playersInHand.length === 1) {
+        // Award pot immediately to last remaining player
+        const winner = playersInHand[0];
+        winner.chips += gameState.pot;
+        logAction(`${winner.name} wins $${gameState.pot} (everyone else folded)`);
+        
+        UIModule.updateUI(gameState);
+        
+        // Remove broke players
+        gameState.players = gameState.players.filter(p => p.chips > 0);
+        
+        if (gameState.players.length === 1) {
+            setTimeout(() => {
+                alert(`Game Over! ${gameState.players[0].name} wins!`);
+                UIModule.showSettings();
+            }, 3000);
+        } else {
+            // Move dealer button
+            gameState.dealerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
+            
+            setTimeout(() => {
+                startHand();
+            }, 3000);
+        }
+        return;
+    }
+    
+    // Check if everyone is all-in (no more betting possible)
+    const activePlayers = gameState.players.filter(p => !p.folded && !p.allIn);
+    const allAllIn = activePlayers.length === 0;
+    
+    if (gameState.phase === 'pre-flop') {
+        dealFlop();
+    } else if (gameState.phase === 'flop') {
+        dealTurn();
+    } else if (gameState.phase === 'turn') {
+        dealRiver();
+    } else if (gameState.phase === 'river') {
+        showdown();
+        return;
+    }
+    
+    // If everyone is all-in, skip betting and auto-advance
+    if (allAllIn) {
+        logAction('All players all-in, revealing cards...');
+        setTimeout(() => advancePhase(), 1500);
+        return;
+    }
+    
+    // Start next betting round with first active player
+    gameState.currentPlayerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
+    
+    // Skip to first active player
+    let iterations = 0;
+    while ((gameState.players[gameState.currentPlayerIndex].folded || 
+           gameState.players[gameState.currentPlayerIndex].allIn) &&
+           iterations < gameState.players.length) {
+        gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+        iterations++;
+    }
+    
+    UIModule.updateUI(gameState);
+    
+    if (gameState.players[gameState.currentPlayerIndex].isAI) {
+        setTimeout(aiTurn, 1000);
+    }
+}
+
+/**
+ * Deals the flop (3 community cards)
+ */
+function dealFlop() {
+    gameState.deck.pop(); // Burn card
+    for (let i = 0; i < 3; i++) {
+        gameState.communityCards.push(gameState.deck.pop());
+    }
+    gameState.phase = 'flop';
+    logAction('Flop dealt');
+}
+
+/**
+ * Deals the turn (4th community card)
+ */
+function dealTurn() {
+    gameState.deck.pop(); // Burn card
+    gameState.communityCards.push(gameState.deck.pop());
+    gameState.phase = 'turn';
+    logAction('Turn dealt');
+}
+
+/**
+ * Deals the river (5th community card)
+ */
+function dealRiver() {
+    gameState.deck.pop(); // Burn card
+    gameState.communityCards.push(gameState.deck.pop());
+    gameState.phase = 'river';
+    logAction('River dealt');
+}
+
+/**
+ * Handles showdown and determines winner
+ */
+function showdown() {
+    gameState.phase = 'showdown';
+    
+    const activePlayers = gameState.players.filter(p => !p.folded);
+    
+    if (activePlayers.length === 1) {
+        // Everyone else folded
+        const winner = activePlayers[0];
+        winner.chips += gameState.pot;
+        logAction(`${winner.name} wins $${gameState.pot} (everyone else folded)`);
+        UIModule.announceWinner(winner, 'Everyone else folded');
+    } else {
+        // Evaluate hands
+        const evaluations = activePlayers.map(p => ({
+            player: p,
+            hand: HandEvaluator.findBestHand([...p.cards, ...gameState.communityCards])
+        }));
+        
+        evaluations.sort((a, b) => HandEvaluator.compareHands(b.hand, a.hand));
+        
+        const winners = [evaluations[0]];
+        for (let i = 1; i < evaluations.length; i++) {
+            if (HandEvaluator.compareHands(evaluations[i].hand, evaluations[0].hand) === 0) {
+                winners.push(evaluations[i]);
+            } else {
+                break;
+            }
+        }
+        
+        const winAmount = Math.floor(gameState.pot / winners.length);
+        
+        winners.forEach(w => {
+            w.player.chips += winAmount;
+            logAction(`${w.player.name} wins $${winAmount} with ${w.hand.name}`);
+        });
+        
+        UIModule.announceWinner(winners[0].player, winners[0].hand.name, winners.length > 1);
+    }
+    
+    UIModule.updateUI(gameState);
+    
+    // Remove broke players
+    gameState.players = gameState.players.filter(p => p.chips > 0);
+    
+    if (gameState.players.length === 1) {
+        setTimeout(() => {
+            alert(`Game Over! ${gameState.players[0].name} wins!`);
+            UIModule.showSettings();
+        }, 3000);
+    } else {
+        // Move dealer button
+        gameState.dealerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
+        
+        setTimeout(() => {
+            startHand();
+        }, 4000);
+    }
+}
+
+/**
+ * Logs an action to the action log
+ * @param {string} message - Action message
+ */
+function logAction(message) {
+    gameState.actionLog.push(message);
+}
+
+/**
+ * Wrapper for UI.toggleRaiseControls
+ */
+function toggleRaiseControls() {
+    UIModule.toggleRaiseControls(gameState);
+}
+
+/**
+ * Shows settings modal
+ */
+function showSettings() {
+    UIModule.showSettings();
+}
+
+/**
+ * Starts new game from settings modal
+ */
+function startNewGame() {
+    UIModule.hideSettings();
+    initGame();
+}
+
+// Initialize on page load
+window.addEventListener('load', () => {
+    console.log('🃏 Texas Hold\'em Poker Game Loaded!');
+    console.log('Complete modular implementation with:');
+    console.log('- Deck module (deck.js)');
+    console.log('- Hand evaluator module (handEvaluator.js)');
+    console.log('- AI module (ai.js)');
+    console.log('- UI module (ui.js)');
+    console.log('- Main game logic (game.js)');
+    
+    UIModule.showSettings();
+});

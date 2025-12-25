@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Testing for Modular Poker Game</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #4ec9b0;
+            text-align: center;
+        }
+        
+        .test-section {
+            background: #252526;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #4ec9b0;
+            border-radius: 4px;
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .pass {
+            background: #1e3a1e;
+            border-left: 4px solid #4CAF50;
+            color: #4CAF50;
+        }
+        
+        .fail {
+            background: #3a1e1e;
+            border-left: 4px solid #f44336;
+            color: #f44336;
+        }
+        
+        .info {
+            background: #1e2a3a;
+            border-left: 4px solid #2196F3;
+            color: #2196F3;
+        }
+        
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-family: inherit;
+        }
+        
+        button:hover {
+            background: #1177bb;
+        }
+        
+        .summary {
+            background: #2d2d30;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .summary-stat {
+            display: inline-block;
+            margin: 10px 20px;
+            font-size: 24px;
+        }
+        
+        .summary-stat .label {
+            display: block;
+            font-size: 14px;
+            color: #858585;
+        }
+        
+        .summary-stat .value {
+            display: block;
+            font-weight: bold;
+        }
+        
+        .console {
+            background: #1e1e1e;
+            border: 1px solid #3c3c3c;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 500px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Modular Poker Game - Automated Test Suite</h1>
+    
+    <div class="summary" id="summary">
+        <h2>Test Summary</h2>
+        <div class="summary-stat">
+            <span class="label">Total Tests</span>
+            <span class="value" id="total-tests">0</span>
+        </div>
+        <div class="summary-stat" style="color: #4CAF50;">
+            <span class="label">Passed</span>
+            <span class="value" id="passed-tests">0</span>
+        </div>
+        <div class="summary-stat" style="color: #f44336;">
+            <span class="label">Failed</span>
+            <span class="value" id="failed-tests">0</span>
+        </div>
+        <div class="summary-stat" style="color: #2196F3;">
+            <span class="label">Pass Rate</span>
+            <span class="value" id="pass-rate">0%</span>
+        </div>
+    </div>
+    
+    <div style="text-align: center;">
+        <button onclick="runAllTests()">▶️ Run All Tests</button>
+        <button onclick="runModuleTests()">📦 Test Modules Only</button>
+        <button onclick="clearResults()">🗑️ Clear Results</button>
+    </div>
+    
+    <div class="console" id="console">
+        <div style="color: #4ec9b0;">Ready to run tests...</div>
+        <div style="color: #858585;">Click "Run All Tests" to begin automated testing</div>
+    </div>
+    
+    <div id="test-results"></div>
+
+    <script>
+        let totalTests = 0;
+        let passedTests = 0;
+        let failedTests = 0;
+        
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const color = type === 'pass' ? '#4CAF50' : type === 'fail' ? '#f44336' : '#d4d4d4';
+            console.innerHTML += `<div style="color: ${color}">${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+        }
+        
+        function addTestResult(name, passed, message = '') {
+            totalTests++;
+            if (passed) passedTests++;
+            else failedTests++;
+            
+            const resultsDiv = document.getElementById('test-results');
+            const resultClass = passed ? 'pass' : 'fail';
+            const icon = passed ? '✓' : '✗';
+            resultsDiv.innerHTML += `
+                <div class="test-result ${resultClass}">
+                    ${icon} ${name} ${message ? '- ' + message : ''}
+                </div>
+            `;
+            
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            document.getElementById('total-tests').textContent = totalTests;
+            document.getElementById('passed-tests').textContent = passedTests;
+            document.getElementById('failed-tests').textContent = failedTests;
+            const passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+            document.getElementById('pass-rate').textContent = passRate + '%';
+        }
+        
+        function clearResults() {
+            document.getElementById('console').innerHTML = '<div style="color: #4ec9b0;">Console cleared.</div>';
+            document.getElementById('test-results').innerHTML = '';
+            totalTests = 0;
+            passedTests = 0;
+            failedTests = 0;
+            updateSummary();
+        }
+        
+        // ===== MODULE TESTS =====
+        
+        function testDeckModule() {
+            log('=== Testing DeckModule ===', 'info');
+            
+            // Test 1: Module exists
+            try {
+                const exists = typeof DeckModule !== 'undefined';
+                addTestResult('DeckModule exists', exists);
+                if (!exists) throw new Error('Module not loaded');
+            } catch (e) {
+                addTestResult('DeckModule exists', false, e.message);
+                return;
+            }
+            
+            // Test 2: Create deck
+            try {
+                const deck = DeckModule.create();
+                const passed = deck && deck.length === 52;
+                addTestResult('create() returns 52 cards', passed, `Got ${deck ? deck.length : 'null'} cards`);
+            } catch (e) {
+                addTestResult('create() returns 52 cards', false, e.message);
+            }
+            
+            // Test 3: Card structure
+            try {
+                const deck = DeckModule.create();
+                const card = deck[0];
+                const hasProps = card && card.suit && card.rank && typeof card.value === 'number';
+                addTestResult('Cards have suit, rank, value', hasProps);
+            } catch (e) {
+                addTestResult('Cards have suit, rank, value', false, e.message);
+            }
+            
+            // Test 4: Shuffle
+            try {
+                const deck = DeckModule.create();
+                const original = [...deck];
+                DeckModule.shuffle(deck);
+                const changed = JSON.stringify(deck) !== JSON.stringify(original);
+                addTestResult('shuffle() changes order', changed);
+            } catch (e) {
+                addTestResult('shuffle() changes order', false, e.message);
+            }
+            
+            // Test 5: Get suit symbol
+            try {
+                const symbol = DeckModule.getSuitSymbol('hearts');
+                const passed = symbol === '♥';
+                addTestResult('getSuitSymbol() returns ♥', passed, `Got "${symbol}"`);
+            } catch (e) {
+                addTestResult('getSuitSymbol() returns ♥', false, e.message);
+            }
+            
+            log('');
+        }
+        
+        function testHandEvaluator() {
+            log('=== Testing HandEvaluator ===', 'info');
+            
+            // Test 1: Module exists
+            try {
+                const exists = typeof HandEvaluator !== 'undefined';
+                addTestResult('HandEvaluator exists', exists);
+                if (!exists) throw new Error('Module not loaded');
+            } catch (e) {
+                addTestResult('HandEvaluator exists', false, e.message);
+                return;
+            }
+            
+            // Test 2: Royal Flush
+            try {
+                const royalFlush = [
+                    { suit: 'hearts', rank: 'A', value: 14 },
+                    { suit: 'hearts', rank: 'K', value: 13 },
+                    { suit: 'hearts', rank: 'Q', value: 12 },
+                    { suit: 'hearts', rank: 'J', value: 11 },
+                    { suit: 'hearts', rank: '10', value: 10 }
+                ];
+                const result = HandEvaluator.evaluate(royalFlush);
+                const passed = result.name === 'Royal Flush';
+                addTestResult('Detects Royal Flush', passed, result.name);
+            } catch (e) {
+                addTestResult('Detects Royal Flush', false, e.message);
+            }
+            
+            // Test 3: Straight Flush
+            try {
+                const straightFlush = [
+                    { suit: 'clubs', rank: '9', value: 9 },
+                    { suit: 'clubs', rank: '8', value: 8 },
+                    { suit: 'clubs', rank: '7', value: 7 },
+                    { suit: 'clubs', rank: '6', value: 6 },
+                    { suit: 'clubs', rank: '5', value: 5 }
+                ];
+                const result = HandEvaluator.evaluate(straightFlush);
+                const passed = result.name === 'Straight Flush';
+                addTestResult('Detects Straight Flush', passed, result.name);
+            } catch (e) {
+                addTestResult('Detects Straight Flush', false, e.message);
+            }
+            
+            // Test 4: Flush
+            try {
+                const flush = [
+                    { suit: 'diamonds', rank: 'K', value: 13 },
+                    { suit: 'diamonds', rank: '10', value: 10 },
+                    { suit: 'diamonds', rank: '7', value: 7 },
+                    { suit: 'diamonds', rank: '4', value: 4 },
+                    { suit: 'diamonds', rank: '2', value: 2 }
+                ];
+                const result = HandEvaluator.evaluate(flush);
+                const passed = result.name === 'Flush';
+                addTestResult('Detects Flush', passed, result.name);
+            } catch (e) {
+                addTestResult('Detects Flush', false, e.message);
+            }
+            
+            // Test 5: Compare hands
+            try {
+                const flush = { rank: 6, high: [13, 10, 7, 4, 2] };
+                const straight = { rank: 5, high: [10, 9, 8, 7, 6] };
+                const result = HandEvaluator.compare(flush, straight);
+                const passed = result > 0; // Flush should beat Straight
+                addTestResult('compare() ranks correctly', passed, `Flush vs Straight = ${result}`);
+            } catch (e) {
+                addTestResult('compare() ranks correctly', false, e.message);
+            }
+            
+            log('');
+        }
+        
+        function testAIModule() {
+            log('=== Testing AIModule ===', 'info');
+            
+            // Test 1: Module exists
+            try {
+                const exists = typeof AIModule !== 'undefined';
+                addTestResult('AIModule exists', exists);
+                if (!exists) throw new Error('Module not loaded');
+            } catch (e) {
+                addTestResult('AIModule exists', false, e.message);
+                return;
+            }
+            
+            // Note: AI tests require game state, so we'll just check structure
+            log('AI module requires game context - skipping functional tests');
+            log('');
+        }
+        
+        function testUIModule() {
+            log('=== Testing UIModule ===', 'info');
+            
+            // Test 1: Module exists
+            try {
+                const exists = typeof UIModule !== 'undefined';
+                addTestResult('UIModule exists', exists);
+                if (!exists) throw new Error('Module not loaded');
+            } catch (e) {
+                addTestResult('UIModule exists', false, e.message);
+                return;
+            }
+            
+            log('UI module requires DOM elements - skipping functional tests');
+            log('');
+        }
+        
+        function testGameController() {
+            log('=== Testing Game Controller ===', 'info');
+            
+            // Test 1: Functions exist
+            try {
+                const funcs = ['initGame', 'startHand', 'playerAction'];
+                const allExist = funcs.every(f => typeof window[f] === 'function');
+                addTestResult('Game functions exist', allExist);
+            } catch (e) {
+                addTestResult('Game functions exist', false, e.message);
+            }
+            
+            log('');
+        }
+        
+        // ===== INTEGRATION TESTS =====
+        
+        function testIntegration() {
+            log('=== Integration Tests ===', 'info');
+            
+            // Test 1: All modules loaded
+            const modules = ['DeckModule', 'HandEvaluator', 'AIModule', 'UIModule'];
+            modules.forEach(mod => {
+                const exists = typeof window[mod] !== 'undefined';
+                addTestResult(`${mod} loaded`, exists);
+            });
+            
+            // Test 2: DOM elements exist
+            const elements = [
+                'community-cards',
+                'players-container',
+                'action-log',
+                'pot-amount'
+            ];
+            elements.forEach(id => {
+                const exists = document.getElementById(id) !== null;
+                addTestResult(`Element #${id} exists`, exists);
+            });
+            
+            log('');
+        }
+        
+        // ===== RUN ALL TESTS =====
+        
+        function runModuleTests() {
+            clearResults();
+            log('🧪 Starting Module Tests...\n', 'info');
+            
+            testDeckModule();
+            testHandEvaluator();
+            testAIModule();
+            testUIModule();
+            testGameController();
+            
+            log('=== Module Tests Complete ===', 'info');
+            log(`Total: ${totalTests} | Passed: ${passedTests} | Failed: ${failedTests}`, 'info');
+        }
+        
+        function runAllTests() {
+            clearResults();
+            log('🧪 Starting Comprehensive Test Suite...\n', 'info');
+            
+            testDeckModule();
+            testHandEvaluator();
+            testAIModule();
+            testUIModule();
+            testGameController();
+            testIntegration();
+            
+            log('\n=== All Tests Complete ===', 'info');
+            log(`Total: ${totalTests} | Passed: ${passedTests} | Failed: ${failedTests}`, 'info');
+            const passRate = Math.round((passedTests / totalTests) * 100);
+            log(`Pass Rate: ${passRate}%`, passRate === 100 ? 'pass' : passRate >= 80 ? 'info' : 'fail');
+            
+            if (passRate === 100) {
+                log('\n✅ All tests passed! Modular structure is working correctly.', 'pass');
+            } else if (passRate >= 80) {
+                log('\n⚠️ Most tests passed, but some issues detected.', 'info');
+            } else {
+                log('\n❌ Multiple failures detected. Review console for details.', 'fail');
+            }
+        }
+        
+        // Auto-run on load if modules are available
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (typeof DeckModule !== 'undefined') {
+                    log('Modules detected! Click "Run All Tests" to verify everything works.', 'info');
+                } else {
+                    log('⚠️ Modules not detected. Make sure you opened this file from the modular-version directory.', 'fail');
+                    log('Expected location: answer-key/modular-version/', 'info');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
