@@ -207,6 +207,7 @@ function playerAction(action) {
         
         document.getElementById('raise-controls').style.display = 'none';
     } else if (action === 'allin') {
+        player.lastAction = 'allin';
         amount = player.chips;
         player.chips = 0;
         player.currentBet += amount;
@@ -248,7 +249,7 @@ function aiTurn() {
     
     const decision = AIModule.makeAIDecision(player, gameState, config);
     
-    // Show thinking message
+    // Set thinking status temporarily
     logAction(`${player.name} is thinking...`);
     UIModule.updateUI(gameState);
     
@@ -260,7 +261,6 @@ function aiTurn() {
         } else if (decision.action === 'check') {
             player.lastAction = 'check';
             logAction(`${player.name} checks`);
-            UIModule.updateUI(gameState);
         } else if (decision.action === 'call') {
             player.lastAction = 'call';
             const amount = Math.min(gameState.currentBet - player.currentBet, player.chips);
