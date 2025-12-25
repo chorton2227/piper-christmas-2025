@@ -103,6 +103,7 @@ function startHand() {
         player.currentBet = 0;
         player.folded = false;
         player.allIn = false;
+        player.lastAction = null; // Clear last action for new hand
     });
     
     gameState.actionLog = [];
@@ -218,6 +219,17 @@ function playerAction(action) {
         }
         
         logAction(`${player.name} goes all-in with $${amount}`);
+    }
+    
+    // Check if human player is eliminated
+    if (gameState.players[0].chips === 0 && !gameState.players[0].allIn) {
+        setTimeout(() => {
+            alert('😢 You\'re out of chips! Game Over!\n\nBetter luck next time!');
+            if (confirm('Would you like to start a new game?')) {
+                UIModule.showSettings();
+            }
+        }, 1000);
+        return;
     }
     
     nextPlayer();
@@ -506,8 +518,23 @@ function showdown() {
     
     UIModule.updateUI(gameState);
     
+    // Check if human player lost (has no chips)
+    const humanPlayer = gameState.players.find(p => !p.isAI);
+    const humanLost = !humanPlayer || humanPlayer.chips === 0;
+    
     // Remove broke players
     gameState.players = gameState.players.filter(p => p.chips > 0);
+    
+    if (humanLost && !gameState.players.find(p => !p.isAI)) {
+        // Human player was eliminated
+        setTimeout(() => {
+            alert('😢 You Lose! You\'re out of chips!\n\nBetter luck next time!');
+            if (confirm('Would you like to start a new game?')) {
+                UIModule.showSettings();
+            }
+        }, 5000);
+        return;
+    }
     
     if (gameState.players.length === 1) {
         const winner = gameState.players[0];

@@ -99,6 +99,8 @@ const UIModule = (function() {
                 actionStatus = '<div class="player-action" style="color: #ff9800; font-weight: bold;">Raised!</div>';
             } else if (isActive && !player.isAI) {
                 actionStatus = '<div class="player-action" style="color: #ffd700; animation: pulse 1s infinite;">Your Turn!</div>';
+            } else if (isActive && player.isAI) {
+                actionStatus = '<div class="player-action" style="color: #ffeb3b;">Thinking...</div>';
             }
             
             return `
