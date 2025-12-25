@@ -404,9 +404,19 @@ function nextPlayer() {
  * Advances to next phase of the hand
  */
 function advancePhase() {
-    // Reset bets and tracking for next round
-    gameState.players.forEach(p => p.currentBet = 0);
-    gameState.currentBet = 0;
+    // Don't reset bets if there are all-in players - they set the minimum bet
+    const allInPlayers = gameState.players.filter(p => p.allIn && !p.folded);
+    const maxAllInBet = allInPlayers.length > 0 ? Math.max(...allInPlayers.map(p => p.currentBet)) : 0;
+    
+    // Reset bets and tracking for next round, but keep currentBet if all-in player has bet
+    gameState.players.forEach(p => {
+        if (!p.allIn) {
+            p.currentBet = 0;
+        }
+    });
+    
+    // Current bet is the highest all-in bet if any, otherwise 0
+    gameState.currentBet = maxAllInBet;
     gameState.lastRaiserIndex = -1;
     gameState.playersActed = [];
     
