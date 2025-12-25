@@ -393,6 +393,48 @@ function nextPlayer() {
              gameState.players[gameState.currentPlayerIndex].allIn) && 
              count < gameState.players.length);
     
+    // Check if only one player left (all others folded)
+    const playersInHand = gameState.players.filter(p => !p.folded);
+    if (playersInHand.length === 1) {
+        // Award pot to last remaining player
+        const winner = playersInHand[0];
+        const potAmount = gameState.pot;
+        winner.chips += gameState.pot;
+        SoundModule.collect();
+        logAction(`${winner.name} wins $${potAmount} (everyone else folded)`);
+        
+        UIModule.announceWinner(winner, 'Everyone else folded', false, {
+            playerCards: winner.cards,
+            communityCards: gameState.communityCards,
+            winningHandCards: [],
+            potAmount: potAmount
+        });
+        
+        UIModule.updateUI(gameState);
+        
+        // Remove broke players
+        gameState.players = gameState.players.filter(p => p.chips > 0);
+        
+        if (gameState.players.length === 1) {
+            setTimeout(() => {
+                const finalWinner = gameState.players[0];
+                if (finalWinner.isAI) {
+                    alert(`😢 You Lose! ${finalWinner.name} wins the game!\n\nBetter luck next time!`);
+                } else {
+                    alert(`🎉 Congratulations! You won the game!\n\nYou beat all the AI players!`);
+                }
+                UIModule.showSettings();
+            }, 5000);
+        } else {
+            // Start next hand
+            setTimeout(() => {
+                gameState.dealerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
+                startHand();
+            }, 5000);
+        }
+        return;
+    }
+    
     // Continue betting
     if (activePlayers.length > 0) {
         if (gameState.players[gameState.currentPlayerIndex].isAI) {
