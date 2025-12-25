@@ -345,38 +345,43 @@ function nextPlayer() {
     // Check if betting round is complete
     const activePlayers = gameState.players.filter(p => !p.folded && !p.allIn);
     
-    // If only 0-1 active players (rest are all-in or folded), end betting round
-    if (activePlayers.length <= 1) {
-        advancePhase();
-        return;
-    }
+    // Check if all active players have acted and matched bets
+    const allActivePlayersActed = activePlayers.every(p => {
+        const playerIndex = gameState.players.indexOf(p);
+        return gameState.playersActed.includes(playerIndex);
+    });
     
-    // Check if all active players have matched the current bet
     const allMatched = activePlayers.every(p => p.currentBet === gameState.currentBet);
     
-    // Check if action has returned to the last raiser (or gone around once if no raise)
-    let actionComplete = false;
-    if (gameState.lastRaiserIndex === -1) {
-        // No raise yet, check if everyone has acted
-        actionComplete = activePlayers.every((p) => {
-            const playerIndex = gameState.players.indexOf(p);
-            return gameState.playersActed.includes(playerIndex);
-        });
-    } else {
-        // There was a raise, check if action is back to raiser
-        const nextIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
-        actionComplete = nextIndex === gameState.lastRaiserIndex || 
-                        (gameState.players[nextIndex].folded && 
-                         activePlayers.every(p => {
-                            const pIndex = gameState.players.indexOf(p);
-                            return pIndex === gameState.lastRaiserIndex || gameState.playersActed.includes(pIndex);
-                         }));
-    }
-    
-    // If all active players have acted and bets are matched, end betting round
-    if (allMatched && actionComplete) {
+    // Only advance if there are 0 active players OR (1 active player AND they've acted)
+    if (activePlayers.length === 0 || (activePlayers.length === 1 && allActivePlayersActed && allMatched)) {
         advancePhase();
         return;
+    }
+    
+    // If multiple active players, check if betting round is complete
+    if (activePlayers.length > 1) {
+        // Check if action has returned to the last raiser (or gone around once if no raise)
+        let actionComplete = false;
+        if (gameState.lastRaiserIndex === -1) {
+            // No raise yet, check if everyone has acted
+            actionComplete = allActivePlayersActed;
+        } else {
+            // There was a raise, check if action is back to raiser
+            const nextIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+            actionComplete = nextIndex === gameState.lastRaiserIndex || 
+                            (gameState.players[nextIndex].folded && 
+                             activePlayers.every(p => {
+                                const pIndex = gameState.players.indexOf(p);
+                                return pIndex === gameState.lastRaiserIndex || gameState.playersActed.includes(pIndex);
+                             }));
+        }
+        
+        // If all active players have acted and bets are matched, end betting round
+        if (allMatched && actionComplete) {
+            advancePhase();
+            return;
+        }
     }
     
     // Move to next player
