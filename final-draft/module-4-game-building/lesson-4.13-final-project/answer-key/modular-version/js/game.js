@@ -131,6 +131,7 @@ function startHand() {
         
         if (round < 2) {
             gameState.players[playerIndex].cards.push(gameState.deck.pop());
+            SoundModule.deal();
             UIModule.updateUI(gameState);
             dealIndex++;
         } else {
