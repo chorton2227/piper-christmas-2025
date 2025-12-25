@@ -518,7 +518,7 @@ function dealRiver() {
 }
 
 /**
- * Calculates side pots based on all-in situations
+ * Calculates side pots based on all-in situations and returns excess chips
  * @returns {Array} Array of pot objects with amount and eligible players
  */
 function calculateSidePots() {
@@ -538,8 +538,31 @@ function calculateSidePots() {
         amount: p.currentBet
     })).sort((a, b) => a.amount - b.amount);
     
+    // Return excess chips to players who bet more than lowest all-in
+    // This ensures players only risk what the all-in player can match
+    const lowestBet = contributions[0].amount;
+    let totalPotAmount = 0;
+    
+    activePlayers.forEach(p => {
+        if (p.currentBet > lowestBet) {
+            // Return excess chips
+            const excess = p.currentBet - lowestBet;
+            p.chips += excess;
+            p.currentBet = lowestBet;
+            gameState.pot -= excess;
+            logAction(`${p.name} gets $${excess} returned (uncalled bet)`);
+        }
+        totalPotAmount += p.currentBet;
+    });
+    
+    // Recalculate contributions after returning excess
+    const adjustedContributions = activePlayers.map(p => ({
+        player: p,
+        amount: p.currentBet
+    })).sort((a, b) => a.amount - b.amount);
+    
     // Remove duplicates and create betting levels
-    const uniqueLevels = [...new Set(contributions.map(c => c.amount))].sort((a, b) => a - b);
+    const uniqueLevels = [...new Set(adjustedContributions.map(c => c.amount))].filter(v => v > 0).sort((a, b) => a - b);
     
     const pots = [];
     let previousLevel = 0;
@@ -548,7 +571,7 @@ function calculateSidePots() {
         const level = uniqueLevels[i];
         if (level > previousLevel) {
             // Find all players who contributed at least this level
-            const eligiblePlayers = contributions
+            const eligiblePlayers = adjustedContributions
                 .filter(c => c.amount >= level)
                 .map(c => c.player);
             
