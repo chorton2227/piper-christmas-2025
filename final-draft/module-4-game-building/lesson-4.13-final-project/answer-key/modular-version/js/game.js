@@ -243,6 +243,33 @@ function playerAction(action) {
         logAction(`${player.name} goes all-in with $${amount}`);
     }
     
+    // Check if human player is eliminated (not all-in, just out of chips somehow)
+    if (gameState.players[0].chips === 0 && !gameState.players[0].allIn) {
+            player.allIn = true;
+            player.lastAction = 'allin';
+            SoundModule.allin();
+        } else {
+            SoundModule.raise();
+        }
+        
+        document.getElementById('raise-controls').style.display = 'none';
+    } else if (action === 'allin') {
+        player.lastAction = 'allin';
+        amount = player.chips;
+        player.chips = 0;
+        player.currentBet += amount;
+        gameState.pot += amount;
+        player.allIn = true;
+        SoundModule.allin();
+        
+        if (player.currentBet > gameState.currentBet) {
+            gameState.currentBet = player.currentBet;
+            gameState.lastRaiserIndex = 0;
+        }
+        
+        logAction(`${player.name} goes all-in with $${amount}`);
+    }
+    
     // Check if human player is eliminated
     if (gameState.players[0].chips === 0 && !gameState.players[0].allIn) {
         setTimeout(() => {
