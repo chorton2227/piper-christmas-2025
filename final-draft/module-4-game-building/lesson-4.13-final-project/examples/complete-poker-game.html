@@ -743,7 +743,9 @@
                 phase: 'pre-flop',
                 smallBlind: smallBlind,
                 bigBlind: smallBlind * 2,
-                actionLog: []
+                actionLog: [],
+                lastRaiserIndex: -1, // Track who raised last
+                playersActed: [] // Track who has acted this round
             };
             
             // Create players
@@ -784,6 +786,8 @@
             gameState.phase = 'pre-flop';
             gameState.deck = createDeck();
             shuffleDeck(gameState.deck);
+            gameState.lastRaiserIndex = -1;
+            gameState.playersActed = [];
             
             gameState.players.forEach(player => {
                 player.cards = [];
@@ -803,6 +807,7 @@
             
             gameState.currentBet = gameState.bigBlind;
             gameState.currentPlayerIndex = (bbIndex + 1) % gameState.players.length;
+            gameState.lastRaiserIndex = bbIndex; // Big blind is initial raiser
             
             // Deal hole cards
             for (let i = 0; i < 2; i++) {
@@ -864,6 +869,7 @@
                 gameState.pot += amount;
                 player.currentBet += amount;
                 gameState.currentBet = player.currentBet;
+                gameState.lastRaiserIndex = 0; // Track this raise
                 logAction(`${player.name} raises to $${player.currentBet}`);
                 
                 if (player.chips === 0) player.allIn = true;
@@ -878,6 +884,7 @@
                 
                 if (player.currentBet > gameState.currentBet) {
                     gameState.currentBet = player.currentBet;
+                    gameState.lastRaiserIndex = 0; // Track if all-in is a raise
                 }
                 
                 logAction(`${player.name} goes all-in with $${amount}`);
@@ -919,6 +926,7 @@
                     player.currentBet += totalBet;
                     gameState.pot += totalBet;
                     gameState.currentBet = player.currentBet;
+                    gameState.lastRaiserIndex = gameState.currentPlayerIndex; // Track this raise
                     logAction(`${player.name} raises to $${player.currentBet}`);
                     
                     if (player.chips === 0) player.allIn = true;
@@ -930,6 +938,11 @@
         
         function nextPlayer() {
             updateUI();
+            
+            // Mark current player as having acted
+            if (!gameState.playersActed.includes(gameState.currentPlayerIndex)) {
+                gameState.playersActed.push(gameState.currentPlayerIndex);
+            }
             
             // Check if betting round is complete
             const activePlayers = gameState.players.filter(p => !p.folded && !p.allIn);
@@ -944,6 +957,31 @@
             // Check if all active players have matched the current bet
             const allMatched = activePlayers.every(p => p.currentBet === gameState.currentBet);
             
+            // Check if action has returned to the last raiser (or gone around once if no raise)
+            let actionComplete = false;
+            if (gameState.lastRaiserIndex === -1) {
+                // No raise yet, check if everyone has acted
+                actionComplete = activePlayers.every((p, idx) => {
+                    const playerIndex = gameState.players.indexOf(p);
+                    return gameState.playersActed.includes(playerIndex);
+                });
+            } else {
+                // There was a raise, check if action is back to raiser
+                const nextIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+                actionComplete = nextIndex === gameState.lastRaiserIndex || 
+                                (gameState.players[nextIndex].folded && 
+                                 activePlayers.every(p => {
+                                    const pIndex = gameState.players.indexOf(p);
+                                    return pIndex === gameState.lastRaiserIndex || gameState.playersActed.includes(pIndex);
+                                 }));
+            }
+            
+            // If all active players have acted and bets are matched, end betting round
+            if (allMatched && actionComplete) {
+                advancePhase();
+                return;
+            }
+            
             // Move to next player
             let count = 0;
             do {
@@ -953,11 +991,8 @@
                      gameState.players[gameState.currentPlayerIndex].allIn) && 
                      count < gameState.players.length);
             
-            // If all active players have acted and bets are matched, end betting round
-            if (allMatched && count >= gameState.players.length) {
-                advancePhase();
-            } else if (activePlayers.length > 0) {
-                // Continue betting
+            // Continue betting
+            if (activePlayers.length > 0) {
                 if (gameState.players[gameState.currentPlayerIndex].isAI) {
                     aiTurn();
                 } else {
@@ -970,9 +1005,11 @@
         }
         
         function advancePhase() {
-            // Reset bets for next round
+            // Reset bets and tracking for next round
             gameState.players.forEach(p => p.currentBet = 0);
             gameState.currentBet = 0;
+            gameState.lastRaiserIndex = -1;
+            gameState.playersActed = [];
             
             // Check if only one player remains (everyone else folded)
             const playersInHand = gameState.players.filter(p => !p.folded);
