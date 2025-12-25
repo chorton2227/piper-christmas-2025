@@ -16,15 +16,27 @@ const UIModule = (function() {
         updateActionLog(gameState);
     }
     
+    // Track previous community card count for animation
+    let previousCommunityCount = 0;
+    
     /**
      * Updates community cards display
      * @param {Object} gameState - Current game state
      */
     function updateCommunityCards(gameState) {
         const communityDiv = document.getElementById('community-cards');
-        communityDiv.innerHTML = gameState.communityCards.map(card => 
-            `<div class="card ${card.suit} dealing">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`
-        ).join('');
+        const currentCount = gameState.communityCards.length;
+        
+        communityDiv.innerHTML = gameState.communityCards.map((card, index) => {
+            // Only animate new cards
+            const isNew = index >= previousCommunityCount;
+            return `<div class="card ${card.suit} ${isNew ? 'dealing' : ''}">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
+        }).join('');
+        
+        previousCommunityCount = currentCount;
+        
+        // Reset count on new hand
+        if (currentCount === 0) previousCommunityCount = 0;
     }
     
     /**
@@ -61,6 +73,8 @@ const UIModule = (function() {
             const isDealer = index === gameState.dealerIndex;
             
             let cardsHTML;
+            const isEliminated = player.chips === 0 && !gameState.players.includes(player);
+            
             if (player.isAI && gameState.phase !== 'showdown') {
                 cardsHTML = player.cards.map(() => 
                     '<div class="card back">🂠</div>'
@@ -71,18 +85,33 @@ const UIModule = (function() {
                 ).join('');
             }
             
+            // Show current action status
+            let actionStatus = '';
+            if (player.folded) {
+                actionStatus = '<div class="player-action" style="color: #ff6b6b; font-weight: bold;">Folded</div>';
+            } else if (player.allIn) {
+                actionStatus = '<div class="player-action" style="color: #ffd700; font-weight: bold; font-size: 16px;">💰 ALL-IN! 💰</div>';
+            } else if (player.lastAction === 'check') {
+                actionStatus = '<div class="player-action" style="color: #4CAF50; font-weight: bold;">✓ Checked</div>';
+            } else if (player.lastAction === 'call') {
+                actionStatus = '<div class="player-action" style="color: #2196F3;">Called</div>';
+            } else if (player.lastAction === 'raise') {
+                actionStatus = '<div class="player-action" style="color: #ff9800; font-weight: bold;">Raised!</div>';
+            } else if (isActive && !player.isAI) {
+                actionStatus = '<div class="player-action" style="color: #ffd700; animation: pulse 1s infinite;">Your Turn!</div>';
+            }
+            
             return `
-                <div class="player-seat ${isActive ? 'active' : ''} ${player.folded ? 'folded' : ''}">
+                <div class="player-seat ${isActive ? 'active' : ''} ${player.folded ? 'folded' : ''} ${isEliminated ? 'eliminated' : ''}">
                     <div class="player-name">
-                        ${player.name}
+                        ${player.name}${isEliminated ? ' (Eliminated)' : ''}
                         ${isDealer ? '<span class="dealer-button">D</span>' : ''}
                     </div>
                     <div class="player-cards">${cardsHTML}</div>
                     <div class="player-info">
                         <div class="chips">💰 $${player.chips}</div>
                         ${player.currentBet > 0 ? `<div class="current-bet">Bet: $${player.currentBet}</div>` : ''}
-                        ${player.folded ? '<div class="player-action" style="color: #ff6b6b;">Folded</div>' : ''}
-                        ${player.allIn && !player.folded ? '<div class="player-action" style="color: #ffd700; font-weight: bold;">All-In!</div>' : ''}
+                        ${actionStatus}
                     </div>
                 </div>
             `;
@@ -139,14 +168,26 @@ const UIModule = (function() {
      * @param {Object} player - Winning player
      * @param {string} handName - Name of winning hand
      * @param {boolean} isSplit - Whether pot was split
+     * @param {Array} winningCards - Winner's cards (optional)
      */
-    function announceWinner(player, handName, isSplit = false) {
+    function announceWinner(player, handName, isSplit = false, winningCards = null) {
         const announcement = document.getElementById('winner-announcement');
+        
+        let cardsHTML = '';
+        if (winningCards && winningCards.length > 0) {
+            cardsHTML = `<div style="margin-top: 15px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">`;
+            winningCards.forEach(card => {
+                cardsHTML += `<div class="card ${card.suit}" style="width: 50px; height: 70px; font-size: 20px;">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
+            });
+            cardsHTML += '</div>';
+        }
+        
         announcement.innerHTML = `
             🏆 ${player.name} wins! 🏆<br>
-            <div style="font-size: 18px; margin-top: 10px;">
+            <div style="font-size: 20px; margin-top: 10px; font-weight: bold; color: #ffd700;">
                 ${handName}${isSplit ? ' (Split Pot)' : ''}
             </div>
+            ${cardsHTML}
         `;
         announcement.classList.add('show');
         

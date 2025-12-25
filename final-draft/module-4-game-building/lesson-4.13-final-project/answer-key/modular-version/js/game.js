@@ -169,10 +169,13 @@ function playerAction(action) {
     
     if (action === 'fold') {
         player.folded = true;
+        player.lastAction = 'fold';
         logAction(`${player.name} folds`);
     } else if (action === 'check') {
+        player.lastAction = 'check';
         logAction(`${player.name} checks`);
     } else if (action === 'call') {
+        player.lastAction = 'call';
         amount = gameState.currentBet - player.currentBet;
         amount = Math.min(amount, player.chips);
         player.chips -= amount;
@@ -182,6 +185,7 @@ function playerAction(action) {
         
         if (player.chips === 0) player.allIn = true;
     } else if (action === 'raise') {
+        player.lastAction = 'raise';
         const raiseInput = parseInt(document.getElementById('raise-amount').value);
         amount = raiseInput;
         
@@ -239,11 +243,14 @@ function aiTurn() {
     setTimeout(() => {
         if (decision.action === 'fold') {
             player.folded = true;
+            player.lastAction = 'fold';
             logAction(`${player.name} folds`);
         } else if (decision.action === 'check') {
+            player.lastAction = 'check';
             logAction(`${player.name} checks`);
             UIModule.updateUI(gameState);
         } else if (decision.action === 'call') {
+            player.lastAction = 'call';
             const amount = Math.min(gameState.currentBet - player.currentBet, player.chips);
             player.chips -= amount;
             player.currentBet += amount;
@@ -252,6 +259,7 @@ function aiTurn() {
             
             if (player.chips === 0) player.allIn = true;
         } else if (decision.action === 'raise') {
+            player.lastAction = 'raise';
             const toCall = gameState.currentBet - player.currentBet;
             const raiseAmount = Math.min(decision.amount, player.chips - toCall);
             const totalBet = toCall + raiseAmount;
@@ -400,6 +408,9 @@ function advancePhase() {
         return;
     }
     
+    // Clear last actions for new betting round
+    gameState.players.forEach(p => p.lastAction = null);
+    
     // Start next betting round with first active player
     gameState.currentPlayerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
     
@@ -464,7 +475,7 @@ function showdown() {
         const winner = activePlayers[0];
         winner.chips += gameState.pot;
         logAction(`${winner.name} wins $${gameState.pot} (everyone else folded)`);
-        UIModule.announceWinner(winner, 'Everyone else folded');
+        UIModule.announceWinner(winner, 'Everyone else folded', false, winner.cards);
     } else {
         // Evaluate hands
         const evaluations = activePlayers.map(p => ({
@@ -490,7 +501,7 @@ function showdown() {
             logAction(`${w.player.name} wins $${winAmount} with ${w.hand.name}`);
         });
         
-        UIModule.announceWinner(winners[0].player, winners[0].hand.name, winners.length > 1);
+        UIModule.announceWinner(winners[0].player, winners[0].hand.name, winners.length > 1, winners[0].player.cards);
     }
     
     UIModule.updateUI(gameState);
