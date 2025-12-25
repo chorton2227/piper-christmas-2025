@@ -33,6 +33,9 @@ function initGame() {
     const startingChips = parseInt(document.getElementById('starting-chips').value);
     const smallBlind = parseInt(document.getElementById('small-blind').value);
     
+    // Initialize sound module
+    SoundModule.init();
+    
     config.playerCount = playerCount;
     config.startingChips = startingChips;
     config.smallBlind = smallBlind;
@@ -203,7 +206,12 @@ function playerAction(action) {
         gameState.lastRaiserIndex = 0;
         logAction(`${player.name} raises to $${player.currentBet}`);
         
-        if (player.chips === 0) player.allIn = true;
+        if (player.chips === 0) {
+            player.allIn = true;
+            SoundModule.allin();
+        } else {
+            SoundModule.raise();
+        }
         
         document.getElementById('raise-controls').style.display = 'none';
     } else if (action === 'allin') {
@@ -213,6 +221,7 @@ function playerAction(action) {
         player.currentBet += amount;
         gameState.pot += amount;
         player.allIn = true;
+        SoundModule.allin();
         
         if (player.currentBet > gameState.currentBet) {
             gameState.currentBet = player.currentBet;
@@ -258,6 +267,7 @@ function aiTurn() {
             player.folded = true;
             player.lastAction = 'fold';
             logAction(`${player.name} folds`);
+            SoundModule.fold();
         } else if (decision.action === 'check') {
             player.lastAction = 'check';
             logAction(`${player.name} checks`);
@@ -269,7 +279,12 @@ function aiTurn() {
             gameState.pot += amount;
             logAction(`${player.name} calls $${amount}`);
             
-            if (player.chips === 0) player.allIn = true;
+            if (player.chips === 0) {
+                player.allIn = true;
+                SoundModule.allin();
+            } else {
+                SoundModule.bet();
+            }
         } else if (decision.action === 'raise') {
             player.lastAction = 'raise';
             const toCall = gameState.currentBet - player.currentBet;
@@ -283,7 +298,12 @@ function aiTurn() {
             gameState.lastRaiserIndex = gameState.currentPlayerIndex;
             logAction(`${player.name} raises to $${player.currentBet}`);
             
-            if (player.chips === 0) player.allIn = true;
+            if (player.chips === 0) {
+                player.allIn = true;
+                SoundModule.allin();
+            } else {
+                SoundModule.raise();
+            }
         }
         
         nextPlayer();
@@ -525,6 +545,7 @@ function showdown() {
         const potAmount = gameState.pot;
         winner.chips += gameState.pot;
         logAction(`${winner.name} wins $${potAmount} (everyone else folded)`);
+        SoundModule.collect();
         UIModule.announceWinner(winner, 'Everyone else folded', false, {
             playerCards: winner.cards,
             communityCards: gameState.communityCards,
@@ -585,6 +606,7 @@ function showdown() {
         
         // Show winner announcement for main pot winner
         if (mainWinner && mainWinningHand) {
+            SoundModule.win();
             UIModule.announceWinner(mainWinner, mainWinningHand.name, pots.length > 1, {
                 playerCards: mainWinner.cards,
                 communityCards: gameState.communityCards,
