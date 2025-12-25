@@ -129,6 +129,12 @@ h1 {
     opacity: 0.5;
 }
 
+.player-seat.eliminated {
+    opacity: 0.3;
+    filter: grayscale(100%);
+    pointer-events: none;
+}
+
 .player-seat.winner {
     border-color: #4caf50;
     background: rgba(76, 175, 80, 0.2);
@@ -378,7 +384,10 @@ button:disabled {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
 .card.dealing {
     animation: fadeIn 0.3s ease-out;
 }
