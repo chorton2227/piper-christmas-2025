@@ -98,6 +98,7 @@ function startHand() {
     gameState.phase = 'pre-flop';
     gameState.deck = DeckModule.createDeck();
     DeckModule.shuffleDeck(gameState.deck);
+    SoundModule.shuffle();
     gameState.lastRaiserIndex = -1;
     gameState.playersActed = [];
     
