@@ -475,6 +475,43 @@ function dealRiver() {
 }
 
 /**
+ * Calculates side pots based on all-in situations
+ * @returns {Array} Array of pot objects with amount and eligible players
+ */
+function calculateSidePots() {
+    const activePlayers = gameState.players.filter(p => !p.folded);
+    
+    // Create array of {player, contribution} sorted by contribution
+    const contributions = activePlayers.map(p => ({
+        player: p,
+        amount: p.currentBet
+    })).sort((a, b) => a.amount - b.amount);
+    
+    const pots = [];
+    let previousLevel = 0;
+    
+    for (let i = 0; i < contributions.length; i++) {
+        const level = contributions[i].amount;
+        if (level > previousLevel) {
+            // Create a pot for this betting level
+            const eligiblePlayers = contributions.slice(i).map(c => c.player);
+            const potAmount = (level - previousLevel) * eligiblePlayers.length;
+            
+            if (potAmount > 0) {
+                pots.push({
+                    amount: potAmount,
+                    eligiblePlayers: eligiblePlayers
+                });
+            }
+            
+            previousLevel = level;
+        }
+    }
+    
+    return pots;
+}
+
+/**
  * Handles showdown and determines winner
  */
 function showdown() {
@@ -495,7 +532,10 @@ function showdown() {
             potAmount: potAmount
         });
     } else {
-        // Evaluate hands
+        // Calculate side pots
+        const pots = calculateSidePots();
+        
+        // Evaluate all active players' hands
         const evaluations = activePlayers.map(p => ({
             player: p,
             hand: HandEvaluator.findBestHand([...p.cards, ...gameState.communityCards])
@@ -503,28 +543,55 @@ function showdown() {
         
         evaluations.sort((a, b) => HandEvaluator.compareHands(b.hand, a.hand));
         
-        const winners = [evaluations[0]];
-        for (let i = 1; i < evaluations.length; i++) {
-            if (HandEvaluator.compareHands(evaluations[i].hand, evaluations[0].hand) === 0) {
-                winners.push(evaluations[i]);
-            } else {
-                break;
+        let totalWon = 0;
+        let mainWinner = null;
+        let mainWinningHand = null;
+        
+        // Award each pot to eligible winner(s)
+        pots.forEach((pot, potIndex) => {
+            // Filter to only eligible players for this pot
+            const eligibleEvaluations = evaluations.filter(e => 
+                pot.eligiblePlayers.includes(e.player)
+            );
+            
+            if (eligibleEvaluations.length === 0) return;
+            
+            // Find winner(s) among eligible players
+            const potWinners = [eligibleEvaluations[0]];
+            for (let i = 1; i < eligibleEvaluations.length; i++) {
+                if (HandEvaluator.compareHands(eligibleEvaluations[i].hand, eligibleEvaluations[0].hand) === 0) {
+                    potWinners.push(eligibleEvaluations[i]);
+                } else {
+                    break;
+                }
             }
+            
+            const winAmount = Math.floor(pot.amount / potWinners.length);
+            
+            potWinners.forEach(w => {
+                w.player.chips += winAmount;
+                if (potIndex === 0) {
+                    totalWon = winAmount;
+                    mainWinner = w.player;
+                    mainWinningHand = w.hand;
+                } else if (w.player === mainWinner) {
+                    totalWon += winAmount;
+                }
+                
+                const potName = potIndex === 0 ? 'main pot' : `side pot ${potIndex}`;
+                logAction(`${w.player.name} wins $${winAmount} from ${potName} with ${w.hand.name}`);
+            });
+        });
+        
+        // Show winner announcement for main pot winner
+        if (mainWinner && mainWinningHand) {
+            UIModule.announceWinner(mainWinner, mainWinningHand.name, pots.length > 1, {
+                playerCards: mainWinner.cards,
+                communityCards: gameState.communityCards,
+                winningHandCards: mainWinningHand.cards || [],
+                potAmount: totalWon
+            });
         }
-        
-        const winAmount = Math.floor(gameState.pot / winners.length);
-        
-        winners.forEach(w => {
-            w.player.chips += winAmount;
-            logAction(`${w.player.name} wins $${winAmount} with ${w.hand.name}`);
-        });
-        
-        UIModule.announceWinner(winners[0].player, winners[0].hand.name, winners.length > 1, {
-            playerCards: winners[0].player.cards,
-            communityCards: gameState.communityCards,
-            winningHandCards: winners[0].hand.cards || [],
-            potAmount: winAmount
-        });
     }
     
     UIModule.updateUI(gameState);
