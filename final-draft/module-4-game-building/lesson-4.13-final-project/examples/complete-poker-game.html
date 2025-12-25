@@ -933,6 +933,15 @@
             
             // Check if betting round is complete
             const activePlayers = gameState.players.filter(p => !p.folded && !p.allIn);
+            const playersInHand = gameState.players.filter(p => !p.folded);
+            
+            // If only 0-1 active players (rest are all-in or folded), end betting round
+            if (activePlayers.length <= 1) {
+                advancePhase();
+                return;
+            }
+            
+            // Check if all active players have matched the current bet
             const allMatched = activePlayers.every(p => p.currentBet === gameState.currentBet);
             
             // Move to next player
@@ -944,16 +953,19 @@
                      gameState.players[gameState.currentPlayerIndex].allIn) && 
                      count < gameState.players.length);
             
+            // If all active players have acted and bets are matched, end betting round
             if (allMatched && count >= gameState.players.length) {
-                // Betting round complete
                 advancePhase();
-            } else {
+            } else if (activePlayers.length > 0) {
                 // Continue betting
                 if (gameState.players[gameState.currentPlayerIndex].isAI) {
                     aiTurn();
                 } else {
                     updateUI();
                 }
+            } else {
+                // No active players left (shouldn't happen, but safety check)
+                advancePhase();
             }
         }
         
@@ -961,6 +973,26 @@
             // Reset bets for next round
             gameState.players.forEach(p => p.currentBet = 0);
             gameState.currentBet = 0;
+            
+            // Check if only one player remains (everyone else folded)
+            const playersInHand = gameState.players.filter(p => !p.folded);
+            if (playersInHand.length === 1) {
+                // Award pot immediately to last remaining player
+                const winner = playersInHand[0];
+                winner.chips += gameState.pot;
+                logAction(`${winner.name} wins $${gameState.pot} (everyone else folded)`);
+                
+                setTimeout(() => {
+                    if (confirm('Hand complete. Start new hand?')) {
+                        startNewHand();
+                    }
+                }, 2000);
+                return;
+            }
+            
+            // Check if everyone is all-in (no more betting possible)
+            const activePlayers = gameState.players.filter(p => !p.folded && !p.allIn);
+            const allAllIn = activePlayers.length === 0;
             
             if (gameState.phase === 'pre-flop') {
                 dealFlop();
@@ -973,13 +1005,23 @@
                 return;
             }
             
-            // Start next betting round
+            // If everyone is all-in, skip betting and auto-advance
+            if (allAllIn) {
+                logAction('All players all-in, revealing cards...');
+                setTimeout(() => advancePhase(), 1500);
+                return;
+            }
+            
+            // Start next betting round with first active player
             gameState.currentPlayerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
             
-            // Skip to first active player
-            while (gameState.players[gameState.currentPlayerIndex].folded || 
-                   gameState.players[gameState.currentPlayerIndex].allIn) {
+            // Skip to first active player (safety check with max iterations)
+            let iterations = 0;
+            while ((gameState.players[gameState.currentPlayerIndex].folded || 
+                   gameState.players[gameState.currentPlayerIndex].allIn) &&
+                   iterations < gameState.players.length) {
                 gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+                iterations++;
             }
             
             updateUI();
