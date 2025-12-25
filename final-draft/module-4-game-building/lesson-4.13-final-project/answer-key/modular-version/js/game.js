@@ -118,19 +118,27 @@ function startHand() {
     gameState.currentPlayerIndex = (bbIndex + 1) % gameState.players.length;
     gameState.lastRaiserIndex = bbIndex;
     
-    // Deal hole cards
-    for (let i = 0; i < 2; i++) {
-        for (let player of gameState.players) {
-            player.cards.push(gameState.deck.pop());
+    // Deal hole cards with animation
+    let dealIndex = 0;
+    const dealInterval = setInterval(() => {
+        const playerIndex = dealIndex % gameState.players.length;
+        const round = Math.floor(dealIndex / gameState.players.length);
+        
+        if (round < 2) {
+            gameState.players[playerIndex].cards.push(gameState.deck.pop());
+            UIModule.updateUI(gameState);
+            dealIndex++;
+        } else {
+            clearInterval(dealInterval);
+            logAction('Cards dealt to all players');
+            UIModule.updateUI(gameState);
+            
+            // Start action if first player is AI
+            if (gameState.players[gameState.currentPlayerIndex].isAI) {
+                setTimeout(aiTurn, 1000);
+            }
         }
-    }
-    
-    UIModule.updateUI(gameState);
-    
-    // Start action if first player is AI
-    if (gameState.players[gameState.currentPlayerIndex].isAI) {
-        setTimeout(aiTurn, 1000);
-    }
+    }, 200);
 }
 
 /**
@@ -224,12 +232,17 @@ function aiTurn() {
     
     const decision = AIModule.makeAIDecision(player, gameState, config);
     
+    // Show thinking message
+    logAction(`${player.name} is thinking...`);
+    UIModule.updateUI(gameState);
+    
     setTimeout(() => {
         if (decision.action === 'fold') {
             player.folded = true;
             logAction(`${player.name} folds`);
         } else if (decision.action === 'check') {
             logAction(`${player.name} checks`);
+            UIModule.updateUI(gameState);
         } else if (decision.action === 'call') {
             const amount = Math.min(gameState.currentBet - player.currentBet, player.chips);
             player.chips -= amount;
@@ -254,7 +267,7 @@ function aiTurn() {
         }
         
         nextPlayer();
-    }, 800 + Math.random() * 1200);
+    }, 1500 + Math.random() * 1000);
 }
 
 /**
@@ -360,7 +373,7 @@ function advancePhase() {
             
             setTimeout(() => {
                 startHand();
-            }, 3000);
+            }, 6000);
         }
         return;
     }
@@ -383,7 +396,7 @@ function advancePhase() {
     // If everyone is all-in, skip betting and auto-advance
     if (allAllIn) {
         logAction('All players all-in, revealing cards...');
-        setTimeout(() => advancePhase(), 1500);
+        setTimeout(() => advancePhase(), 2500);
         return;
     }
     
@@ -486,17 +499,25 @@ function showdown() {
     gameState.players = gameState.players.filter(p => p.chips > 0);
     
     if (gameState.players.length === 1) {
+        const winner = gameState.players[0];
         setTimeout(() => {
-            alert(`Game Over! ${gameState.players[0].name} wins!`);
-            UIModule.showSettings();
-        }, 3000);
+            if (winner.isAI) {
+                alert(`😢 You Lose! ${winner.name} wins the game!\n\nBetter luck next time!`);
+            } else {
+                alert(`🎉 Congratulations! You won the game!\n\nYou beat all the AI players!`);
+            }
+            // Only show settings if user wants to play again
+            if (confirm('Would you like to start a new game?')) {
+                UIModule.showSettings();
+            }
+        }, 5000);
     } else {
         // Move dealer button
         gameState.dealerIndex = (gameState.dealerIndex + 1) % gameState.players.length;
         
         setTimeout(() => {
             startHand();
-        }, 4000);
+        }, 6000);
     }
 }
 

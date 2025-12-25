@@ -81,8 +81,8 @@ const UIModule = (function() {
                     <div class="player-info">
                         <div class="chips">💰 $${player.chips}</div>
                         ${player.currentBet > 0 ? `<div class="current-bet">Bet: $${player.currentBet}</div>` : ''}
-                        ${player.folded ? '<div class="player-action">Folded</div>' : ''}
-                        ${player.allIn ? '<div class="player-action">All-In</div>' : ''}
+                        ${player.folded ? '<div class="player-action" style="color: #ff6b6b;">Folded</div>' : ''}
+                        ${player.allIn && !player.folded ? '<div class="player-action" style="color: #ffd700; font-weight: bold;">All-In!</div>' : ''}
                     </div>
                 </div>
             `;
@@ -152,7 +152,7 @@ const UIModule = (function() {
         
         setTimeout(() => {
             announcement.classList.remove('show');
-        }, 3000);
+        }, 5000);
     }
     
     /**
