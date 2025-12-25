@@ -195,7 +195,9 @@ const UIModule = (function() {
                 cardsHTML += `<div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;">`;
                 playerCards.forEach(card => {
                     const isWinning = winningHandCards.some(wc => wc.rank === card.rank && wc.suit === card.suit);
-                    const highlightStyle = isWinning ? 'box-shadow: 0 0 15px #ffd700; border: 2px solid #ffd700;' : '';
+                    const highlightStyle = isWinning 
+                        ? 'box-shadow: 0 0 15px #ffd700; border: 2px solid #ffd700;' 
+                        : 'opacity: 0.3; filter: grayscale(70%);';
                     cardsHTML += `<div class="card ${card.suit}" style="width: 50px; height: 70px; font-size: 20px; ${highlightStyle}">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
                 });
                 cardsHTML += '</div>';
@@ -207,7 +209,9 @@ const UIModule = (function() {
                 cardsHTML += `<div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">`;
                 communityCards.forEach(card => {
                     const isWinning = winningHandCards.some(wc => wc.rank === card.rank && wc.suit === card.suit);
-                    const highlightStyle = isWinning ? 'box-shadow: 0 0 15px #ffd700; border: 2px solid #ffd700;' : '';
+                    const highlightStyle = isWinning 
+                        ? 'box-shadow: 0 0 15px #ffd700; border: 2px solid #ffd700;' 
+                        : 'opacity: 0.3; filter: grayscale(70%);';
                     cardsHTML += `<div class="card ${card.suit}" style="width: 50px; height: 70px; font-size: 20px; ${highlightStyle}">${card.rank}${DeckModule.getSuitSymbol(card.suit)}</div>`;
                 });
                 cardsHTML += '</div>';
