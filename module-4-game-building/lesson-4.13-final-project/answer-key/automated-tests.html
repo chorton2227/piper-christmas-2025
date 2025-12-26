@@ -390,12 +390,30 @@
         function testIntegration() {
             log('=== Integration Tests ===', 'info');
             
-            // Test 1: All modules loaded
-            const modules = ['DeckModule', 'HandEvaluator', 'AIModule', 'UIModule'];
-            modules.forEach(mod => {
-                const exists = typeof window[mod] !== 'undefined';
-                addTestResult(`${mod} loaded`, exists);
-            });
+            // Test 1: All modules loaded (check if they exist in global scope)
+            try {
+                addTestResult('DeckModule loaded', typeof DeckModule !== 'undefined');
+            } catch (e) {
+                addTestResult('DeckModule loaded', false, e.message);
+            }
+            
+            try {
+                addTestResult('HandEvaluator loaded', typeof HandEvaluator !== 'undefined');
+            } catch (e) {
+                addTestResult('HandEvaluator loaded', false, e.message);
+            }
+            
+            try {
+                addTestResult('AIModule loaded', typeof AIModule !== 'undefined');
+            } catch (e) {
+                addTestResult('AIModule loaded', false, e.message);
+            }
+            
+            try {
+                addTestResult('UIModule loaded', typeof UIModule !== 'undefined');
+            } catch (e) {
+                addTestResult('UIModule loaded', false, e.message);
+            }
             
             // Test 2: DOM elements exist
             const elements = [
