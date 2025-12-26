@@ -124,22 +124,22 @@ Put all your skills together to build a full-featured Texas Hold'em poker game. 
 
 ---
 
-### Module 5: Web Fundamentals Plus 🚀
-**Ship your projects to the world**
+### Module 5: Deploy Your Poker Game 🚀
+**Ship your Texas Hold'em game to the world**
 
-Learn professional development workflows. Use version control, set up tooling, deploy to the web, and build your portfolio.
+Take your completed poker game from Module 4 and deploy it live to the internet. Learn professional deployment workflows, optimization, and how to share your game with others.
 
-**Duration:** 6 lessons + portfolio capstone
+**Duration:** 6 lessons + live deployment
 
 **Topics:**
-- 5.1 Project Setup & Tooling - Code editors, linters, formatters
-- 5.2 Git & GitHub - Version control basics, commits, repos
-- 5.3 Publishing & Hosting - GitHub Pages, Netlify, custom domains
-- 5.4 Performance & Assets - Optimizing images, caching, minification
-- 5.5 Accessibility Auditing - Testing tools, WCAG guidelines
-- 5.6 Documentation & Portfolios - READMEs, project showcases
+- 5.1 Preparing for Deployment - Code cleanup, testing, final polish
+- 5.2 Git & GitHub - Version control for your poker game
+- 5.3 GitHub Pages Deployment - Host your game for free
+- 5.4 Game Optimization - Asset optimization, loading performance, caching
+- 5.5 Cross-Browser Testing - Ensure your game works everywhere
+- 5.6 Sharing Your Game - Custom domain, social sharing, documentation
 
-**Capstone:** Published portfolio site with your best projects, complete with documentation and accessibility considerations
+**Capstone:** Your Texas Hold'em poker game live on the internet with custom URL, optimized performance, and professional documentation
 
 ---
 
@@ -170,23 +170,12 @@ Each lesson includes:
 
 ```
 piper_christmas_2025/
-├── README.md                    # This file
+├── README.md                   # This file
 ├── module-1-html/              # HTML Foundations
-│   ├── lesson-1.1-what-is-html/
-│   ├── lesson-1.2-headings-paragraphs/
-│   └── ...
 ├── module-2-css/               # CSS Essentials
-│   ├── lesson-2.1-what-is-css/
-│   └── ...
 ├── module-3-javascript/        # JavaScript Fundamentals
-│   ├── lesson-3.1-what-is-javascript/
-│   └── ...
 ├── module-4-game-building/     # Texas Hold'em Poker Game
-│   ├── lesson-4.1-card-deck-fundamentals/
-│   ├── lesson-4.13-final-project/
-│   │   └── answer-key/           # Complete working poker game
-│   └── ...
-└── module-5-web-fundamentals/  # Deployment & Portfolio (coming soon)
+└── module-5-deployment/        # Deploy Texas Hold'em Poker Game
 ```
 
 Each lesson contains:
