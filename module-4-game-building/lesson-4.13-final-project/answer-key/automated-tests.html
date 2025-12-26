@@ -141,6 +141,22 @@
     
     <div id="test-results"></div>
 
+    <!-- Hidden DOM elements for integration tests -->
+    <div style="display:none;" id="test-dom">
+        <div id="community-cards"></div>
+        <div id="players-container"></div>
+        <div id="action-log"></div>
+        <div id="pot-amount"></div>
+        <div id="game-controls"></div>
+    </div>
+
+    <!-- JavaScript Modules - Load in dependency order -->
+    <script src="js/modules/sounds.js"></script>
+    <script src="js/modules/deck.js"></script>
+    <script src="js/modules/handEvaluator.js"></script>
+    <script src="js/modules/ai.js"></script>
+    <script src="js/modules/ui.js"></script>
+    <script src="js/game.js"></script>
     <script>
         let totalTests = 0;
         let passedTests = 0;
@@ -204,16 +220,16 @@
             
             // Test 2: Create deck
             try {
-                const deck = DeckModule.create();
+                const deck = DeckModule.createDeck();
                 const passed = deck && deck.length === 52;
-                addTestResult('create() returns 52 cards', passed, `Got ${deck ? deck.length : 'null'} cards`);
+                addTestResult('createDeck() returns 52 cards', passed, `Got ${deck ? deck.length : 'null'} cards`);
             } catch (e) {
-                addTestResult('create() returns 52 cards', false, e.message);
+                addTestResult('createDeck() returns 52 cards', false, e.message);
             }
             
             // Test 3: Card structure
             try {
-                const deck = DeckModule.create();
+                const deck = DeckModule.createDeck();
                 const card = deck[0];
                 const hasProps = card && card.suit && card.rank && typeof card.value === 'number';
                 addTestResult('Cards have suit, rank, value', hasProps);
@@ -223,13 +239,13 @@
             
             // Test 4: Shuffle
             try {
-                const deck = DeckModule.create();
+                const deck = DeckModule.createDeck();
                 const original = [...deck];
-                DeckModule.shuffle(deck);
+                DeckModule.shuffleDeck(deck);
                 const changed = JSON.stringify(deck) !== JSON.stringify(original);
-                addTestResult('shuffle() changes order', changed);
+                addTestResult('shuffleDeck() changes order', changed);
             } catch (e) {
-                addTestResult('shuffle() changes order', false, e.message);
+                addTestResult('shuffleDeck() changes order', false, e.message);
             }
             
             // Test 5: Get suit symbol
@@ -266,7 +282,7 @@
                     { suit: 'hearts', rank: 'J', value: 11 },
                     { suit: 'hearts', rank: '10', value: 10 }
                 ];
-                const result = HandEvaluator.evaluate(royalFlush);
+                const result = HandEvaluator.evaluateHand(royalFlush);
                 const passed = result.name === 'Royal Flush';
                 addTestResult('Detects Royal Flush', passed, result.name);
             } catch (e) {
@@ -282,7 +298,7 @@
                     { suit: 'clubs', rank: '6', value: 6 },
                     { suit: 'clubs', rank: '5', value: 5 }
                 ];
-                const result = HandEvaluator.evaluate(straightFlush);
+                const result = HandEvaluator.evaluateHand(straightFlush);
                 const passed = result.name === 'Straight Flush';
                 addTestResult('Detects Straight Flush', passed, result.name);
             } catch (e) {
@@ -298,7 +314,7 @@
                     { suit: 'diamonds', rank: '4', value: 4 },
                     { suit: 'diamonds', rank: '2', value: 2 }
                 ];
-                const result = HandEvaluator.evaluate(flush);
+                const result = HandEvaluator.evaluateHand(flush);
                 const passed = result.name === 'Flush';
                 addTestResult('Detects Flush', passed, result.name);
             } catch (e) {
@@ -309,11 +325,11 @@
             try {
                 const flush = { rank: 6, high: [13, 10, 7, 4, 2] };
                 const straight = { rank: 5, high: [10, 9, 8, 7, 6] };
-                const result = HandEvaluator.compare(flush, straight);
+                const result = HandEvaluator.compareHands(flush, straight);
                 const passed = result > 0; // Flush should beat Straight
-                addTestResult('compare() ranks correctly', passed, `Flush vs Straight = ${result}`);
+                addTestResult('compareHands() ranks correctly', passed, `Flush vs Straight = ${result}`);
             } catch (e) {
-                addTestResult('compare() ranks correctly', false, e.message);
+                addTestResult('compareHands() ranks correctly', false, e.message);
             }
             
             log('');
