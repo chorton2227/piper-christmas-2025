@@ -5,8 +5,9 @@ This is a fully modularized version of the complete Texas Hold'em poker game. Th
 ## File Structure
 
 ```
-modular-version/
+answer-key/
 ├── index.html              # Main HTML structure
+├── automated-tests.html    # Test suite for all modules
 ├── css/
 │   └── styles.css         # All game styling
 ├── js/
@@ -15,8 +16,9 @@ modular-version/
 │       ├── deck.js       # Deck management (create, shuffle, suit symbols)
 │       ├── handEvaluator.js  # Hand evaluation and comparison
 │       ├── ai.js         # AI opponent decision making
-│       └── ui.js         # User interface updates
-└── sounds/               # Sound effects directory (empty, ready for audio)
+│       ├── ui.js         # User interface updates
+│       └── sounds.js     # Web Audio API sound generation
+└── sounds/               # Sound effects directory (reserved for future assets)
 ```
 
 ## Module Architecture

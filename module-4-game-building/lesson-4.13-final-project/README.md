@@ -76,28 +76,32 @@ A complete poker game featuring:
 
 ## 🏗️ Project Structure
 
-### File Organization
+### File Organization Options
 
+**Option 1: Modular Structure (Recommended)**
+See `answer-key/` for complete implementation:
 ```
-final-project/
-├── index.html          # Main HTML file
+your-project/
+├── index.html              # Main HTML file
 ├── css/
-│   ├── main.css       # Base styles
-│   ├── table.css      # Poker table styles
-│   ├── cards.css      # Card styles
-│   └── animations.css # Animation styles
+│   └── styles.css         # All game styling
 ├── js/
-│   ├── game.js        # Main game logic
-│   ├── deck.js        # Deck and card functions
-│   ├── hand-eval.js   # Hand evaluation
-│   ├── betting.js     # Betting system
-│   ├── ai.js          # AI logic
-│   ├── ui.js          # UI updates
-│   ├── sound.js       # Sound manager
-│   └── settings.js    # Configuration
-├── sounds/
-│   ├── card-deal.mp3
-│   ├── chip-bet.mp3
+│   ├── game.js           # Main game controller
+│   └── modules/
+│       ├── deck.js       # Deck module
+│       ├── handEvaluator.js  # Hand evaluation
+│       ├── ai.js         # AI logic
+│       ├── ui.js         # UI updates
+│       └── sounds.js     # Sound generation
+```
+
+**Option 2: Single File**
+See `examples/complete-poker-game.html` for single-file implementation
+
+**Available Resources:**
+- `answer-key/` - Complete modular implementation
+- `examples/` - Reference implementations and guides
+- `your-project/` - Starter template for your version
 │   └── winner.mp3
 └── README.md          # Project documentation
 ```

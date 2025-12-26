@@ -184,8 +184,7 @@ piper_christmas_2025/
 ├── module-4-game-building/     # Texas Hold'em Poker Game
 │   ├── lesson-4.1-card-deck-fundamentals/
 │   ├── lesson-4.13-final-project/
-│   │   └── answer-key/
-│   │       └── modular-version/  # Complete working poker game
+│   │   └── answer-key/           # Complete working poker game
 │   └── ...
 └── module-5-web-fundamentals/  # Deployment & Portfolio (coming soon)
 ```
