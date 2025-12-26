@@ -124,22 +124,21 @@ Put all your skills together to build a full-featured Texas Hold'em poker game. 
 
 ---
 
-### Module 5: Deploy Your Poker Game 🚀
-**Ship your Texas Hold'em game to the world**
+### Module 5: Host Your Poker Game on GitHub 🚀
+**Put your Texas Hold'em game on the internet**
 
-Take your completed poker game from Module 4 and deploy it live to the internet. Learn professional deployment workflows, optimization, and how to share your game with others.
+Take your completed poker game from Module 4 and deploy it live to the internet using GitHub Pages. Learn how to use GitHub (the platform millions of developers use), upload your project, and get a real web address anyone can visit.
 
-**Duration:** 6 lessons + live deployment
+**Duration:** 3 lessons (2-4 hours total)
 
 **Topics:**
-- 5.1 Preparing for Deployment - Code cleanup, testing, final polish
-- 5.2 Git & GitHub - Version control for your poker game
-- 5.3 GitHub Pages Deployment - Host your game for free
-- 5.4 Game Optimization - Asset optimization, loading performance, caching
-- 5.5 Cross-Browser Testing - Ensure your game works everywhere
-- 5.6 Sharing Your Game - Custom domain, social sharing, documentation
+- 5.1 Introduction to GitHub - What is GitHub, create account, understand interface
+- 5.2 Upload Your Game - Create repository, upload files, write professional README
+- 5.3 Deploy with GitHub Pages - Enable free hosting, get live URL, share your game
 
-**Capstone:** Your Texas Hold'em poker game live on the internet with custom URL, optimized performance, and professional documentation
+**Real Example:** [https://chorton2227.github.io/poker-game/](https://chorton2227.github.io/poker-game/)
+
+**Capstone:** Your Texas Hold'em poker game live on the internet at `https://yourusername.github.io/poker-game` - a real URL you can share with friends, family, and add to your portfolio!
 
 ---
 
